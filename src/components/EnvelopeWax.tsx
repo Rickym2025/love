@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Heart, Sparkles } from 'lucide-react';
@@ -9,13 +9,15 @@ interface EnvelopeWaxProps {
   initials?: string;
   coupleNames?: string;
   weddingDate?: string;
+  audioUrl?: string;
   children: React.ReactNode;
 }
 
 export default function EnvelopeWax({
-  initials = 'R & L',
-  coupleNames = 'Renzo & Lucia',
+  initials = 'E & D',
+  coupleNames = 'Elena & Davide',
   weddingDate = '28 Settembre 2026',
+  audioUrl = 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3',
   children,
 }: EnvelopeWaxProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,19 +27,18 @@ export default function EnvelopeWax({
     if (isOpen || isAnimating) return;
     setIsAnimating(true);
 
+    // Avvia la musica personalizzata degli sposi!
     try {
-      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-      audio.volume = 0.4;
+      const audio = new Audio(audioUrl);
+      audio.volume = 0.5;
       audio.play().catch(() => {});
-    } catch (e) {
-      // Audio fallback
-    }
+    } catch (e) {}
 
     confetti({
-      particleCount: 70,
-      spread: 80,
+      particleCount: 60,
+      spread: 70,
       origin: { y: 0.6 },
-      colors: ['#d4af37', '#f3e5ab', '#ffffff', '#e11d48'],
+      colors: ['#d4af37', '#f4efe6', '#ffffff', '#8b1e24'],
     });
 
     setTimeout(() => {
@@ -47,37 +48,61 @@ export default function EnvelopeWax({
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#FAF7F2] text-[#4A3D39] overflow-x-hidden">
+      
+      {/* CADUTA PETALI ANIMATI QUANDO LA BUSTA È APERTA */}
+      {isOpen && (
+        <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="petal"
+              style={{
+                left: `${10 + i * 12}%`,
+                animationDelay: `${i * 1.2}s`,
+                animationDuration: `${8 + (i % 3) * 2}s`,
+              }}
+            >
+              🌸
+            </div>
+          ))}
+        </div>
+      )}
+
       <AnimatePresence>
         {!isOpen && (
           <motion.div
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950/30 p-4 select-none"
+            exit={{ opacity: 0, scale: 1.03 }}
+            transition={{ duration: 0.9, ease: 'easeInOut' }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAF7F2] p-4 select-none"
           >
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-center mb-8"
+              className="text-center mb-6"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs tracking-widest uppercase mb-3">
-                <Sparkles className="w-3.5 h-3.5" />
-                Invito Speciale
-              </div>
-              <h1 className="font-serif text-3xl sm:text-5xl text-amber-100 font-light tracking-wide mb-2">
+              <span className="text-[#8B1E24] text-xs font-semibold tracking-widest uppercase mb-2 block">
+                Partecipazione di Nozze
+              </span>
+              <h1 className="font-serif text-3xl sm:text-5xl text-[#4A3D39] font-normal mb-1">
                 {coupleNames}
               </h1>
-              <p className="text-slate-400 text-xs sm:text-sm tracking-widest uppercase">
+              <p className="text-[#9E8976] text-xs tracking-widest uppercase">
                 {weddingDate}
               </p>
             </motion.div>
 
-            {/* BUSTA DI CARTA */}
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/3] bg-[#fbf8f3] rounded-xl shadow-2xl border border-amber-200/20 flex flex-col items-center justify-between p-6 overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 pointer-events-none" />
+            {/* BUSTA D'EPOCA RICAMATA CON FLORAL EMBOSSING */}
+            <div className="relative w-full max-w-sm sm:max-w-md aspect-[3/4] bg-[#F4EFE6] rounded-2xl shadow-[0_15px_40px_rgba(139,115,85,0.15)] border border-[#E5DACB] flex flex-col items-center justify-between p-8 overflow-hidden">
+              
+              {/* Ricami Floreali agli angoli (Pattern Embossed) */}
+              <div className="absolute top-4 left-4 text-xl opacity-30 pointer-events-none">🌿</div>
+              <div className="absolute top-4 right-4 text-xl opacity-30 pointer-events-none">🌿</div>
+              <div className="absolute bottom-4 left-4 text-xl opacity-30 pointer-events-none">🌸</div>
+              <div className="absolute bottom-4 right-4 text-xl opacity-30 pointer-events-none">🌸</div>
 
+              {/* Flap Superiore */}
               <motion.div
                 animate={
                   isAnimating
@@ -86,44 +111,40 @@ export default function EnvelopeWax({
                 }
                 transition={{ duration: 0.8 }}
                 style={{ transformOrigin: 'top' }}
-                className="absolute top-0 left-0 right-0 h-1/2 bg-[#f4eee5] border-b border-amber-900/10 shadow-md rounded-t-xl flex items-end justify-center pb-2"
-              >
-                <div className="w-full h-full bg-gradient-to-b from-amber-900/5 to-transparent" />
-              </motion.div>
+                className="absolute top-0 left-0 right-0 h-1/2 bg-[#EFE8D8] border-b border-[#D8CBB7] rounded-t-2xl flex items-end justify-center pb-2 shadow-sm"
+              />
 
               <div className="z-10 text-center my-auto">
-                <p className="font-serif text-slate-800 text-lg italic mb-1">
+                <p className="font-serif text-[#4A3D39] text-xl italic mb-2">
                   Sei cordialmente invitato
                 </p>
-                <p className="text-slate-500 text-xs uppercase tracking-wider">
-                  Tocca la ceralacca per aprire
+                <p className="text-[#9E8976] text-[10px] uppercase tracking-widest">
+                  Tocca il sigillo per aprire
                 </p>
               </div>
 
-              {/* SIGILLO CERALACCA */}
+              {/* SIGILLO IN CERALACCA BORGOGNA CON ORO */}
               <motion.button
                 onClick={handleOpen}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
-                animate={isAnimating ? { scale: [1, 1.25, 0], rotate: [0, 15, -15, 0] } : {}}
+                animate={isAnimating ? { scale: [1, 1.2, 0], rotate: [0, 10, -10, 0] } : {}}
                 transition={{ duration: 0.8 }}
-                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-red-600 via-rose-700 to-amber-900 shadow-[0_10px_25px_rgba(225,29,72,0.5)] border-2 border-rose-400/40 flex items-center justify-center cursor-pointer group"
+                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-[#8B1E24] via-[#6E1216] to-[#4A0A0D] shadow-[0_10px_25px_rgba(139,30,36,0.35)] border-2 border-[#D4AF37]/50 flex items-center justify-center cursor-pointer group"
               >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-rose-300/30 flex items-center justify-center bg-rose-800/30 shadow-inner">
-                  <span className="font-serif text-amber-100 text-lg sm:text-xl font-bold tracking-widest drop-shadow-md group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-[#D4AF37]/30 flex items-center justify-center bg-[#8B1E24]/20 shadow-inner">
+                  <span className="font-serif text-[#F4EFE6] text-lg sm:text-xl font-bold tracking-widest drop-shadow group-hover:scale-110 transition-transform">
                     {initials}
                   </span>
                 </div>
-                <span className="absolute inset-0 rounded-full bg-rose-500/20 animate-ping opacity-75 pointer-events-none" />
               </motion.button>
 
-              <div className="z-10 flex items-center gap-1.5 text-slate-400 text-xs italic">
-                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-                <span>Un giorno speciale da vivere insieme</span>
+              <div className="z-10 text-center text-[#9E8976] text-xs font-serif italic">
+                Sfoglia la nostra storia d'amore
               </div>
             </div>
 
-            <p className="mt-8 text-xs text-slate-500 tracking-wider uppercase">
+            <p className="mt-6 text-[10px] text-[#9E8976] tracking-widest uppercase">
               LOVE • RM Studio Experience
             </p>
           </motion.div>
@@ -132,7 +153,7 @@ export default function EnvelopeWax({
 
       {isOpen && (
         <motion.main
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
