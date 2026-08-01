@@ -2,17 +2,14 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 
-interface ScratchCardProps {
-  revealText?: string;
-  subText?: string;
+interface ScratchBoxProps {
+  label: string;
+  hiddenValue: string;
 }
 
-export default function ScratchCard({
-  revealText = '28 SETTEMBRE 2026',
-  subText = 'Chiesa di Pescarenico • Ore 11:00',
-}: ScratchCardProps) {
+function ScratchBox({ label, hiddenValue }: ScratchBoxProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isScratched, setIsScratched] = useState(false);
+  const [scratched, setScratched] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -20,22 +17,21 @@ export default function ScratchCard({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Disegna lo strato dorato grattabile
-    ctx.fillStyle = '#d4af37';
+    // Strato di copertura azzurro/argentato grattabile
+    ctx.fillStyle = '#B0C4DE';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Testo di istruzione sopra la lamina dorata
-    ctx.fillStyle = '#423103';
-    ctx.font = 'bold 13px sans-serif';
+    ctx.fillStyle = '#4682B4';
+    ctx.font = 'bold 10px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('✨ GRATTA QUI CON IL DITO ✨', canvas.width / 2, canvas.height / 2 + 5);
+    ctx.fillText('GRATTA', canvas.width / 2, canvas.height / 2 + 4);
 
     let isDrawing = false;
 
     const scratch = (x: number, y: number) => {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.arc(x, y, 22, 0, Math.PI * 2);
+      ctx.arc(x, y, 16, 0, Math.PI * 2);
       ctx.fill();
     };
 
@@ -50,10 +46,7 @@ export default function ScratchCard({
         clientX = (e as MouseEvent).clientX;
         clientY = (e as MouseEvent).clientY;
       }
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top,
-      };
+      return { x: clientX - rect.left, y: clientY - rect.top };
     };
 
     const handleStart = (e: MouseEvent | TouchEvent) => {
@@ -70,13 +63,12 @@ export default function ScratchCard({
 
     const handleEnd = () => {
       isDrawing = false;
-      setIsScratched(true);
+      setScratched(true);
     };
 
     canvas.addEventListener('mousedown', handleStart);
     canvas.addEventListener('mousemove', handleMove);
     canvas.addEventListener('mouseup', handleEnd);
-
     canvas.addEventListener('touchstart', handleStart);
     canvas.addEventListener('touchmove', handleMove);
     canvas.addEventListener('touchend', handleEnd);
@@ -92,27 +84,35 @@ export default function ScratchCard({
   }, []);
 
   return (
-    <div className="relative w-full max-w-sm mx-auto aspect-[5/2] bg-slate-900 border border-amber-500/30 rounded-2xl overflow-hidden shadow-2xl flex flex-col items-center justify-center p-4 text-center select-none">
-      {/* Contenuto segreto sotto la lamina */}
-      <div className="z-0">
-        <span className="text-amber-400 text-xs uppercase tracking-widest block mb-1">
-          Data & Location Rivelata
+    <div className="flex flex-col items-center">
+      <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-2xl shadow-md border border-[#BBDEFB] flex items-center justify-center overflow-hidden">
+        <span className="font-serif text-xl sm:text-2xl font-bold text-[#37474F]">
+          {hiddenValue}
         </span>
-        <h4 className="font-serif text-2xl text-amber-100 font-bold tracking-wide">
-          {revealText}
-        </h4>
-        <p className="text-xs text-slate-300 italic mt-1">{subText}</p>
+        <canvas
+          ref={canvasRef}
+          width={112}
+          height={112}
+          className={`absolute inset-0 w-full h-full cursor-pointer z-10 ${scratched ? 'touch-none' : ''}`}
+        />
       </div>
+      <span className="text-[10px] text-[#78909C] uppercase tracking-widest mt-2 font-semibold">
+        {label}
+      </span>
+    </div>
+  );
+}
 
-      {/* Tela Canvas grattabile */}
-      <canvas
-        ref={canvasRef}
-        width={380}
-        height={150}
-        className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-500 ${
-          isScratched ? 'touch-none' : ''
-        }`}
-      />
+export default function ScratchDate({ day = '14', month = 'Settembre', year = '2026' }: { day?: string; month?: string; year?: string }) {
+  return (
+    <div className="my-8 text-center">
+      <p className="font-serif italic text-[#4682B4] text-xl mb-1">The Date</p>
+      <p className="text-xs text-[#78909C] tracking-widest uppercase mb-6">✦ Gratta per svelare la data ✦</p>
+      <div className="flex items-center justify-center gap-4">
+        <ScratchBox label="Giorno" hiddenValue={day} />
+        <ScratchBox label="Mese" hiddenValue={month} />
+        <ScratchBox label="Anno" hiddenValue={year} />
+      </div>
     </div>
   );
 }
