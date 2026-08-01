@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
+import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import {
   Sparkles,
   Heart,
@@ -121,7 +122,7 @@ export default function LandingPage() {
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-16 pb-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
+      <section className="relative pt-16 pb-12 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
         
         <div className="inline-flex p-1.5 rounded-full bg-[#F4EFE6] border border-[#E5DACB] mb-8 shadow-sm">
           <button
@@ -176,7 +177,6 @@ export default function LandingPage() {
           </>
         )}
 
-        {/* DEMO BUTTONS */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
           <Link
             href="/elena-e-davide"
@@ -195,7 +195,29 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* GAMIFICATION SHOWCASE */}
+      {/* SHOWCASE ANIMAZIONE 3D DA 21ST.DEV (CONTAINER SCROLL) */}
+      <section className="-mt-12">
+        <ContainerScroll
+          titleComponent={
+            <div className="flex flex-col items-center">
+              <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold mb-2">
+                Esperienza Tridimensionale
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-serif text-[#4A3D39]">
+                Scorri per scoprire la magia dell'invito
+              </h2>
+            </div>
+          }
+        >
+          <img
+            src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"
+            alt="Anteprima 3D Matrimonio"
+            className="w-full h-full object-cover rounded-2xl"
+          />
+        </ContainerScroll>
+      </section>
+
+      {/* GAMIFICATION SHOWCASE (SCRATCH CARD) */}
       <section className="py-16 px-6 bg-[#F4EFE6] border-y border-[#E5DACB]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold mb-2 block">
