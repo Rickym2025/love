@@ -17,8 +17,7 @@ import {
   ChevronDown,
   Star,
   Users,
-  ShieldCheck,
-  Zap,
+  BookOpen,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -86,9 +85,8 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950 overflow-x-hidden relative">
       
-      {/* EFFETTI GLOW AMBIENTALI DI SFONDO */}
+      {/* EFFETTI GLOW SFONDO */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-amber-500/15 via-rose-500/20 to-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-[1200px] right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none" />
 
       {/* NAVBAR */}
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
@@ -105,13 +103,25 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <Link
               href="/renzo-e-lucia"
-              className="text-xs text-amber-300 hover:text-amber-200 transition-colors hidden sm:block font-medium"
+              className="text-xs text-amber-300 hover:text-amber-200 transition-colors hidden md:block font-medium"
             >
               Guarda Demo Live ↗
             </Link>
+
+            {/* LINK BLOG COME DRIVEMOTION */}
+            <a
+              href="https://blogs.rmstudio.app/love/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold text-amber-400 hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+              <span>Blog</span>
+            </a>
+
             <a
               href="#prezzi"
               className="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 text-xs font-bold hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] transition-all active:scale-95"
@@ -231,7 +241,6 @@ export default function LandingPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
-          {/* CARD 1 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-amber-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(245,158,11,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
@@ -243,7 +252,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* CARD 2 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-rose-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(225,29,72,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-6 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300">
@@ -255,7 +263,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* CARD 3 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-amber-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(245,158,11,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
@@ -267,7 +274,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* CARD 4 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-rose-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(225,29,72,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-6 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300">
@@ -279,7 +285,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* CARD 5 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-amber-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(245,158,11,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
@@ -291,7 +296,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* CARD 6 */}
           <div className="group relative p-8 rounded-3xl bg-slate-900/80 border border-slate-800/80 hover:border-rose-500/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(225,29,72,0.25)] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-6 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300">
@@ -490,16 +494,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FOOTER UFFICIALE CON LINK LEGALI RM STUDIO */}
+      {/* FOOTER UFFICIALE CON LINK LEGALI E BLOG RM STUDIO */}
       <footer className="py-12 border-t border-slate-800/80 text-center text-xs text-slate-500">
         <div className="flex items-center justify-center gap-1.5 mb-2">
           <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
           <span className="font-serif text-slate-300 font-bold">LOVE</span>
         </div>
         <p>© 2026 RM Studio di Riccardo Modena • Tutti i diritti riservati</p>
-        
-        {/* LINK LEGALI CENTRALIZZATI SU RMSTUDIO.APP */}
+
         <div className="flex justify-center gap-6 my-4 text-xs text-slate-400 font-medium">
+          <a
+            href="https://blogs.rmstudio.app/love/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-amber-300 transition-colors font-bold text-amber-400"
+          >
+            Blog LOVE
+          </a>
+          <span>•</span>
           <a
             href="https://rmstudio.app/privacy.html"
             target="_blank"
