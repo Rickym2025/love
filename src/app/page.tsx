@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
-import { ContainerScroll } from '@/components/ui/container-scroll-animation';
+import { AnimatedGradient } from '@/components/ui/animated-gradient';
+import KineticGrid from '@/components/ui/kinetic-grid';
 import {
   Sparkles,
   Heart,
@@ -70,7 +71,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#4A3D39] selection:bg-[#D4AF37] selection:text-white">
+    <KineticGrid className="min-h-screen bg-[#FAF7F2] text-[#4A3D39]">
       
       {/* NAVBAR */}
       <header className="border-b border-[#E5DACB] bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40">
@@ -121,37 +122,39 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
-      <section className="relative pt-16 pb-12 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
+      {/* HERO SECTION CON ANIMATED GRADIENT AURORA */}
+      <section className="relative pt-16 pb-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
         
-        <div className="inline-flex p-1.5 rounded-full bg-[#F4EFE6] border border-[#E5DACB] mb-8 shadow-sm">
-          <button
-            onClick={() => setActiveTab('sposi')}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
-              activeTab === 'sposi'
-                ? 'bg-[#D4AF37] text-white shadow-md'
-                : 'text-[#9E8976] hover:text-[#4A3D39]'
-            }`}
-          >
-            <Heart className="w-3.5 h-3.5" />
-            Siete gli Sposi?
-          </button>
-          <button
-            onClick={() => setActiveTab('agenzie')}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
-              activeTab === 'agenzie'
-                ? 'bg-[#D4AF37] text-white shadow-md'
-                : 'text-[#9E8976] hover:text-[#4A3D39]'
-            }`}
-          >
-            <Building2 className="w-3.5 h-3.5" />
-            Wedding Planner & Agenzie
-          </button>
-        </div>
+        <AnimatedGradient config={{ preset: 'Aurora' }} radius="100px" className="px-6 py-2 mb-8">
+          <div className="inline-flex p-1 rounded-full bg-white/80 border border-[#E5DACB]">
+            <button
+              onClick={() => setActiveTab('sposi')}
+              className={`px-6 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'sposi'
+                  ? 'bg-[#8B1E24] text-white shadow-md'
+                  : 'text-[#9E8976] hover:text-[#4A3D39]'
+              }`}
+            >
+              <Heart className="w-3.5 h-3.5" />
+              Siete gli Sposi?
+            </button>
+            <button
+              onClick={() => setActiveTab('agenzie')}
+              className={`px-6 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'agenzie'
+                  ? 'bg-[#8B1E24] text-white shadow-md'
+                  : 'text-[#9E8976] hover:text-[#4A3D39]'
+              }`}
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              Wedding Planner & Agenzie
+            </button>
+          </div>
+        </AnimatedGradient>
 
         {activeTab === 'sposi' ? (
           <>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#8B1E24] text-xs tracking-widest uppercase mb-6 font-semibold">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8B1E24]/10 border border-[#8B1E24]/20 text-[#8B1E24] text-xs tracking-widest uppercase mb-6 font-semibold">
               <Sparkles className="w-3.5 h-3.5" />
               Partecipazioni Digitali d'Autore
             </div>
@@ -164,7 +167,7 @@ export default function LandingPage() {
           </>
         ) : (
           <>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#8B1E24] text-xs tracking-widest uppercase mb-6 font-semibold">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8B1E24]/10 border border-[#8B1E24]/20 text-[#8B1E24] text-xs tracking-widest uppercase mb-6 font-semibold">
               <Building2 className="w-3.5 h-3.5" />
               Soluzione White-Label B2B
             </div>
@@ -177,10 +180,11 @@ export default function LandingPage() {
           </>
         )}
 
+        {/* DEMO BUTTONS */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
           <Link
             href="/elena-e-davide"
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-white font-bold hover:bg-[#B59226] transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
+            className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#8B1E24] text-white font-bold hover:bg-[#6E1216] transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
           >
             <span>Demo "Elena & Davide"</span>
             <ArrowRight className="w-4 h-4" />
@@ -195,30 +199,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SHOWCASE ANIMAZIONE 3D DA 21ST.DEV (CONTAINER SCROLL) */}
-      <section className="-mt-12">
-        <ContainerScroll
-          titleComponent={
-            <div className="flex flex-col items-center">
-              <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold mb-2">
-                Esperienza Tridimensionale
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif text-[#4A3D39]">
-                Scorri per scoprire la magia dell'invito
-              </h2>
-            </div>
-          }
-        >
-          <img
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"
-            alt="Anteprima 3D Matrimonio"
-            className="w-full h-full object-cover rounded-2xl"
-          />
-        </ContainerScroll>
-      </section>
-
-      {/* GAMIFICATION SHOWCASE (SCRATCH CARD) */}
-      <section className="py-16 px-6 bg-[#F4EFE6] border-y border-[#E5DACB]">
+      {/* GAMIFICATION SHOWCASE */}
+      <section className="py-16 px-6 bg-[#F4EFE6]/90 border-y border-[#E5DACB]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold mb-2 block">
             Esperienza Interattiva
@@ -411,6 +393,6 @@ export default function LandingPage() {
         <p className="mt-1 opacity-60">Sito Ufficiale: https://rmstudio.app</p>
       </footer>
 
-    </div>
+    </KineticGrid>
   );
 }
