@@ -14,11 +14,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Animazione morbida per lo scorrimento e la ceralacca */
 html {
   scroll-behavior: smooth;
 }
 
+/* ── ANIMAZIONE STRISCIA SCORREVOLE COMMENTI ── */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -32,4 +32,125 @@ html {
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ── REGOLE CSS PER WIDGET ECOSISTEMA ORBITALE (DRIVEMOTION PATTERN) ── */
+@keyframes orbit-rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes counter-rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+.orbit-ring {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+  animation: orbit-rotation 40s linear infinite;
+}
+.orbit-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 440px;
+}
+.orbit-area:hover .orbit-ring,
+.orbit-area:hover .orbit-item {
+  animation-play-state: paused;
+}
+.orbit-wrapper {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+}
+.orbit-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: counter-rotation 40s linear infinite;
+  transform-origin: center;
+}
+.orbit-link {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-sizing: border-box;
+  transition: 0.3s;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+.orbit-link:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+.orbit-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.orbit-img.cover {
+  object-fit: cover;
+}
+.orbit-img.rounded {
+  border-radius: 50%;
+}
+.orbit-center-photo {
+  position: absolute;
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  border: 4px solid #f59e0b;
+  padding: 4px;
+  background: #000;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  z-index: 15;
+  box-sizing: border-box;
+}
+.orbit-center-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.orbit-tooltip {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  background: #0a0a0c;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #94a3b8;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  text-align: center;
+  z-index: 50;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  line-height: 1.4;
+}
+.orbit-tooltip b {
+  color: white;
+  display: block;
+  margin-bottom: 4px;
+}
+.orbit-item:hover .orbit-tooltip {
+  opacity: 1;
 }
