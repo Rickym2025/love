@@ -2,12 +2,21 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 
-interface ScratchBoxProps {
-  label: string;
-  hiddenValue: string;
+interface ScratchCardProps {
+  revealText?: string;
+  subText?: string;
+  day?: string;
+  month?: string;
+  year?: string;
 }
 
-function ScratchBox({ label, hiddenValue }: ScratchBoxProps) {
+export default function ScratchCard({
+  revealText = '28 SETTEMBRE 2026',
+  subText = 'Chiesa di Pescarenico • Ore 11:00',
+  day = '28',
+  month = 'Settembre',
+  year = '2026',
+}: ScratchCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [scratched, setScratched] = useState(false);
 
@@ -17,21 +26,20 @@ function ScratchBox({ label, hiddenValue }: ScratchBoxProps) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Strato di copertura azzurro/argentato grattabile
-    ctx.fillStyle = '#B0C4DE';
+    ctx.fillStyle = '#D4AF37';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#4682B4';
-    ctx.font = 'bold 10px sans-serif';
+    ctx.fillStyle = '#5C450C';
+    ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('GRATTA', canvas.width / 2, canvas.height / 2 + 4);
+    ctx.fillText('✨ GRATTA CON IL DITO ✨', canvas.width / 2, canvas.height / 2 + 4);
 
     let isDrawing = false;
 
     const scratch = (x: number, y: number) => {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.arc(x, y, 16, 0, Math.PI * 2);
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
       ctx.fill();
     };
 
@@ -84,35 +92,25 @@ function ScratchBox({ label, hiddenValue }: ScratchBoxProps) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-2xl shadow-md border border-[#BBDEFB] flex items-center justify-center overflow-hidden">
-        <span className="font-serif text-xl sm:text-2xl font-bold text-[#37474F]">
-          {hiddenValue}
+    <div className="relative w-full max-w-sm mx-auto aspect-[5/2] bg-[#FAF7F2] border border-[#D4AF37]/50 rounded-2xl overflow-hidden shadow-xl flex flex-col items-center justify-center p-4 text-center select-none">
+      <div className="z-0">
+        <span className="text-[#8B1E24] text-[10px] font-bold uppercase tracking-widest block mb-1">
+          Data Segreta Rivelata
         </span>
-        <canvas
-          ref={canvasRef}
-          width={112}
-          height={112}
-          className={`absolute inset-0 w-full h-full cursor-pointer z-10 ${scratched ? 'touch-none' : ''}`}
-        />
+        <h4 className="font-serif text-2xl font-bold text-[#4A3D39]">
+          {revealText || `${day} ${month} ${year}`}
+        </h4>
+        <p className="text-xs text-[#9E8976] italic mt-1">{subText}</p>
       </div>
-      <span className="text-[10px] text-[#78909C] uppercase tracking-widest mt-2 font-semibold">
-        {label}
-      </span>
-    </div>
-  );
-}
 
-export default function ScratchDate({ day = '14', month = 'Settembre', year = '2026' }: { day?: string; month?: string; year?: string }) {
-  return (
-    <div className="my-8 text-center">
-      <p className="font-serif italic text-[#4682B4] text-xl mb-1">The Date</p>
-      <p className="text-xs text-[#78909C] tracking-widest uppercase mb-6">✦ Gratta per svelare la data ✦</p>
-      <div className="flex items-center justify-center gap-4">
-        <ScratchBox label="Giorno" hiddenValue={day} />
-        <ScratchBox label="Mese" hiddenValue={month} />
-        <ScratchBox label="Anno" hiddenValue={year} />
-      </div>
+      <canvas
+        ref={canvasRef}
+        width={380}
+        height={150}
+        className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-500 ${
+          scratched ? 'touch-none' : ''
+        }`}
+      />
     </div>
   );
 }
