@@ -43,12 +43,12 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
 
   if (submitted) {
     return (
-      <div className="bg-slate-900/80 border border-emerald-500/30 rounded-2xl p-8 text-center max-w-lg mx-auto shadow-xl">
-        <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto mb-4 animate-bounce" />
-        <h3 className="font-serif text-2xl text-emerald-200 mb-2">
+      <div className="paper-card border border-[#D4AF37]/50 rounded-2xl p-8 text-center max-w-lg mx-auto shadow-md">
+        <CheckCircle2 className="w-12 h-12 text-[#8B1E24] mx-auto mb-3" />
+        <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">
           Conferma Ricevuta!
         </h3>
-        <p className="text-slate-300 text-sm italic">
+        <p className="text-xs text-[#9E8976] italic">
           Grazie {guestName}, la tua risposta è stata registrata con successo. Non vediamo l'ora di festeggiare insieme!
         </p>
       </div>
@@ -58,18 +58,17 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-slate-900/60 backdrop-blur-md border border-amber-500/20 rounded-2xl p-6 sm:p-8 max-w-lg mx-auto text-left shadow-2xl"
+      className="paper-card border border-[#E5DACB] rounded-2xl p-6 sm:p-8 max-w-lg mx-auto text-left shadow-md"
     >
-      <h3 className="font-serif text-2xl text-amber-100 mb-1 text-center">
-        Conferma la tua Presenza (RSVP)
+      <h3 className="font-serif text-2xl text-[#4A3D39] mb-1 text-center">
+        Conferma la tua Partecipazione
       </h3>
-      <p className="text-xs text-slate-400 text-center mb-6 uppercase tracking-wider">
-        Rispondi entro il 15 Luglio 2026
+      <p className="text-[10px] text-[#9E8976] text-center mb-6 uppercase tracking-wider">
+        Rispondi per aiutarci con la cucina
       </p>
 
-      {/* Nome e Cognome */}
       <div className="mb-4">
-        <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+        <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
           Il tuo Nome e Cognome *
         </label>
         <input
@@ -78,34 +77,33 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
           value={guestName}
           onChange={(e) => setGuestName(e.target.value)}
           placeholder="Es. Mario Rossi"
-          className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-colors"
+          className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none focus:border-[#8B1E24]"
         />
       </div>
 
-      {/* Presenza */}
       <div className="mb-5">
-        <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-          Partecipazione
+        <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
+          Sarai dei nostri?
         </label>
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => setAttending(true)}
-            className={`py-2.5 px-4 rounded-xl border text-sm font-medium transition-all ${
+            className={`py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
               attending
-                ? 'bg-amber-500/20 border-amber-500 text-amber-200'
-                : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                ? 'bg-[#8B1E24] text-white border-[#8B1E24]'
+                : 'bg-[#FAF7F2] border-[#D8CBB7] text-[#9E8976]'
             }`}
           >
-            Sì, ci sarò! 🎉
+            Sì, ci sarò con gioia! 🎉
           </button>
           <button
             type="button"
             onClick={() => setAttending(false)}
-            className={`py-2.5 px-4 rounded-xl border text-sm font-medium transition-all ${
+            className={`py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
               !attending
-                ? 'bg-rose-500/20 border-rose-500 text-rose-200'
-                : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                ? 'bg-[#8B1E24] text-white border-[#8B1E24]'
+                : 'bg-[#FAF7F2] border-[#D8CBB7] text-[#9E8976]'
             }`}
           >
             Purtroppo no
@@ -115,16 +113,15 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
 
       {attending && (
         <>
-          {/* Numero di persone */}
           <div className="mb-4">
-            <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-amber-400" />
+            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-[#8B1E24]" />
               Numero di Partecipanti
             </label>
             <select
               value={guestsCount}
               onChange={(e) => setGuestsCount(Number(e.target.value))}
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none"
             >
               <option value={1}>Solo io (1 persona)</option>
               <option value={2}>Io + 1 accompagnatore (2 persone)</option>
@@ -133,16 +130,15 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
             </select>
           </div>
 
-          {/* Preferenza Menu */}
           <div className="mb-4">
-            <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Utensils className="w-3.5 h-3.5 text-amber-400" />
+            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Utensils className="w-3.5 h-3.5 text-[#8B1E24]" />
               Preferenza Menu
             </label>
             <select
               value={menuPreference}
               onChange={(e) => setMenuPreference(e.target.value)}
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none"
             >
               <option value="carne">Menu Carne / Tradizionale</option>
               <option value="pesce">Menu Pesce</option>
@@ -151,9 +147,8 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
             </select>
           </div>
 
-          {/* Intolleranze o allergie */}
           <div className="mb-4">
-            <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
               Allergie o Intolleranze Alimentari
             </label>
             <textarea
@@ -161,22 +156,7 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
               value={dietaryNotes}
               onChange={(e) => setDietaryNotes(e.target.value)}
               placeholder="Es. Celiachia, intolleranza al lattosio..."
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-sm"
-            />
-          </div>
-
-          {/* Richiesta Canzone per la Festa */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Music className="w-3.5 h-3.5 text-rose-400" />
-              Che canzone ti farebbe ballare alla festa?
-            </label>
-            <input
-              type="text"
-              value={songRequest}
-              onChange={(e) => setSongRequest(e.target.value)}
-              placeholder="Es. Titolo della tua canzone preferita"
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-sm"
+              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-xs focus:outline-none"
             />
           </div>
         </>
@@ -185,10 +165,10 @@ export default function RsvpForm({ experienceSlug }: { experienceSlug: string })
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-medium hover:from-amber-400 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50"
+        className="w-full py-3.5 rounded-xl bg-[#8B1E24] text-[#FAF7F2] font-bold text-xs uppercase tracking-widest hover:bg-[#6E1216] transition-all shadow-md flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50 mt-4"
       >
-        <Send className="w-4 h-4" />
-        {loading ? 'Invio in corso...' : 'Invia Conferma'}
+        <Send className="w-3.5 h-3.5" />
+        {loading ? 'Inviando...' : 'Invia Conferma'}
       </button>
     </form>
   );
