@@ -14,7 +14,6 @@ interface EnvelopeWaxProps {
 }
 
 export default function EnvelopeWax({
-  initials = 'E & D',
   coupleNames = 'Elena & Davide',
   weddingDate = '28 Settembre 2026',
   audioUrl = 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3',
@@ -47,12 +46,10 @@ export default function EnvelopeWax({
     }, 1000);
   };
 
-  const envBg = themeColor === 'blue' ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F4EFE6] border-[#E5DACB]';
-  const flapBg = themeColor === 'blue' ? 'bg-[#D0E7FF]' : 'bg-[#EFE8D8]';
-  const waxBg = themeColor === 'blue' ? 'from-[#2196F3] via-[#1976D2] to-[#0D47A1]' : 'from-[#8B1E24] via-[#6E1216] to-[#4A0A0D]';
+  const isBlue = themeColor === 'blue';
 
   return (
-    <div className="relative min-h-screen bg-[#FAF7F2] text-[#4A3D39] overflow-x-hidden">
+    <div className={`relative min-h-screen ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} text-[#4A3D39] overflow-x-hidden`}>
       
       {isOpen && (
         <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
@@ -62,11 +59,11 @@ export default function EnvelopeWax({
               className="petal"
               style={{
                 left: `${8 + i * 10}%`,
-                animationDelay: `${i * 0.9}s`,
+                animationDelay: `${i * 0.8}s`,
                 animationDuration: `${7 + (i % 3) * 2}s`,
               }}
             >
-              {themeColor === 'blue' ? '🕊️' : '🌸'}
+              {isBlue ? '🕊️' : '🌸'}
             </div>
           ))}
         </div>
@@ -78,10 +75,10 @@ export default function EnvelopeWax({
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.8 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAF7F2] p-4 select-none"
+            className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} p-4 select-none`}
           >
             <div className="text-center mb-6">
-              <span className="text-[#8B1E24] text-xs font-semibold tracking-widest uppercase mb-1 block">
+              <span className="text-[#D4AF37] font-bold text-xs tracking-widest uppercase mb-1 block">
                 Partecipazione di Nozze
               </span>
               <h1 className="font-serif text-4xl sm:text-6xl text-[#4A3D39] font-normal mb-1">
@@ -92,18 +89,15 @@ export default function EnvelopeWax({
               </p>
             </div>
 
-            {/* STRUTTURA REALE DELLA BUSTA PIEGATA */}
-            <div className={`relative w-full max-w-sm sm:max-w-md aspect-[3/4] ${envBg} rounded-2xl shadow-xl border flex flex-col items-center justify-between p-8 overflow-hidden`}>
+            {/* BUSTA DI CARTA REALE PIEGATA */}
+            <div className={`relative w-full max-w-sm sm:max-w-md aspect-[3/4] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F4EFE6] border-[#E5DACB]'} rounded-3xl shadow-2xl border flex flex-col items-center justify-between p-8 overflow-hidden`}>
               
-              {/* Pattern Piegatura Vettoriale Interno */}
-              <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:16px_16px]" />
-
-              {/* Flap Triangolare della Busta */}
+              {/* Flap Triangolare */}
               <motion.div
                 animate={isAnimating ? { rotateX: 180, zIndex: 0 } : { rotateX: 0, zIndex: 20 }}
                 transition={{ duration: 0.8 }}
                 style={{ transformOrigin: 'top', clipPath: 'polygon(0 0, 100% 0, 50% 100%)' }}
-                className={`absolute top-0 left-0 right-0 h-1/2 ${flapBg} border-b shadow-sm flex items-end justify-center pb-2`}
+                className={`absolute top-0 left-0 right-0 h-1/2 ${isBlue ? 'bg-[#D0E7FF]' : 'bg-[#EFE8D8]'} border-b shadow-sm flex items-end justify-center pb-2`}
               />
 
               <div className="z-10 text-center my-auto">
@@ -111,23 +105,25 @@ export default function EnvelopeWax({
                   Sei cordialmente invitato
                 </p>
                 <p className="text-[#9E8976] text-[10px] uppercase tracking-widest">
-                  Tocca il sigillo per aprire
+                  Tocca la ceralacca per aprire
                 </p>
               </div>
 
-              {/* SIGILLO IN CERALACCA ANCORATO SENZA SPOSTAMENTI */}
+              {/* SIGILLO IN CERALACCA DORATA IDENTICO ALL'IMMAGINE ALLEGATA (FISSO E ANCORATO) */}
               <motion.button
                 onClick={handleOpen}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 animate={isAnimating ? { scale: [1, 1.2, 0] } : {}}
                 transition={{ duration: 0.8 }}
-                className={`z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${waxBg} shadow-2xl border-2 border-[#D4AF37]/60 flex items-center justify-center cursor-pointer`}
+                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#E6C363] via-[#D4AF37] to-[#997A15] shadow-[0_10px_30px_rgba(212,175,55,0.4)] border-2 border-[#FFF0AA] flex items-center justify-center cursor-pointer overflow-hidden group"
               >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-[#D4AF37]/40 flex items-center justify-center bg-black/10">
-                  <span className="font-serif text-[#FAF7F2] text-lg sm:text-xl font-bold tracking-widest drop-shadow">
-                    {initials}
+                {/* Incisione 'L' con Cuore intagliato */}
+                <div className="w-20 h-20 rounded-full border border-[#FFF0AA]/40 flex flex-col items-center justify-center bg-amber-500/10 shadow-inner text-[#524103]">
+                  <span className="font-serif text-2xl font-bold tracking-tighter drop-shadow-sm group-hover:scale-110 transition-transform">
+                    L
                   </span>
+                  <span className="text-xs">❤️</span>
                 </div>
               </motion.button>
 
