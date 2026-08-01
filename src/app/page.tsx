@@ -340,6 +340,27 @@ export default function LandingPage() {
         </div>
         <p>© 2026 RM Studio di Riccardo Modena • Tutti i diritti riservati</p>
         <p className="mt-1 opacity-60">Sito Ufficiale: https://rmstudio.app</p>
+
+        <div className="flex justify-center gap-6 my-4 text-xs text-slate-400">
+          <a
+            href="https://rmstudio.app/privacy.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-amber-300 transition-colors"
+          >
+            Privacy Policy
+          </a>
+          <span>•</span>
+          <a
+            href="https://rmstudio.app/termini.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-amber-300 transition-colors"
+          >
+            Termini e Condizioni
+          </a>
+        </div>
+        
       </footer>
 
     </div>
