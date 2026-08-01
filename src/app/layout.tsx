@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -23,6 +24,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-rose-500 selection:text-white">
         {children}
+
+        {/* INIEZIONE CENTRALE DALLA POSIZIONE ORIGINALE RM STUDIO */}
+        <Script src="https://rmstudio.app/cookie-banner.js" strategy="afterInteractive" />
       </body>
     </html>
   );
