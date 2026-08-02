@@ -183,7 +183,7 @@ export default function LandingPage() {
         </section>
 
         {/* RIGA 3: STRISCIA 3 RECENSIONI AFFIANCATE (SCHEMA GOOGLE) */}
-        <section className="py-16 bg-white/90 border-y border-[#E2E8F0]">
+        <section className="py-16 bg-white/50 backdrop-blur-sm border-y border-[#E2E8F0]">
           <div className="max-w-6xl mx-auto px-6">
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block text-center mb-8">
               Cosa Dicono Sposi & Wedding Planner
@@ -252,7 +252,7 @@ export default function LandingPage() {
         </section>
 
         {/* GAMIFICATION DEMO */}
-        <section className="py-16 px-6 bg-white/90 border-y border-[#E2E8F0] text-center">
+        <section className="py-16 px-6 bg-white/50 backdrop-blur-sm border-y border-[#E2E8F0] text-center">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-3xl text-[#1E293B] mb-4">Prova il "Gratta e Scopri" con il dito!</h2>
             <ScratchCard revealText="28 SETTEMBRE 2026" subText="Chiesa di Pescarenico • Ore 11:00" />
@@ -288,7 +288,7 @@ export default function LandingPage() {
         </section>
 
         {/* PREZZI COMPLETI */}
-        <section id="prezzi" className="py-20 px-6 bg-white/90 border-t border-[#E2E8F0]">
+        <section id="prezzi" className="py-20 px-6 bg-white/50 backdrop-blur-sm border-t border-[#E2E8F0]">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] text-center mb-16">Piani Semplici. Zero Abbonamenti.</h2>
             <div className="grid md:grid-cols-2 gap-8">
