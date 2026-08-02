@@ -28,7 +28,6 @@ export default function EnvelopeWax({
     if (isOpen || isAnimating) return;
     setIsAnimating(true);
 
-    // Avvia l'unico elemento Audio condiviso
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
       audioRef.current.play().catch(() => {});
@@ -52,26 +51,8 @@ export default function EnvelopeWax({
   return (
     <div className={`relative min-h-screen ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} text-[#4A3D39] overflow-x-hidden`}>
       
-      {/* ELEMENTO AUDIO UNICO PER PREVENIRE SOVRAPPOSIZIONI */}
-      <audio ref={audioRef} src={audioUrl} preload="auto" />
-
-      {isOpen && (
-        <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="petal"
-              style={{
-                left: `${8 + i * 10}%`,
-                animationDelay: `${i * 0.8}s`,
-                animationDuration: `${7 + (i % 3) * 2}s`,
-              }}
-            >
-              {isBlue ? '🕊️' : '🌸'}
-            </div>
-          ))}
-        </div>
-      )}
+      {/* UNICO ELEMENTO AUDIO NATIVO CONDIVISO CON LA PAGINA */}
+      <audio id="love-wedding-audio" ref={audioRef} src={audioUrl} preload="auto" />
 
       <AnimatePresence>
         {!isOpen && (
@@ -93,10 +74,10 @@ export default function EnvelopeWax({
               </p>
             </div>
 
-            {/* BUSTA DI CARTA REALE PIEGATA */}
+            {/* BUSTA D'EPOCA RICAMATA CON PUNTALE TRIANGOLARE */}
             <div className={`relative w-full max-w-sm sm:max-w-md aspect-[3/4] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F4EFE6] border-[#E5DACB]'} rounded-3xl shadow-2xl border flex flex-col items-center justify-between p-8 overflow-hidden`}>
               
-              {/* Flap Triangolare */}
+              {/* Flap Triangolare della Busta */}
               <motion.div
                 animate={isAnimating ? { rotateX: 180, zIndex: 0 } : { rotateX: 0, zIndex: 20 }}
                 transition={{ duration: 0.8 }}
@@ -109,20 +90,26 @@ export default function EnvelopeWax({
                   Sei cordialmente invitato
                 </p>
                 <p className="text-[#9E8976] text-[10px] uppercase tracking-widest">
-                  Tocca la ceralacca per aprire
+                  Tocca il sigillo per aprire
                 </p>
               </div>
 
-              {/* SIGILLO IN CERALACCA DORATA IDENTICO AL LOGO 2 (PERFETTAMENTE FISSO E CENTRATO) */}
+              {/* SIGILLO IN CERALACCA (USO DI PUBLIC/WAX-SEAL.PNG O FALLBACK DORATO ANCORATO PERFETTAMENTE) */}
               <button
                 onClick={handleOpen}
-                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#E6C363] via-[#D4AF37] to-[#997A15] shadow-[0_10px_30px_rgba(212,175,55,0.4)] border-2 border-[#FFF0AA] flex items-center justify-center cursor-pointer overflow-hidden transform active:scale-95 transition-transform"
+                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
               >
-                <div className="w-20 h-20 rounded-full border border-[#FFF0AA]/40 flex flex-col items-center justify-center bg-amber-500/10 shadow-inner text-[#524103]">
-                  <span className="font-serif text-2xl font-bold tracking-tighter drop-shadow-sm">
-                    L
-                  </span>
-                  <span className="text-xs">❤️</span>
+                <img
+                  src="/wax-seal.png"
+                  alt="Ceralacca"
+                  className="w-full h-full object-contain drop-shadow-xl"
+                  onError={(e) => {
+                    // Fallback visivo se l'immagine non è ancora stata caricata
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+                <div className="w-20 h-20 rounded-full border-2 border-[#D4AF37] bg-gradient-to-br from-[#E6C363] to-[#997A15] flex items-center justify-center text-white font-serif font-bold text-xl shadow-lg">
+                  L❤️
                 </div>
               </button>
 
