@@ -6,10 +6,9 @@ import { supabase } from '@/lib/supabase';
 import EnvelopeWax from '@/components/EnvelopeWax';
 import ScratchDate from '@/components/ScratchDate';
 import PartingClouds from '@/components/PartingClouds';
-import LoveQuiz from '@/components/LoveQuiz';
 import RsvpForm from '@/components/RsvpForm';
 import { WaterRippleImage } from '@/components/ui/water-ripple-image';
-import { Heart, Gift, Music, Sparkles, Camera } from 'lucide-react';
+import { Heart, Gift, Music, Sparkles } from 'lucide-react';
 
 export default function ExperiencePage({
   params,
@@ -20,7 +19,6 @@ export default function ExperiencePage({
 }) {
   const slug = params.slug;
   const guestName = searchParams?.guest || 'Cara Famiglia / Amico';
-
   const isFrancesca = slug === 'francesca-e-luca';
 
   const defaultData = isFrancesca
@@ -52,15 +50,9 @@ export default function ExperiencePage({
   useEffect(() => {
     async function loadData() {
       try {
-        const { data } = await supabase
-          .from('love_experiences')
-          .select('*')
-          .eq('slug', slug)
-          .single();
+        const { data } = await supabase.from('love_experiences').select('*').eq('slug', slug).single();
         if (data) setExperience(data);
-      } catch (e) {
-        console.warn('Uso dati predefiniti per demo');
-      }
+      } catch (e) {}
     }
     loadData();
   }, [slug]);
@@ -73,7 +65,7 @@ export default function ExperiencePage({
       audioUrl={experience.audio_url}
       themeColor={experience.theme_color}
     >
-      <div className={`min-h-screen ${isFrancesca ? 'bg-[#F0F7FF] text-[#2C3E50]' : 'bg-[#FAF7F2] text-[#4A3D39]'} pb-20`}>
+      <div className={`min-h-screen ${isFrancesca ? 'bg-[#F0F7FF] text-[#1E293B]' : 'bg-[#FAF7F2] text-[#1E293B]'} pb-20`}>
         
         {/* HERO SECTION */}
         <section className="relative py-16 px-6 text-center max-w-3xl mx-auto flex flex-col items-center">
@@ -84,28 +76,34 @@ export default function ExperiencePage({
 
           <p className="font-serif italic text-[#D4AF37] text-2xl mb-2">Getting Married!</p>
           <h1 className="font-serif text-5xl sm:text-7xl font-normal mb-4 tracking-wide">{experience.couple_names}</h1>
-          <p className="text-[#78909C] text-xs tracking-widest uppercase mb-8">{experience.wedding_date}</p>
+          <p className="text-[#64748B] text-xs tracking-widest uppercase mb-8">{experience.wedding_date}</p>
 
-          {/* FOTO FORMATO VERTICALE 9:16 PER EVITARE TAGLI ALLE TESTE */}
-          <div className="w-full max-w-xs aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
+          {/* FOTO PROPORZIONATA SENZA TAGLI ALLE TESTE */}
+          <div className="w-full max-w-md h-auto rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
             {!isFrancesca ? (
-              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" />
+              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" className="w-full h-80" />
             ) : (
-              <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" alt="Coppia" className="w-full h-full object-cover" />
+              <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" alt="Coppia" className="w-full h-80 object-cover" />
             )}
           </div>
         </section>
 
-        {/* DEMO FRANCESCA: NUVOLE + SCRATCH | DEMO ELENA: LOVE QUIZ */}
+        {/* DEMO FRANCESCA: NUVOLE + SCRATCH | DEMO ELENA: CITAZIONE D'AUTORE */}
         {isFrancesca ? (
           <PartingClouds>
             <ScratchDate day="14" month="Settembre" year="2026" />
           </PartingClouds>
         ) : (
-          <LoveQuiz coupleNames={experience.couple_names} />
+          <div className="max-w-xl mx-auto px-6 text-center my-8">
+            <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md">
+              <p className="font-serif italic text-lg text-[#1E293B] leading-relaxed">
+                "Due anime, un solo destino. Una vita scritta nel cuore da condividere con chi amiamo."
+              </p>
+            </div>
+          </div>
         )}
 
-        {/* PLAYER AUDIO COLLEGATO AD AUDIO UNICO */}
+        {/* PLAYER AUDIO UNICO */}
         <section className="py-8 px-6 max-w-xl mx-auto text-center">
           <div className="bg-white p-6 rounded-2xl border border-[#D4AF37]/50 shadow-md">
             <Music className="w-6 h-6 text-[#8B1E24] mx-auto mb-2 animate-bounce" />
@@ -127,12 +125,17 @@ export default function ExperiencePage({
           </div>
         </section>
 
-        {/* LINK ALLA PAGINA DEDICATA DELLA FESTA */}
-        <section className="py-12 px-6 max-w-md mx-auto text-center">
+        {/* FORM DI CONFERMA PARTECIPAZIONE */}
+        <section className="py-12 px-6">
+          <RsvpForm experienceSlug={slug} />
+        </section>
+
+        {/* LINK CRONOLOGICO A "LA FESTA" IN FONDO ALLA PAGINA */}
+        <section className="py-12 px-6 max-w-md mx-auto text-center border-t border-[#E2E8F0] mt-12">
           <div className="bg-white border-2 border-[#D4AF37] p-8 rounded-3xl shadow-lg">
-            <Camera className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
-            <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">La Festa & Maxischermo</h3>
-            <p className="text-xs text-[#9E8976] mb-6">Il giorno delle nozze scatta foto e video per inviarli al maxischermo del locale!</p>
+            <Sparkles className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
+            <h3 className="font-serif text-2xl text-[#1E293B] mb-2">La Festa</h3>
+            <p className="text-xs text-[#64748B] mb-6">Il giorno delle nozze scatta foto e video dal tuo telefono per trasmetterle in tempo reale sul maxischermo del locale!</p>
             
             <Link
               href={`/${slug}/festa`}
@@ -141,11 +144,6 @@ export default function ExperiencePage({
               Apri Pagina della Festa 📸
             </Link>
           </div>
-        </section>
-
-        {/* FORM DI CONFERMA PARTECIPAZIONE */}
-        <section className="py-12 px-6">
-          <RsvpForm experienceSlug={slug} />
         </section>
 
       </div>
