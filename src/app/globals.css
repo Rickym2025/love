@@ -6,18 +6,20 @@
   --bg-cream: #FAF7F2;
   --text-dark: #1E293B;
   --gold-accent: #D4AF37;
-  --burgundy: #8B1E24;
 }
 
-body {
+/* REGOLE DI CONFORMITÀ GOOGLE SEO MOBILE (MINIMO 16PX PER I TESTI) */
+html, body {
+  font-size: 16px !important; /* Previene penalizzazioni Google */
   color: #1E293B;
   background-color: #FAF7F2;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-html {
-  scroll-behavior: smooth;
+input, select, textarea, button {
+  font-size: 16px !important; /* Previene lo zoom automatico su iPhone/iOS */
 }
 
 /* Texture carta stropicciata / pergamena */
@@ -61,7 +63,7 @@ html {
 .orbit-wrapper { position: absolute; width: 64px; height: 64px; transform: translate(-50%, -50%); }
 .orbit-item { position: relative; width: 100%; height: 100%; animation: counter-rotation 40s linear infinite; transform-origin: center; }
 .orbit-link { display: flex; width: 100%; height: 100%; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.2); transition: 0.3s; align-items: center; justify-content: center; overflow: hidden; }
-.orbit-link:hover { border-color: #8B1E24; box-shadow: 0 0 15px rgba(139, 30, 36, 0.3); }
+.orbit-link:hover { border-color: #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 .orbit-img { width: 100%; height: 100%; object-fit: contain; }
 .orbit-center-photo { position: absolute; width: 144px; height: 144px; border-radius: 50%; border: 4px solid #D4AF37; padding: 4px; background: #FAF7F2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 15; }
 .orbit-center-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
