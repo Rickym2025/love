@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
+import Marquee from '@/components/Marquee';
 import KineticGrid from '@/components/ui/kinetic-grid';
 import {
   Sparkles,
@@ -13,9 +14,6 @@ import {
   ArrowRight,
   ChevronDown,
   BookOpen,
-  Star,
-  Smartphone,
-  Tv,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -93,15 +91,15 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B]">
       
-      {/* SFONDO CONTINUO SU TUTTO IL SITO (STILE DRIVEMOTION) */}
+      {/* SFONDO CONTINUO SU TUTTO IL SITO */}
       <div
-        className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
+        className="fixed inset-0 z-0 pointer-events-none opacity-15 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
       />
 
       <KineticGrid className="relative z-10">
         
-        {/* RIGA 1: HEADER (LOGO A SINISTRA | MENU A DESTRA - SCHEMA GOOGLE) */}
+        {/* NAVBAR */}
         <header className="border-b border-[#E2E8F0] bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40">
           <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -115,14 +113,14 @@ export default function LandingPage() {
                 <span className="font-serif text-2xl font-bold tracking-wider text-[#1E293B] block leading-none">
                   LOVE
                 </span>
-                <span className="text-[9px] uppercase tracking-widest text-[#8B1E24] font-bold">
+                <span className="text-[9px] uppercase tracking-widest text-[#D4AF37] font-bold">
                   RM STUDIO
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-6">
-              <Link href="/elena-e-davide" className="text-xs text-[#8B1E24] hover:underline font-bold hidden md:block">
+              <Link href="/elena-e-davide" className="text-xs text-[#D4AF37] hover:underline font-bold hidden md:block">
                 Demo "Elena & Davide" ↗
               </Link>
               <Link href="/francesca-e-luca" className="text-xs text-[#1976D2] hover:underline font-bold hidden md:block">
@@ -138,14 +136,14 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* RIGA 2: SLIDE INIZIALE / HERO (COSA FAI? - A CHI TI RIVOLGI? - CTA DIRETTI) */}
+        {/* HERO SECTION */}
         <section className="py-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
           
-          <div className="inline-flex p-1 rounded-full bg-white border border-[#E2E8F0] mb-8 shadow-sm">
+          <div className="inline-flex p-1 rounded-full bg-white/80 border border-[#E2E8F0] mb-8 shadow-sm">
             <button
               onClick={() => setActiveTab('sposi')}
               className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                activeTab === 'sposi' ? 'bg-[#8B1E24] text-white shadow-md' : 'text-[#64748B]'
+                activeTab === 'sposi' ? 'bg-[#D4AF37] text-white shadow-md' : 'text-[#64748B]'
               }`}
             >
               💍 Per gli Sposi
@@ -153,14 +151,14 @@ export default function LandingPage() {
             <button
               onClick={() => setActiveTab('agenzie')}
               className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                activeTab === 'agenzie' ? 'bg-[#8B1E24] text-white shadow-md' : 'text-[#64748B]'
+                activeTab === 'agenzie' ? 'bg-[#D4AF37] text-white shadow-md' : 'text-[#64748B]'
               }`}
             >
               💼 Per Wedding Planner
             </button>
           </div>
 
-          <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-3">
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-3">
             Cosa Fai? • Le Partecipazioni Digitali d'Autore
           </span>
           <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl">
@@ -171,7 +169,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
-            <Link href="/elena-e-davide" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#8B1E24] text-white font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-[#6E1216]">
+            <Link href="/elena-e-davide" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-white font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-[#B59226]">
               <span>Demo "Elena & Davide"</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -182,34 +180,15 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* RIGA 3: STRISCIA 3 RECENSIONI AFFIANCATE (SCHEMA GOOGLE) */}
-        <section className="py-16 bg-white/50 backdrop-blur-sm border-y border-[#E2E8F0]">
-          <div className="max-w-6xl mx-auto px-6">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block text-center mb-8">
-              Cosa Dicono Sposi & Wedding Planner
-            </span>
-            <div className="grid md:grid-cols-3 gap-6">
-              {testimonials.map((t, idx) => (
-                <div key={idx} className="bg-[#FAF7F2] p-6 rounded-2xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-1 mb-3 text-[#D4AF37]">
-                      {[...Array(t.stars)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
-                      ))}
-                    </div>
-                    <p className="text-xs text-[#1E293B] italic mb-4 leading-relaxed font-light">"{t.text}"</p>
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-sm font-bold text-[#1E293B]">{t.name}</h4>
-                    <span className="text-[10px] text-[#64748B] uppercase tracking-wider">{t.role}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* RECENSIONI - STRISCIA SCORREVOLE AUTOMATICA */}
+        <section className="py-12 bg-white/60 backdrop-blur-sm border-y border-[#E2E8F0] overflow-hidden">
+          <div className="max-w-6xl mx-auto px-6 text-center mb-6">
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Recensioni Sposi & Agenzie</span>
           </div>
+          <Marquee items={testimonials} />
         </section>
 
-        {/* RIGA 4: SEZIONE ALTERNATA 1 (IMMAGINE MEDIO-GRANDE SINISTRA | DESCRIZIONE DESTRA) */}
+        {/* SEZIONE ALTERNATA 1 (IMMAGINE SINISTRA | DESCRIZIONE DESTRA) */}
         <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
@@ -219,18 +198,18 @@ export default function LandingPage() {
             />
           </div>
           <div>
-            <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Busta D'Epoca & Ceralacca 3D</span>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Busta D'Epoca & Ceralacca 3D</span>
             <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Un'emozione al primo tocco</h3>
             <p className="text-sm text-[#64748B] leading-relaxed mb-6">
               L'invitato tocca il sigillo dorato sullo schermo del telefono: la busta si apre con musica d'autore e pioggia di petali animati.
             </p>
-            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#8B1E24] uppercase tracking-wider">
+            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
               Prova la Busta Live →
             </Link>
           </div>
         </section>
 
-        {/* RIGA 5: SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE MEDIO-GRANDE DESTRA) */}
+        {/* SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE DESTRA) */}
         <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#E2E8F0]">
           <div className="order-2 md:order-1">
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">La Festa & Maxischermo Live</span>
@@ -252,7 +231,7 @@ export default function LandingPage() {
         </section>
 
         {/* GAMIFICATION DEMO */}
-        <section className="py-16 px-6 bg-white/50 backdrop-blur-sm border-y border-[#E2E8F0] text-center">
+        <section className="py-16 px-6 bg-white/60 backdrop-blur-sm border-y border-[#E2E8F0] text-center">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-3xl text-[#1E293B] mb-4">Prova il "Gratta e Scopri" con il dito!</h2>
             <ScratchCard revealText="28 SETTEMBRE 2026" subText="Chiesa di Pescarenico • Ore 11:00" />
@@ -282,20 +261,20 @@ export default function LandingPage() {
         {/* SISTEMA ORBITALE RM STUDIO */}
         <section className="py-12 border-t border-[#E2E8F0]">
           <div className="max-w-6xl mx-auto px-6 text-center">
-            <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Ecosistema RM Studio</span>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Ecosistema RM Studio</span>
             <OrbitWidget />
           </div>
         </section>
 
         {/* PREZZI COMPLETI */}
-        <section id="prezzi" className="py-20 px-6 bg-white/50 backdrop-blur-sm border-t border-[#E2E8F0]">
+        <section id="prezzi" className="py-20 px-6 bg-white/60 backdrop-blur-sm border-t border-[#E2E8F0]">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] text-center mb-16">Piani Semplici. Zero Abbonamenti.</h2>
             <div className="grid md:grid-cols-2 gap-8">
               
               <div className="bg-[#FAF7F2] border border-[#E2E8F0] rounded-3xl p-8 flex flex-col justify-between shadow-sm hover:border-[#D4AF37] transition-all">
                 <div>
-                  <span className="text-xs text-[#8B1E24] uppercase font-bold block mb-2">Per la Coppia</span>
+                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per la Coppia</span>
                   <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Sposi Premium</h3>
                   <div className="text-4xl font-serif text-[#1E293B] mb-6">€149 <span className="text-xs text-[#64748B] font-normal">una tantum</span></div>
                   
@@ -317,7 +296,7 @@ export default function LandingPage() {
 
               <div className="bg-[#FAF7F2] border-2 border-[#D4AF37] rounded-3xl p-8 flex flex-col justify-between shadow-md">
                 <div>
-                  <span className="text-xs text-[#8B1E24] uppercase font-bold block mb-2">Per Wedding Planner & Agenzie</span>
+                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per Wedding Planner & Agenzie</span>
                   <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Agency Hub</h3>
                   <div className="text-4xl font-serif text-[#1E293B] mb-6">€490 <span className="text-xs text-[#64748B] font-normal">/ anno (10 Matrimoni)</span></div>
                   
@@ -340,11 +319,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* FOOTER (P.IVA - PRIVACY POLICY - COOKIE POLICY - CONTATTI) */}
+        {/* FOOTER */}
         <footer className="py-12 border-t border-[#E2E8F0] bg-white text-center text-xs text-[#64748B]">
           <div className="max-w-4xl mx-auto px-6 space-y-3">
             <div className="flex items-center justify-center gap-1.5">
-              <Heart className="w-4 h-4 text-[#8B1E24] fill-[#8B1E24]" />
+              <Heart className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" />
               <span className="font-serif text-[#1E293B] font-bold text-lg">LOVE</span>
             </div>
             <p>© 2026 RM Studio di Riccardo Modena • P.IVA: 01659990299</p>
@@ -354,7 +333,7 @@ export default function LandingPage() {
               <span>•</span>
               <a href="https://rmstudio.app/termini.html" target="_blank" rel="noopener noreferrer" className="hover:underline">Cookie Policy & Termini</a>
               <span>•</span>
-              <a href="mailto:info@rmstudio.app" className="text-[#8B1E24] hover:underline">info@rmstudio.app</a>
+              <a href="mailto:info@rmstudio.app" className="text-[#D4AF37] hover:underline">info@rmstudio.app</a>
             </div>
           </div>
         </footer>
