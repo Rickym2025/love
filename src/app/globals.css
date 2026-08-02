@@ -4,14 +4,13 @@
 
 :root {
   --bg-cream: #FAF7F2;
-  --bg-card: #F4EFE6;
-  --text-serif: #4A3E3d;
+  --text-dark: #1E293B;
   --gold-accent: #D4AF37;
-  --wax-red: #8B1E24;
+  --burgundy: #8B1E24;
 }
 
 body {
-  color: #4A3D39;
+  color: #1E293B;
   background-color: #FAF7F2;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
@@ -23,16 +22,9 @@ html {
 
 /* Texture carta stropicciata / pergamena */
 .paper-card {
-  background-color: #F5EFE6;
-  background-image: radial-gradient(#E8DFC8 1px, transparent 1px);
-  background-size: 20px 20px;
-  box-shadow: 0 10px 30px rgba(139, 115, 85, 0.08);
-}
-
-/* Effetto Bordo Carta Strappata */
-.torn-border {
-  border-radius: 12px;
-  box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.15), 0 8px 25px rgba(74, 61, 57, 0.06);
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 /* Animazione Petali/Foglie che Cadono */
@@ -42,7 +34,7 @@ html {
     opacity: 1;
   }
   100% {
-    transform: translateY(105vh) rotate(360deg) translateX(50px);
+    transform: translateY(105vh) rotate(360deg) translateX(40px);
     opacity: 0.2;
   }
 }
@@ -52,10 +44,10 @@ html {
   top: -20px;
   pointer-events: none;
   z-index: 40;
-  animation: falling-petals 10s linear infinite;
+  animation: falling-petals 12s linear infinite;
 }
 
-/* Re-importa le animazioni del Widget Orbitale */
+/* REGOLE CSS PER WIDGET ECOSISTEMA ORBITALE */
 @keyframes orbit-rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes counter-rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
 
@@ -73,5 +65,5 @@ html {
 .orbit-img { width: 100%; height: 100%; object-fit: contain; }
 .orbit-center-photo { position: absolute; width: 144px; height: 144px; border-radius: 50%; border: 4px solid #D4AF37; padding: 4px; background: #FAF7F2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 15; }
 .orbit-center-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.orbit-tooltip { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 200px; background: #FAF7F2; border: 1px solid #D4AF37; color: #4A3D39; font-size: 12px; border-radius: 8px; padding: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; z-index: 50; }
+.orbit-tooltip { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 200px; background: #FAF7F2; border: 1px solid #D4AF37; color: #1E293B; font-size: 12px; border-radius: 8px; padding: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; z-index: 50; }
 .orbit-item:hover .orbit-tooltip { opacity: 1; }
