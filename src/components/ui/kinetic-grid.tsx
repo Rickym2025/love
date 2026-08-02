@@ -74,8 +74,8 @@ export default function KineticGrid({
           }
 
           ctx.beginPath();
-          ctx.arc(px, py, 2.8, 0, Math.PI * 2); // Puntini ingranditi
-          ctx.fillStyle = 'rgba(139, 30, 36, 0.35)'; // Borgogna ad alto contrasto
+          ctx.arc(px, py, 1.4, 0, Math.PI * 2); // Raggio ridotto a 1.4px
+          ctx.fillStyle = 'rgba(212, 175, 55, 0.22)'; // Oro sottile trasparente
           ctx.fill();
         }
       }
