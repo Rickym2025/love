@@ -175,25 +175,70 @@ export default function AgencyStudioPage() {
         </div>
       </div>
 
-      {/* MODALE WEB3FORMS (Richiesta Canzone Inedita) */}
-      {showWeb3FormsModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-slate-800 p-6 rounded-xl max-w-md w-[100%] border border-[#D4AF37]">
-            <h3 className="text-lg font-bold text-[#D4AF37] mb-2">Richiesta Brano Inedito - FF Edizioni</h3>
-            <p className="text-xs text-slate-300 mb-4">Compila il form per richiedere la composizione su misura al Maestro Fausto Fusetti.</p>
-            <form action="https://api.web3forms.com/submit" method="POST" className="space-y-3">
-              <input type="hidden" name="access_key" value="INSERISCI_TUA_KEY_WEB3FORMS" />
-              <input type="text" name="sposi" placeholder="Nomi Sposi (es. Elena & Davide)" required className="w-[100%] p-2 rounded bg-slate-700 text-xs text-white" />
-              <input type="email" name="email" placeholder="Email Agenzia / Sposi" required className="w-[100%] p-2 rounded bg-slate-700 text-xs text-white" />
-              <textarea name="note" placeholder="Dettagli sulla storia d'amore o genere musicale..." rows={3} className="w-[100%] p-2 rounded bg-slate-700 text-xs text-white" />
-              <div className="flex justify-end space-x-2 pt-2">
-                <button type="button" onClick={() => setShowWeb3FormsModal(false)} className="px-3 py-1.5 text-xs bg-slate-600 rounded">Annulla</button>
-                <button type="submit" className="px-3 py-1.5 text-xs bg-[#D4AF37] text-black font-bold rounded">Invia Richiesta 🚀</button>
-              </div>
-            </form>
-          </div>
+      {/* MODALE WEB3FORMS RICHIESTA CANZONE FAUSTO FUSETTI */}
+{showWeb3FormsModal && (
+  <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div className="bg-[#1E293B] p-6 rounded-2xl max-w-md w-full border border-[#D4AF37] text-left shadow-2xl">
+      <h3 className="text-lg font-bold text-[#D4AF37] mb-1">Richiesta Brano Inedito — FF Edizioni</h3>
+      <p className="text-xs text-slate-300 mb-4">
+        Invia i dati al Maestro Fausto Fusetti per la composizione d'autore personalizzata.
+      </p>
+
+      <form action="https://api.web3forms.com/submit" method="POST" className="space-y-3">
+        {/* ACCESS KEY ESTRATTA DAL PASTE */}
+        <input type="hidden" name="access_key" value="9013a8d5-0901-42a0-b9e6-4c45553f960d" />
+        <input type="hidden" name="subject" value="Nuova Richiesta Brano Inedito FF Edizioni - SaaS LOVE" />
+        <input type="hidden" name="from_name" value="LOVE Agency Hub" />
+
+        <div>
+          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Nomi Sposi & Agenzia</label>
+          <input
+            type="text"
+            name="sposi_agenzia"
+            required
+            placeholder="es. Elena & Davide (Agenzia Sposi in Love)"
+            className="w-full p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+          />
         </div>
-      )}
+
+        <div>
+          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Email di Contatto</label>
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="info@agenzia.it"
+            className="w-full p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Dettagli della Coppia e Genere Musicale</label>
+          <textarea
+            name="messaggio"
+            required
+            rows={3}
+            placeholder="Racconta la storia d'amore o lo stile desiderato (es. Romantico Pianoforte e Archi)..."
+            className="w-full p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#D4AF37] resize-none"
+          />
+        </div>
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onClick={() => setShowWeb3FormsModal(false)}
+            className="px-4 py-2 text-xs bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600"
+          >
+            Annulla
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 text-xs bg-[#D4AF37] text-slate-900 font-bold rounded-lg hover:bg-amber-400 transition"
+          >
+            Invia Richiesta al Maestro 🚀
+          </button>
+        </div>
+      </form>
     </div>
-  );
-}
+  </div>
+)}
