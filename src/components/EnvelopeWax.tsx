@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -22,16 +22,17 @@ export default function EnvelopeWax({
 }: EnvelopeWaxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleOpen = () => {
     if (isOpen || isAnimating) return;
     setIsAnimating(true);
 
-    try {
-      const audio = new Audio(audioUrl);
-      audio.volume = 0.5;
-      audio.play().catch(() => {});
-    } catch (e) {}
+    // Avvia l'unico elemento Audio condiviso
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+      audioRef.current.play().catch(() => {});
+    }
 
     confetti({
       particleCount: 70,
@@ -51,6 +52,9 @@ export default function EnvelopeWax({
   return (
     <div className={`relative min-h-screen ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} text-[#4A3D39] overflow-x-hidden`}>
       
+      {/* ELEMENTO AUDIO UNICO PER PREVENIRE SOVRAPPOSIZIONI */}
+      <audio ref={audioRef} src={audioUrl} preload="auto" />
+
       {isOpen && (
         <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
           {[...Array(10)].map((_, i) => (
@@ -109,23 +113,18 @@ export default function EnvelopeWax({
                 </p>
               </div>
 
-              {/* SIGILLO IN CERALACCA DORATA IDENTICO ALL'IMMAGINE ALLEGATA (FISSO E ANCORATO) */}
-              <motion.button
+              {/* SIGILLO IN CERALACCA DORATA IDENTICO AL LOGO 2 (PERFETTAMENTE FISSO E CENTRATO) */}
+              <button
                 onClick={handleOpen}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                animate={isAnimating ? { scale: [1, 1.2, 0] } : {}}
-                transition={{ duration: 0.8 }}
-                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#E6C363] via-[#D4AF37] to-[#997A15] shadow-[0_10px_30px_rgba(212,175,55,0.4)] border-2 border-[#FFF0AA] flex items-center justify-center cursor-pointer overflow-hidden group"
+                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#E6C363] via-[#D4AF37] to-[#997A15] shadow-[0_10px_30px_rgba(212,175,55,0.4)] border-2 border-[#FFF0AA] flex items-center justify-center cursor-pointer overflow-hidden transform active:scale-95 transition-transform"
               >
-                {/* Incisione 'L' con Cuore intagliato */}
                 <div className="w-20 h-20 rounded-full border border-[#FFF0AA]/40 flex flex-col items-center justify-center bg-amber-500/10 shadow-inner text-[#524103]">
-                  <span className="font-serif text-2xl font-bold tracking-tighter drop-shadow-sm group-hover:scale-110 transition-transform">
+                  <span className="font-serif text-2xl font-bold tracking-tighter drop-shadow-sm">
                     L
                   </span>
                   <span className="text-xs">❤️</span>
                 </div>
-              </motion.button>
+              </button>
 
               <div className="z-10 text-center text-[#9E8976] text-xs font-serif italic">
                 Sfoglia l'invito digitale
