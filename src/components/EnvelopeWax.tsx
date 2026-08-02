@@ -37,7 +37,7 @@ export default function EnvelopeWax({
       particleCount: 75,
       spread: 80,
       origin: { y: 0.6 },
-      colors: ['#D4AF37', '#FAF7F2', '#EFE8D8', '#1E293B'],
+      colors: themeColor === 'blue' ? ['#70b5f9', '#ffffff', '#d4af37'] : ['#8b1e24', '#ffffff', '#d4af37'],
     });
 
     setTimeout(() => {
@@ -78,16 +78,23 @@ export default function EnvelopeWax({
             transition={{ duration: 0.8 }}
             className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} p-4 select-none`}
           >
-            {/* BUSTA D'EPOCA VERTICALE CON EMBOSSED FLORAL PATTERN (IDENTICA ALL'IMMAGINE 1) */}
-            <div className={`relative w-full max-w-sm aspect-[3/5] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F5EFE6] border-[#E5DACB]'} rounded-2xl shadow-2xl border-2 flex flex-col items-center justify-between p-6 overflow-hidden`}>
-              
-              {/* Ricami floreali incisi ai lati */}
-              <div className="absolute top-6 left-3 text-xs opacity-25 pointer-events-none font-serif select-none">🌿 🌸 🌿</div>
-              <div className="absolute top-6 right-3 text-xs opacity-25 pointer-events-none font-serif select-none">🌿 🌸 🌿</div>
-              <div className="absolute bottom-6 left-3 text-xs opacity-25 pointer-events-none font-serif select-none">🌿 🌸 🌿</div>
-              <div className="absolute bottom-6 right-3 text-xs opacity-25 pointer-events-none font-serif select-none">🌿 🌸 🌿</div>
+            {/* INTESTAZIONE SPOSI SOPRA LA BUSTA PER LEGGIBILITÀ PERFETTA */}
+            <div className="text-center mb-6 z-20">
+              <span className="text-[#D4AF37] font-bold text-xs tracking-widest uppercase mb-1 block">
+                Partecipazione di Nozze
+              </span>
+              <h1 className="font-serif text-4xl sm:text-6xl text-[#1E293B] font-normal mb-1">
+                {coupleNames}
+              </h1>
+              <p className="text-[#64748B] text-xs tracking-widest uppercase">
+                {weddingDate}
+              </p>
+            </div>
 
-              {/* Risvolto Triangolare Superiore */}
+            {/* BUSTA VERTICALE PIEGATA */}
+            <div className={`relative w-full max-w-sm aspect-[3/5] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F5EFE6] border-[#E5DACB]'} rounded-3xl shadow-2xl border-2 flex flex-col items-center justify-between p-6 overflow-hidden`}>
+              
+              {/* Flap Triangolare Superiore */}
               <motion.div
                 animate={isAnimating ? { rotateX: 180, zIndex: 0 } : { rotateX: 0, zIndex: 20 }}
                 transition={{ duration: 0.8 }}
@@ -95,25 +102,25 @@ export default function EnvelopeWax({
                 className={`absolute top-0 left-0 right-0 h-[52%] ${isBlue ? 'bg-[#D0E7FF]' : 'bg-[#EFE8D8]'} border-b shadow-sm`}
               />
 
-              {/* Risvolto Triangolare Inferiore */}
+              {/* Flap Inferiore */}
               <div
                 style={{ clipPath: 'polygon(0 100%, 100% 100%, 50% 0)' }}
                 className={`absolute bottom-0 left-0 right-0 h-[52%] ${isBlue ? 'bg-[#E3F2FD]' : 'bg-[#F5EFE6]'} border-t shadow-inner pointer-events-none z-10`}
               />
 
               <div className="z-10 text-center my-auto">
-                <p className="font-serif text-[#1E293B] text-xl italic mb-1">
-                  {coupleNames}
+                <p className="font-serif text-[#1E293B] text-lg italic mb-1">
+                  Sei cordialmente invitato
                 </p>
-                <p className="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest mt-2">
+                <p className="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest">
                   TAP TO OPEN
                 </p>
               </div>
 
-              {/* UNICO SIGILLO CERALACCA BORGOGNA / ORO (NESSUN DOPPIO RETTANGOLO) */}
+              {/* UNICO SIGILLO IN CERALACCA DORATA AL CENTRO */}
               <button
                 onClick={handleOpen}
-                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-22 sm:h-22 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
+                className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
               >
                 <img
                   src="/wax-seal.png"
@@ -127,13 +134,13 @@ export default function EnvelopeWax({
                     }
                   }}
                 />
-                <div className="w-18 h-18 rounded-full border-2 border-[#D4AF37] bg-gradient-to-br from-[#8B1E24] via-[#6E1216] to-[#4A0A0D] hidden items-center justify-center text-[#D4AF37] font-serif font-bold text-lg shadow-xl">
-                  R&Z
+                <div className="w-20 h-20 rounded-full border-2 border-[#D4AF37] bg-gradient-to-br from-[#E6C363] to-[#997A15] hidden items-center justify-center text-white font-serif font-bold text-xl shadow-lg">
+                  L❤️
                 </div>
               </button>
 
-              <div className="z-10 text-center text-[#64748B] text-[10px] font-serif italic">
-                {weddingDate}
+              <div className="z-10 text-center text-[#64748B] text-xs font-serif italic">
+                Sfoglia l'invito digitale
               </div>
             </div>
 
