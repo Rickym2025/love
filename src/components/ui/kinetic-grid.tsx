@@ -74,8 +74,8 @@ export default function KineticGrid({
           }
 
           ctx.beginPath();
-          ctx.arc(px, py, 1.4, 0, Math.PI * 2); // Raggio ridotto a 1.4px
-          ctx.fillStyle = 'rgba(212, 175, 55, 0.22)'; // Oro sottile trasparente
+          ctx.arc(px, py, 2.2, 0, Math.PI * 2); // Raggio 2.2px nitido
+          ctx.fillStyle = 'rgba(180, 140, 30, 0.38)'; // Oro caldo ben definito
           ctx.fill();
         }
       }
