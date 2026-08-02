@@ -24,12 +24,17 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
     let height = (canvas.height = canvas.parentElement?.clientHeight || 400);
 
     let ripples: { x: number; y: number; r: number; alpha: number }[] = [];
+    let lastTime = 0;
 
     img.onload = () => {
       ctx.drawImage(img, 0, 0, width, height);
     };
 
     const addRipple = (e: MouseEvent | TouchEvent) => {
+      const now = Date.now();
+      if (now - lastTime < 100) return; // Throttle per evitare l'effetto troppo veloce
+      lastTime = now;
+
       const rect = canvas.getBoundingClientRect();
       let x = 0, y = 0;
       if ('touches' in e && e.touches.length > 0) {
@@ -39,7 +44,7 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
         x = (e as MouseEvent).clientX - rect.left;
         y = (e as MouseEvent).clientY - rect.top;
       }
-      ripples.push({ x, y, r: 0, alpha: 0.8 });
+      ripples.push({ x, y, r: 0, alpha: 0.6 });
     };
 
     canvas.parentElement?.addEventListener('mousemove', addRipple);
@@ -56,11 +61,11 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha})`;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.stroke();
 
-        rip.r += 2.5;
-        rip.alpha -= 0.02;
+        rip.r += 1.2; // Onde più lente e rilassanti
+        rip.alpha -= 0.008;
 
         if (rip.alpha <= 0) {
           ripples.splice(idx, 1);
