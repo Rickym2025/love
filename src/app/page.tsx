@@ -56,15 +56,43 @@ export default function LandingPage() {
     },
     {
       q: 'Dove trovo la Dashboard Risultati?',
-      a: 'Ogni matrimonio ha una sua Dashboard riservata raggiungibile all\'indirizzo love.rmstudio.app/dashboard/elena-e-davide dove scaricare l\'Excel per il catering.',
+      a: 'Ogni matrimonio ha la sua Dashboard riservata raggiungibile all\'indirizzo love.rmstudio.app/dashboard/elena-e-davide dove scaricare l\'Excel per il catering.',
+    },
+    {
+      q: 'Come funziona la canzone personalizzata di FF Edizioni?',
+      a: 'Creiamo un brano d\'autore inedito (in collaborazione con il Maestro Fausto Fusetti, iscritto SIAE) cucito sulla vostra storia d\'amore.',
+    },
+    {
+      q: 'Posso personalizzare i colori e le immagini?',
+      a: 'Certamente! Ogni matrimonio può avere la sua palette colori, le foto di coppia e la scelta della busta.',
+    },
+    {
+      q: 'Come funziona la pagina "La Festa" e il Maxischermo?',
+      a: 'Gli invitati accedono alla pagina /festa il giorno delle nozze, scattano foto dal telefono che vengono proiettate in diretta sul maxischermo del locale.',
+    },
+    {
+      q: 'Se sono un\'agenzia, posso mettere il mio logo?',
+      a: 'Sì! Con il piano Agency Hub il footer e le schermate mostreranno esclusivamente il logo e i contatti della tua agenzia.',
+    },
+    {
+      q: 'I dati delle allergie alimentari sono protetti?',
+      a: 'Sì, rispettiamo il regolamento GDPR. I dati delle preferenze alimentari sono visibili solo agli sposi e all\'agenzia.',
+    },
+    {
+      q: 'Il sito scade dopo il matrimonio?',
+      a: 'No, rimane attivo per 1 anno completo dopo le nozze per permettere a parenti ed amici di rivedere la galleria fotografica.',
+    },
+    {
+      q: 'Come posso procedere con l\'acquisto?',
+      a: 'Clicca su "Crea Ora" o contattaci su WhatsApp: attiveremo la bozza della tua partecipazione in pochi minuti!',
     },
   ];
 
   return (
-    <KineticGrid className="min-h-screen bg-[#FAF7F2] text-[#4A3D39]">
+    <KineticGrid className="min-h-screen bg-[#FAF7F2] text-[#1E293B]">
       
-      {/* NAVBAR CON LOGO PULITO WAX-SEAL.PNG */}
-      <header className="border-b border-[#E5DACB] bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40">
+      {/* NAVBAR */}
+      <header className="border-b border-[#E2E8F0] bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -72,12 +100,11 @@ export default function LandingPage() {
               alt="LOVE RM Studio"
               className="w-10 h-10 object-contain drop-shadow"
               onError={(e) => {
-                // Fallback visivo
                 (e.target as HTMLElement).style.display = 'none';
               }}
             />
             <div>
-              <span className="font-serif text-2xl font-bold tracking-wider text-[#4A3D39] block leading-none">
+              <span className="font-serif text-2xl font-bold tracking-wider text-[#1E293B] block leading-none">
                 LOVE
               </span>
               <span className="text-[9px] uppercase tracking-widest text-[#8B1E24] font-bold">
@@ -104,17 +131,17 @@ export default function LandingPage() {
       </header>
 
       {/* HERO SECTION CON SFONDO PUBLIC/HERO-BG.JPG */}
-      <section className="relative py-24 px-6 text-center max-w-5xl mx-auto flex flex-col items-center rounded-3xl my-6 overflow-hidden bg-cover bg-center shadow-2xl" style={{ backgroundImage: "linear-gradient(to bottom, rgba(250,247,242,0.85), rgba(250,247,242,0.92)), url('/hero-bg.jpg')" }}>
+      <section className="relative py-24 px-6 text-center max-w-5xl mx-auto flex flex-col items-center rounded-3xl my-6 overflow-hidden bg-cover bg-center shadow-xl border border-[#E2E8F0]" style={{ backgroundImage: "linear-gradient(to bottom, rgba(250,247,242,0.85), rgba(250,247,242,0.92)), url('/hero-bg.jpg')" }}>
         
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#E5DACB] shadow-sm mb-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E2E8F0] shadow-sm mb-6">
           <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
           <span className="text-[#8B1E24] text-xs font-semibold uppercase tracking-widest">Partecipazioni Digitali d'Autore</span>
         </div>
 
-        <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#4A3D39] leading-tight mb-6 max-w-4xl">
+        <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl">
           Stupisci i tuoi invitati con un'esperienza da favola.
         </h1>
-        <p className="text-[#9E8976] text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+        <p className="text-[#64748B] text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-light">
           Busta d'epoca con sigillo in ceralacca dorata, giochi come lo Scratch della Data, colonna sonora inedita e lista nozze integrata.
         </p>
 
@@ -131,12 +158,12 @@ export default function LandingPage() {
       </section>
 
       {/* GAMIFICATION SHOWCASE */}
-      <section className="py-16 px-6 bg-[#F4EFE6]/80 border-y border-[#E5DACB]">
+      <section className="py-16 px-6 bg-white border-y border-[#E2E8F0]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold mb-2 block">
             Esperienza Interattiva
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#4A3D39] mb-4">
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#1E293B] mb-4">
             Prova il "Gratta e Scopri" con il dito!
           </h2>
           <ScratchCard revealText="28 SETTEMBRE 2026" subText="Chiesa di Pescarenico • Ore 11:00" />
@@ -144,28 +171,28 @@ export default function LandingPage() {
       </section>
 
       {/* STRISCIA SCORREVOLE AUTOMATICA COMMENTI UTENTI */}
-      <section className="py-16 bg-[#FAF7F2] border-b border-[#E5DACB] overflow-hidden">
+      <section className="py-16 bg-[#FAF7F2] border-b border-[#E2E8F0] overflow-hidden">
         <div className="max-w-6xl mx-auto text-center mb-6 px-6">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold block mb-2">Recensioni & Feedback</span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#4A3D39]">Cosa dicono Sposi e Wedding Planner</h2>
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#1E293B]">Cosa dicono Sposi e Wedding Planner</h2>
         </div>
         <Marquee items={testimonials} />
       </section>
 
-      {/* FAQ */}
+      {/* FAQ 10 DOMANDE ESTESE */}
       <section className="py-24 px-6 max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="font-serif text-3xl sm:text-5xl text-[#4A3D39] mb-4">Domande Frequenti</h2>
+          <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Domande Frequenti</h2>
         </div>
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-white border border-[#E5DACB] rounded-2xl overflow-hidden shadow-sm">
-              <button onClick={() => toggleFaq(index)} className="w-full p-6 text-left font-serif text-lg text-[#4A3D39] flex items-center justify-between">
+            <div key={index} className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-sm">
+              <button onClick={() => toggleFaq(index)} className="w-full p-6 text-left font-serif text-lg text-[#1E293B] flex items-center justify-between">
                 <span>{faq.q}</span>
                 <ChevronDown className={`w-5 h-5 text-[#D4AF37] transition-transform ${openFaq === index ? 'rotate-180' : ''}`} />
               </button>
               {openFaq === index && (
-                <div className="px-6 pb-6 text-xs sm:text-sm text-[#9E8976] border-t border-[#E5DACB]/50 pt-4">
+                <div className="px-6 pb-6 text-xs sm:text-sm text-[#64748B] border-t border-[#E2E8F0] pt-4">
                   {faq.a}
                 </div>
               )}
@@ -175,7 +202,7 @@ export default function LandingPage() {
       </section>
 
       {/* SISTEMA ORBITALE RM STUDIO */}
-      <section className="py-12 border-t border-[#E5DACB]">
+      <section className="py-12 border-t border-[#E2E8F0]">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Ecosistema RM Studio</span>
           <OrbitWidget />
@@ -183,18 +210,18 @@ export default function LandingPage() {
       </section>
 
       {/* PREZZI */}
-      <section id="prezzi" className="py-20 px-6 bg-[#F4EFE6] border-t border-[#E5DACB]">
+      <section id="prezzi" className="py-20 px-6 bg-white border-t border-[#E2E8F0]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-3xl sm:text-5xl text-[#4A3D39] mb-4">Piani Semplici. Zero Abbonamenti.</h2>
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Piani Semplici. Zero Abbonamenti.</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-[#FAF7F2] border border-[#E5DACB] rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+            <div className="bg-[#FAF7F2] border border-[#E2E8F0] rounded-3xl p-8 flex flex-col justify-between shadow-sm">
               <div>
                 <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Per la Coppia</span>
-                <h3 className="font-serif text-3xl text-[#4A3D39] mb-2">Sposi Premium</h3>
-                <div className="text-4xl font-serif text-[#8B1E24] mb-6">€149 <span className="text-xs text-[#9E8976] font-normal">una tantum</span></div>
-                <ul className="space-y-3 text-sm text-[#4A3D39] mb-8">
+                <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Sposi Premium</h3>
+                <div className="text-4xl font-serif text-[#8B1E24] mb-6">€149 <span className="text-xs text-[#64748B] font-normal">una tantum</span></div>
+                <ul className="space-y-3 text-sm text-[#1E293B] mb-8">
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Busta d'epoca con Ceralacca</li>
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Conferma Partecipazione</li>
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Gioco "Gratta per svelare la Data"</li>
@@ -209,9 +236,9 @@ export default function LandingPage() {
             <div className="bg-[#FAF7F2] border-2 border-[#D4AF37] rounded-3xl p-8 flex flex-col justify-between shadow-md">
               <div>
                 <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Per Wedding Planner & Agenzie</span>
-                <h3 className="font-serif text-3xl text-[#4A3D39] mb-2">Agency Hub</h3>
-                <div className="text-4xl font-serif text-[#8B1E24] mb-6">€490 <span className="text-xs text-[#9E8976] font-normal">/ anno (10 Matrimoni)</span></div>
-                <ul className="space-y-3 text-sm text-[#4A3D39] mb-8">
+                <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Agency Hub</h3>
+                <div className="text-4xl font-serif text-[#8B1E24] mb-6">€490 <span className="text-xs text-[#64748B] font-normal">/ anno (10 Matrimoni)</span></div>
+                <ul className="space-y-3 text-sm text-[#1E293B] mb-8">
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> 10 Matrimoni Sbloccati inclusi</li>
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Logo della tua Agenzia nel Footer</li>
                   <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Export Excel Liste Invitati per Catering</li>
@@ -226,10 +253,10 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 border-t border-[#E5DACB] text-center text-xs text-[#9E8976]">
+      <footer className="py-12 border-t border-[#E2E8F0] text-center text-xs text-[#64748B]">
         <div className="flex items-center justify-center gap-1.5 mb-2">
           <Heart className="w-4 h-4 text-[#8B1E24] fill-[#8B1E24]" />
-          <span className="font-serif text-[#4A3D39] font-bold">LOVE</span>
+          <span className="font-serif text-[#1E293B] font-bold">LOVE</span>
         </div>
         <p>© 2026 RM Studio di Riccardo Modena • Tutti i diritti riservati</p>
       </footer>
