@@ -45,7 +45,7 @@ export function WaterRippleImage({
 
     const addRipple = (e: MouseEvent | TouchEvent) => {
       const now = Date.now();
-      if (now - lastTime < 80) return;
+      if (now - lastTime < 100) return;
       lastTime = now;
 
       const rect = canvas.getBoundingClientRect();
@@ -70,20 +70,18 @@ export function WaterRippleImage({
         ctx.drawImage(img, 0, 0, width, height);
       }
 
-      // Tinta bluastra superficiale dell'acqua
-      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.15})`;
+      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.12})`;
       ctx.fillRect(0, 0, width, height);
 
-      // Rendering distorsione onde
       ripples.forEach((rip, idx) => {
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha})`;
-        ctx.lineWidth = scale * 0.4;
+        ctx.lineWidth = scale * 0.3;
         ctx.stroke();
 
-        rip.r += waterDistortion * 100 + 1.2;
-        rip.alpha -= surfaceDistortion * 0.4 + 0.005;
+        rip.r += waterDistortion * 80 + 1.0;
+        rip.alpha -= surfaceDistortion * 0.3 + 0.004;
 
         if (rip.alpha <= 0) {
           ripples.splice(idx, 1);
