@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import EnvelopeWax from '@/components/EnvelopeWax';
@@ -7,29 +9,22 @@ import PartingClouds from '@/components/PartingClouds';
 import LoveQuiz from '@/components/LoveQuiz';
 import RsvpForm from '@/components/RsvpForm';
 import { WaterRippleImage } from '@/components/ui/water-ripple-image';
-import { Heart, Gift, Music, Clock, Camera, Sparkles } from 'lucide-react';
+import { Heart, Gift, Music, Sparkles, Camera } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
-export default async function ExperiencePage({
+export default function ExperiencePage({
   params,
   searchParams,
 }: {
   params: { slug: string };
-  searchParams: { guest?: string };
+  searchParams?: { guest?: string };
 }) {
-  const { slug } = params;
-  const guestName = searchParams.guest || 'Cara Famiglia / Amico';
+  const slug = params.slug;
+  const guestName = searchParams?.guest || 'Cara Famiglia / Amico';
 
-  let experience: any = null;
-  try {
-    const { data } = await supabase.from('love_experiences').select('*').eq('slug', slug).single();
-    experience = data;
-  } catch (e) {}
+  const isFrancesca = slug === 'francesca-e-luca';
 
-  if (!experience) {
-    if (slug === 'francesca-e-luca') {
-      experience = {
+  const defaultData = isFrancesca
+    ? {
         slug: 'francesca-e-luca',
         couple_names: 'Francesca & Luca',
         wax_initials: 'F & L',
@@ -39,9 +34,8 @@ export default async function ExperiencePage({
         location_name: 'Villa Borghese',
         location_address: 'Chianti, Toscana',
         iban: 'IT99 X 0123 4567 8901 2345 6789',
-      };
-    } else {
-      experience = {
+      }
+    : {
         slug: 'elena-e-davide',
         couple_names: 'Elena & Davide',
         wax_initials: 'E & D',
@@ -52,10 +46,24 @@ export default async function ExperiencePage({
         location_address: 'Lago di Como (CO)',
         iban: 'IT99 X 0123 4567 8901 2345 6789',
       };
-    }
-  }
 
-  const isFrancesca = slug === 'francesca-e-luca';
+  const [experience, setExperience] = useState<any>(defaultData);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const { data } = await supabase
+          .from('love_experiences')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+        if (data) setExperience(data);
+      } catch (e) {
+        console.warn('Uso dati predefiniti per demo');
+      }
+    }
+    loadData();
+  }, [slug]);
 
   return (
     <EnvelopeWax
@@ -78,8 +86,8 @@ export default async function ExperiencePage({
           <h1 className="font-serif text-5xl sm:text-7xl font-normal mb-4 tracking-wide">{experience.couple_names}</h1>
           <p className="text-[#78909C] text-xs tracking-widest uppercase mb-8">{experience.wedding_date}</p>
 
-          {/* FOTO 9:16 VERTICALE CON TESTE INTERE */}
-          <div className="w-full max-w-sm aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
+          {/* FOTO FORMATO VERTICALE 9:16 PER EVITARE TAGLI ALLE TESTE */}
+          <div className="w-full max-w-xs aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
             {!isFrancesca ? (
               <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" />
             ) : (
@@ -97,7 +105,7 @@ export default async function ExperiencePage({
           <LoveQuiz coupleNames={experience.couple_names} />
         )}
 
-        {/* PLAYER AUDIO COLLEGATO ALLO STESSO AUDIO DELLA BUSTA */}
+        {/* PLAYER AUDIO COLLEGATO AD AUDIO UNICO */}
         <section className="py-8 px-6 max-w-xl mx-auto text-center">
           <div className="bg-white p-6 rounded-2xl border border-[#D4AF37]/50 shadow-md">
             <Music className="w-6 h-6 text-[#8B1E24] mx-auto mb-2 animate-bounce" />
@@ -112,19 +120,19 @@ export default async function ExperiencePage({
                   else el.pause();
                 }
               }}
-              className="mt-4 px-6 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider shadow-sm"
+              className="mt-4 px-6 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-[#6E1216]"
             >
               Play / Pausa Musica 🎵
             </button>
           </div>
         </section>
 
-        {/* LINK ALLA SECONDA PAGINA DEDICATA ALLA FESTA */}
+        {/* LINK ALLA PAGINA DEDICATA DELLA FESTA */}
         <section className="py-12 px-6 max-w-md mx-auto text-center">
-          <div className="bg-gradient-to-br from-[#FAF7F2] to-[#F4EFE6] border-2 border-[#D4AF37] p-8 rounded-3xl shadow-lg">
-            <Sparkles className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
-            <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">Ci vediamo alla Festa!</h3>
-            <p className="text-xs text-[#9E8976] mb-6">Il giorno delle nozze accedi alla pagina della festa per caricare le tue foto ed inviarle al maxischermo del locale!</p>
+          <div className="bg-white border-2 border-[#D4AF37] p-8 rounded-3xl shadow-lg">
+            <Camera className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
+            <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">La Festa & Maxischermo</h3>
+            <p className="text-xs text-[#9E8976] mb-6">Il giorno delle nozze scatta foto e video per inviarli al maxischermo del locale!</p>
             
             <Link
               href={`/${slug}/festa`}
