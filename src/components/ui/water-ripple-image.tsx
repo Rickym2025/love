@@ -36,7 +36,7 @@ export function WaterRippleImage({
     let width = (canvas.width = canvas.parentElement?.clientWidth || 600);
     let height = (canvas.height = canvas.parentElement?.clientHeight || 400);
 
-    let ripples: { x: number; y: number; r: number; alpha: number }[] = [];
+    let ripples: { x: number; y: number; r: number; maxR: number; alpha: number }[] = [];
     let lastTime = 0;
 
     img.onload = () => {
@@ -45,7 +45,7 @@ export function WaterRippleImage({
 
     const addRipple = (e: MouseEvent | TouchEvent) => {
       const now = Date.now();
-      if (now - lastTime < 100) return;
+      if (now - lastTime < 120) return; // Throttle morbido
       lastTime = now;
 
       const rect = canvas.getBoundingClientRect();
@@ -57,7 +57,7 @@ export function WaterRippleImage({
         x = (e as MouseEvent).clientX - rect.left;
         y = (e as MouseEvent).clientY - rect.top;
       }
-      ripples.push({ x, y, r: 0, alpha: illumination * 4 });
+      ripples.push({ x, y, r: 2, maxR: 60 * scale, alpha: 0.7 });
     };
 
     canvas.parentElement?.addEventListener('mousemove', addRipple);
@@ -70,20 +70,22 @@ export function WaterRippleImage({
         ctx.drawImage(img, 0, 0, width, height);
       }
 
-      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.12})`;
+      // Tinta superficiale dell'acqua
+      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.08})`;
       ctx.fillRect(0, 0, width, height);
 
+      // Rifrazione d'onda circolare acquatica
       ripples.forEach((rip, idx) => {
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha})`;
-        ctx.lineWidth = scale * 0.3;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        rip.r += waterDistortion * 80 + 1.0;
-        rip.alpha -= surfaceDistortion * 0.3 + 0.004;
+        rip.r += 0.8;
+        rip.alpha -= 0.006;
 
-        if (rip.alpha <= 0) {
+        if (rip.alpha <= 0 || rip.r >= rip.maxR) {
           ripples.splice(idx, 1);
         }
       });
