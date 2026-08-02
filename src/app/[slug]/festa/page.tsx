@@ -141,7 +141,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
                   src={p.url}
                   alt={p.caption}
                   className={`w-full h-full object-cover transition-all ${
-                    selectedFilter === 'warm' ? 'sepia-[0.3] contrast-105' : selectedFilter === 'bw' ? 'grayscale' : ''
+                    selectedFilter === 'warm' ? 'sepia-[0.3]' : selectedFilter === 'bw' ? 'grayscale' : ''
                   }`}
                 />
                 {selectedFrame === 'married' && (
@@ -209,7 +209,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* POPUP PREMIO VITTORIA GIOCO */}
+        {/* POPUP PREMIO VITTORIA SPECIFICO */}
         {prizeText && (
           <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-md">
             <div className="bg-white border-4 border-[#D4AF37] p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl relative">
