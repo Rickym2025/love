@@ -196,7 +196,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* FAQ 10 DOMANDE ESTESE */}
+        {/* FAQ 10 DOMANDE COMPLETE */}
         <section className="py-24 px-6 max-w-4xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] text-center mb-16">Domande Frequenti</h2>
           <div className="space-y-4">
@@ -224,18 +224,30 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* PREZZI */}
+        {/* PREZZI DETTAGLIATI CON LISTA COMPLETA */}
         <section id="prezzi" className="py-20 px-6 bg-white/90 border-t border-[#E2E8F0]">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] text-center mb-16">Piani Semplici. Zero Abbonamenti.</h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-[#FAF7F2] border border-[#E2E8F0] rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+              
+              <div className="bg-[#FAF7F2] border border-[#E2E8F0] rounded-3xl p-8 flex flex-col justify-between shadow-sm hover:border-[#D4AF37] transition-all">
                 <div>
                   <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per la Coppia</span>
                   <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Sposi Premium</h3>
                   <div className="text-4xl font-serif text-[#1E293B] mb-6">€149 <span className="text-xs text-[#64748B] font-normal">una tantum</span></div>
+                  
+                  <ul className="space-y-3 text-xs text-[#1E293B] mb-8 font-medium">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Busta d'epoca con Ceralacca 3D</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Conferma Partecipazione (Menu & Intolleranze)</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Gioco "Gratta per svelare la Data"</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora Inedita FF Edizioni</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze IBAN & Amazon Affiliata</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Pagina "La Festa" con Scatto Foto/Video</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Trasmissione Live su Proiettore / Maxischermo</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Dashboard Risultati con Export Excel Catering</li>
+                  </ul>
                 </div>
-                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20vorrei%20informazioni%20per%20creare%20il%20sito%20Love!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md">
+                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20vorrei%20informazioni%20per%20creare%20il%20sito%20Love!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-[#B59226]">
                   Attiva per il tuo Matrimonio
                 </a>
               </div>
@@ -245,11 +257,22 @@ export default function LandingPage() {
                   <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per Wedding Planner & Agenzie</span>
                   <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Agency Hub</h3>
                   <div className="text-4xl font-serif text-[#1E293B] mb-6">€490 <span className="text-xs text-[#64748B] font-normal">/ anno (10 Matrimoni)</span></div>
+                  
+                  <ul className="space-y-3 text-xs text-[#1E293B] mb-8 font-medium">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> 10 Matrimoni Sbloccati inclusi</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Logo della tua Agenzia nel Footer</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Selezione tra 10 Temi Grafici d'Élite</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Studio Configuratore a 3 Colonne</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Canale diretto per Brani Inediti FF Edizioni</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Export Excel Liste Invitati per Catering</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Puntamento Domini Personalizzati dei Clienti</li>
+                  </ul>
                 </div>
-                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiori%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#1E293B] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md">
+                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiori%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#1E293B] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-black">
                   Richiedi Licenza Agenzia
                 </a>
               </div>
+
             </div>
           </div>
         </section>
