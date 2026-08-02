@@ -37,7 +37,7 @@ export default function EnvelopeWax({
       particleCount: 75,
       spread: 80,
       origin: { y: 0.6 },
-      colors: themeColor === 'blue' ? ['#70b5f9', '#ffffff', '#d4af37'] : ['#8b1e24', '#ffffff', '#d4af37'],
+      colors: themeColor === 'blue' ? ['#70b5f9', '#ffffff', '#d4af37'] : ['#e5dacb', '#ffffff', '#d4af37'],
     });
 
     setTimeout(() => {
@@ -78,7 +78,7 @@ export default function EnvelopeWax({
             transition={{ duration: 0.8 }}
             className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} p-4 select-none`}
           >
-            {/* INTESTAZIONE E NOMI SPOSI POSIZIONATI IN ALTO (NON PIÙ COPERTI DAL SIGILLO!) */}
+            {/* INTESTAZIONE E NOMI SPOSI BEN VISIBILI IN ALTO FUORI DALLA BUSTA */}
             <div className="text-center mb-6 z-20">
               <span className="text-[#D4AF37] font-bold text-xs tracking-widest uppercase mb-1 block">
                 Partecipazione di Nozze
@@ -91,7 +91,7 @@ export default function EnvelopeWax({
               </p>
             </div>
 
-            {/* BUSTA PIEGATA PULITA ED ELEGANTE */}
+            {/* BUSTA D'EPOCA VERTICALE */}
             <div className={`relative w-full max-w-sm aspect-[3/5] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F5EFE6] border-[#E5DACB]'} rounded-3xl shadow-2xl border-2 flex flex-col items-center justify-between p-6 overflow-hidden`}>
               
               {/* Flap Triangolare Superiore */}
@@ -108,16 +108,7 @@ export default function EnvelopeWax({
                 className={`absolute bottom-0 left-0 right-0 h-[52%] ${isBlue ? 'bg-[#E3F2FD]' : 'bg-[#F5EFE6]'} border-t shadow-inner pointer-events-none z-10`}
               />
 
-              <div className="z-10 text-center my-auto">
-                <p className="font-serif text-[#1E293B] text-lg italic mb-1">
-                  Sei cordialmente invitato
-                </p>
-                <p className="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest">
-                  TAP TO OPEN
-                </p>
-              </div>
-
-              {/* UNICO SIGILLO IN CERALACCA CENTRATO */}
+              {/* SIGILLO IN CERALACCA DORATA AL CENTRO */}
               <button
                 onClick={handleOpen}
                 className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
@@ -138,6 +129,16 @@ export default function EnvelopeWax({
                   L❤️
                 </div>
               </button>
+
+              {/* TESTO IN ITALIANO POSIZIONATO IN BASSO (NESSUN TESTO DIETRO IL SIGILLO!) */}
+              <div className="z-10 text-center mt-auto pb-4">
+                <p className="font-serif text-[#1E293B] text-base italic mb-0.5">
+                  Sei cordialmente invitato
+                </p>
+                <p className="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest">
+                  TOCCA PER APRIRE
+                </p>
+              </div>
 
               <div className="z-10 text-center text-[#64748B] text-xs font-serif italic">
                 Sfoglia l'invito digitale
