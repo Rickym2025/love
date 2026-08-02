@@ -78,7 +78,7 @@ export default function EnvelopeWax({
             transition={{ duration: 0.8 }}
             className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} p-4 select-none`}
           >
-            {/* INTESTAZIONE SPOSI SOPRA LA BUSTA PER LEGGIBILITÀ PERFETTA */}
+            {/* INTESTAZIONE E NOMI SPOSI POSIZIONATI IN ALTO (NON PIÙ COPERTI DAL SIGILLO!) */}
             <div className="text-center mb-6 z-20">
               <span className="text-[#D4AF37] font-bold text-xs tracking-widest uppercase mb-1 block">
                 Partecipazione di Nozze
@@ -91,7 +91,7 @@ export default function EnvelopeWax({
               </p>
             </div>
 
-            {/* BUSTA VERTICALE PIEGATA */}
+            {/* BUSTA PIEGATA PULITA ED ELEGANTE */}
             <div className={`relative w-full max-w-sm aspect-[3/5] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F5EFE6] border-[#E5DACB]'} rounded-3xl shadow-2xl border-2 flex flex-col items-center justify-between p-6 overflow-hidden`}>
               
               {/* Flap Triangolare Superiore */}
@@ -117,7 +117,7 @@ export default function EnvelopeWax({
                 </p>
               </div>
 
-              {/* UNICO SIGILLO IN CERALACCA DORATA AL CENTRO */}
+              {/* UNICO SIGILLO IN CERALACCA CENTRATO */}
               <button
                 onClick={handleOpen}
                 className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
