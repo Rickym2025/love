@@ -5,7 +5,6 @@ import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
 import Marquee from '@/components/Marquee';
-import { AnimatedGradient } from '@/components/ui/animated-gradient';
 import KineticGrid from '@/components/ui/kinetic-grid';
 import {
   Sparkles,
@@ -62,17 +61,18 @@ export default function LandingPage() {
   ];
 
   return (
-    <KineticGrid className="min-h-screen bg-[#F7F3E9] text-[#4A3D39]">
+    <KineticGrid className="min-h-screen bg-[#FAF7F2] text-[#4A3D39]">
       
-      {/* NAVBAR CON LOGO 3 DA PUBLIC/LOGO.PNG */}
-      <header className="border-b border-[#E5DACB] bg-[#F7F3E9]/90 backdrop-blur-md sticky top-0 z-40">
+      {/* NAVBAR CON LOGO PULITO WAX-SEAL.PNG */}
+      <header className="border-b border-[#E5DACB] bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-              src="/logo.png"
+              src="/wax-seal.png"
               alt="LOVE RM Studio"
-              className="w-10 h-10 object-contain rounded-xl shadow-md"
+              className="w-10 h-10 object-contain drop-shadow"
               onError={(e) => {
+                // Fallback visivo
                 (e.target as HTMLElement).style.display = 'none';
               }}
             />
@@ -96,35 +96,20 @@ export default function LandingPage() {
             <a href="https://blogs.rmstudio.app/love/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#D4AF37] flex items-center gap-1">
               <BookOpen className="w-3.5 h-3.5" /> Blog
             </a>
-            <a href="#prezzi" className="px-6 py-2.5 rounded-full bg-[#D4AF37] text-white text-xs font-bold shadow-md">
+            <a href="#prezzi" className="px-6 py-2.5 rounded-full bg-[#D4AF37] text-white text-xs font-bold shadow-md hover:bg-[#B59226] transition-all">
               Crea Ora
             </a>
           </div>
         </div>
       </header>
 
-      {/* HERO SECTION CON ANIMATED GRADIENT */}
-      <section className="relative pt-16 pb-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
-        <AnimatedGradient config={{ preset: 'WarmGold' }} radius="100px" className="px-6 py-2 mb-8">
-          <div className="inline-flex p-1 rounded-full bg-white/90 border border-[#E5DACB]">
-            <button
-              onClick={() => setActiveTab('sposi')}
-              className={`px-6 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'sposi' ? 'bg-[#8B1E24] text-white shadow-md' : 'text-[#9E8976]'
-              }`}
-            >
-              <Heart className="w-3.5 h-3.5" /> Siete gli Sposi?
-            </button>
-            <button
-              onClick={() => setActiveTab('agenzie')}
-              className={`px-6 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'agenzie' ? 'bg-[#8B1E24] text-white shadow-md' : 'text-[#9E8976]'
-              }`}
-            >
-              <Building2 className="w-3.5 h-3.5" /> Wedding Planner & Agenzie
-            </button>
-          </div>
-        </AnimatedGradient>
+      {/* HERO SECTION CON SFONDO PUBLIC/HERO-BG.JPG */}
+      <section className="relative py-24 px-6 text-center max-w-5xl mx-auto flex flex-col items-center rounded-3xl my-6 overflow-hidden bg-cover bg-center shadow-2xl" style={{ backgroundImage: "linear-gradient(to bottom, rgba(250,247,242,0.85), rgba(250,247,242,0.92)), url('/hero-bg.jpg')" }}>
+        
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#E5DACB] shadow-sm mb-6">
+          <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <span className="text-[#8B1E24] text-xs font-semibold uppercase tracking-widest">Partecipazioni Digitali d'Autore</span>
+        </div>
 
         <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#4A3D39] leading-tight mb-6 max-w-4xl">
           Stupisci i tuoi invitati con un'esperienza da favola.
@@ -134,11 +119,11 @@ export default function LandingPage() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
-          <Link href="/elena-e-davide" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#8B1E24] text-white font-bold shadow-lg flex items-center justify-center gap-2">
+          <Link href="/elena-e-davide" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#8B1E24] text-white font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-[#6E1216] transition-all">
             <span>Demo "Elena & Davide"</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <Link href="/francesca-e-luca" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1976D2] text-white font-bold shadow-lg flex items-center justify-center gap-2">
+          <Link href="/francesca-e-luca" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1976D2] text-white font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-[#1565C0] transition-all">
             <span>Demo "Francesca & Luca"</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
@@ -146,7 +131,7 @@ export default function LandingPage() {
       </section>
 
       {/* GAMIFICATION SHOWCASE */}
-      <section className="py-16 px-6 bg-[#EFE7D8]/80 border-y border-[#E5DACB]">
+      <section className="py-16 px-6 bg-[#F4EFE6]/80 border-y border-[#E5DACB]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold mb-2 block">
             Esperienza Interattiva
@@ -159,7 +144,7 @@ export default function LandingPage() {
       </section>
 
       {/* STRISCIA SCORREVOLE AUTOMATICA COMMENTI UTENTI */}
-      <section className="py-16 bg-[#F7F3E9] border-b border-[#E5DACB]">
+      <section className="py-16 bg-[#FAF7F2] border-b border-[#E5DACB] overflow-hidden">
         <div className="max-w-6xl mx-auto text-center mb-6 px-6">
           <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-semibold block mb-2">Recensioni & Feedback</span>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#4A3D39]">Cosa dicono Sposi e Wedding Planner</h2>
@@ -198,13 +183,13 @@ export default function LandingPage() {
       </section>
 
       {/* PREZZI */}
-      <section id="prezzi" className="py-20 px-6 bg-[#EFE7D8]/80 border-t border-[#E5DACB]">
+      <section id="prezzi" className="py-20 px-6 bg-[#F4EFE6] border-t border-[#E5DACB]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl sm:text-5xl text-[#4A3D39] mb-4">Piani Semplici. Zero Abbonamenti.</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-[#F7F3E9] border border-[#E5DACB] rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+            <div className="bg-[#FAF7F2] border border-[#E5DACB] rounded-3xl p-8 flex flex-col justify-between shadow-sm">
               <div>
                 <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Per la Coppia</span>
                 <h3 className="font-serif text-3xl text-[#4A3D39] mb-2">Sposi Premium</h3>
@@ -221,7 +206,7 @@ export default function LandingPage() {
               </a>
             </div>
 
-            <div className="bg-[#F7F3E9] border-2 border-[#D4AF37] rounded-3xl p-8 flex flex-col justify-between shadow-md">
+            <div className="bg-[#FAF7F2] border-2 border-[#D4AF37] rounded-3xl p-8 flex flex-col justify-between shadow-md">
               <div>
                 <span className="text-xs text-[#8B1E24] uppercase tracking-widest font-bold block mb-2">Per Wedding Planner & Agenzie</span>
                 <h3 className="font-serif text-3xl text-[#4A3D39] mb-2">Agency Hub</h3>
