@@ -3,8 +3,9 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import LoveQuiz from '@/components/LoveQuiz';
-import ScratchDate from '@/components/ScratchDate';
-import { Camera, Tv, ArrowLeft, X, Sparkles, Puzzle, Gamepad2 } from 'lucide-react';
+import ScratchPhoto from '@/components/ScratchPhoto';
+import PhotoPuzzle from '@/components/PhotoPuzzle';
+import { Camera, Tv, ArrowLeft, X, Sparkles, Puzzle, Gamepad2, Trophy, Image as ImageIcon } from 'lucide-react';
 
 export default function FestaPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -12,6 +13,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
   const coupleNames = isFrancesca ? 'Francesca & Luca' : 'Elena & Davide';
 
   const [activeGame, setActiveGame] = useState<'none' | 'quiz' | 'puzzle' | 'scratch'>('none');
+  const [showPrizeModal, setShowPrizeModal] = useState(false);
   const [photos, setPhotos] = useState([
     { id: '1', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80', author: 'Marco', caption: 'Evviva gli Sposi! 🎉' },
     { id: '2', url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80', author: 'Giulia', caption: 'Bellissimi! ❤️' },
@@ -19,6 +21,10 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
 
   const [isProjector, setIsProjector] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleWinGame = () => {
+    setShowPrizeModal(true);
+  };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,7 +44,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] p-6 sm:p-12">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] p-6 sm:p-12 relative">
       <div className="max-w-5xl mx-auto">
         
         {/* HEADER FESTA */}
@@ -49,7 +55,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
           <span className="font-serif text-xl font-bold">{coupleNames} • La Festa</span>
           <button
             onClick={() => setIsProjector(true)}
-            className="px-5 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-[#6E1216] transition-all shadow-md"
+            className="px-5 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-[#6E1216] shadow-md"
           >
             <Tv className="w-4 h-4 text-[#D4AF37] animate-pulse" />
             Maxischermo Proiettore
@@ -63,12 +69,11 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
           </span>
           <h2 className="font-serif text-3xl text-[#1E293B] mb-6">Giochi & Scatto Foto per la Sala</h2>
 
-          {/* BOTTONI SELEZIONE GIOCHI & CAMERA */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             <button
               onClick={() => setActiveGame(activeGame === 'quiz' ? 'none' : 'quiz')}
               className={`p-4 rounded-2xl border text-xs font-bold flex flex-col items-center gap-2 transition-all ${
-                activeGame === 'quiz' ? 'bg-[#8B1E24] text-white border-[#8B1E24]' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B] hover:border-[#D4AF37]'
+                activeGame === 'quiz' ? 'bg-[#8B1E24] text-white' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B]'
               }`}
             >
               <Gamepad2 className="w-6 h-6 text-[#D4AF37]" />
@@ -78,7 +83,7 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
             <button
               onClick={() => setActiveGame(activeGame === 'puzzle' ? 'none' : 'puzzle')}
               className={`p-4 rounded-2xl border text-xs font-bold flex flex-col items-center gap-2 transition-all ${
-                activeGame === 'puzzle' ? 'bg-[#8B1E24] text-white border-[#8B1E24]' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B] hover:border-[#D4AF37]'
+                activeGame === 'puzzle' ? 'bg-[#8B1E24] text-white' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B]'
               }`}
             >
               <Puzzle className="w-6 h-6 text-[#D4AF37]" />
@@ -88,17 +93,16 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
             <button
               onClick={() => setActiveGame(activeGame === 'scratch' ? 'none' : 'scratch')}
               className={`p-4 rounded-2xl border text-xs font-bold flex flex-col items-center gap-2 transition-all ${
-                activeGame === 'scratch' ? 'bg-[#8B1E24] text-white border-[#8B1E24]' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B] hover:border-[#D4AF37]'
+                activeGame === 'scratch' ? 'bg-[#8B1E24] text-white' : 'bg-[#FAF7F2] border-[#E2E8F0] text-[#1E293B]'
               }`}
             >
               <Sparkles className="w-6 h-6 text-[#D4AF37]" />
-              <span>🎟️ Scratch Foto</span>
+              <span>🎟️ Gratta la Foto</span>
             </button>
 
-            {/* BOTTONE APERTURA FOTOCAMERA */}
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="p-4 rounded-2xl bg-[#D4AF37] text-white border border-[#D4AF37] text-xs font-bold flex flex-col items-center gap-2 shadow-md hover:bg-[#B59226]"
+              className="p-4 rounded-2xl bg-[#D4AF37] text-white text-xs font-bold flex flex-col items-center gap-2 shadow-md hover:bg-[#B59226]"
             >
               <Camera className="w-6 h-6 text-white animate-bounce" />
               <span>📸 Scatta Foto/Video</span>
@@ -116,25 +120,8 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
 
           {/* CONTENUTO DEL GIOCO SELEZIONATO */}
           {activeGame === 'quiz' && <LoveQuiz coupleNames={coupleNames} />}
-          
-          {activeGame === 'scratch' && (
-            <div className="py-6">
-              <p className="text-xs text-[#64748B] mb-4">Gratta con il dito per svelare lo scatto segreto degli sposi!</p>
-              <ScratchDate day="28" month="Settembre" year="2026" />
-            </div>
-          )}
-
-          {activeGame === 'puzzle' && (
-            <div className="py-6 bg-[#FAF7F2] p-6 rounded-2xl border border-[#E2E8F0]">
-              <p className="font-serif text-lg font-bold text-[#1E293B] mb-2">🧩 Puzzle Foto degli Sposi</p>
-              <p className="text-xs text-[#64748B] mb-4">Ricomponi l'immagine spostando i tasselli con il dito!</p>
-              <img
-                src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80"
-                alt="Puzzle"
-                className="w-full max-w-xs mx-auto rounded-2xl shadow-md border-2 border-dashed border-[#D4AF37]"
-              />
-            </div>
-          )}
+          {activeGame === 'puzzle' && <PhotoPuzzle onWin={handleWinGame} />}
+          {activeGame === 'scratch' && <ScratchPhoto onWin={handleWinGame} />}
         </div>
 
         {/* FEED FOTO DEGLI INVITATI */}
@@ -149,6 +136,34 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
             </div>
           ))}
         </div>
+
+        {/* SCHERMATA PREMIO FINALE (POPUP VITTORIA GIOCO) */}
+        {showPrizeModal && (
+          <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-md">
+            <div className="bg-white border-4 border-[#D4AF37] p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl relative">
+              <button onClick={() => setShowPrizeModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-black">
+                <X className="w-5 h-5" />
+              </button>
+              <Trophy className="w-16 h-16 text-[#D4AF37] mx-auto mb-3 animate-bounce" />
+              <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-2">COMPLIMENTI! 🎉</h3>
+              <p className="text-xs text-[#8B1E24] font-bold uppercase tracking-wider mb-4">Hai completato il gioco con successo!</p>
+              <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E2E8F0] mb-6">
+                <p className="font-serif italic text-sm text-[#1E293B]">
+                  "Hai vinto uno scatto/selfie speciale da fare subito insieme agli Sposi!" 📸
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowPrizeModal(false);
+                  fileInputRef.current?.click();
+                }}
+                className="w-full py-3.5 rounded-xl bg-[#8B1E24] text-white font-bold text-xs uppercase tracking-widest shadow-md hover:bg-[#6E1216]"
+              >
+                Scatta la Foto Ora 📷
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* PROIETTORE MAXISCHERMO */}
         {isProjector && (
