@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { Camera, Tv, Heart, X, ArrowLeft } from 'lucide-react';
+import { Camera, Tv, Heart, X, ArrowLeft, Upload, Video } from 'lucide-react';
 
 export default function FestaPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -15,6 +15,39 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
   ]);
 
   const [isProjector, setIsProjector] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Caricamento foto o scatto fotocamera dagli invitati
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const newPhoto = {
+        id: Date.now().toString(),
+        url: event.target?.result as string,
+        author: 'Invitato',
+        caption: 'Un ricordo speciale! 🥂',
+      };
+      setPhotos((prev) => [newPhoto, ...prev]);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Avvio trasmissione al Proiettore / TV via Presentation API / Screen Share
+  const handleConnectProjector = async () => {
+    setIsProjector(true);
+    if ('presentation' in navigator) {
+      try {
+        // Tenta la connessione nativa al proiettore o Chromecast nelle vicinanze
+        const request = new (window as any).PresentationRequest(['/' + slug + '/festa']);
+        await request.start();
+      } catch (err) {
+        console.log('Attivazione modalità maxischermo a tutto schermo');
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#4A3D39] p-6 sm:p-12">
@@ -26,21 +59,37 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
           </Link>
           <span className="font-serif text-xl font-bold">{coupleNames} • La Festa Live</span>
           <button
-            onClick={() => setIsProjector(true)}
-            className="px-5 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2"
+            onClick={handleConnectProjector}
+            className="px-5 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-[#6E1216] transition-all shadow-md"
           >
             <Tv className="w-4 h-4 text-[#D4AF37] animate-pulse" />
-            Modalità Maxischermo Proiettore
+            Connetti a Maxischermo / Proiettore
           </button>
         </div>
 
         <div className="text-center max-w-xl mx-auto mb-10">
           <Camera className="w-10 h-10 text-[#D4AF37] mx-auto mb-2" />
-          <h1 className="font-serif text-4xl text-[#4A3D39] mb-2">Guest Photo Wall</h1>
-          <p className="text-xs text-[#9E8976]">Carica le tue foto per vederle proiettate in tempo reale sul maxischermo del locale!</p>
+          <h1 className="font-serif text-4xl text-[#4A3D39] mb-2">Guest Photo & Video Wall</h1>
+          <p className="text-xs text-[#9E8976] mb-6">Scatta una foto o registra un video per inviarlo direttamente sullo schermo della sala!</p>
+          
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*,video/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleUpload}
+          />
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="px-8 py-4 rounded-full bg-[#D4AF37] text-white font-bold text-xs uppercase tracking-widest hover:bg-[#B59226] transition-all shadow-lg inline-flex items-center gap-2"
+          >
+            <Camera className="w-4 h-4" /> Scatta Foto o Video Ora 📸
+          </button>
         </div>
 
-        {/* GRIGLIA POLAROID */}
+        {/* GRIGLIA POLAROID CON FOTO DEGLI INVITATI */}
         <div className="grid sm:grid-cols-3 gap-6">
           {photos.map((p) => (
             <div key={p.id} className="bg-white p-4 rounded-2xl border border-[#E5DACB] shadow-md transform hover:-rotate-1 transition-transform">
@@ -53,15 +102,15 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
           ))}
         </div>
 
-        {/* MODALITÀ PROIETTORE FESTA */}
+        {/* MODALITÀ MAXISCHERMO PROIETTORE LOCALE */}
         {isProjector && (
-          <div className="fixed inset-0 z-50 bg-[#0F172A] text-white flex flex-col items-center justify-between p-8">
-            <button onClick={() => setIsProjector(false)} className="absolute top-6 right-6 p-3 rounded-full bg-slate-800">
+          <div className="fixed inset-0 z-50 bg-[#0A0A0C] text-white flex flex-col items-center justify-between p-8">
+            <button onClick={() => setIsProjector(false)} className="absolute top-6 right-6 p-3 rounded-full bg-slate-800 text-white">
               <X className="w-6 h-6" />
             </button>
             <div className="my-auto text-center max-w-xl">
               <span className="text-amber-400 text-xs font-bold uppercase tracking-widest block mb-4 animate-pulse">
-                📺 PROIEZIONE LIVE LOCALE
+                📺 TRASMISSIONE MAXISCHERMO SALA MATRIMONIO
               </span>
               <div className="aspect-[9/16] max-w-xs mx-auto bg-white p-3 rounded-2xl shadow-2xl mb-4">
                 <img src={photos[0].url} alt="Proiezione" className="w-full h-full object-cover rounded-xl" />
@@ -69,6 +118,9 @@ export default function FestaPage({ params }: { params: { slug: string } }) {
               <h2 className="font-serif text-2xl text-amber-100">"{photos[0].caption}"</h2>
               <p className="text-xs font-bold text-amber-400 mt-1">— {photos[0].author}</p>
             </div>
+            <p className="text-xs text-slate-400 uppercase tracking-widest">
+              Connesso al proiettore • Inquadra il QR Code sul tavolo per inviare le tue foto!
+            </p>
           </div>
         )}
 
