@@ -4,10 +4,23 @@ import React, { useRef, useEffect } from 'react';
 
 interface WaterRippleProps {
   src: string;
+  blueish?: number;
+  scale?: number;
+  illumination?: number;
+  surfaceDistortion?: number;
+  waterDistortion?: number;
   className?: string;
 }
 
-export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
+export function WaterRippleImage({
+  src,
+  blueish = 0.4,
+  scale = 7,
+  illumination = 0.15,
+  surfaceDistortion = 0.03,
+  waterDistortion = 0.02,
+  className = '',
+}: WaterRippleProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -32,7 +45,7 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
 
     const addRipple = (e: MouseEvent | TouchEvent) => {
       const now = Date.now();
-      if (now - lastTime < 100) return; // Throttle per evitare l'effetto troppo veloce
+      if (now - lastTime < 80) return;
       lastTime = now;
 
       const rect = canvas.getBoundingClientRect();
@@ -44,7 +57,7 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
         x = (e as MouseEvent).clientX - rect.left;
         y = (e as MouseEvent).clientY - rect.top;
       }
-      ripples.push({ x, y, r: 0, alpha: 0.6 });
+      ripples.push({ x, y, r: 0, alpha: illumination * 4 });
     };
 
     canvas.parentElement?.addEventListener('mousemove', addRipple);
@@ -57,15 +70,20 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
         ctx.drawImage(img, 0, 0, width, height);
       }
 
+      // Tinta bluastra superficiale dell'acqua
+      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.15})`;
+      ctx.fillRect(0, 0, width, height);
+
+      // Rendering distorsione onde
       ripples.forEach((rip, idx) => {
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = scale * 0.4;
         ctx.stroke();
 
-        rip.r += 1.2; // Onde più lente e rilassanti
-        rip.alpha -= 0.008;
+        rip.r += waterDistortion * 100 + 1.2;
+        rip.alpha -= surfaceDistortion * 0.4 + 0.005;
 
         if (rip.alpha <= 0) {
           ripples.splice(idx, 1);
@@ -82,7 +100,7 @@ export function WaterRippleImage({ src, className = '' }: WaterRippleProps) {
       canvas.parentElement?.removeEventListener('mousemove', addRipple);
       canvas.parentElement?.removeEventListener('touchmove', addRipple);
     };
-  }, [src]);
+  }, [src, blueish, scale, illumination, surfaceDistortion, waterDistortion]);
 
   return (
     <div className={`relative overflow-hidden rounded-3xl shadow-xl ${className}`}>
