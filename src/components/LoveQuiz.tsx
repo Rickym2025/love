@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles, CheckCircle2, Heart } from 'lucide-react';
+import { Sparkles, Heart } from 'lucide-react';
 
 export default function LoveQuiz({ coupleNames = 'Elena & Davide' }: { coupleNames?: string }) {
   const [score, setScore] = useState<number | null>(null);
@@ -16,7 +16,7 @@ export default function LoveQuiz({ coupleNames = 'Elena & Davide' }: { coupleNam
     },
     {
       q: 'Chi ha fatto la proposta di matrimonio?',
-      options: [coupleNames.split('&')[0].trim(), coupleNames.split('&')[1].trim(), 'Insieme a Parigi!'],
+      options: [coupleNames.split('&')[0].trim(), coupleNames.split('&')[1]?.trim() || 'Coppia', 'Insieme a Parigi!'],
       correct: 1,
     },
     {
@@ -57,7 +57,7 @@ export default function LoveQuiz({ coupleNames = 'Elena & Davide' }: { coupleNam
         <div className="space-y-6 text-left">
           {questions.map((q, qIdx) => (
             <div key={qIdx} className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E5DACB]">
-              <p className="font-serif text-sm font-bold text-[#4A3D39] mb-3">{i + 1}. {q.q}</p>
+              <p className="font-serif text-sm font-bold text-[#4A3D39] mb-3">{qIdx + 1}. {q.q}</p>
               <div className="space-y-2">
                 {q.options.map((opt, optIdx) => (
                   <button
