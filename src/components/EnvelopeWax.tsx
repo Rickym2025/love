@@ -50,8 +50,6 @@ export default function EnvelopeWax({
 
   return (
     <div className={`relative min-h-screen ${isBlue ? 'bg-[#F0F7FF]' : 'bg-[#FAF7F2]'} text-[#1E293B] overflow-x-hidden`}>
-      
-      {/* UNICO ELEMENTO AUDIO CONDIVISO */}
       <audio id="love-wedding-audio" ref={audioRef} src={audioUrl} preload="auto" />
 
       {isOpen && (
@@ -95,7 +93,6 @@ export default function EnvelopeWax({
             {/* BUSTA D'EPOCA RICAMATA */}
             <div className={`relative w-full max-w-sm sm:max-w-md aspect-[3/4] ${isBlue ? 'bg-[#E3F2FD] border-[#BBDEFB]' : 'bg-[#F9F6F0] border-[#E2E8F0]'} rounded-3xl shadow-2xl border flex flex-col items-center justify-between p-8 overflow-hidden`}>
               
-              {/* Flap Triangolare */}
               <motion.div
                 animate={isAnimating ? { rotateX: 180, zIndex: 0 } : { rotateX: 0, zIndex: 20 }}
                 transition={{ duration: 0.8 }}
@@ -108,11 +105,11 @@ export default function EnvelopeWax({
                   Sei cordialmente invitato
                 </p>
                 <p className="text-[#64748B] text-[10px] uppercase tracking-widest">
-                  Tocca la ceralacca per aprire
+                  Tocca il sigillo per aprire
                 </p>
               </div>
 
-              {/* UNICO SIGILLO IN CERALACCA DORATA SENZA RETTANGOLI O TESTI STRANI */}
+              {/* UNICO SIGILLO IN CERALACCA DORATA (NESSUN RETTANGOLO SOVRAPPOSTO) */}
               <button
                 onClick={handleOpen}
                 className="z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer transform active:scale-95 transition-transform"
@@ -122,11 +119,15 @@ export default function EnvelopeWax({
                   alt="Ceralacca"
                   className="w-full h-full object-contain drop-shadow-xl"
                   onError={(e) => {
-                    // Fallback pulito se l'immagine non è presente
-                    (e.target as HTMLElement).style.display = 'none';
+                    // Fallback se l'immagine non è ancora stata caricata
+                    const target = e.target as HTMLElement;
+                    target.style.display = 'none';
+                    if (target.nextElementSibling) {
+                      (target.nextElementSibling as HTMLElement).style.display = 'flex';
+                    }
                   }}
                 />
-                <div className="w-20 h-20 rounded-full border-2 border-[#D4AF37] bg-gradient-to-br from-[#E6C363] to-[#997A15] flex items-center justify-center text-white font-serif font-bold text-xl shadow-lg">
+                <div className="w-20 h-20 rounded-full border-2 border-[#D4AF37] bg-gradient-to-br from-[#E6C363] to-[#997A15] hidden items-center justify-center text-white font-serif font-bold text-xl shadow-lg">
                   L❤️
                 </div>
               </button>
