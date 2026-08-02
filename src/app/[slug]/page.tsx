@@ -1,13 +1,13 @@
 import React from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import EnvelopeWax from '@/components/EnvelopeWax';
 import ScratchDate from '@/components/ScratchDate';
 import PartingClouds from '@/components/PartingClouds';
 import LoveQuiz from '@/components/LoveQuiz';
-import PhotoWallSection from '@/components/PhotoWallSection';
 import RsvpForm from '@/components/RsvpForm';
 import { WaterRippleImage } from '@/components/ui/water-ripple-image';
-import { MapPin, Calendar, Heart, Gift, Music, Clock } from 'lucide-react';
+import { Heart, Gift, Music, Clock, Camera, Sparkles } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,13 +22,8 @@ export default async function ExperiencePage({
   const guestName = searchParams.guest || 'Cara Famiglia / Amico';
 
   let experience: any = null;
-
   try {
-    const { data } = await supabase
-      .from('love_experiences')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    const { data } = await supabase.from('love_experiences').select('*').eq('slug', slug).single();
     experience = data;
   } catch (e) {}
 
@@ -41,8 +36,8 @@ export default async function ExperiencePage({
         wedding_date: '14 Settembre 2026',
         theme_color: 'blue',
         audio_url: 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3',
-        location_name: 'Villa Borghese - Puerto Vallarta',
-        location_address: '118 Old East Neck Road, NY',
+        location_name: 'Villa Borghese',
+        location_address: 'Chianti, Toscana',
         iban: 'IT99 X 0123 4567 8901 2345 6789',
       };
     } else {
@@ -54,7 +49,7 @@ export default async function ExperiencePage({
         theme_color: 'pink',
         audio_url: 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3',
         location_name: 'Villa del Balbianello',
-        location_address: 'Pescarenico, Lago di Como (CO)',
+        location_address: 'Lago di Como (CO)',
         iban: 'IT99 X 0123 4567 8901 2345 6789',
       };
     }
@@ -73,66 +68,70 @@ export default async function ExperiencePage({
       <div className={`min-h-screen ${isFrancesca ? 'bg-[#F0F7FF] text-[#2C3E50]' : 'bg-[#FAF7F2] text-[#4A3D39]'} pb-20`}>
         
         {/* HERO SECTION */}
-        <section className="relative py-16 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
+        <section className="relative py-16 px-6 text-center max-w-3xl mx-auto flex flex-col items-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#D4AF37]/40 text-[#8B1E24] text-xs font-semibold uppercase tracking-widest mb-6 shadow-sm">
             <Heart className="w-3.5 h-3.5 fill-[#8B1E24]" />
             <span>Benvenuto/a {guestName}!</span>
           </div>
 
           <p className="font-serif italic text-[#D4AF37] text-2xl mb-2">Getting Married!</p>
-          <h1 className="font-serif text-5xl sm:text-7xl font-normal mb-4 tracking-wide">
-            {experience.couple_names}
-          </h1>
-          <p className="text-[#78909C] text-xs tracking-widest uppercase mb-10">
-            {experience.wedding_date}
-          </p>
+          <h1 className="font-serif text-5xl sm:text-7xl font-normal mb-4 tracking-wide">{experience.couple_names}</h1>
+          <p className="text-[#78909C] text-xs tracking-widest uppercase mb-8">{experience.wedding_date}</p>
 
-          {/* EFFETTO ONDE SULL'ACQUA PER ELENA & DAVIDE */}
-          {!isFrancesca && (
-            <div className="w-full max-w-2xl h-80 my-6">
-              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop" className="w-full h-full" />
-            </div>
-          )}
+          {/* FOTO 9:16 VERTICALE CON TESTE INTERE */}
+          <div className="w-full max-w-sm aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
+            {!isFrancesca ? (
+              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" />
+            ) : (
+              <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" alt="Coppia" className="w-full h-full object-cover" />
+            )}
+          </div>
         </section>
 
-        {/* DEMO FRANCESCA: NUVOLE CHE SI SCOSTANO + SCRATCH DATE */}
+        {/* DEMO FRANCESCA: NUVOLE + SCRATCH | DEMO ELENA: LOVE QUIZ */}
         {isFrancesca ? (
           <PartingClouds>
             <ScratchDate day="14" month="Settembre" year="2026" />
           </PartingClouds>
         ) : (
-          /* DEMO ELENA: LOVE QUIZ INTERATTIVO */
           <LoveQuiz coupleNames={experience.couple_names} />
         )}
 
-        {/* COLONNA SONORA FF EDIZIONI */}
+        {/* PLAYER AUDIO COLLEGATO ALLO STESSO AUDIO DELLA BUSTA */}
         <section className="py-8 px-6 max-w-xl mx-auto text-center">
           <div className="bg-white p-6 rounded-2xl border border-[#D4AF37]/50 shadow-md">
             <Music className="w-6 h-6 text-[#8B1E24] mx-auto mb-2 animate-bounce" />
             <span className="text-[10px] text-[#8B1E24] uppercase tracking-widest font-bold">Colonna Sonora Inedita • FF Edizioni</span>
             <h3 className="font-serif text-xl my-1">La Nostra Melodia</h3>
-            <audio controls className="w-full rounded-lg mt-3">
-              <source src={experience.audio_url} type="audio/mpeg" />
-            </audio>
+            
+            <button
+              onClick={() => {
+                const el = document.getElementById('love-wedding-audio') as HTMLAudioElement;
+                if (el) {
+                  if (el.paused) el.play();
+                  else el.pause();
+                }
+              }}
+              className="mt-4 px-6 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider shadow-sm"
+            >
+              Play / Pausa Musica 🎵
+            </button>
           </div>
         </section>
 
-        {/* SEZIONE FOTO WALL & PROIETTORE MAXISCHERMO PER LA FESTA */}
-        <PhotoWallSection coupleNames={experience.couple_names} />
-
-        {/* LISTA NOZZE */}
-        <section className="py-12 px-6 max-w-2xl mx-auto text-center">
-          <h2 className="font-serif text-3xl mb-2">Lista Nozze & Regali</h2>
-          <div className="bg-white p-6 rounded-2xl border border-[#E5DACB] shadow-sm text-center max-w-md mx-auto">
-            <Gift className="w-6 h-6 text-[#D4AF37] mx-auto mb-2" />
-            <a
-              href="https://www.amazon.it/baby-reg/homepage?tag=zero100store-21"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 rounded-xl bg-[#D4AF37] text-white font-bold uppercase tracking-wider block mt-2 text-xs"
+        {/* LINK ALLA SECONDA PAGINA DEDICATA ALLA FESTA */}
+        <section className="py-12 px-6 max-w-md mx-auto text-center">
+          <div className="bg-gradient-to-br from-[#FAF7F2] to-[#F4EFE6] border-2 border-[#D4AF37] p-8 rounded-3xl shadow-lg">
+            <Sparkles className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
+            <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">Ci vediamo alla Festa!</h3>
+            <p className="text-xs text-[#9E8976] mb-6">Il giorno delle nozze accedi alla pagina della festa per caricare le tue foto ed inviarle al maxischermo del locale!</p>
+            
+            <Link
+              href={`/${slug}/festa`}
+              className="w-full py-3.5 rounded-xl bg-[#8B1E24] text-white font-bold text-xs uppercase tracking-widest block shadow-md hover:bg-[#6E1216]"
             >
-              Apri Lista Nozze Amazon ↗
-            </a>
+              Apri Pagina della Festa 📸
+            </Link>
           </div>
         </section>
 
