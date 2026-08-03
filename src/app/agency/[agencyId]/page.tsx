@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Folder, PlusCircle, Palette, Sliders, Music, Sparkles, Building2, Store, MapPin, Plus, Trash2, X } from "lucide-react";
+import { Folder, PlusCircle, Palette, Sliders, Music, Sparkles, Building2, Store, Plus, Trash2, X } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
@@ -14,13 +14,27 @@ export interface AgencyPageProps {
   };
 }
 
+// 10 FRASI DI BENVENUTO PREIMPOSTATE
+const WELCOME_PHRASE_PRESETS = [
+  "Due anime, un solo destino. Una storia scritta nel cuore.",
+  "L'amore non consiste nello guardarsi l'un l'altro, ma nel guardare insieme nella stessa direzione.",
+  "Niente è per caso, ogni passo ci ha condotti qui. Unisciti alla nostra gioia.",
+  "Oggi inizia il nostro 'per sempre'. Siete i benvenuti a celebrare con noi.",
+  "Due cuori, una sola melodia. Festeggia il nostro giorno speciale!",
+  "Con gioia e gratitudine vi invitiamo a condividere l'inizio della nostra vita insieme.",
+  "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
+  "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
+  "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
+  "Personalizzata (scrivi la tua frase personalizzata nel campo sottostante)",
+];
+
 export default function AgencyStudioPage({ params }: AgencyPageProps) {
-  const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("modules");
+  const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("create");
   
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
 
-  // Dati Personalizzabili
+  // DATI PERSONALIZZABILI SPOSI
   const [coupleNames, setCoupleNames] = useState("Elena & Davide");
   const [weddingDateDay, setWeddingDateDay] = useState("24");
   const [weddingDateMonth, setWeddingDateMonth] = useState("MAGGIO");
@@ -30,10 +44,22 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
   const [waterImageUrl, setWaterImageUrl] = useState("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti in tonalità pastello. Evitare il bordeaux.");
   const [selectedDressColor, setSelectedDressColor] = useState("#D4AF37");
+
+  // SELEZIONE FRASE DI BENVENUTO (10 PRESETS + TESTO LIBERO)
+  const [selectedPhrasePreset, setSelectedPhrasePreset] = useState("0");
+  const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
+
+  // CALCOLO DINAMICO DELLA FRASE DI BENVENUTO (Risolve il ReferenceError)
+  const welcomePhrase =
+    selectedPhrasePreset === "9"
+      ? customWelcomePhrase || "Scrivi qui la tua frase di benvenuto..."
+      : WELCOME_PHRASE_PRESETS[parseInt(selectedPhrasePreset, 10)] || WELCOME_PHRASE_PRESETS[0];
+
   const [customIban, setCustomIban] = useState("IT60 X 0542 8111 0000 0012 3456");
+  const [partnerStoreName, setPartnerStoreName] = useState("Gioielleria Valenza");
   const [showWeb3FormsModal, setShowWeb3FormsModal] = useState(false);
 
-  // Lista Negozi Convenzionati Modificabili
+  // LISTA NEGOZI CONVENZIONATI MULTIPLI
   const [partnerStores, setPartnerStores] = useState([
     { id: "1", name: "Gioielleria Valenza", url: "https://www.gioielleriavalenza.it" },
     { id: "2", name: "Rinascente Milano", url: "https://www.rinascente.it" },
@@ -47,13 +73,13 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
     setPartnerStores(partnerStores.filter((s) => s.id !== id));
   };
 
-  // 10 Colori Preimpostati per il Dress Code
+  // 10 COLORI DRESS CODE PREIMPOSTATI
   const dressCodeColorPresets = [
     "#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA",
     "#D4AF37", "#34D399", "#A78BFA", "#F472B6", "#1E293B",
   ];
 
-  // TUTTI I MODULI ATTIVABILI ED EDITABILI
+  // MODULI ATTIVABILI ED EDITABILI
   const [modules, setModules] = useState({
     busta3d: true,
     grattaData: true,
@@ -73,7 +99,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] flex flex-col md:flex-row font-sans select-none overflow-hidden">
       
-      {/* COLONNA 1: MENU AGENZIA */}
+      {/* ─── COLONNA 1: MENU AGENZIA ─── */}
       <div className="w-full md:w-1/4 border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between bg-white shadow-sm min-w-[240px]">
         <div>
           <div className="mb-8">
@@ -112,13 +138,13 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         </div>
       </div>
 
-      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
+      {/* ─── COLONNA 2: CONFIGURATORE CENTRALE ─── */}
       <div className="w-full md:w-2/4 p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen">
         {activeTab === "create" && (
           <div className="space-y-6">
             <h2 className="text-xl font-serif font-bold text-[#1E293B]">Template &amp; Dati Generali Sposi</h2>
 
-            {/* SELEZIONE TEMPLATE */}
+            {/* SELEZIONE TEMPLATE STRUTTURALE */}
             <div>
               <label className="block text-xs font-bold uppercase text-slate-600 mb-2">1. Template Grafico Layout</label>
               <div className="grid grid-cols-2 gap-3">
@@ -136,9 +162,44 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
-              <input type="text" value={coupleNames} onChange={(e) => setCoupleNames(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold" />
+            {/* DATI SPOSI & FRASE BENVENUTO */}
+            <div className="space-y-4 pt-4 border-t border-slate-200">
+              <label className="block text-xs font-bold uppercase text-slate-600">2. Nomi Sposi &amp; Frase di Benvenuto</label>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
+                <input type="text" value={coupleNames} onChange={(e) => setCoupleNames(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold" />
+              </div>
+
+              {/* SELETTORE DELLE 10 FRASI DI BENVENUTO */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">Selezione Frase di Benvenuto (10 Opzioni)</label>
+                <select
+                  value={selectedPhrasePreset}
+                  onChange={(e) => setSelectedPhrasePreset(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B] bg-white focus:outline-none focus:border-[#D4AF37]"
+                >
+                  {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
+                    <option key={idx} value={idx.toString()}>
+                      {idx + 1}. {phrase.length > 60 ? phrase.substring(0, 60) + "..." : phrase}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* CAMPO TESTO LIBERO PER FRASE PERSONALIZZATA */}
+              {selectedPhrasePreset === "9" && (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1">Scrivi la tua Frase Personalizzata</label>
+                  <textarea
+                    rows={3}
+                    value={customWelcomePhrase}
+                    onChange={(e) => setCustomWelcomePhrase(e.target.value)}
+                    placeholder="Scrivi qui la dedica d'amore personalizzata per gli ospiti..."
+                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-[#1E293B] resize-none focus:outline-none focus:border-[#D4AF37]"
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -298,7 +359,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         )}
       </div>
 
-      {/* COLONNA 3: VERO INVITO REALE LIVE COMPLETO */}
+      {/* ─── COLONNA 3: VERO INVITO LIVE REALE COMPLETO ─── */}
       <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[340px]">
         <div className="flex justify-between items-center w-full max-w-[340px] mb-3 text-white">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
@@ -310,7 +371,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         </div>
 
         {/* MOCKUP SMARTPHONE */}
-        <div className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedTemplate === "B" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
+        <div className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedTemplate === "B" || selectedColorScheme === "2" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
           
           {/* BUSTA D'EPOCA CON VERA CERALACCA */}
           {modules.busta3d && (
@@ -325,7 +386,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
             </div>
           )}
 
-          {/* INTRO HERO */}
+          {/* INTRO HERO CON FRASE DI BENVENUTO DINAMICA */}
           <div className="text-center pt-6 px-4">
             <span className="text-[10px] tracking-widest uppercase font-semibold text-[#D4AF37]">Wedding Day</span>
             <p className="text-xs font-bold text-slate-400 mt-0.5">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
@@ -365,7 +426,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
             </div>
           )}
 
-          {/* NEGOZI CONVENZIONATI MULTIPLI */}
+          {/* NEGOZI CONVENZIONATI */}
           {modules.negoziConvenzionati && (
             <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
               <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">🏪 Negozi Convenzionati</span>
