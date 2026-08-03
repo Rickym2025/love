@@ -8,39 +8,36 @@ import { Folder, PlusCircle, Palette, Sliders, Music, ExternalLink, X, MoveHoriz
 export default function AgencyStudioPage({ params }: { params: { agencyId: string } }) {
   const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("create");
   
-  // Larghezze Colonne Trascinabili (in %)
+  // Drag Colonne (in %)
   const [col1Width, setCol1Width] = useState(24);
   const [col2Width, setCol2Width] = useState(46);
 
-  // Concetti Separati: Template Grafico (Struttura) e Tema Colore (Palette)
+  // Template Grafico (Struttura) vs Tema Colore (Palette)
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
-  const [selectedColorScheme, setSelectedColorScheme] = useState("1"); // 1 su 10 temi colore
+  const [selectedColorScheme, setSelectedColorScheme] = useState("1");
 
-  // Dati Personalizzabili
+  // Dati Sposi e Negozi
   const [coupleNames, setCoupleNames] = useState("Elena & Davide");
   const [weddingDate, setWeddingDate] = useState("24 MAGGIO 2026");
   const [locationName, setLocationName] = useState("Villa del Balbianello");
   const [dressCodeText, setDressCodeText] = useState("Abiti eleganti in tonalità pastello. Evitare il bordeaux.");
   const [welcomePhrase, setWelcomePhrase] = useState("Due anime, un solo destino. Una storia scritta nel cuore.");
   const [customIban, setCustomIban] = useState("IT60 X 0542 8111 0000 0012 3456");
-  const [partnerStore, setPartnerStore] = useState("Gioielleria Valenza — Lista Nozze in Corso");
   const [showWeb3FormsModal, setShowWeb3FormsModal] = useState(false);
 
-  // Moduli Attivabili
+  // Moduli Attivi in Italiano
   const [modules, setModules] = useState({
-    envelope: true,
-    waterRipple: true,
-    clouds: true,
-    scratchDate: true,
-    dressCode: true,
-    partnerStores: true,
-    wishlistAmazon: true,
-    rsvp: true,
+    busta3d: true,
+    grattaData: true,
+    nuvole3d: true,
+    codiceAbbigliamento: true,
+    negoziConvenzionati: true,
+    listaNozzeAmazon: true,
+    confermaRsvp: true,
   });
 
   const isDraggingRef = useRef<"col1" | "col2" | null>(null);
 
-  // Drag Handlers
   const handleMouseDown = (divider: "col1" | "col2") => {
     isDraggingRef.current = divider;
     document.addEventListener("mousemove", handleMouseMove);
@@ -73,7 +70,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] flex flex-col md:flex-row font-sans select-none overflow-hidden">
       
-      {/* ─── COLONNA 1: MENU AGENZIA (TRAS CINABILE) ─── */}
+      {/* COLONNA 1: MENU AGENZIA (TRAS CINABILE) */}
       <div style={{ width: `${col1Width}%` }} className="border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between bg-white shadow-sm min-w-[240px]">
         <div>
           <div className="mb-8">
@@ -117,7 +114,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         <MoveHorizontal className="w-3 h-3 text-slate-400" />
       </div>
 
-      {/* ─── COLONNA 2: CONFIGURATORE CENTRALE ─── */}
+      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
       <div style={{ width: `${col2Width}%` }} className="p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen min-w-[320px]">
         {activeTab === "create" && (
           <div className="space-y-6">
@@ -130,13 +127,13 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
                 <button type="button" onClick={() => { setSelectedTemplate("A"); setCoupleNames("Elena & Davide"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "A" ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"}`}>
                   <span className="text-[10px] font-bold uppercase text-[#D4AF37] block">Template A</span>
                   <h4 className="font-serif font-bold text-sm">Arco Romano &amp; Cigni</h4>
-                  <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio materico, specchio d&apos;acqua con cigni e timeline classica.</p>
+                  <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio materico, specchio d&apos;acqua con cigni, carta strappata e countdown.</p>
                 </button>
 
                 <button type="button" onClick={() => { setSelectedTemplate("B"); setCoupleNames("Francesca & Luca"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "B" ? "border-sky-500 bg-sky-50" : "border-slate-200 bg-white"}`}>
                   <span className="text-[10px] font-bold uppercase text-sky-600 block">Template B</span>
                   <h4 className="font-serif font-bold text-sm">Cielo &amp; Nuvole 3D</h4>
-                  <p className="text-[10px] text-slate-500 mt-1">3 Grattabili date, Nuvole Parting Clouds e galleria foto dress code.</p>
+                  <p className="text-[10px] text-slate-500 mt-1">3 Grattabili date, busta azurra con lettera, Nuvole Parting Clouds e galleria foto.</p>
                 </button>
               </div>
             </div>
@@ -160,7 +157,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
 
             {/* FORM DATI MODULI */}
             <div className="space-y-4 pt-4 border-t border-slate-200">
-              <label className="block text-xs font-bold uppercase text-slate-600">3. Moduli Personalizzabili</label>
+              <label className="block text-xs font-bold uppercase text-slate-600">3. Dati Sposi &amp; Moduli</label>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
@@ -168,7 +165,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Data delle Nozze</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">Data Nozze</label>
                 <input type="text" value={weddingDate} onChange={(e) => setWeddingDate(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
               </div>
 
@@ -180,11 +177,6 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
               <div>
                 <label className="block text-xs font-semibold text-slate-500 mb-1">Dress Code Notes</label>
                 <input type="text" value={dressCodeText} onChange={(e) => setDressCodeText(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Negozi Convenzionati (Lista Nozze locale)</label>
-                <input type="text" value={partnerStore} onChange={(e) => setPartnerStore(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
               </div>
 
               <div>
@@ -237,7 +229,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         <MoveHorizontal className="w-3 h-3 text-slate-400" />
       </div>
 
-      {/* ─── COLONNA 3: ANTEPRIMA LIVE Sincronizzata ─── */}
+      {/* COLONNA 3: ANTEPRIMA LIVE REALE */}
       <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[300px]">
         <div className="flex justify-between items-center w-full max-w-[320px] mb-3 text-white">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
@@ -251,8 +243,8 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         {/* MOCKUP SMARTPHONE */}
         <div className={`w-[320px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedColorScheme === "2" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
           
-          {/* BUSTA D'EPOCA CON VERA CERALACCA */}
-          {modules.envelope && (
+          {/* BUSTA D'EPOCA CON VERA CERALACCA logo /wax-seal.png */}
+          {modules.busta3d && (
             <div className="m-3 p-4 bg-white rounded-2xl border border-[#D4AF37]/30 text-center shadow-sm relative">
               <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">✦ Partecipazione Digitale</span>
               <p className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</p>
@@ -273,7 +265,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
           </div>
 
           {/* GRATTIAMO LA DATA */}
-          {modules.scratchDate && (
+          {modules.grattaData && (
             <div className="my-4 mx-3 p-3 bg-white rounded-xl text-center border border-slate-200">
               <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-2">🎰 Gratta per Scoprire la Data</span>
               <div className="flex justify-center gap-2">
@@ -295,7 +287,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
           </div>
 
           {/* DRESS CODE CON CERCHI COLORE */}
-          {modules.dressCode && (
+          {modules.codiceAbbigliamento && (
             <div className="mx-3 my-4 p-3 bg-white rounded-xl text-center border border-slate-200">
               <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">Dress Code &amp; Palette</span>
               <p className="text-[10px] text-slate-500 mb-2">{dressCodeText}</p>
@@ -308,16 +300,8 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
             </div>
           )}
 
-          {/* NEGOZI CONVENZIONATI */}
-          {modules.partnerStores && (
-            <div className="mx-3 my-4 p-3 bg-white rounded-xl border border-slate-200 text-xs">
-              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">🏪 Lista Nozze Locale</span>
-              <p className="text-[11px] text-slate-700 font-medium">{partnerStore}</p>
-            </div>
-          )}
-
           {/* BOTTONE RSVP */}
-          {modules.rsvp && (
+          {modules.confermaRsvp && (
             <div className="p-4">
               <button type="button" className="w-full py-3 font-bold rounded-full text-xs shadow-md uppercase tracking-wider bg-[#D4AF37] text-slate-900">
                 Conferma Partecipazione (RSVP)
