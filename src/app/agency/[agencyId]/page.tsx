@@ -9,13 +9,13 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
-  // Colonne Ridimensionabili con Drag & Drop Mouse
-  const [sidebarWidth, setSidebarWidth] = useState(260);
-  const [configuratorWidth, setConfiguratorWidth] = useState(440);
+  // Proporzioni Colonne Studio Bilanciate
+  const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [configuratorWidth, setConfiguratorWidth] = useState(460);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingConfigurator, setIsResizingConfigurator] = useState(false);
 
-  // Stati Configurazione Invito
+  // Stati Configuratore
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
@@ -29,7 +29,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [waterImageUrl, setWaterImageUrl] = useState("");
   const [selectedPhrasePreset, setSelectedPhrasePreset] = useState("0");
   const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
-  const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni della palette");
+  const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   const [partnerStores, setPartnerStores] = useState<any[]>([]);
   const [marqueeText, setMarqueeText] = useState(
@@ -56,14 +56,14 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
-  // Gestione Eventi Mouse per Trascinamento Colonne
+  // Listener Mouse per Ridimensionamento Drag & Drop
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(200, Math.min(380, e.clientX));
+        const newWidth = Math.max(220, Math.min(360, e.clientX));
         setSidebarWidth(newWidth);
       } else if (isResizingConfigurator) {
-        const newWidth = Math.max(320, Math.min(650, e.clientX - sidebarWidth));
+        const newWidth = Math.max(340, Math.min(600, e.clientX - sidebarWidth));
         setConfiguratorWidth(newWidth);
       }
     };
@@ -86,7 +86,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-full bg-[#FAF7F2] overflow-hidden font-sans">
-      {/* COLONNA 1: SIDEBAR AGENZIA */}
+      {/* 1. SIDEBAR AGENZIA */}
       <AgencySidebar
         agencyId={agencyId}
         activeTab={activeTab}
@@ -94,17 +94,17 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         style={{ width: `${sidebarWidth}px` }}
       />
 
-      {/* SEPARATORE RIDIMENSIONABILE 1 */}
+      {/* SEPARATORE 1 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
           setIsResizingSidebar(true);
         }}
-        className="w-1.5 cursor-col-resize bg-[#D4AF37]/20 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/25 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
+      {/* 2. CONFIGURATORE CENTRALE */}
       <AgencyConfigurator
         style={{ width: `${configuratorWidth}px` }}
         activeTab={activeTab}
@@ -146,37 +146,39 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         toggleModule={toggleModule}
       />
 
-      {/* SEPARATORE RIDIMENSIONABILE 2 */}
+      {/* SEPARATORE 2 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
           setIsResizingConfigurator(true);
         }}
-        className="w-1.5 cursor-col-resize bg-[#D4AF37]/20 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/25 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
         title="Trascina per ridimensionare Configuratore"
       />
 
-      {/* COLONNA 3: PREVIEW SMARTPHONE LIVE */}
-      <AgencyPreview
-        selectedTemplate={selectedTemplate}
-        selectedColorScheme={selectedColorScheme}
-        coupleNames={coupleNames}
-        weddingDateDay={weddingDateDay}
-        weddingDateMonth={weddingDateMonth}
-        weddingDateYear={weddingDateYear}
-        locationName={locationName}
-        locationAddress={locationAddress}
-        audioUrl={audioUrl}
-        waterImageUrl={waterImageUrl}
-        selectedPhrasePreset={selectedPhrasePreset}
-        customWelcomePhrase={customWelcomePhrase}
-        dressCodeNotes={dressCodeNotes}
-        selectedPaletteIdx={selectedPaletteIdx}
-        partnerStores={partnerStores}
-        marqueeText={marqueeText}
-        customIban={customIban}
-        modules={modules}
-      />
+      {/* 3. PREVIEW SMARTPHONE CENTRATA CON FLEX-1 */}
+      <div className="flex-1 h-full bg-[#1E293B] overflow-hidden flex items-center justify-center">
+        <AgencyPreview
+          selectedTemplate={selectedTemplate}
+          selectedColorScheme={selectedColorScheme}
+          coupleNames={coupleNames}
+          weddingDateDay={weddingDateDay}
+          weddingDateMonth={weddingDateMonth}
+          weddingDateYear={weddingDateYear}
+          locationName={locationName}
+          locationAddress={locationAddress}
+          audioUrl={audioUrl}
+          waterImageUrl={waterImageUrl}
+          selectedPhrasePreset={selectedPhrasePreset}
+          customWelcomePhrase={customWelcomePhrase}
+          dressCodeNotes={dressCodeNotes}
+          selectedPaletteIdx={selectedPaletteIdx}
+          partnerStores={partnerStores}
+          marqueeText={marqueeText}
+          customIban={customIban}
+          modules={modules}
+        />
+      </div>
     </div>
   );
 }
