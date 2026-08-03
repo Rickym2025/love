@@ -11,7 +11,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   // Larghezze Pannelli (Sidebar e Preview fixed/resizable, Configuratore FLEX-1 CENTRALE)
   const [sidebarWidth, setSidebarWidth] = useState(240);
-  const [previewWidth, setPreviewWidth] = useState(380);
+  const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
 
