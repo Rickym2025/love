@@ -38,7 +38,7 @@ export default function Home() {
       <section className="py-12 px-6 bg-white border-y border-slate-200 text-center">
         <div className="max-w-2xl mx-auto space-y-4">
           <h2 className="font-serif text-2xl font-bold text-[#1E293B]">Prova il Modulo &quot;Gratta la Data&quot;</h2>
-          <ScratchCard revealText="24 MAGGIO 2026" subText="Villa del Balbianello • Lago di Como" />
+          <ScratchCard day="24" month="MAGGIO" year="2026" />
         </div>
       </section>
 
