@@ -12,49 +12,54 @@ import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
 import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 
-function InvitationContent({ params }: { params: { slug: string } }) {
+function InvitationContent({ params }: { params?: { slug?: string } }) {
   const searchParams = useSearchParams();
 
-  const isTemplateB = params.slug === "francesca-e-luca" || searchParams.get("template") === "B";
+  // Gestione sicura e protetta di params.slug (Evita TypeError su .replace)
+  const slug = params?.slug || "elena-e-davide";
+  const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
+
+  const isTemplateB = cleanSlug === "francesca-e-luca" || searchParams?.get("template") === "B";
 
   const coupleNames =
-    searchParams.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
-  const weddingDateDay = searchParams.get("day") || "15";
-  const weddingDateMonth = searchParams.get("month") || "Settembre";
-  const weddingDateYear = searchParams.get("year") || "2026";
-  const locationName = searchParams.get("location") || "Villa Rosa";
-  const locationAddress = searchParams.get("address") || "Via Roma 1, Roma";
+    searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
+  const weddingDateDay = searchParams?.get("day") || "15";
+  const weddingDateMonth = searchParams?.get("month") || "Settembre";
+  const weddingDateYear = searchParams?.get("year") || "2026";
+  const locationName = searchParams?.get("location") || "Villa Rosa";
+  const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase =
-    searchParams.get("phrase") ||
+    searchParams?.get("phrase") ||
     "Due anime, un solo destino. Una storia scritta nel cuore.";
-  const audioUrl = searchParams.get("audio") || "";
+  const audioUrl = searchParams?.get("audio") || "";
   const dressCodeNotes =
-    searchParams.get("dress") || "Abiti eleganti nei toni cromatici della palette";
-  const paletteIdx = parseInt(searchParams.get("palette") || "0", 10);
+    searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
+  const paletteIdx = parseInt(searchParams?.get("palette") || "0", 10);
   const activePalette = DRESS_CODE_PALETTES[paletteIdx] || DRESS_CODE_PALETTES[0];
 
-  // DICHIARAZIONEmarqueeText
   const marqueeText =
-    searchParams.get("marquee") ||
+    searchParams?.get("marquee") ||
     "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦";
 
   const customIban =
-    searchParams.get("iban") || "IT60 X 05428 11101 000000123456";
+    searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
 
   const modules = {
-    busta3d: searchParams.get("busta3d") !== "false",
-    grattaData: searchParams.get("grattaData") !== "false",
-    effettoAcqua: searchParams.get("effettoAcqua") !== "false",
-    nuvole3d: searchParams.get("nuvole3d") !== "false",
-    locationMappa: searchParams.get("locationMappa") !== "false",
-    codiceAbbigliamento: searchParams.get("codiceAbbigliamento") !== "false",
-    negoziConvenzionati: searchParams.get("negoziConvenzionati") !== "false",
-    listaNozzeAmazon: searchParams.get("listaNozzeAmazon") !== "false",
-    dedicheMarquee: searchParams.get("dedicheMarquee") !== "false",
-    hubGiochiFesta: searchParams.get("hubGiochiFesta") !== "false",
-    guestPhotoWall: searchParams.get("guestPhotoWall") !== "false",
-    confermaRsvp: searchParams.get("confermaRsvp") !== "false",
+    busta3d: searchParams?.get("busta3d") !== "false",
+    grattaData: searchParams?.get("grattaData") !== "false",
+    effettoAcqua: searchParams?.get("effettoAcqua") !== "false",
+    nuvole3d: searchParams?.get("nuvole3d") !== "false",
+    locationMappa: searchParams?.get("locationMappa") !== "false",
+    codiceAbbigliamento: searchParams?.get("codiceAbbigliamento") !== "false",
+    negoziConvenzionati: searchParams?.get("negoziConvenzionati") !== "false",
+    listaNozzeAmazon: searchParams?.get("listaNozzeAmazon") !== "false",
+    dedicheMarquee: searchParams?.get("dedicheMarquee") !== "false",
+    hubGiochiFesta: searchParams?.get("hubGiochiFesta") !== "false",
+    guestPhotoWall: searchParams?.get("guestPhotoWall") !== "false",
+    confermaRsvp: searchParams?.get("confermaRsvp") !== "false",
   };
+
+  const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
   return (
     <div
@@ -64,9 +69,7 @@ function InvitationContent({ params }: { params: { slug: string } }) {
     >
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {modules.dedicheMarquee && (
-        <Marquee text={marqueeText} />
-      )}
+      {modules.dedicheMarquee && <Marquee text={marqueeText} />}
 
       {modules.nuvole3d && <PartingClouds />}
 
@@ -114,9 +117,7 @@ function InvitationContent({ params }: { params: { slug: string } }) {
             <h3 className="font-serif font-bold text-lg text-[#1E293B]">{locationName}</h3>
             <p className="text-xs text-slate-500">{locationAddress}</p>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                locationAddress || locationName
-              )}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors"
@@ -167,7 +168,7 @@ function InvitationContent({ params }: { params: { slug: string } }) {
               Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
             </p>
             <Link
-              href={`/${params.slug}/festa`}
+              href={`/${cleanSlug}/festa`}
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
             >
               <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
@@ -190,7 +191,7 @@ function InvitationContent({ params }: { params: { slug: string } }) {
   );
 }
 
-export default function InvitationPage({ params }: { params: { slug: string } }) {
+export default function InvitationPage({ params }: { params?: { slug?: string } }) {
   return (
     <Suspense
       fallback={
