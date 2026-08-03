@@ -7,33 +7,36 @@ import AudioPlayer from "@/components/AudioPlayer";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
-import { ShoppingBag, PartyPopper, Store } from "lucide-react";
+import PartnerStores from "@/components/PartnerStores";
+import { ShoppingBag, PartyPopper } from "lucide-react";
 
 export default function InvitationPage({ params }: { params: { slug: string } }) {
   const isDemo2 = params?.slug === "francesca-e-luca";
 
-  // DATI DEMO 1 vs DEMO 2
+  // DATI TEMA 1 vs TEMA 2
   const coupleNames = isDemo2 ? "Francesca & Luca" : "Elena & Davide";
   const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "24 MAGGIO 2026";
   const locationName = isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como";
   
-  // URL Brani Inediti FF Edizioni
+  // URL MP3 REALI R2 PER I BRANI INEDITI FF EDIZIONI
   const customAudioUrl = isDemo2
-    ? "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-    : "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
+    : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
 
-  // Negozi Convenzionati
-  const partnerStoreName = "Gioielleria Valenza — Lista Nozze in Corso";
+  // Palette Cerchi Colore Dress Code
+  const dressCodeColors = isDemo2
+    ? ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"]
+    : ["#FAF7F2", "#D4AF37", "#E5DACB", "#1E293B", "#8B1E24"];
 
   return (
     <div className={`min-h-screen ${isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"} font-sans pb-24 selection:bg-[#D4AF37] selection:text-white`}>
-      {/* 1. BUSTA D'EPOCA CON VERA CERALACCA LOGO */}
+      {/* 1. BUSTA CON VERA CERALACCA logo /wax-seal.png */}
       <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "E&D"} />
 
-      {/* 2. AUDIO PLAYER CON BRANO INEDITO FF EDIZIONI */}
+      {/* 2. AUDIO PLAYER CON BRANO REALE R2 */}
       <AudioPlayer audioUrl={customAudioUrl} songTitle={`Brano Inedito per ${coupleNames} — FF Edizioni`} />
 
-      {/* HERO ANNOUNCEMENT */}
+      {/* HERO INTRO ANNOUNCEMENT */}
       <section className="py-20 px-6 max-w-3xl mx-auto text-center relative">
         <div className={`border-4 border-double ${isDemo2 ? "border-sky-300 bg-white" : "border-[#D4AF37]/40 bg-white/90"} rounded-t-[180px] p-8 md:p-14 shadow-2xl backdrop-blur-sm`}>
           <span className="text-[10px] tracking-[0.3em] font-bold text-[#D4AF37] uppercase block mb-2">
@@ -47,7 +50,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         </div>
       </section>
 
-      {/* TEMPLATE B: EFFETTO NUVOLE 3D CON TIMELINE APERTA ALLO SCROLL */}
+      {/* TEMA 2: EFFETTO NUVOLE 3D CON TIMELINE CHE SI APRE ALLO SCROLL */}
       {isDemo2 && (
         <section className="py-4">
           <PartingClouds />
@@ -64,7 +67,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         </div>
       </section>
 
-      {/* PROGRAMMA DELLA GIORNATA (TIMELINE CONTINUA VERTICALE) */}
+      {/* PROGRAMMA DELLA GIORNATA (TIMELINE CONTINUA VERTICALE PER TEMA 1) */}
       {!isDemo2 && (
         <section className="py-12 px-6 max-w-2xl mx-auto text-center">
           <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
@@ -100,15 +103,18 @@ export default function InvitationPage({ params }: { params: { slug: string } })
             Vi invitiamo ad indossare abiti eleganti in armonia con le sfumature della nostra palette:
           </p>
           <div className="flex justify-center items-center gap-3 my-4">
-            <div className="w-8 h-8 rounded-full border-2 border-slate-200 bg-[#FAF7F2] shadow-md" />
-            <div className="w-8 h-8 rounded-full border-2 border-slate-200 bg-[#FDE68A] shadow-md" />
-            <div className="w-8 h-8 rounded-full border-2 border-slate-200 bg-[#FCA5A5] shadow-md" />
-            <div className="w-8 h-8 rounded-full border-2 border-slate-200 bg-[#93C5FD] shadow-md" />
+            {dressCodeColors.map((color, idx) => (
+              <div
+                key={idx}
+                className="w-8 h-8 rounded-full border-2 border-slate-200 shadow-md transform hover:scale-110 transition"
+                style={{ backgroundColor: color }}
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* LISTA NOZZE, AMAZON & NEGOZI CONVENZIONATI */}
+      {/* LISTA NOZZE, AMAZON AFFILIATO & NEGOZI CONVENZIONATI */}
       <section className="py-12 px-6 max-w-2xl mx-auto text-center">
         <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-4">
           <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Lista Nozze &amp; Regali</h3>
@@ -116,10 +122,8 @@ export default function InvitationPage({ params }: { params: { slug: string } })
             Per chi desidera farci un pensiero, è possibile consultare la Lista Nozze Amazon, i negozi convenzionati o contribuire al nostro viaggio:
           </p>
 
-          <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 text-xs text-slate-700 flex items-center justify-center gap-2">
-            <Store className="w-4 h-4 text-[#D4AF37]" />
-            <span className="font-bold">{partnerStoreName}</span>
-          </div>
+          {/* NEGOZI CONVENZIONATI CON LOGO E LINK CLICCABILE */}
+          <PartnerStores />
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
             <a
