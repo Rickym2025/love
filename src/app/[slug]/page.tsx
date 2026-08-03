@@ -48,7 +48,12 @@ export default function InvitationPage({ params }: { params: { slug: string } })
       {/* ─── TEMA 2: EFFETTO NUVOLE 3D (PARTING CLOUDS) ─── */}
       {isDemo2 && (
         <section className="py-8">
-          <PartingClouds />
+          <PartingClouds>
+            <div className="text-center space-y-2">
+              <p className="text-xs font-bold text-sky-700">16:30 — Apertura Porte a Villa Borromeo</p>
+              <p className="text-xs font-bold text-sky-700">17:30 — Cerimonia e Scambio degli Anelli</p>
+            </div>
+          </PartingClouds>
         </section>
       )}
 
