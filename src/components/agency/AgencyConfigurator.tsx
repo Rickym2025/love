@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Plus, ExternalLink, Download, Edit3 } from "lucide-react";
+import Image from "next/image";
+import { Plus, ExternalLink, Download, Edit3, FolderHeart, LayoutGrid, Palette } from "lucide-react";
 
 export interface PartnerStore {
   id: string;
@@ -120,8 +121,47 @@ export default function AgencyConfigurator(props: any) {
   ];
 
   return (
-    <div style={style} className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full max-w-3xl mx-auto">
+    <div style={style} className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full">
       
+      {/* BARRA SUPERIORE TAB DI NAVIGAZIONE RAPIDA */}
+      <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
+        <button
+          type="button"
+          onClick={() => setActiveTab && setActiveTab("create")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            activeTab === "create"
+              ? "bg-[#D4AF37] text-slate-900 shadow-sm"
+              : "bg-white text-slate-600 hover:bg-amber-50"
+          }`}
+        >
+          <LayoutGrid className="w-3.5 h-3.5" /> ➕ Crea Invito
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab && setActiveTab("list")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            activeTab === "list"
+              ? "bg-[#D4AF37] text-slate-900 shadow-sm"
+              : "bg-white text-slate-600 hover:bg-amber-50"
+          }`}
+        >
+          <FolderHeart className="w-3.5 h-3.5" /> ✉️ Inviti Già Creati (5)
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab && setActiveTab("brand")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            activeTab === "brand"
+              ? "bg-[#D4AF37] text-slate-900 shadow-sm"
+              : "bg-white text-slate-600 hover:bg-amber-50"
+          }`}
+        >
+          <Palette className="w-3.5 h-3.5" /> 🎨 Brand White-Label
+        </button>
+      </div>
+
       {/* TAB 1: CREA & CONFIGURA INVITO */}
       {activeTab === "create" && (
         <div className="space-y-6">
@@ -132,22 +172,22 @@ export default function AgencyConfigurator(props: any) {
             <label className="block text-xs font-bold uppercase text-[#1E293B] mb-2 tracking-wider">
               1. Template Grafico Layout
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => {
                   setSelectedTemplate("A");
                   setCoupleNames("Elena & Davide");
                 }}
-                className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                className={`p-5 rounded-2xl border-2 text-left transition-all ${
                   selectedTemplate === "A"
                     ? "border-[#D4AF37] bg-amber-50 shadow-md"
                     : "border-slate-300 bg-white hover:border-[#D4AF37]"
                 }`}
               >
                 <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
-                <h4 className="font-serif font-bold text-sm text-[#1E293B]">Arco Romano &amp; Cigni</h4>
-                <p className="text-[10px] text-slate-600 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
+                <h4 className="font-serif font-bold text-base text-[#1E293B]">Arco Romano &amp; Cigni</h4>
+                <p className="text-xs text-slate-600 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
               </button>
 
               <button
@@ -156,15 +196,15 @@ export default function AgencyConfigurator(props: any) {
                   setSelectedTemplate("B");
                   setCoupleNames("Francesca & Luca");
                 }}
-                className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                className={`p-5 rounded-2xl border-2 text-left transition-all ${
                   selectedTemplate === "B"
                     ? "border-sky-500 bg-sky-50 shadow-md"
                     : "border-slate-300 bg-white hover:border-sky-500"
                 }`}
               >
                 <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
-                <h4 className="font-serif font-bold text-sm text-[#1E293B]">Cielo &amp; Nuvole 3D</h4>
-                <p className="text-[10px] text-slate-600 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
+                <h4 className="font-serif font-bold text-base text-[#1E293B]">Cielo &amp; Nuvole 3D</h4>
+                <p className="text-xs text-slate-600 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
               </button>
             </div>
           </div>
@@ -181,7 +221,7 @@ export default function AgencyConfigurator(props: any) {
                 type="text"
                 value={coupleNames}
                 onChange={(e) => setCoupleNames(e.target.value)}
-                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs shadow-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm shadow-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
               />
             </div>
 
@@ -190,11 +230,11 @@ export default function AgencyConfigurator(props: any) {
               <select
                 value={selectedPhrasePreset}
                 onChange={(e) => setSelectedPhrasePreset(e.target.value)}
-                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
               >
                 {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
                   <option key={idx} value={idx.toString()} className="text-[#1E293B]">
-                    {idx + 1}. {phrase.length > 55 ? phrase.substring(0, 55) + "..." : phrase}
+                    {idx + 1}. {phrase.length > 60 ? phrase.substring(0, 60) + "..." : phrase}
                   </option>
                 ))}
               </select>
@@ -207,7 +247,7 @@ export default function AgencyConfigurator(props: any) {
                   value={customWelcomePhrase}
                   onChange={(e) => setCustomWelcomePhrase(e.target.value)}
                   placeholder="Scrivi qui la tua frase personalizzata..."
-                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                  className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
                 />
               </div>
             )}
@@ -220,12 +260,12 @@ export default function AgencyConfigurator(props: any) {
             </label>
 
             {/* BUSTA 3D */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
               <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
               <button
                 type="button"
                 onClick={() => toggleModule("busta3d")}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                 }`}
               >
@@ -234,13 +274,13 @@ export default function AgencyConfigurator(props: any) {
             </div>
 
             {/* GRATTA LA DATA */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎰 Gratta la Data col Dito</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("grattaData")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.grattaData ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -251,28 +291,28 @@ export default function AgencyConfigurator(props: any) {
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
                   <div>
                     <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Giorno</label>
-                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                   <div>
                     <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Mese</label>
-                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                   <div>
                     <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Anno</label>
-                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                 </div>
               )}
             </div>
 
             {/* LOCATION MAPPA */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("locationMappa")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -281,20 +321,20 @@ export default function AgencyConfigurator(props: any) {
               </div>
               {modules.locationMappa && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
-                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
                 </div>
               )}
             </div>
 
             {/* DRESS CODE PALETTE */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Codice Abbigliamento &amp; Palette</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("codiceAbbigliamento")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -303,14 +343,14 @@ export default function AgencyConfigurator(props: any) {
               </div>
               {modules.codiceAbbigliamento && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2.5 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
                   <div className="grid grid-cols-2 gap-2">
                     {DRESS_CODE_PALETTES.map((pal, idx) => (
                       <button
                         key={pal.id}
                         type="button"
                         onClick={() => setSelectedPaletteIdx(idx)}
-                        className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${
+                        className={`p-2.5 rounded-xl border text-left flex flex-col gap-1 ${
                           selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"
                         }`}
                       >
@@ -407,9 +447,14 @@ export default function AgencyConfigurator(props: any) {
           <p className="text-xs text-slate-500">Configura il tuo logo ed i contatti dell&apos;agenzia che appariranno nel footer degli inviti dei tuoi clienti.</p>
 
           <div className="p-6 bg-white rounded-3xl border border-slate-200 space-y-4 shadow-sm">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Logo Agenzia (PNG Trasparente)</label>
-              <input type="file" accept="image/*" className="text-xs text-slate-600 block w-full" />
+            <div className="flex items-center gap-4">
+              <div className="relative w-16 h-16 border border-slate-200 rounded-2xl overflow-hidden p-2 bg-[#FAF7F2]">
+                <Image src="/logo.png" alt="Logo Agenzia" fill className="object-contain p-1" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Logo Agenzia (PNG Trasparente)</label>
+                <input type="file" accept="image/*" className="text-xs text-slate-600 block w-full" />
+              </div>
             </div>
 
             <div>
