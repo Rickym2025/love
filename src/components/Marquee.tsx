@@ -1,48 +1,35 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import React from "react";
 
-interface Testimonial {
-  name: string;
-  role: string;
-  text: string;
-  stars: number;
+export interface Testimonial {
+  id?: string;
+  name?: string;
+  quote?: string;
 }
 
-export default function Marquee({ items }: { items: Testimonial[] }) {
-  const duplicated = [...items, ...items, ...items];
+export interface MarqueeProps {
+  text?: string; // <-- Accetta la stringa diretta delle dediche
+  items?: Testimonial[]; // <-- Accetta anche un array di recensioni/dediche
+  speed?: number;
+}
+
+export default function Marquee({
+  text = "Evviva gli Sposi! 🎉 • Vi aspettiamo per festeggiare insieme • Un giorno unico ed indimenticabile •",
+  items,
+}: MarqueeProps) {
+  const contentText =
+    items && items.length > 0
+      ? items.map((item) => `"${item.quote || ""}" — ${item.name || "Anonimo"}`).join(" • ")
+      : text;
 
   return (
-    <div className="w-full overflow-hidden py-4 select-none">
-      <motion.div
-        className="flex gap-6 w-max"
-        animate={{ x: ['0%', '-33.33%'] }}
-        transition={{
-          repeat: Infinity,
-          ease: 'linear',
-          duration: 25,
-        }}
-      >
-        {duplicated.map((t, idx) => (
-          <div
-            key={idx}
-            className="w-80 sm:w-96 flex-shrink-0 bg-white border border-[#E5DACB] p-6 rounded-2xl shadow-sm hover:border-[#D4AF37] transition-all"
-          >
-            <div className="flex items-center gap-1 mb-3 text-[#D4AF37]">
-              {[...Array(t.stars)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
-              ))}
-            </div>
-            <p className="text-xs text-[#4A3D39] italic mb-4 leading-relaxed font-light">"{t.text}"</p>
-            <div>
-              <h4 className="font-serif text-sm font-bold text-[#4A3D39]">{t.name}</h4>
-              <span className="text-[10px] text-[#9E8976] uppercase tracking-wider">{t.role}</span>
-            </div>
-          </div>
-        ))}
-      </motion.div>
+    <div className="overflow-hidden whitespace-nowrap bg-[#1E293B] text-[#D4AF37] py-2 border-y border-[#D4AF37]/30 font-mono text-xs select-none shadow-md">
+      <div className="inline-block animate-pulse tracking-widest uppercase font-semibold">
+        <span className="mx-4">{contentText}</span>
+        <span className="mx-4">{contentText}</span>
+        <span className="mx-4">{contentText}</span>
+      </div>
     </div>
   );
 }
