@@ -1,9 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import ScratchCard from "@/components/ScratchCard";
-import { Sparkles, Heart, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
+  const coupleNames = "Elena & Davide";
+  const welcomePhrase = "Due anime, un solo destino. Una storia scritta nel cuore.";
+
   return (
     <main className="min-h-screen bg-[#FAF7F2] text-[#1E293B] font-sans">
       {/* HERO LANDING PAGE */}
@@ -15,7 +18,7 @@ export default function Home() {
           LOVE — Partecipazioni Digitali d&apos;Autore
         </h1>
         <p className="text-base md:text-lg text-slate-600 font-serif italic mt-4 max-w-2xl mx-auto">
-          Crea inviti di nozze unici con Busta 3D in Ceralacca, Gratta la Data, Nuvole 3D e Guest Photo Wall con Proiettore Maxischermo.
+          &quot;{welcomePhrase}&quot;
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
@@ -23,7 +26,7 @@ export default function Home() {
             href="/elena-e-davide"
             className="px-6 py-3.5 bg-[#D4AF37] text-slate-900 font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-md flex items-center justify-center gap-2"
           >
-            Guarda Demo 1 (Elena &amp; Davide) <ArrowRight className="w-4 h-4" />
+            Guarda Demo 1 ({coupleNames}) <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/francesca-e-luca"
