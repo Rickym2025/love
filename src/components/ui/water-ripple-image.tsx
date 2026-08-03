@@ -108,3 +108,4 @@ export function WaterRippleImage({
     </div>
   );
 }
+export default WaterRippleImage;
