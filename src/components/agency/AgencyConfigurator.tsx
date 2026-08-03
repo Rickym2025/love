@@ -94,32 +94,32 @@ export default function AgencyConfigurator(props: any) {
   }
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-8 text-[#1E293B]">
+    <div className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full">
       {activeTab === "create" && (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-xl mx-auto">
           <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-          {/* 1. SELEZIONE TEMPLATE CON TITOLI AD ALTO CONTRASTO */}
+          {/* 1. SELEZIONE TEMPLATE */}
           <div>
             <label className="block text-xs font-bold uppercase text-[#1E293B] mb-2 tracking-wider">
               1. Template Grafico Layout
             </label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => {
                   setSelectedTemplate("A");
                   setCoupleNames("Elena & Davide");
                 }}
-                className={`p-5 rounded-2xl border-2 text-left transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   selectedTemplate === "A"
                     ? "border-[#D4AF37] bg-amber-50 shadow-md"
                     : "border-slate-300 bg-white hover:border-[#D4AF37]"
                 }`}
               >
                 <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
-                <h4 className="font-serif font-bold text-base text-[#1E293B]">Arco Romano &amp; Cigni</h4>
-                <p className="text-xs text-slate-600 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
+                <h4 className="font-serif font-bold text-sm text-[#1E293B]">Arco Romano &amp; Cigni</h4>
+                <p className="text-[10px] text-slate-600 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
               </button>
 
               <button
@@ -128,20 +128,20 @@ export default function AgencyConfigurator(props: any) {
                   setSelectedTemplate("B");
                   setCoupleNames("Francesca & Luca");
                 }}
-                className={`p-5 rounded-2xl border-2 text-left transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   selectedTemplate === "B"
                     ? "border-sky-500 bg-sky-50 shadow-md"
                     : "border-slate-300 bg-white hover:border-sky-500"
                 }`}
               >
                 <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
-                <h4 className="font-serif font-bold text-base text-[#1E293B]">Cielo &amp; Nuvole 3D</h4>
-                <p className="text-xs text-slate-600 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
+                <h4 className="font-serif font-bold text-sm text-[#1E293B]">Cielo &amp; Nuvole 3D</h4>
+                <p className="text-[10px] text-slate-600 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
               </button>
             </div>
           </div>
 
-          {/* 2. DATI SPOSI & FRASE (INPUT NITIDI AD ALTO CONTRASTO) */}
+          {/* 2. DATI SPOSI & FRASE */}
           <div className="space-y-4 pt-4 border-t border-slate-200">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
               2. Dati Sposi &amp; Frase di Benvenuto
@@ -153,7 +153,7 @@ export default function AgencyConfigurator(props: any) {
                 type="text"
                 value={coupleNames}
                 onChange={(e) => setCoupleNames(e.target.value)}
-                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm shadow-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs shadow-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
               />
             </div>
 
@@ -162,11 +162,11 @@ export default function AgencyConfigurator(props: any) {
               <select
                 value={selectedPhrasePreset}
                 onChange={(e) => setSelectedPhrasePreset(e.target.value)}
-                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
               >
                 {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
                   <option key={idx} value={idx.toString()} className="text-[#1E293B]">
-                    {idx + 1}. {phrase.length > 60 ? phrase.substring(0, 60) + "..." : phrase}
+                    {idx + 1}. {phrase.length > 55 ? phrase.substring(0, 55) + "..." : phrase}
                   </option>
                 ))}
               </select>
@@ -179,7 +179,7 @@ export default function AgencyConfigurator(props: any) {
                   value={customWelcomePhrase}
                   onChange={(e) => setCustomWelcomePhrase(e.target.value)}
                   placeholder="Scrivi qui la tua frase personalizzata..."
-                  className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
                 />
               </div>
             )}
@@ -192,12 +192,12 @@ export default function AgencyConfigurator(props: any) {
             </label>
 
             {/* BUSTA 3D */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
               <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
               <button
                 type="button"
                 onClick={() => toggleModule("busta3d")}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                 }`}
               >
@@ -206,13 +206,13 @@ export default function AgencyConfigurator(props: any) {
             </div>
 
             {/* GRATTA LA DATA */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎰 Gratta la Data col Dito</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("grattaData")}
-                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.grattaData ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -220,31 +220,31 @@ export default function AgencyConfigurator(props: any) {
                 </button>
               </div>
               {modules.grattaData && (
-                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
                   <div>
-                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Giorno</label>
-                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Giorno</label>
+                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Mese</label>
-                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Mese</label>
+                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Anno</label>
-                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                    <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Anno</label>
+                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
                   </div>
                 </div>
               )}
             </div>
 
             {/* LOCATION MAPPA */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("locationMappa")}
-                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -253,20 +253,20 @@ export default function AgencyConfigurator(props: any) {
               </div>
               {modules.locationMappa && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
-                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
                 </div>
               )}
             </div>
 
             {/* DRESS CODE PALETTE */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Codice Abbigliamento &amp; Palette</span>
                 <button
                   type="button"
                   onClick={() => toggleModule("codiceAbbigliamento")}
-                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
                   }`}
                 >
@@ -274,22 +274,22 @@ export default function AgencyConfigurator(props: any) {
                 </button>
               </div>
               {modules.codiceAbbigliamento && (
-                <div className="space-y-3 pt-2 border-t border-slate-100">
-                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
                   <div className="grid grid-cols-2 gap-2">
                     {DRESS_CODE_PALETTES.map((pal, idx) => (
                       <button
                         key={pal.id}
                         type="button"
                         onClick={() => setSelectedPaletteIdx(idx)}
-                        className={`p-2.5 rounded-xl border text-left flex flex-col gap-1.5 ${
+                        className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${
                           selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"
                         }`}
                       >
                         <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
                         <div className="flex gap-1">
                           {pal.colors.map((c, i) => (
-                            <div key={i} className="w-4 h-4 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
+                            <div key={i} className="w-3.5 h-3.5 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
                           ))}
                         </div>
                       </button>
