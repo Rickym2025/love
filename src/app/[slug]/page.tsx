@@ -15,7 +15,6 @@ import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 function InvitationContent({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
 
-  // Template e dati base con fallback sicuri
   const isTemplateB = params.slug === "francesca-e-luca" || searchParams.get("template") === "B";
 
   const coupleNames =
@@ -34,7 +33,7 @@ function InvitationContent({ params }: { params: { slug: string } }) {
   const paletteIdx = parseInt(searchParams.get("palette") || "0", 10);
   const activePalette = DRESS_CODE_PALETTES[paletteIdx] || DRESS_CODE_PALETTES[0];
 
-  // DICHIARAZIONE FONDAMENTALE DI marqueeText (Risolve ReferenceError)
+  // DICHIARAZIONEmarqueeText
   const marqueeText =
     searchParams.get("marquee") ||
     "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦";
@@ -42,7 +41,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
   const customIban =
     searchParams.get("iban") || "IT60 X 05428 11101 000000123456";
 
-  // Moduli attivi (letti dall'URL o attivi di default)
   const modules = {
     busta3d: searchParams.get("busta3d") !== "false",
     grattaData: searchParams.get("grattaData") !== "false",
@@ -64,23 +62,15 @@ function InvitationContent({ params }: { params: { slug: string } }) {
         isTemplateB ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"
       }`}
     >
-      {/* PLAYER AUDIO PERSISTENTE */}
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* MARQUEE DEDICHE SCORREVOLI */}
       {modules.dedicheMarquee && (
-        <div className="bg-[#1E293B] text-[#D4AF37] py-2">
-          <Marquee text={marqueeText} />
-        </div>
+        <Marquee text={marqueeText} />
       )}
 
-      {/* NUVOLE 3D DI SFONDO */}
       {modules.nuvole3d && <PartingClouds />}
 
-      {/* CONTENITORE CENTRALE INVITO */}
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
-        
-        {/* BUSTA D'EPOCA CON CERALACCA */}
         {modules.busta3d && (
           <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/30 text-center shadow-lg relative">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">
@@ -94,7 +84,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* HERO INTRODUZIONE */}
         <div className="text-center space-y-3 pt-4">
           <span className="text-xs tracking-widest uppercase font-semibold text-[#D4AF37]">
             Wedding Celebration
@@ -108,7 +97,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </blockquote>
         </div>
 
-        {/* GRATTIAMO LA DATA */}
         {modules.grattaData && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block">
@@ -118,7 +106,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* LOCATION & MAPPA GOOGLE */}
         {modules.locationMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block flex items-center justify-center gap-1.5">
@@ -139,7 +126,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* DRESS CODE & PALETTE CROMATICA */}
         {modules.codiceAbbigliamento && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block">
@@ -158,7 +144,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* LISTA NOZZE & IBAN */}
         {modules.listaNozzeAmazon && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block flex items-center justify-center gap-1.5">
@@ -173,7 +158,6 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* LINK PAGINA DELLA FESTA */}
         {modules.hubGiochiFesta && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -191,14 +175,12 @@ function InvitationContent({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP */}
         {modules.confermaRsvp && (
           <div className="pt-2">
             <RsvpForm coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* FOOTER WHITE-LABEL AGENZIA */}
         <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
           <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
           <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
