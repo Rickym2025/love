@@ -1,15 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
 
 export default function AgencyStudioPage({ params }: { params?: { agencyId?: string } }) {
-  // Protezione totale su params.agencyId (Evita Errore 500 e TypeError .replace)
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
+  // Colonne Ridimensionabili con Drag & Drop Mouse
+  const [sidebarWidth, setSidebarWidth] = useState(260);
+  const [configuratorWidth, setConfiguratorWidth] = useState(440);
+  const [isResizingSidebar, setIsResizingSidebar] = useState(false);
+  const [isResizingConfigurator, setIsResizingConfigurator] = useState(false);
+
+  // Stati Configurazione Invito
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
@@ -50,13 +56,57 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
-  return (
-    <div className="flex h-screen w-full bg-slate-900 overflow-hidden font-sans">
-      {/* 1. SIDEBAR */}
-      <AgencySidebar agencyId={agencyId} activeTab={activeTab} setActiveTab={setActiveTab} />
+  // Gestione Eventi Mouse per Trascinamento Colonne
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizingSidebar) {
+        const newWidth = Math.max(200, Math.min(380, e.clientX));
+        setSidebarWidth(newWidth);
+      } else if (isResizingConfigurator) {
+        const newWidth = Math.max(320, Math.min(650, e.clientX - sidebarWidth));
+        setConfiguratorWidth(newWidth);
+      }
+    };
 
-      {/* 2. CONFIGURATORE */}
+    const handleMouseUp = () => {
+      setIsResizingSidebar(false);
+      setIsResizingConfigurator(false);
+    };
+
+    if (isResizingSidebar || isResizingConfigurator) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizingSidebar, isResizingConfigurator, sidebarWidth]);
+
+  return (
+    <div className="flex h-screen w-full bg-[#FAF7F2] overflow-hidden font-sans">
+      {/* COLONNA 1: SIDEBAR AGENZIA */}
+      <AgencySidebar
+        agencyId={agencyId}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        style={{ width: `${sidebarWidth}px` }}
+      />
+
+      {/* SEPARATORE RIDIMENSIONABILE 1 */}
+      <div
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setIsResizingSidebar(true);
+        }}
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/20 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
+        title="Trascina per ridimensionare Sidebar"
+      />
+
+      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
       <AgencyConfigurator
+        style={{ width: `${configuratorWidth}px` }}
         activeTab={activeTab}
         selectedTemplate={selectedTemplate}
         setSelectedTemplate={setSelectedTemplate}
@@ -96,7 +146,17 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         toggleModule={toggleModule}
       />
 
-      {/* 3. PREVIEW */}
+      {/* SEPARATORE RIDIMENSIONABILE 2 */}
+      <div
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setIsResizingConfigurator(true);
+        }}
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/20 hover:bg-[#D4AF37] transition-colors flex-shrink-0 select-none h-full"
+        title="Trascina per ridimensionare Configuratore"
+      />
+
+      {/* COLONNA 3: PREVIEW SMARTPHONE LIVE */}
       <AgencyPreview
         selectedTemplate={selectedTemplate}
         selectedColorScheme={selectedColorScheme}
