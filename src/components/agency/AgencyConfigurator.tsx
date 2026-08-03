@@ -10,6 +10,43 @@ export interface PartnerStore {
   logoUrl: string;
 }
 
+interface AgencyConfiguratorProps {
+  activeTab: string;
+  selectedTemplate: "A" | "B";
+  setSelectedTemplate: (t: "A" | "B") => void;
+  selectedColorScheme: string;
+  setSelectedColorScheme: (c: string) => void;
+  coupleNames: string;
+  setCoupleNames: (v: string) => void;
+  weddingDateDay: string;
+  setWeddingDateDay: (v: string) => void;
+  weddingDateMonth: string;
+  setWeddingDateMonth: (v: string) => void;
+  weddingDateYear: string;
+  setWeddingDateYear: (v: string) => void;
+  locationName: string;
+  setLocationName: (v: string) => void;
+  locationAddress: string;
+  setLocationAddress: (v: string) => void;
+  audioUrl: string;
+  setAudioUrl: (v: string) => void;
+  waterImageUrl: string;
+  setWaterImageUrl: (v: string) => void;
+  selectedPhrasePreset: string;
+  setSelectedPhrasePreset: (v: string) => void;
+  customWelcomePhrase: string;
+  setCustomWelcomePhrase: (v: string) => void;
+  dressCodeNotes: string;
+  setDressCodeNotes: (v: string) => void;
+  selectedPaletteIdx: number;
+  setSelectedPaletteIdx: (i: number) => void;
+  partnerStores: PartnerStore[];
+  setPartnerStores: (stores: PartnerStore[]) => void;
+  modules: any;
+  toggleModule: (k: string) => void;
+  style?: React.CSSProperties;
+}
+
 const WELCOME_PHRASE_PRESETS = [
   "Due anime, un solo destino. Una storia scritta nel cuore.",
   "L'amore non consiste nello guardarsi l'un l'altro, ma nel guardare insieme nella stessa direzione.",
@@ -30,44 +67,42 @@ const DRESS_CODE_PALETTES = [
   { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF1F2", "#FECDD3", "#FB7185", "#E11D48", "#881337"] },
 ];
 
-export default function AgencyConfigurator(props: any) {
-  const {
-    activeTab,
-    selectedTemplate,
-    setSelectedTemplate,
-    selectedColorScheme,
-    setSelectedColorScheme,
-    coupleNames,
-    setCoupleNames,
-    weddingDateDay,
-    setWeddingDateDay,
-    weddingDateMonth,
-    setWeddingDateMonth,
-    weddingDateYear,
-    setWeddingDateYear,
-    locationName,
-    setLocationName,
-    locationAddress,
-    setLocationAddress,
-    audioUrl,
-    setAudioUrl,
-    waterImageUrl,
-    setWaterImageUrl,
-    selectedPhrasePreset,
-    setSelectedPhrasePreset,
-    customWelcomePhrase,
-    setCustomWelcomePhrase,
-    dressCodeNotes,
-    setDressCodeNotes,
-    selectedPaletteIdx,
-    setSelectedPaletteIdx,
-    partnerStores,
-    setPartnerStores,
-    modules,
-    toggleModule,
-    style,
-  } = props;
-
+export default function AgencyConfigurator({
+  activeTab,
+  selectedTemplate,
+  setSelectedTemplate,
+  selectedColorScheme,
+  setSelectedColorScheme,
+  coupleNames,
+  setCoupleNames,
+  weddingDateDay,
+  setWeddingDateDay,
+  weddingDateMonth,
+  setWeddingDateMonth,
+  weddingDateYear,
+  setWeddingDateYear,
+  locationName,
+  setLocationName,
+  locationAddress,
+  setLocationAddress,
+  audioUrl,
+  setAudioUrl,
+  waterImageUrl,
+  setWaterImageUrl,
+  selectedPhrasePreset,
+  setSelectedPhrasePreset,
+  customWelcomePhrase,
+  setCustomWelcomePhrase,
+  dressCodeNotes,
+  setDressCodeNotes,
+  selectedPaletteIdx,
+  setSelectedPaletteIdx,
+  partnerStores,
+  setPartnerStores,
+  modules,
+  toggleModule,
+  style,
+}: AgencyConfiguratorProps) {
   function addStore() {
     setPartnerStores([
       ...partnerStores,
@@ -81,7 +116,7 @@ export default function AgencyConfigurator(props: any) {
   }
 
   function removeStore(id: string) {
-    setPartnerStores(partnerStores.filter((s: any) => s.id !== id));
+    setPartnerStores(partnerStores.filter((s) => s.id !== id));
   }
 
   function handleAudioFileUpload(e: any) {
@@ -372,13 +407,13 @@ export default function AgencyConfigurator(props: any) {
               </div>
               {modules.negoziConvenzionati && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  {partnerStores.map((store: any) => (
+                  {partnerStores.map((store) => (
                     <div key={store.id} className="bg-[#FAF7F2] p-2.5 rounded-xl border border-slate-200 flex gap-2 items-center">
                       <input
                         type="text"
                         value={store.name}
                         onChange={(e) => {
-                          setPartnerStores(partnerStores.map((s: any) => (s.id === store.id ? { ...s, name: e.target.value } : s)));
+                          setPartnerStores(partnerStores.map((s) => (s.id === store.id ? { ...s, name: e.target.value } : s)));
                         }}
                         className="flex-1 p-1.5 rounded bg-white border border-slate-300 text-xs"
                       />
@@ -398,19 +433,20 @@ export default function AgencyConfigurator(props: any) {
               )}
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* TAB BRAND AGENZIA */}
-        {activeTab === "brand" && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
-            <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti dell&apos;agenzia.</p>
-            <div>
-              <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
-              <input type="file" className="text-xs text-slate-600" />
-            </div>
+      {/* TAB BRAND AGENZIA */}
+      {activeTab === "brand" && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
+          <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti dell&apos;agenzia.</p>
+          <div>
+            <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
+            <input type="file" className="text-xs text-slate-600" />
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 }
