@@ -106,7 +106,12 @@ export default function AgencyConfigurator({
   const addStore = () => {
     setPartnerStores([
       ...partnerStores,
-      { id: Date.now().toString(), name: "Nuovo Negozio", url: "https://...", logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80" },
+      {
+        id: Date.now().toString(),
+        name: "Nuovo Negozio",
+        url: "https://...",
+        logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
+      },
     ]);
   };
 
@@ -136,13 +141,31 @@ export default function AgencyConfigurator({
           <div>
             <label className="block text-xs font-bold uppercase text-slate-600 mb-2">1. Template Grafico Layout</label>
             <div className="grid grid-cols-2 gap-3">
-              <button type="button" onClick={() => { setSelectedTemplate("A"); setCoupleNames("Elena & Davide"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "A" ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"}`}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTemplate("A");
+                  setCoupleNames("Elena & Davide");
+                }}
+                className={`p-4 rounded-2xl border-2 text-left ${
+                  selectedTemplate === "A" ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"
+                }`}
+              >
                 <span className="text-[10px] font-bold uppercase text-[#D4AF37] block">Template A</span>
                 <h4 className="font-serif font-bold text-sm">Arco Romano &amp; Cigni</h4>
                 <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
               </button>
 
-              <button type="button" onClick={() => { setSelectedTemplate("B"); setCoupleNames("Francesca & Luca"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "B" ? "border-sky-500 bg-sky-50" : "border-slate-200 bg-white"}`}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTemplate("B");
+                  setCoupleNames("Francesca & Luca");
+                }}
+                className={`p-4 rounded-2xl border-2 text-left ${
+                  selectedTemplate === "B" ? "border-sky-500 bg-sky-50" : "border-slate-200 bg-white"
+                }`}
+              >
                 <span className="text-[10px] font-bold uppercase text-sky-600 block">Template B</span>
                 <h4 className="font-serif font-bold text-sm">Cielo &amp; Nuvole 3D</h4>
                 <p className="text-[10px] text-slate-500 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
@@ -155,12 +178,21 @@ export default function AgencyConfigurator({
             <label className="block text-xs font-bold uppercase text-slate-600">2. Dati Sposi &amp; Frase di Benvenuto</label>
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
-              <input type="text" value={coupleNames} onChange={(e) => setCoupleNames(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold" />
+              <input
+                type="text"
+                value={coupleNames}
+                onChange={(e) => setCoupleNames(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold"
+              />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1">Frase di Benvenuto (10 Opzioni)</label>
-              <select value={selectedPhrasePreset} onChange={(e) => setSelectedPhrasePreset(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white">
+              <select
+                value={selectedPhrasePreset}
+                onChange={(e) => setSelectedPhrasePreset(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white"
+              >
                 {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
                   <option key={idx} value={idx.toString()}>
                     {idx + 1}. {phrase.length > 55 ? phrase.substring(0, 55) + "..." : phrase}
@@ -171,7 +203,13 @@ export default function AgencyConfigurator({
 
             {selectedPhrasePreset === "9" && (
               <div>
-                <textarea rows={2} value={customWelcomePhrase} onChange={(e) => setCustomWelcomePhrase(e.target.value)} placeholder="Scrivi qui la tua frase personalizzata..." className="w-full p-2.5 rounded-xl border border-slate-300 text-xs resize-none" />
+                <textarea
+                  rows={2}
+                  value={customWelcomePhrase}
+                  onChange={(e) => setCustomWelcomePhrase(e.target.value)}
+                  placeholder="Scrivi qui la tua frase personalizzata..."
+                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs resize-none"
+                />
               </div>
             )}
           </div>
@@ -194,7 +232,13 @@ export default function AgencyConfigurator({
             {/* BUSTA */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
               <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
-              <button type="button" onClick={() => toggleModule("busta3d")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+              <button
+                type="button"
+                onClick={() => toggleModule("busta3d")}
+                className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                  modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                }`}
+              >
                 {modules.busta3d ? "Attivo" : "Disattivato"}
               </button>
             </div>
@@ -203,7 +247,13 @@ export default function AgencyConfigurator({
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎰 Gratta la Data col Dito</span>
-                <button type="button" onClick={() => toggleModule("grattaData")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.grattaData ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("grattaData")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    modules.grattaData ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
                   {modules.grattaData ? "Attivo" : "Disattivato"}
                 </button>
               </div>
@@ -211,15 +261,30 @@ export default function AgencyConfigurator({
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
                   <div>
                     <label className="block text-[10px] text-slate-500 font-bold mb-1">Giorno</label>
-                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center" />
+                    <input
+                      type="text"
+                      value={weddingDateDay}
+                      onChange={(e) => setWeddingDateDay(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center"
+                    />
                   </div>
                   <div>
                     <label className="block text-[10px] text-slate-500 font-bold mb-1">Mese</label>
-                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center" />
+                    <input
+                      type="text"
+                      value={weddingDateMonth}
+                      onChange={(e) => setWeddingDateMonth(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center"
+                    />
                   </div>
                   <div>
                     <label className="block text-[10px] text-slate-500 font-bold mb-1">Anno</label>
-                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center" />
+                    <input
+                      type="text"
+                      value={weddingDateYear}
+                      onChange={(e) => setWeddingDateYear(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center"
+                    />
                   </div>
                 </div>
               )}
@@ -229,7 +294,13 @@ export default function AgencyConfigurator({
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">💧 Effetto Acqua (Rifrazione Liquida)</span>
-                <button type="button" onClick={() => toggleModule("effettoAcqua")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.effettoAcqua ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("effettoAcqua")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    modules.effettoAcqua ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
                   {modules.effettoAcqua ? "Attivo" : "Disattivato"}
                 </button>
               </div>
@@ -245,14 +316,32 @@ export default function AgencyConfigurator({
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google / Indicazioni</span>
-                <button type="button" onClick={() => toggleModule("locationMappa")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("locationMappa")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
                   {modules.locationMappa ? "Attivo" : "Disattivato"}
                 </button>
               </div>
               {modules.locationMappa && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
-                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                  <input
+                    type="text"
+                    value={locationName}
+                    onChange={(e) => setLocationName(e.target.value)}
+                    placeholder="Nome Location"
+                    className="w-full p-2 rounded-lg border border-slate-300 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={locationAddress}
+                    onChange={(e) => setLocationAddress(e.target.value)}
+                    placeholder="Indirizzo completo"
+                    className="w-full p-2 rounded-lg border border-slate-300 text-xs"
+                  />
                 </div>
               )}
             </div>
@@ -261,16 +350,34 @@ export default function AgencyConfigurator({
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Codice Abbigliamento &amp; Palette Multi-Colore</span>
-                <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("codiceAbbigliamento")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
                   {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
                 </button>
               </div>
               {modules.codiceAbbigliamento && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                  <input
+                    type="text"
+                    value={dressCodeNotes}
+                    onChange={(e) => setDressCodeNotes(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300 text-xs"
+                  />
                   <div className="grid grid-cols-2 gap-2">
                     {DRESS_CODE_PALETTES.map((pal, idx) => (
-                      <button key={pal.id} type="button" onClick={() => setSelectedPaletteIdx(idx)} className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"}`}>
+                      <button
+                        key={pal.id}
+                        type="button"
+                        onClick={() => setSelectedPaletteIdx(idx)}
+                        className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${
+                          selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"
+                        }`}
+                      >
                         <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
                         <div className="flex gap-1">
                           {pal.colors.map((c, i) => (
@@ -288,7 +395,13 @@ export default function AgencyConfigurator({
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (Link &amp; Upload Logo)</span>
-                <button type="button" onClick={() => toggleModule("negoziConvenzionati")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.negoziConvenzionati ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("negoziConvenzionati")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    modules.negoziConvenzionati ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
                   {modules.negoziConvenzionati ? "Attivo" : "Disattivato"}
                 </button>
               </div>
@@ -296,19 +409,43 @@ export default function AgencyConfigurator({
                 <div className="space-y-2 pt-2 border-t border-slate-100">
                   {partnerStores.map((store) => (
                     <div key={store.id} className="bg-[#FAF7F2] p-2.5 rounded-xl border border-slate-200 flex gap-2 items-center">
-                      <input type="text" value={store.name} onChange={(e) => { setPartnerStores(partnerStores.map((s) => (s.id === store.id ? { ...s, name: e.target.value } : s))); }} className="flex-1 p-1.5 rounded bg-white border border-slate-300 text-xs" />
-                      <button type="button" onClick={() => removeStore(store.id)} className="text-rose-500"><Trash2 className="w-4 h-4" /></button>
+                      <input
+                        type="text"
+                        value={store.name}
+                        onChange={(e) => {
+                          setPartnerStores(partnerStores.map((s) => (s.id === store.id ? { ...s, name: e.target.value } : s)));
+                        }}
+                        className="flex-1 p-1.5 rounded bg-white border border-slate-300 text-xs"
+                      />
+                      <button type="button" onClick={() => removeStore(store.id)} className="text-rose-500">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   ))}
-                  <button type="button" onClick={addStore} className="px-3 py-1.5 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Aggiungi Negozio</button>
+                  <button
+                    type="button"
+                    onClick={addStore}
+                    className="px-3 py-1.5 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Aggiungi Negozio
+                  </button>
                 </div>
               )}
             </div>
           </div>
         )}
+
+        {/* TAB BRAND AGENZIA */}
+        {activeTab === "brand" && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
+            <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti dell&apos;agenzia.</p>
+            <div>
+              <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
+              <input type="file" className="text-xs text-slate-600" />
+            </div>
+          </div>
+        )}
       </div>
     );
-  }
-
-  return null;
 }
