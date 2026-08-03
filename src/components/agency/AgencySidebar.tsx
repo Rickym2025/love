@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { LayoutGrid, Palette, Sparkles } from "lucide-react";
+import { LayoutGrid, FolderHeart, Palette, Sparkles } from "lucide-react";
 
 export interface AgencySidebarProps {
   agencyId?: string;
@@ -23,7 +23,7 @@ export default function AgencySidebar({
   return (
     <aside
       style={style}
-      className="bg-[#1E293B] text-[#FAF7F2] border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between h-screen flex-shrink-0 select-none overflow-y-auto"
+      className="bg-[#1E293B] text-[#FAF7F2] border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between h-full select-none overflow-y-auto"
     >
       <div className="space-y-6">
         {/* LOGO E NOME AGENZIA */}
@@ -36,7 +36,7 @@ export default function AgencySidebar({
           </h1>
         </div>
 
-        {/* MENU NAVIGAZIONE */}
+        {/* MENU NAVIGAZIONE CON INVITI GIÀ CREATI */}
         <nav className="space-y-2">
           <button
             type="button"
@@ -47,7 +47,19 @@ export default function AgencySidebar({
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
             }`}
           >
-            <LayoutGrid className="w-4 h-4" /> Configuratore Invito
+            <LayoutGrid className="w-4 h-4" /> Crea Nuovo Invito
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("list")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+              activeTab === "list"
+                ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
+                : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
+            }`}
+          >
+            <FolderHeart className="w-4 h-4" /> Inviti Già Creati (5)
           </button>
 
           <button
@@ -59,14 +71,14 @@ export default function AgencySidebar({
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
             }`}
           >
-            <Palette className="w-4 h-4" /> Personalizzazione Brand
+            <Palette className="w-4 h-4" /> Brand &amp; Logo White-Label
           </button>
         </nav>
       </div>
 
       <div className="pt-6 border-t border-slate-700/60 text-[10px] text-slate-400">
-        <p className="font-bold text-[#D4AF37]">Piano White-Label Attivo</p>
-        <p className="mt-0.5">10 Matrimoni / Anno</p>
+        <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
+        <p className="mt-0.5">5 di 10 Matrimoni Utilizzati</p>
       </div>
     </aside>
   );
