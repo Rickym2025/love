@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
-interface WaterRippleProps {
+export interface WaterRippleProps {
   src: string;
   blueish?: number;
   scale?: number;
   illumination?: number;
   surfaceDistortion?: number;
   waterDistortion?: number;
+  alt?: string;
   className?: string;
 }
 
@@ -19,92 +20,224 @@ export function WaterRippleImage({
   illumination = 0.15,
   surfaceDistortion = 0.03,
   waterDistortion = 0.02,
+  alt = "Effetto Acqua",
   className = '',
 }: WaterRippleProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [webGlSupported, setWebGlSupported] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = src;
+    const gl = (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
+    if (!gl) {
+      setWebGlSupported(false);
+      return;
+    }
 
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 600);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 400);
+    // Vertex Shader (Geometria Piano 2D)
+    const vsSource = `
+      attribute vec2 a_position;
+      attribute vec2 a_texCoord;
+      varying vec2 v_texCoord;
+      void main() {
+        gl_Position = vec4(a_position, 0.0, 1.0);
+        v_texCoord = vec2(a_texCoord.x, 1.0 - a_texCoord.y);
+      }
+    `;
 
-    let ripples: { x: number; y: number; r: number; maxR: number; alpha: number }[] = [];
-    let lastTime = 0;
+    // Fragment Shader (Rifrazione Caustiche e Onde Subacquee)
+    const fsSource = `
+      precision mediump float;
+      varying vec2 v_texCoord;
+      uniform sampler2D u_image;
+      uniform float u_time;
+      uniform vec2 u_mouse;
+      uniform float u_blueish;
+      uniform float u_scale;
+      uniform float u_illumination;
+      uniform float u_surfaceDistortion;
+      uniform float u_waterDistortion;
 
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, width, height);
+      // Generatore di Rumore Caustico per l'Acqua
+      float noise(vec2 p) {
+        return sin(p.x * 12.0 + u_time * 2.0) * cos(p.y * 12.0 + u_time * 1.5) * 0.5 + 0.5;
+      }
+
+      void main() {
+        vec2 uv = v_texCoord;
+        
+        // Calcolo distanza dal cursore
+        float dist = distance(uv, u_mouse);
+        float mouseWave = sin(dist * u_scale * 15.0 - u_time * 4.0) * exp(-dist * 4.0) * u_surfaceDistortion;
+
+        // Distorsione del rumore d'onda subacqueo
+        float waveX = sin(uv.y * u_scale * 8.0 + u_time * 1.8) * u_waterDistortion;
+        float waveY = cos(uv.x * u_scale * 8.0 + u_time * 1.5) * u_waterDistortion;
+
+        vec2 distortedUv = uv + vec2(waveX + mouseWave, waveY + mouseWave);
+        distortedUv = clamp(distortedUv, 0.0, 1.0);
+
+        // Campionamento Texture Immagine
+        vec4 texColor = texture2D(u_image, distortedUv);
+
+        // Caustiche di Luce Subacquea
+        float caustic = noise(distortedUv * u_scale * 2.0) * u_illumination;
+        vec3 waterTint = mix(texColor.rgb, vec3(0.0, 0.4, 0.8), u_blueish * 0.25);
+        vec3 finalColor = waterTint + vec3(caustic);
+
+        gl_FragColor = vec4(finalColor, texColor.a);
+      }
+    `;
+
+    // Helper Compilazione Shader WebGL
+    function createShader(gl: WebGLRenderingContext, type: number, source: string) {
+      const shader = gl.createShader(type);
+      if (!shader) return null;
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error('Errore compilazione shader:', gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    const vertShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+    if (!vertShader || !fragShader) return;
+
+    const program = gl.createProgram();
+    if (!program) return;
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+    gl.useProgram(program);
+
+    // Buffer Geometria Quad
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+      gl.STATIC_DRAW
+    );
+
+    const positionLocation = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    const texCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+      gl.STATIC_DRAW
+    );
+
+    const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
+    gl.enableVertexAttribArray(texCoordLocation);
+    gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+    // Caricamento Immagine Texture WebGL
+    const texture = gl.createTexture();
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+    image.src = src;
+
+    image.onload = () => {
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     };
 
-    const addRipple = (e: MouseEvent | TouchEvent) => {
-      const now = Date.now();
-      if (now - lastTime < 120) return; // Throttle morbido
-      lastTime = now;
+    // Uniform Location
+    const uTimeLoc = gl.getUniformLocation(program, 'u_time');
+    const uMouseLoc = gl.getUniformLocation(program, 'u_mouse');
+    const uBlueishLoc = gl.getUniformLocation(program, 'u_blueish');
+    const uScaleLoc = gl.getUniformLocation(program, 'u_scale');
+    const uIllumLoc = gl.getUniformLocation(program, 'u_illumination');
+    const uSurfDistLoc = gl.getUniformLocation(program, 'u_surfaceDistortion');
+    const uWaterDistLoc = gl.getUniformLocation(program, 'u_waterDistortion');
 
+    gl.uniform1f(uBlueishLoc, blueish);
+    gl.uniform1f(uScaleLoc, scale);
+    gl.uniform1f(uIllumLoc, illumination);
+    gl.uniform1f(uSurfDistLoc, surfaceDistortion);
+    gl.uniform1f(uWaterDistLoc, waterDistortion);
+
+    let mouseX = 0.5;
+    let mouseY = 0.5;
+
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       const rect = canvas.getBoundingClientRect();
-      let x = 0, y = 0;
+      let clientX = 0;
+      let clientY = 0;
       if ('touches' in e && e.touches.length > 0) {
-        x = e.touches[0].clientX - rect.left;
-        y = e.touches[0].clientY - rect.top;
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
       } else if ('clientX' in e) {
-        x = (e as MouseEvent).clientX - rect.left;
-        y = (e as MouseEvent).clientY - rect.top;
+        clientX = (e as MouseEvent).clientX;
+        clientY = (e as MouseEvent).clientY;
       }
-      ripples.push({ x, y, r: 2, maxR: 60 * scale, alpha: 0.7 });
+      mouseX = (clientX - rect.left) / rect.width;
+      mouseY = 1.0 - (clientY - rect.top) / rect.height;
     };
 
-    canvas.parentElement?.addEventListener('mousemove', addRipple);
-    canvas.parentElement?.addEventListener('touchmove', addRipple);
+    const container = containerRef.current;
+    container?.addEventListener('mousemove', handlePointerMove);
+    container?.addEventListener('touchmove', handlePointerMove);
 
+    // Loop Animazione Shader
     let animId: number;
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      if (img.complete) {
-        ctx.drawImage(img, 0, 0, width, height);
+    let startTime = performance.now();
+
+    const render = () => {
+      const parent = containerRef.current;
+      if (parent) {
+        if (canvas.width !== parent.clientWidth || canvas.height !== parent.clientHeight) {
+          canvas.width = parent.clientWidth || 600;
+          canvas.height = parent.clientHeight || 400;
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
       }
 
-      // Tinta superficiale dell'acqua
-      ctx.fillStyle = `rgba(30, 144, 255, ${blueish * 0.08})`;
-      ctx.fillRect(0, 0, width, height);
+      const elapsed = (performance.now() - startTime) * 0.001;
+      gl.uniform1f(uTimeLoc, elapsed);
+      gl.uniform2f(uMouseLoc, mouseX, mouseY);
 
-      // Rifrazione d'onda circolare acquatica
-      ripples.forEach((rip, idx) => {
-        ctx.beginPath();
-        ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha})`;
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-
-        rip.r += 0.8;
-        rip.alpha -= 0.006;
-
-        if (rip.alpha <= 0 || rip.r >= rip.maxR) {
-          ripples.splice(idx, 1);
-        }
-      });
-
-      animId = requestAnimationFrame(animate);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      animId = requestAnimationFrame(render);
     };
 
-    animate();
+    render();
 
     return () => {
       cancelAnimationFrame(animId);
-      canvas.parentElement?.removeEventListener('mousemove', addRipple);
-      canvas.parentElement?.removeEventListener('touchmove', addRipple);
+      container?.removeEventListener('mousemove', handlePointerMove);
+      container?.removeEventListener('touchmove', handlePointerMove);
     };
   }, [src, blueish, scale, illumination, surfaceDistortion, waterDistortion]);
 
   return (
-    <div className={`relative overflow-hidden rounded-3xl shadow-xl ${className}`}>
-      <canvas ref={canvasRef} className="w-full h-full object-cover cursor-pointer" />
+    <div ref={containerRef} className={`relative overflow-hidden w-full h-full min-h-[300px] rounded-3xl shadow-xl ${className}`}>
+      {webGlSupported ? (
+        <canvas ref={canvasRef} className="w-full h-full block cursor-pointer" />
+      ) : (
+        /* Fallback 2D in caso di WebGL disabilitato */
+        <div className="relative w-full h-full">
+          <img src={src} alt={alt} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-blue-500/10 pointer-events-none" />
+        </div>
+      )}
     </div>
   );
 }
+
+export default WaterRippleImage;
