@@ -16,10 +16,15 @@ import { ShoppingBag, PartyPopper } from "lucide-react";
 export default function InvitationPage({ params }: { params: { slug: string } }) {
   const isDemo2 = params?.slug === "francesca-e-luca";
 
-  // DATI DEMO 1 vs DEMO 2
+  // DATI DEMO 1 vs DEMO 2 (Tutte le variabili sono esplicitamente definite)
   const coupleNames = isDemo2 ? "Francesca & Luca" : "Elena & Davide";
   const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "24 MAGGIO 2026";
   const locationName = isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como";
+  
+  // DICHIARAZIONE WELCOME PHRASE (Risolve il ReferenceError)
+  const welcomePhrase = isDemo2
+    ? "Un amore grande nato sotto le stelle. Vi aspettiamo per festeggiare insieme!"
+    : "Due anime, un solo destino. Una storia scritta nel cuore.";
   
   // MP3 REALI R2 PER FF EDIZIONI
   const customAudioUrl = isDemo2
@@ -65,7 +70,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
           <h1 className="font-serif text-4xl md:text-6xl font-bold tracking-wide my-3 text-[#1E293B]">
             {coupleNames}
           </h1>
-          <p className="text-sm font-serif italic text-slate-500 mb-4">{weddingDate}</p>
+          <p className="text-sm font-serif italic text-slate-500 mb-4">&quot;{welcomePhrase}&quot;</p>
           <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">{locationName}</p>
         </div>
       </section>
