@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Folder, PlusCircle, Palette, Sliders, Music, Sparkles, Building2, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Folder, PlusCircle, Palette, Sliders, Music, Sparkles, Building2, Store, MapPin, Plus, Trash2, X } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
@@ -15,32 +15,51 @@ export interface AgencyPageProps {
 }
 
 export default function AgencyStudioPage({ params }: AgencyPageProps) {
-  const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("create");
+  const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("modules");
   
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
 
-  // Dati Modificabili
+  // Dati Personalizzabili
   const [coupleNames, setCoupleNames] = useState("Elena & Davide");
   const [weddingDateDay, setWeddingDateDay] = useState("24");
   const [weddingDateMonth, setWeddingDateMonth] = useState("MAGGIO");
   const [weddingDateYear, setWeddingDateYear] = useState("2026");
   const [locationName, setLocationName] = useState("Villa del Balbianello");
+  const [locationAddress, setLocationAddress] = useState("Via Salita Regina, 22, 22010 Lenno CO");
+  const [waterImageUrl, setWaterImageUrl] = useState("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti in tonalità pastello. Evitare il bordeaux.");
-  const [dressColor1, setDressColor1] = useState("#FAF7F2");
-  const [dressColor2, setDressColor2] = useState("#FDE68A");
-  const [dressColor3, setDressColor3] = useState("#FCA5A5");
-  const [dressColor4, setDressColor4] = useState("#93C5FD");
-  const [welcomePhrase, setWelcomePhrase] = useState("Due anime, un solo destino. Una storia scritta nel cuore.");
+  const [selectedDressColor, setSelectedDressColor] = useState("#D4AF37");
   const [customIban, setCustomIban] = useState("IT60 X 0542 8111 0000 0012 3456");
-  const [partnerStoreName, setPartnerStoreName] = useState("Gioielleria Valenza");
   const [showWeb3FormsModal, setShowWeb3FormsModal] = useState(false);
 
-  // Moduli Attivi ed Espandibili
+  // Lista Negozi Convenzionati Modificabili
+  const [partnerStores, setPartnerStores] = useState([
+    { id: "1", name: "Gioielleria Valenza", url: "https://www.gioielleriavalenza.it" },
+    { id: "2", name: "Rinascente Milano", url: "https://www.rinascente.it" },
+  ]);
+
+  const addPartnerStore = () => {
+    setPartnerStores([...partnerStores, { id: Date.now().toString(), name: "Nuovo Negozio", url: "https://..." }]);
+  };
+
+  const removePartnerStore = (id: string) => {
+    setPartnerStores(partnerStores.filter((s) => s.id !== id));
+  };
+
+  // 10 Colori Preimpostati per il Dress Code
+  const dressCodeColorPresets = [
+    "#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA",
+    "#D4AF37", "#34D399", "#A78BFA", "#F472B6", "#1E293B",
+  ];
+
+  // TUTTI I MODULI ATTIVABILI ED EDITABILI
   const [modules, setModules] = useState({
     busta3d: true,
     grattaData: true,
+    waterRipple: true,
     nuvole3d: true,
+    locationMappa: true,
     codiceAbbigliamento: true,
     negoziConvenzionati: true,
     listaNozzeAmazon: true,
@@ -93,20 +112,20 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         </div>
       </div>
 
-      {/* COLONNA 2: CONFIGURATORE CENTRALE CON MODULI ESPANDIBILI */}
+      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
       <div className="w-full md:w-2/4 p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen">
         {activeTab === "create" && (
           <div className="space-y-6">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Struttura &amp; Personalizzazione Invito</h2>
+            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Template &amp; Dati Generali Sposi</h2>
 
-            {/* SELEZIONE TEMPLATE STRUTTURALE */}
+            {/* SELEZIONE TEMPLATE */}
             <div>
               <label className="block text-xs font-bold uppercase text-slate-600 mb-2">1. Template Grafico Layout</label>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => { setSelectedTemplate("A"); setCoupleNames("Elena & Davide"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "A" ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"}`}>
                   <span className="text-[10px] font-bold uppercase text-[#D4AF37] block">Template A</span>
                   <h4 className="font-serif font-bold text-sm">Arco Romano &amp; Cigni</h4>
-                  <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio materico, cigni sul lago, ceralacca oro e timeline classica.</p>
+                  <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
                 </button>
 
                 <button type="button" onClick={() => { setSelectedTemplate("B"); setCoupleNames("Francesca & Luca"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "B" ? "border-sky-500 bg-sky-50" : "border-slate-200 bg-white"}`}>
@@ -117,54 +136,27 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
               </div>
             </div>
 
-            {/* SELEZIONE TEMA COLORE */}
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-2">2. Tema Colore (10 Palette)</label>
-              <select value={selectedColorScheme} onChange={(e) => setSelectedColorScheme(e.target.value)} className="w-full p-3 rounded-xl bg-white border border-slate-300 text-xs font-bold text-[#1E293B]">
-                <option value="1">1. Avorio &amp; Oro Bruciato (#FAF7F2 / #D4AF37)</option>
-                <option value="2">2. Cielo Azzurro &amp; Nuvole (#F0F7FF / #1976D2)</option>
-                <option value="3">3. Smeraldo &amp; Ceralacca Dorata (#F0FDF4 / #15803D)</option>
-                <option value="4">4. Rose Gold &amp; Quartz (#FFF1F2 / #E11D48)</option>
-                <option value="5">5. Blu Notte &amp; Stelle (#0F172A / #F59E0B)</option>
-                <option value="6">6. Minimalista Bianco Ottico (#FFFFFF / #1E293B)</option>
-                <option value="7">7. Champagne &amp; Perla (#FDFBF7 / #D4AF37)</option>
-                <option value="8">8. Terracotta &amp; Sabbia (#FFF7ED / #C2410C)</option>
-                <option value="9">9. Royal Blue &amp; Gold (#1E3A8A / #F59E0B)</option>
-                <option value="10">10. Vintage Sepia 1920 (#FEF3C7 / #78350F)</option>
-              </select>
-            </div>
-
-            {/* DATI SPOSI GENERALI */}
-            <div className="space-y-3 pt-4 border-t border-slate-200">
-              <label className="block text-xs font-bold uppercase text-slate-600">3. Dati Generali Sposi</label>
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
-                <input type="text" value={coupleNames} onChange={(e) => setCoupleNames(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Location</label>
-                <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
-              </div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
+              <input type="text" value={coupleNames} onChange={(e) => setCoupleNames(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold" />
             </div>
           </div>
         )}
 
-        {/* MODULI ATTIVABILI E ESPANDIBILI IN ITALIANO */}
+        {/* TAB MODULI TUTTI PERSONALIZZABILI */}
         {activeTab === "modules" && (
           <div className="space-y-4">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B] mb-2">Personalizza ciascun Modulo</h2>
+            <h2 className="text-xl font-serif font-bold text-[#1E293B] mb-2">Personalizza i Moduli dell&apos;Invito</h2>
 
-            {/* MODULO 1: BUSTA 3D */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
-                <button type="button" onClick={() => toggleModule("busta3d")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
-                  {modules.busta3d ? "Attivo" : "Disattivato"}
-                </button>
-              </div>
+            {/* MODULO BUSTA */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+              <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
+              <button type="button" onClick={() => toggleModule("busta3d")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                {modules.busta3d ? "Attivo" : "Disattivato"}
+              </button>
             </div>
 
-            {/* MODULO 2: GRATTA LA DATA */}
+            {/* MODULO GRATTA LA DATA */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎰 Gratta la Data col Dito</span>
@@ -190,7 +182,45 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
               )}
             </div>
 
-            {/* MODULO 3: CODICE ABBIGLIAMENTO & PALETTE */}
+            {/* MODULO EFFETTO ACQUA LAGO */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">💧 Rifrazione Liquida Lago (Water Ripple)</span>
+                <button type="button" onClick={() => toggleModule("waterRipple")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.waterRipple ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                  {modules.waterRipple ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.waterRipple && (
+                <div className="pt-2 border-t border-slate-100">
+                  <label className="block text-[10px] text-slate-500 font-bold mb-1">URL Immagine Sfondo Lago</label>
+                  <input type="text" value={waterImageUrl} onChange={(e) => setWaterImageUrl(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                </div>
+              )}
+            </div>
+
+            {/* MODULO LOCATION & MAPPA */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google</span>
+                <button type="button" onClick={() => toggleModule("locationMappa")} className={`px-3 py-1 rounded-lg text-xs font-bold ${modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                  {modules.locationMappa ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.locationMappa && (
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <div>
+                    <label className="block text-[10px] text-slate-500 font-bold mb-1">Nome Location</label>
+                    <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-slate-500 font-bold mb-1">Indirizzo Mappa</label>
+                    <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* MODULO DRESS CODE & PALETTE */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Codice Abbigliamento &amp; Palette Colori</span>
@@ -202,18 +232,25 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
                 <div className="space-y-2 pt-2 border-t border-slate-100">
                   <label className="block text-[10px] text-slate-500 font-bold">Indicazioni Abbigliamento</label>
                   <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
-                  <label className="block text-[10px] text-slate-500 font-bold mt-2">Scegli i 4 Colori della Palette</label>
-                  <div className="flex gap-2">
-                    <input type="color" value={dressColor1} onChange={(e) => setDressColor1(e.target.value)} className="w-8 h-8 rounded border-0 cursor-pointer" />
-                    <input type="color" value={dressColor2} onChange={(e) => setDressColor2(e.target.value)} className="w-8 h-8 rounded border-0 cursor-pointer" />
-                    <input type="color" value={dressColor3} onChange={(e) => setDressColor3(e.target.value)} className="w-8 h-8 rounded border-0 cursor-pointer" />
-                    <input type="color" value={dressColor4} onChange={(e) => setDressColor4(e.target.value)} className="w-8 h-8 rounded border-0 cursor-pointer" />
+                  <label className="block text-[10px] text-slate-500 font-bold mt-2">Scegli tra i 10 Colori Preimpostati</label>
+                  <div className="flex flex-wrap gap-2">
+                    {dressCodeColorPresets.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => setSelectedDressColor(color)}
+                        className={`w-7 h-7 rounded-full border-2 transition ${
+                          selectedDressColor === color ? "border-slate-900 scale-110 shadow-md" : "border-slate-200"
+                        }`}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
             </div>
 
-            {/* MODULO 4: NEGOZI CONVENZIONATI */}
+            {/* MODULO NEGOZI CONVENZIONATI MULTIPLI */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati in Città</span>
@@ -222,9 +259,26 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
                 </button>
               </div>
               {modules.negoziConvenzionati && (
-                <div className="pt-2 border-t border-slate-100">
-                  <label className="block text-[10px] text-slate-500 font-bold mb-1">Nome Negozio / Note</label>
-                  <input type="text" value={partnerStoreName} onChange={(e) => setPartnerStoreName(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs" />
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  {partnerStores.map((store) => (
+                    <div key={store.id} className="flex gap-2 items-center bg-[#FAF7F2] p-2 rounded-xl border border-slate-200">
+                      <input
+                        type="text"
+                        value={store.name}
+                        onChange={(e) => {
+                          const updated = partnerStores.map((s) => (s.id === store.id ? { ...s, name: e.target.value } : s));
+                          setPartnerStores(updated);
+                        }}
+                        className="flex-1 p-1.5 rounded bg-white border border-slate-300 text-xs"
+                      />
+                      <button type="button" onClick={() => removePartnerStore(store.id)} className="p-1.5 text-rose-500 hover:text-rose-700">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button type="button" onClick={addPartnerStore} className="px-3 py-1.5 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1">
+                    <Plus className="w-3.5 h-3.5" /> Aggiungi Negozio
+                  </button>
                 </div>
               )}
             </div>
@@ -244,7 +298,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         )}
       </div>
 
-      {/* COLONNA 3: VERO INVITO LIVE REALE COMPLETO */}
+      {/* COLONNA 3: VERO INVITO REALE LIVE COMPLETO */}
       <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[340px]">
         <div className="flex justify-between items-center w-full max-w-[340px] mb-3 text-white">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
@@ -256,7 +310,7 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         </div>
 
         {/* MOCKUP SMARTPHONE */}
-        <div className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedTemplate === "B" || selectedColorScheme === "2" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
+        <div className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedTemplate === "B" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
           
           {/* BUSTA D'EPOCA CON VERA CERALACCA */}
           {modules.busta3d && (
@@ -288,10 +342,15 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
             </div>
           )}
 
-          {/* NUVOLE 3D PROGRAMMA (TEMPLATE B) */}
-          {modules.nuvole3d && selectedTemplate === "B" && (
-            <div className="my-4 mx-3 p-2">
-              <PartingClouds />
+          {/* LOCATION & MAPPA GOOGLE */}
+          {modules.locationMappa && (
+            <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block">📍 Location &amp; Mappa</span>
+              <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
+              <p className="text-[10px] text-slate-500">{locationAddress}</p>
+              <div className="w-full h-24 bg-slate-100 rounded-xl flex items-center justify-center text-[10px] font-bold text-slate-400 border border-slate-200">
+                Mappa Google Interactive
+              </div>
             </div>
           )}
 
@@ -301,23 +360,24 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
               <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">Dress Code &amp; Palette</span>
               <p className="text-[10px] text-slate-500 mb-2">{dressCodeNotes}</p>
               <div className="flex justify-center gap-2">
-                <div className="w-5 h-5 rounded-full border border-slate-300" style={{ backgroundColor: dressColor1 }} />
-                <div className="w-5 h-5 rounded-full border border-slate-300" style={{ backgroundColor: dressColor2 }} />
-                <div className="w-5 h-5 rounded-full border border-slate-300" style={{ backgroundColor: dressColor3 }} />
-                <div className="w-5 h-5 rounded-full border border-slate-300" style={{ backgroundColor: dressColor4 }} />
+                <div className="w-6 h-6 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: selectedDressColor }} />
               </div>
             </div>
           )}
 
-          {/* NEGOZI CONVENZIONATI */}
+          {/* NEGOZI CONVENZIONATI MULTIPLI */}
           {modules.negoziConvenzionati && (
-            <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-1">
-              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block">🏪 Lista Nozze Locale</span>
-              <p className="text-[11px] text-slate-700 font-bold">{partnerStoreName}</p>
+            <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
+              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">🏪 Negozi Convenzionati</span>
+              {partnerStores.map((s) => (
+                <div key={s.id} className="p-2 bg-[#FAF7F2] rounded-lg text-[10px] font-bold text-[#1E293B] flex items-center gap-1">
+                  <Store className="w-3 h-3 text-[#D4AF37]" /> {s.name}
+                </div>
+              ))}
             </div>
           )}
 
-          {/* MODULO CONFEMA PARTECIPAZIONE RSVP */}
+          {/* CONFEMA PARTECIPAZIONE RSVP */}
           {modules.confermaRsvp && (
             <div className="p-3">
               <RsvpForm coupleNames={coupleNames} />
