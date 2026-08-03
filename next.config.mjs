@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
-    ignoreBuildErrors: true, // Salta il check TypeScript bloccante
+    ignoreBuildErrors: true, // Salta il check TypeScript bloccante durante il build
   },
   eslint: {
-    ignoreDuringBuilds: true, // Salta ESLint durante il deploy
+    ignoreDuringBuilds: true, // Salta ESLint durante la build
   },
-  swcMinify: true, // Compilazione ultra-veloce Rust SWC
+  swcMinify: true,
   images: {
     remotePatterns: [
       {
@@ -21,4 +21,5 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+// Sintassi ESM corretta per file .mjs
+export default nextConfig;
