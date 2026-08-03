@@ -1,152 +1,205 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import EnvelopeWax from '@/components/EnvelopeWax';
-import ScratchDate from '@/components/ScratchDate';
-import PartingClouds from '@/components/PartingClouds';
-import RsvpForm from '@/components/RsvpForm';
-import { WaterRippleImage } from '@/components/ui/water-ripple-image';
-import { Heart, Gift, Music, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import EnvelopeWax from "@/components/EnvelopeWax";
+import AudioPlayer from "@/components/AudioPlayer";
+import PhotoWallSection from "@/components/PhotoWallSection";
+import ScratchDate from "@/components/ScratchDate";
+import { Calendar, MapPin, Heart, Clock, Gift, Sparkles, Check } from "lucide-react";
 
-export default function ExperiencePage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams?: { guest?: string };
-}) {
-  const slug = params.slug;
-  const guestName = searchParams?.guest || 'Cara Famiglia / Amico';
-  const isFrancesca = slug === 'francesca-e-luca';
+export default function WeddingPage({ params }: { params: { slug: string } }) {
+  const isDemo2 = params?.slug === "francesca-e-luca";
 
-  const defaultData = isFrancesca
-    ? {
-        slug: 'francesca-e-luca',
-        couple_names: 'Francesca & Luca',
-        wax_initials: 'F & L',
-        wedding_date: '14 Settembre 2026',
-        theme_color: 'blue',
-        audio_url: 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3',
-        location_name: 'Villa Borghese',
-        location_address: 'Chianti, Toscana',
-        iban: 'IT99 X 0123 4567 8901 2345 6789',
-      }
-    : {
-        slug: 'elena-e-davide',
-        couple_names: 'Elena & Davide',
-        wax_initials: 'E & D',
-        wedding_date: '28 Settembre 2026',
-        theme_color: 'pink',
-        audio_url: 'https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3',
-        location_name: 'Villa del Balbianello',
-        location_address: 'Lago di Como (CO)',
-        iban: 'IT99 X 0123 4567 8901 2345 6789',
-      };
+  // Nomi e Dati Dinamici della Coppia
+  const coupleNames = isDemo2 ? "Francesca & Luca" : "Zohan & Rose";
+  const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "27 SETTEMBRE 2026";
+  const locationName = isDemo2 ? "Villa Borghese, Puerto Vallarta" : "Islamic Center of Melville";
 
-  const [experience, setExperience] = useState<any>(defaultData);
+  // Countdown State
+  const [timeLeft, setTimeLeft] = useState({ days: 129, hours: 14, minutes: 22, seconds: 45 });
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const { data } = await supabase.from('love_experiences').select('*').eq('slug', slug).single();
-        if (data) setExperience(data);
-      } catch (e) {}
-    }
-    loadData();
-  }, [slug]);
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        return { ...prev, seconds: 59, minutes: prev.minutes - 1 };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <EnvelopeWax
-      initials={experience.wax_initials}
-      coupleNames={experience.couple_names}
-      weddingDate={experience.wedding_date}
-      audioUrl={experience.audio_url}
-      themeColor={experience.theme_color}
-    >
-      <div className={`min-h-screen ${isFrancesca ? 'bg-[#F0F7FF] text-[#1E293B]' : 'bg-[#FAF7F2] text-[#1E293B]'} pb-20`}>
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] font-sans selection:bg-[#D4AF37] selection:text-white pb-20">
+      
+      {/* 1. BUSTA D'EPOCA CON CERALACCA */}
+      <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "R&Z"} />
+
+      {/* 2. PLAYER MUSICALE FISSO */}
+      <AudioPlayer songTitle={`Brano d'Autore Inedito — ${coupleNames}`} />
+
+      {/* ─── SEZIONE 1: HERO ARCO ROMANO E LAGO CON CIGNI ANIMATI ─── */}
+      <section className="relative min-h-screen flex flex-col items-center justify-between p-6 text-center bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px]">
         
-        {/* HERO SECTION */}
-        <section className="relative py-16 px-6 text-center max-w-3xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#D4AF37]/40 text-[#8B1E24] text-xs font-semibold uppercase tracking-widest mb-6 shadow-sm">
-            <Heart className="w-3.5 h-3.5 fill-[#8B1E24]" />
-            <span>Benvenuto/a {guestName}!</span>
+        {/* Cornice Arco Architettonico */}
+        <div className="w-full max-w-xl mx-auto border-8 border-double border-[#D4AF37]/40 rounded-t-[180px] p-8 bg-gradient-to-b from-[#FFFDF9] to-[#FAF7F2] shadow-2xl mt-6">
+          <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#D4AF37] block mb-2">
+            IL GIORNO DEL NOSTRO MATRIMONIO
+          </span>
+          <p className="text-sm font-serif italic text-slate-500 mb-4">{weddingDate}</p>
+
+          <h1 className="font-serif text-5xl md:text-6xl font-bold text-[#1E293B] tracking-wide my-4">
+            {coupleNames}
+          </h1>
+
+          <p className="text-xs tracking-[0.2em] uppercase text-[#D4AF37] font-bold mt-6 animate-pulse">
+            Scorri verso il basso ↓
+          </p>
+
+          {/* LAGO CON CIGNI ANIMATI IN CSS (Come Immagine 2) */}
+          <div className="relative w-full h-64 mt-8 rounded-b-2xl overflow-hidden border border-[#D4AF37]/30 shadow-inner bg-gradient-to-b from-sky-100 via-amber-50 to-blue-200">
+            {/* Specchio d'Acqua Animato */}
+            <div className="absolute inset-0 opacity-60 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-100/50 via-sky-200/30 to-blue-300/40 animate-pulse" />
+
+            {/* CIGNI CHE GALLEGGIANO (ANIMAZIONE CSS) */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 animate-[float_4s_ease-in-out_infinite]">
+              {/* Cigno Sinistra */}
+              <div className="text-4xl transform -scale-x-100 drop-shadow-md">🦢</div>
+              {/* Cuore Sospeso */}
+              <div className="text-xs text-rose-400 animate-ping">❤️</div>
+              {/* Cigno Destra */}
+              <div className="text-4xl drop-shadow-md">🦢</div>
+            </div>
+
+            {/* Riflesso sull'Acqua */}
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-2 bg-white/40 blur-sm rounded-full animate-pulse" />
           </div>
+        </div>
+      </section>
 
-          <p className="font-serif italic text-[#D4AF37] text-2xl mb-2">Getting Married!</p>
-          <h1 className="font-serif text-5xl sm:text-7xl font-normal mb-4 tracking-wide">{experience.couple_names}</h1>
-          <p className="text-[#64748B] text-xs tracking-widest uppercase mb-8">{experience.wedding_date}</p>
+      {/* ─── SEZIONE 2: DEDICA SU CARTA STRAPPATA E COUNTDOWN ─── */}
+      <section className="py-16 px-6 max-w-3xl mx-auto text-center">
+        {/* Scheda Carta Strappata Vintage */}
+        <div 
+          className="bg-[#FFFDF9] p-8 md:p-12 rounded-3xl border border-[#D4AF37]/40 shadow-xl relative"
+          style={{
+            boxShadow: "0 20px 40px rgba(212,175,55,0.08)"
+          }}
+        >
+          <span className="text-xs font-serif italic text-[#D4AF37] text-lg block mb-2">
+            "Due Anime, Un Solo Destino. Una vita scritta nel cuore."
+          </span>
+          <p className="text-sm text-slate-600 font-serif leading-relaxed my-4">
+            Cari parenti e amici, unitevi a noi per una serata piena d'amore, gioia, benedizioni e ricordi indimenticabili mentre iniziamo il nostro per sempre insieme.
+          </p>
 
-          {/* FOTO PROPORZIONATA SENZA TAGLI ALLE TESTE */}
-          <div className="w-full max-w-md h-auto rounded-3xl overflow-hidden shadow-2xl my-4 border-4 border-white">
-            {!isFrancesca ? (
-              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" className="w-full h-80" />
-            ) : (
-              <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" alt="Coppia" className="w-full h-80 object-cover" />
-            )}
-          </div>
-        </section>
-
-        {/* DEMO FRANCESCA: NUVOLE + SCRATCH | DEMO ELENA: CITAZIONE D'AUTORE */}
-        {isFrancesca ? (
-          <PartingClouds>
-            <ScratchDate day="14" month="Settembre" year="2026" />
-          </PartingClouds>
-        ) : (
-          <div className="max-w-xl mx-auto px-6 text-center my-8">
-            <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md">
-              <p className="font-serif italic text-lg text-[#1E293B] leading-relaxed">
-                "Due anime, un solo destino. Una vita scritta nel cuore da condividere con chi amiamo."
-              </p>
+          {/* COUNTDOWN TIMER VINTAGE ORO (Come Immagine 3) */}
+          <div className="pt-8 border-t border-[#D4AF37]/20 mt-8">
+            <h3 className="font-serif italic text-2xl text-[#1E293B] mb-6">La Celebrazione Inizia Tra</h3>
+            <div className="grid grid-cols-4 gap-3 max-w-md mx-auto">
+              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
+                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.days}</span>
+                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Giorni</span>
+              </div>
+              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
+                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.hours}</span>
+                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Ore</span>
+              </div>
+              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
+                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.minutes}</span>
+                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Minuti</span>
+              </div>
+              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
+                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.seconds}</span>
+                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Secondi</span>
+              </div>
             </div>
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* PLAYER AUDIO UNICO */}
-        <section className="py-8 px-6 max-w-xl mx-auto text-center">
-          <div className="bg-white p-6 rounded-2xl border border-[#D4AF37]/50 shadow-md">
-            <Music className="w-6 h-6 text-[#8B1E24] mx-auto mb-2 animate-bounce" />
-            <span className="text-[10px] text-[#8B1E24] uppercase tracking-widest font-bold">Colonna Sonora Inedita • FF Edizioni</span>
-            <h3 className="font-serif text-xl my-1">La Nostra Melodia</h3>
-            
-            <button
-              onClick={() => {
-                const el = document.getElementById('love-wedding-audio') as HTMLAudioElement;
-                if (el) {
-                  if (el.paused) el.play();
-                  else el.pause();
-                }
-              }}
-              className="mt-4 px-6 py-2.5 rounded-full bg-[#8B1E24] text-white text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-[#6E1216]"
-            >
-              Play / Pausa Musica 🎵
-            </button>
+      {/* ─── SEZIONE 3: PROGRAMMA ORARI DELLA GIORNATA (TIMELINE) ─── */}
+      <section className="py-16 px-6 max-w-2xl mx-auto text-center">
+        <div className="bg-[#FFFDF9] p-8 rounded-3xl border border-[#D4AF37]/30 shadow-lg">
+          <h2 className="font-serif text-3xl text-[#1E293B] mb-8 italic">Programma della Giornata</h2>
+
+          <div className="space-y-6 relative before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-[#D4AF37]/30">
+            <div className="flex items-center justify-between relative z-10">
+              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">17:00</span>
+              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Arrivo Ospiti</span>
+            </div>
+
+            <div className="flex items-center justify-between relative z-10">
+              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">18:00</span>
+              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Cerimonia di Nozze</span>
+            </div>
+
+            <div className="flex items-center justify-between relative z-10">
+              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">19:00</span>
+              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Aperitivo sul Lago</span>
+            </div>
+
+            <div className="flex items-center justify-between relative z-10">
+              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">20:00</span>
+              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Cena di Galà</span>
+            </div>
+
+            <div className="flex items-center justify-between relative z-10">
+              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">22:00</span>
+              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Taglio Torta & Party</span>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FORM DI CONFERMA PARTECIPAZIONE */}
-        <section className="py-12 px-6">
-          <RsvpForm experienceSlug={slug} />
-        </section>
+      {/* ─── SEZIONE 4: LOCATION & MAPPA ─── */}
+      <section className="py-12 px-6 max-w-3xl mx-auto text-center">
+        <h2 className="font-serif text-3xl text-[#1E293B] mb-2 italic">La Location</h2>
+        <p className="text-xs uppercase font-bold text-[#D4AF37] tracking-widest mb-6">{locationName}</p>
 
-        {/* LINK CRONOLOGICO A "LA FESTA" IN FONDO ALLA PAGINA */}
-        <section className="py-12 px-6 max-w-md mx-auto text-center border-t border-[#E2E8F0] mt-12">
-          <div className="bg-white border-2 border-[#D4AF37] p-8 rounded-3xl shadow-lg">
-            <Sparkles className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
-            <h3 className="font-serif text-2xl text-[#1E293B] mb-2">La Festa</h3>
-            <p className="text-xs text-[#64748B] mb-6">Il giorno delle nozze scatta foto e video dal tuo telefono per trasmetterle in tempo reale sul maxischermo del locale!</p>
-            
-            <Link
-              href={`/${slug}/festa`}
-              className="w-full py-3.5 rounded-xl bg-[#8B1E24] text-white font-bold text-xs uppercase tracking-widest block shadow-md hover:bg-[#6E1216]"
-            >
-              Apri Pagina della Festa 📸
-            </Link>
+        <div className="rounded-3xl overflow-hidden border-2 border-[#D4AF37]/40 shadow-xl bg-white p-2">
+          <iframe
+            title="Mappa Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2793.821!2d9.2558!3d45.9872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4784360e22700001%3A0x7d28734208a5d3f1!2sVilla%20del%20Balbianello!5e0!3m2!1sit!2sit!4v1650000000000"
+            className="w-full h-80 rounded-2xl border-0"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      {/* ─── SEZIONE 5: DRESS CODE & LISTA NOZZE ─── */}
+      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+        <div className="bg-[#FFFDF9] p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-6">
+          <div>
+            <h3 className="font-serif text-2xl text-[#1E293B] italic">Dress Code & Palette Colori</h3>
+            <p className="text-xs text-slate-600 mt-2">
+              Chiediamo gentilmente agli ospiti di indossare abiti eleganti in toni pastello ed evitare i colori rosso scuro e bordeaux.
+            </p>
           </div>
-        </section>
 
-      </div>
-    </EnvelopeWax>
+          <div className="pt-4 border-t border-[#D4AF37]/20">
+            <h3 className="font-serif text-2xl text-[#1E293B] italic">Preferenza Regali / Lista Nozze</h3>
+            <p className="text-xs text-slate-600 mt-2">
+              Il regalo più bello è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze, è disponibile l'IBAN o la Lista Nozze Amazon.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SEZIONE 6: GUEST PHOTO WALL DELLA FESTA ─── */}
+      <PhotoWallSection coupleNames={coupleNames} />
+
+      {/* Keyframe per l'animazione dei Cigni */}
+      <style jsx global>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-8px) rotate(1deg); }
+        }
+      `}</style>
+    </div>
   );
 }
