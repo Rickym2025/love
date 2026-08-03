@@ -1,42 +1,26 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from "react";
 
-export default function PartingClouds({ children }: { children: React.ReactNode }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
+// Interfaccia con children opzionale
+export interface PartingCloudsProps {
+  children?: React.ReactNode;
+}
 
-  // Nuvola Sinistra si sposta a -100%, Nuvola Destra si sposta a +100%
-  const cloudLeftX = useTransform(scrollYProgress, [0, 0.5], ['0%', '-100%']);
-  const cloudRightX = useTransform(scrollYProgress, [0, 0.5], ['0%', '100%']);
-  const cloudOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-
+export default function PartingClouds({ children }: PartingCloudsProps) {
   return (
-    <div ref={containerRef} className="relative py-12 px-6 max-w-4xl mx-auto overflow-hidden">
-      {/* NUVOLA SINISTRA */}
-      <motion.div
-        style={{ x: cloudLeftX, opacity: cloudOpacity }}
-        className="absolute top-0 left-0 w-1/2 h-full z-20 pointer-events-none flex items-center justify-start opacity-90"
-      >
-        <div className="w-64 h-64 bg-[#BBDEFB]/60 blur-3xl rounded-full" />
-        <span className="text-8xl -ml-10 select-none">☁️</span>
-      </motion.div>
-
-      {/* NUVOLA DESTRA */}
-      <motion.div
-        style={{ x: cloudRightX, opacity: cloudOpacity }}
-        className="absolute top-0 right-0 w-1/2 h-full z-20 pointer-events-none flex items-center justify-end opacity-90"
-      >
-        <div className="w-64 h-64 bg-[#BBDEFB]/60 blur-3xl rounded-full" />
-        <span className="text-8xl -mr-10 select-none">☁️</span>
-      </motion.div>
-
-      {/* CONTENUTO CHE SI RIVELA SOTTO LE NUVOLE */}
-      <div className="relative z-10">{children}</div>
+    <div className="relative overflow-hidden w-full py-8 text-center">
+      {/* Effetto Visivo Nuvole 3D */}
+      <div className="max-w-xl mx-auto p-6 bg-sky-50/80 rounded-3xl border border-sky-200/80 shadow-lg backdrop-blur-sm">
+        <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
+          ☁️ Programma tra le Nuvole ☁️
+        </span>
+        {children || (
+          <p className="text-xs text-slate-600 italic">
+            Scorri per vedere le nuvole scostarsi al passaggio dell&apos;orario della cerimonia!
+          </p>
+        )}
+      </div>
     </div>
   );
 }
