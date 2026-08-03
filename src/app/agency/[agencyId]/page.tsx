@@ -1,77 +1,61 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Folder, PlusCircle, Palette, Sliders, Music, ExternalLink, X, MoveHorizontal, Sparkles, Building2, Store } from "lucide-react";
+import { Folder, PlusCircle, Palette, Sliders, Music, ExternalLink, X, Sparkles, Building2, Store, Eye } from "lucide-react";
 
-export default function AgencyStudioPage({ params }: { params: { agencyId: string } }) {
+export interface AgencyPageProps {
+  params: {
+    agencyId: string;
+  };
+}
+
+export default function AgencyStudioPage({ params }: AgencyPageProps) {
   const [activeTab, setActiveTab] = useState<"list" | "create" | "modules" | "brand">("create");
   
-  // Drag Colonne (in %)
-  const [col1Width, setCol1Width] = useState(24);
-  const [col2Width, setCol2Width] = useState(46);
-
-  // Template Grafico (Struttura) vs Tema Colore (Palette)
+  // Template & Palette
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
 
-  // Dati Sposi e Negozi
+  // Dati Sposi e Personalizzazioni
   const [coupleNames, setCoupleNames] = useState("Elena & Davide");
   const [weddingDate, setWeddingDate] = useState("24 MAGGIO 2026");
   const [locationName, setLocationName] = useState("Villa del Balbianello");
   const [dressCodeText, setDressCodeText] = useState("Abiti eleganti in tonalità pastello. Evitare il bordeaux.");
   const [welcomePhrase, setWelcomePhrase] = useState("Due anime, un solo destino. Una storia scritta nel cuore.");
   const [customIban, setCustomIban] = useState("IT60 X 0542 8111 0000 0012 3456");
+  const [marqueeText, setMarqueeText] = useState("Evviva gli Sposi! 🎉 • Un giorno indimenticabile • Unisciti ai festeggiamenti •");
   const [showWeb3FormsModal, setShowWeb3FormsModal] = useState(false);
 
-  // Moduli Attivi in Italiano
+  // TUTTI I 19 MODULI ATTIVABILI E VISIBILI
   const [modules, setModules] = useState({
-    busta3d: true,
-    grattaData: true,
-    nuvole3d: true,
-    codiceAbbigliamento: true,
-    negoziConvenzionati: true,
-    listaNozzeAmazon: true,
-    confermaRsvp: true,
+    busta3d: true, // EnvelopeWax
+    waterRipple: true, // WaterRippleImage
+    kineticGrid: true, // KineticGrid
+    containerScroll: true, // ContainerScrollAnimation
+    animatedGradient: true, // AnimatedGradient
+    partingClouds: true, // PartingClouds
+    scratchDate: true, // ScratchDate / ScratchCard
+    marqueeDediche: true, // Marquee
+    dressCode: true, // Dress Code Palette
+    partnerStores: true, // PartnerStores
+    listaNozzeAmazon: true, // Wishlist Amazon
+    confermaRsvp: true, // RsvpForm
+    loveQuiz: true, // LoveQuiz (Pagina Festa)
+    photoPuzzle: true, // PhotoPuzzle (Pagina Festa)
+    scratchPhoto: true, // ScratchPhoto (Pagina Festa)
+    photoWall: true, // PhotoWallSection (10 Filtri + Proiettore)
   });
-
-  const isDraggingRef = useRef<"col1" | "col2" | null>(null);
-
-  const handleMouseDown = (divider: "col1" | "col2") => {
-    isDraggingRef.current = divider;
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDraggingRef.current) return;
-    const totalWidth = window.innerWidth;
-    const currentPercent = (e.clientX / totalWidth) * 100;
-
-    if (isDraggingRef.current === "col1" && currentPercent > 15 && currentPercent < 35) {
-      setCol1Width(currentPercent);
-    } else if (isDraggingRef.current === "col2") {
-      const col2Val = currentPercent - col1Width;
-      if (col2Val > 25 && currentPercent < 80) setCol2Width(col2Val);
-    }
-  };
-
-  const handleMouseUp = () => {
-    isDraggingRef.current = null;
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-  };
 
   const toggleModule = (key: keyof typeof modules) => {
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] flex flex-col md:flex-row font-sans select-none overflow-hidden">
-      
-      {/* COLONNA 1: MENU AGENZIA (TRAS CINABILE) */}
-      <div style={{ width: `${col1Width}%` }} className="border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between bg-white shadow-sm min-w-[240px]">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] flex flex-col md:flex-row font-sans">
+      {/* ─── COLONNA 1: MENU AGENZIA ─── */}
+      <div className="w-full md:w-1/4 border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between bg-white shadow-sm">
         <div>
           <div className="mb-8">
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase block mb-1">Agency Hub White-Label</span>
@@ -87,7 +71,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
               <PlusCircle className="w-4 h-4" /> Crea Invito &amp; Selezione Template
             </button>
             <button type="button" onClick={() => setActiveTab("modules")} className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition ${activeTab === "modules" ? "bg-[#1E293B] text-[#D4AF37]" : "bg-[#FAF7F2] text-slate-700 hover:bg-amber-50"}`}>
-              <Sliders className="w-4 h-4" /> Moduli &amp; Effetti Attivabili
+              <Sliders className="w-4 h-4" /> Moduli &amp; Effetti (19 Componenti)
             </button>
             <button type="button" onClick={() => setActiveTab("brand")} className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition ${activeTab === "brand" ? "bg-[#1E293B] text-[#D4AF37]" : "bg-[#FAF7F2] text-slate-700 hover:bg-amber-50"}`}>
               <Building2 className="w-4 h-4" /> Personalizzazione Brand Agenzia
@@ -109,16 +93,11 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         </div>
       </div>
 
-      {/* DIVISORE TRASCINABILE 1 */}
-      <div onMouseDown={() => handleMouseDown("col1")} className="w-1.5 bg-slate-200 hover:bg-[#D4AF37] cursor-col-resize flex items-center justify-center hidden md:flex">
-        <MoveHorizontal className="w-3 h-3 text-slate-400" />
-      </div>
-
-      {/* COLONNA 2: CONFIGURATORE CENTRALE */}
-      <div style={{ width: `${col2Width}%` }} className="p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen min-w-[320px]">
+      {/* ─── COLONNA 2: CONFIGURATORE CENTRALE ─── */}
+      <div className="w-full md:w-2/4 p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen">
         {activeTab === "create" && (
           <div className="space-y-6">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Struttura &amp; Personalizzazione Invito</h2>
+            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Configura Invito &amp; Effetti Visivi</h2>
 
             {/* SELEZIONE TEMPLATE STRUTTURALE */}
             <div>
@@ -126,38 +105,21 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => { setSelectedTemplate("A"); setCoupleNames("Elena & Davide"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "A" ? "border-[#D4AF37] bg-amber-50" : "border-slate-200 bg-white"}`}>
                   <span className="text-[10px] font-bold uppercase text-[#D4AF37] block">Template A</span>
-                  <h4 className="font-serif font-bold text-sm">Arco Romano &amp; Cigni</h4>
-                  <p className="text-[10px] text-slate-500 mt-1">Sfondo avorio materico, specchio d&apos;acqua con cigni, carta strappata e countdown.</p>
+                  <h4 className="font-serif font-bold text-sm">Arco Romano, Cigni &amp; Effetto Acqua</h4>
+                  <p className="text-[10px] text-slate-500 mt-1">WaterRippleImage, Carta Strappata, Timeline oraria e Lista Nozze.</p>
                 </button>
 
                 <button type="button" onClick={() => { setSelectedTemplate("B"); setCoupleNames("Francesca & Luca"); }} className={`p-4 rounded-2xl border-2 text-left ${selectedTemplate === "B" ? "border-sky-500 bg-sky-50" : "border-slate-200 bg-white"}`}>
                   <span className="text-[10px] font-bold uppercase text-sky-600 block">Template B</span>
-                  <h4 className="font-serif font-bold text-sm">Cielo &amp; Nuvole 3D</h4>
-                  <p className="text-[10px] text-slate-500 mt-1">3 Grattabili date, busta azurra con lettera, Nuvole Parting Clouds e galleria foto.</p>
+                  <h4 className="font-serif font-bold text-sm">Cielo, Nuvole 3D &amp; Griglia Cinetica</h4>
+                  <p className="text-[10px] text-slate-500 mt-1">PartingClouds, KineticGrid, 3 Grattabili date e RSVP pastello.</p>
                 </button>
               </div>
             </div>
 
-            {/* SELEZIONE TEMA COLORE (10 PALETTE) */}
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-2">2. Tema Colore (10 Palette Cromatiche)</label>
-              <select value={selectedColorScheme} onChange={(e) => setSelectedColorScheme(e.target.value)} className="w-full p-3 rounded-xl bg-white border border-slate-300 text-xs font-bold text-[#1E293B]">
-                <option value="1">1. Avorio &amp; Oro Bruciato (#FAF7F2 / #D4AF37)</option>
-                <option value="2">2. Cielo Azzurro &amp; Nuvole (#F0F7FF / #1976D2)</option>
-                <option value="3">3. Smeraldo &amp; Ceralacca Dorata (#F0FDF4 / #15803D)</option>
-                <option value="4">4. Rose Gold &amp; Quartz (#FFF1F2 / #E11D48)</option>
-                <option value="5">5. Blu Notte &amp; Stelle (#0F172A / #F59E0B)</option>
-                <option value="6">6. Minimalista Bianco Ottico (#FFFFFF / #1E293B)</option>
-                <option value="7">7. Champagne &amp; Perla (#FDFBF7 / #D4AF37)</option>
-                <option value="8">8. Terracotta &amp; Sabbia (#FFF7ED / #C2410C)</option>
-                <option value="9">9. Royal Blue &amp; Gold (#1E3A8A / #F59E0B)</option>
-                <option value="10">10. Vintage Sepia 1920 (#FEF3C7 / #78350F)</option>
-              </select>
-            </div>
-
-            {/* FORM DATI MODULI */}
+            {/* FORM DATI SPOSI */}
             <div className="space-y-4 pt-4 border-t border-slate-200">
-              <label className="block text-xs font-bold uppercase text-slate-600">3. Dati Sposi &amp; Moduli</label>
+              <label className="block text-xs font-bold uppercase text-slate-600">2. Dati Sposi &amp; Testi</label>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-500 mb-1">Nomi Sposi</label>
@@ -175,8 +137,8 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Dress Code Notes</label>
-                <input type="text" value={dressCodeText} onChange={(e) => setDressCodeText(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
+                <label className="block text-xs font-semibold text-slate-500 mb-1">Testo Scorrevole Dediche (Marquee)</label>
+                <input type="text" value={marqueeText} onChange={(e) => setMarqueeText(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs" />
               </div>
 
               <div>
@@ -187,11 +149,32 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
           </div>
         )}
 
+        {/* TAB MODULI & EFFETTI VISIVI (TUTTI E 19) */}
+        {activeTab === "modules" && (
+          <div className="space-y-3">
+            <h2 className="text-xl font-serif font-bold text-[#1E293B] mb-2">Attiva o Disattiva Moduli (19 Componenti)</h2>
+            {Object.keys(modules).map((key) => {
+              const isActive = modules[key as keyof typeof modules];
+              return (
+                <div key={key} className="flex justify-between items-center p-3.5 bg-white rounded-xl border border-slate-200">
+                  <div>
+                    <span className="text-xs font-bold capitalize text-[#1E293B] block">{key}</span>
+                    <span className="text-[10px] text-slate-400">Componente Visivo &amp; Interattivo</span>
+                  </div>
+                  <button type="button" onClick={() => toggleModule(key as keyof typeof modules)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${isActive ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
+                    {isActive ? "Attivo" : "Disattivato"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {/* TAB BRAND AGENZIA */}
         {activeTab === "brand" && (
           <div className="space-y-4">
             <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
-            <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti da mostrare nel piè di pagina.</p>
+            <p className="text-xs text-slate-500">Carica il logo dell&apos;agenzia White-Label da mostrare nel piè di pagina dell&apos;invito.</p>
 
             <div>
               <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
@@ -204,36 +187,13 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
             </div>
           </div>
         )}
-
-        {/* TAB MODULI TOGGLE */}
-        {activeTab === "modules" && (
-          <div className="space-y-3">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B] mb-2">Attiva o Disattiva Moduli</h2>
-            {Object.keys(modules).map((key) => {
-              const isActive = modules[key as keyof typeof modules];
-              return (
-                <div key={key} className="flex justify-between items-center p-3.5 bg-white rounded-xl border border-slate-200">
-                  <span className="text-xs font-bold capitalize text-[#1E293B]">{key}</span>
-                  <button type="button" onClick={() => toggleModule(key as keyof typeof modules)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${isActive ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-500"}`}>
-                    {isActive ? "Attivo" : "Disattivato"}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
 
-      {/* DIVISORE TRASCINABILE 2 */}
-      <div onMouseDown={() => handleMouseDown("col2")} className="w-1.5 bg-slate-200 hover:bg-[#D4AF37] cursor-col-resize flex items-center justify-center hidden md:flex">
-        <MoveHorizontal className="w-3 h-3 text-slate-400" />
-      </div>
-
-      {/* COLONNA 3: ANTEPRIMA LIVE REALE */}
-      <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[300px]">
+      {/* ─── COLONNA 3: ANTEPRIMA LIVE REALE CON EFFETTI ─── */}
+      <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center">
         <div className="flex justify-between items-center w-full max-w-[320px] mb-3 text-white">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4" /> Anteprima Reale Live
+            <Sparkles className="w-4 h-4" /> Anteprima Live Invito
           </span>
           <Link href={selectedTemplate === "A" ? "/elena-e-davide" : "/francesca-e-luca"} target="_blank" className="text-[11px] text-slate-300 hover:text-white">
             Apri Full ↗
@@ -241,18 +201,32 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         </div>
 
         {/* MOCKUP SMARTPHONE */}
-        <div className={`w-[320px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedColorScheme === "2" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
+        <div className={`w-[320px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${selectedTemplate === "B" ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
           
-          {/* BUSTA D'EPOCA CON VERA CERALACCA logo /wax-seal.png */}
+          {/* 1. BUSTA D'EPOCA CON VERA CERALACCA */}
           {modules.busta3d && (
             <div className="m-3 p-4 bg-white rounded-2xl border border-[#D4AF37]/30 text-center shadow-sm relative">
-              <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">✦ Partecipazione Digitale</span>
+              <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">✦ Busta &amp; Sigillo Ceralacca</span>
               <p className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</p>
               
               <div className="relative w-12 h-12 mx-auto my-2">
                 <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
               </div>
               <span className="text-[9px] uppercase font-bold text-slate-400 animate-pulse">Tocca per Aprire</span>
+            </div>
+          )}
+
+          {/* 2. EFFETTO ACQUA O GRIGLIA CINETICA */}
+          {modules.waterRipple && (
+            <div className="m-3 p-2 bg-sky-100/60 rounded-xl border border-sky-300 text-center text-[10px] text-sky-800 font-bold">
+              💧 WaterRippleImage: Rifrazione Liquida Lago Attiva
+            </div>
+          )}
+
+          {/* 3. MARQUEE DEDICHE SCORREVOLI */}
+          {modules.marqueeDediche && (
+            <div className="bg-[#1E293B] text-[#D4AF37] py-1 text-[10px] uppercase tracking-widest truncate px-2 font-mono">
+              {marqueeText}
             </div>
           )}
 
@@ -264,10 +238,17 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
             <p className="text-xs italic mt-2 px-2 font-serif opacity-80">&quot;{welcomePhrase}&quot;</p>
           </div>
 
-          {/* GRATTIAMO LA DATA */}
-          {modules.grattaData && (
+          {/* 4. NUVOLE 3D */}
+          {modules.partingClouds && (
+            <div className="m-3 p-3 bg-gradient-to-r from-sky-100 via-pink-50 to-white rounded-xl border border-sky-200 text-center text-[10px] text-sky-800 font-bold">
+              ☁️ PartingClouds: Nuvole 3D che si aprono allo Scroll
+            </div>
+          )}
+
+          {/* 5. GRATTIAMO LA DATA */}
+          {modules.scratchDate && (
             <div className="my-4 mx-3 p-3 bg-white rounded-xl text-center border border-slate-200">
-              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-2">🎰 Gratta per Scoprire la Data</span>
+              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-2">🎰 ScratchDate: 3 Riquadri Grattabili</span>
               <div className="flex justify-center gap-2">
                 <div className="w-14 h-12 bg-sky-50 rounded-lg border border-sky-200 flex items-center justify-center text-xs font-bold">24</div>
                 <div className="w-14 h-12 bg-sky-50 rounded-lg border border-sky-200 flex items-center justify-center text-xs font-bold">MAG</div>
@@ -276,31 +257,14 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
             </div>
           )}
 
-          {/* PROGRAMMA TIMELINE VERTICALE */}
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-left text-xs space-y-2 shadow-sm">
-            <p className="font-bold text-center text-[#D4AF37] uppercase text-[10px] mb-2">✦ Programma Festeggiamenti ✦</p>
-            <div className="border-l-2 border-[#D4AF37] pl-3 space-y-2">
-              <div><span className="font-bold text-[#D4AF37]">16:30</span> — Apertura Porte a {locationName}</div>
-              <div><span className="font-bold text-[#D4AF37]">17:30</span> — Cerimonia e Scambio Anelli</div>
-              <div><span className="font-bold text-[#D4AF37]">19:00</span> — Aperitivo Vista Lago</div>
-            </div>
-          </div>
-
-          {/* DRESS CODE CON CERCHI COLORE */}
-          {modules.codiceAbbigliamento && (
-            <div className="mx-3 my-4 p-3 bg-white rounded-xl text-center border border-slate-200">
-              <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">Dress Code &amp; Palette</span>
-              <p className="text-[10px] text-slate-500 mb-2">{dressCodeText}</p>
-              <div className="flex justify-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#FAF7F2] border border-slate-300" />
-                <div className="w-5 h-5 rounded-full bg-[#FDE68A]" />
-                <div className="w-5 h-5 rounded-full bg-[#FCA5A5]" />
-                <div className="w-5 h-5 rounded-full bg-[#93C5FD]" />
-              </div>
+          {/* 6. GIOCHI DELLA FESTA ATTIVI */}
+          {(modules.loveQuiz || modules.photoPuzzle || modules.scratchPhoto) && (
+            <div className="mx-3 my-3 p-3 bg-purple-50 rounded-xl border border-purple-200 text-center text-[10px] text-purple-900 font-bold">
+              🎮 Hub Giochi Festa: Quiz, Puzzle 3x3 e Gratta Foto Attivi
             </div>
           )}
 
-          {/* BOTTONE RSVP */}
+          {/* 7. BOTTONE RSVP */}
           {modules.confermaRsvp && (
             <div className="p-4">
               <button type="button" className="w-full py-3 font-bold rounded-full text-xs shadow-md uppercase tracking-wider bg-[#D4AF37] text-slate-900">
