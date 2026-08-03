@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disabilita la validazione TypeScript e ESLint durante la build per deploy istantanei (~20sec)
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true, // Salta il check TypeScript bloccante
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Salta ESLint durante il deploy
   },
+  swcMinify: true, // Compilazione ultra-veloce Rust SWC
   images: {
     remotePatterns: [
       {
@@ -21,4 +21,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
