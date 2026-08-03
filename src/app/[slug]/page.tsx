@@ -15,7 +15,6 @@ import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 function InvitationContent({ params }: { params?: { slug?: string } }) {
   const searchParams = useSearchParams();
 
-  // Gestione sicura e protetta di params.slug (Evita TypeError su .replace)
   const slug = params?.slug || "elena-e-davide";
   const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
 
@@ -109,6 +108,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* MAPPA INTEGRATA DENTRO L'APP + PULSANTE ESTERNO GOOGLE MAPS */}
         {modules.locationMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block flex items-center justify-center gap-1.5">
@@ -116,13 +116,28 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <h3 className="font-serif font-bold text-lg text-[#1E293B]">{locationName}</h3>
             <p className="text-xs text-slate-500">{locationAddress}</p>
+
+            {/* MAPPA INTERATTIVA INTEGRATA DENTRO L'APP */}
+            <div className="w-full h-52 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
+              <iframe
+                title="Mappa Location"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+              />
+            </div>
+
+            {/* PULSANTE ESTERNO GOOGLE MAPS */}
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors"
             >
-              Apri Mappa &amp; Indicazioni ↗
+              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Indicazioni Stradali su Google Maps ↗
             </a>
           </div>
         )}
