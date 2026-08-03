@@ -1,184 +1,307 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import AgencySidebar from "@/components/agency/AgencySidebar";
-import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
-import AgencyPreview from "@/components/agency/AgencyPreview";
+import React from "react";
+import { Plus, Trash2 } from "lucide-react";
 
-export default function AgencyStudioPage({ params }: { params?: { agencyId?: string } }) {
-  const rawAgencyId = params?.agencyId || "sposi-in-love";
-  const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
+export interface PartnerStore {
+  id: string;
+  name: string;
+  url: string;
+  logoUrl: string;
+}
 
-  // RIDIMENSIONAMENTO COLONNE CON TRASCINAMENTO MOUSE (Colonna centrale leggermente ristretta a 380px)
-  const [sidebarWidth, setSidebarWidth] = useState(260);
-  const [configuratorWidth, setConfiguratorWidth] = useState(380);
-  const [isResizingSidebar, setIsResizingSidebar] = useState(false);
-  const [isResizingConfigurator, setIsResizingConfigurator] = useState(false);
+const WELCOME_PHRASE_PRESETS = [
+  "Due anime, un solo destino. Una storia scritta nel cuore.",
+  "L'amore non consiste nello guardarsi l'un l'altro, ma nel guardare insieme nella stessa direzione.",
+  "Niente è per caso, ogni passo ci ha condotti qui. Unisciti alla nostra gioia.",
+  "Oggi inizia il nostro 'per sempre'. Siete i benvenuti a celebrare con noi.",
+  "Due cuori, una sola melodia. Festeggia il nostro giorno speciale!",
+  "Con gioia e gratitudine vi invitiamo a condividere l'inizio della nostra vita insieme.",
+  "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
+  "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
+  "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
+  "Personalizzata (scrivi la tua frase personalizzata nel campo sottostante)",
+];
 
-  // Stati Configuratore
-  const [activeTab, setActiveTab] = useState("create");
-  const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
-  const [selectedColorScheme, setSelectedColorScheme] = useState("1");
-  const [coupleNames, setCoupleNames] = useState("Elena & Davide");
-  const [weddingDateDay, setWeddingDateDay] = useState("15");
-  const [weddingDateMonth, setWeddingDateMonth] = useState("Settembre");
-  const [weddingDateYear, setWeddingDateYear] = useState("2026");
-  const [locationName, setLocationName] = useState("Villa Rosa");
-  const [locationAddress, setLocationAddress] = useState("Via Roma 1, Roma");
-  const [audioUrl, setAudioUrl] = useState("");
-  const [waterImageUrl, setWaterImageUrl] = useState("");
-  const [selectedPhrasePreset, setSelectedPhrasePreset] = useState("0");
-  const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
-  const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
-  const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
-  const [partnerStores, setPartnerStores] = useState<any[]>([]);
-  const [marqueeText, setMarqueeText] = useState(
-    "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦"
-  );
-  const [customIban, setCustomIban] = useState("IT60 X 05428 11101 000000123456");
+export const DRESS_CODE_PALETTES = [
+  { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
+  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#D4AF37", "#B8860B", "#1E293B"] },
+  { id: "3", name: "Smeraldo & Salvia", colors: ["#F0FDF4", "#A7F3D0", "#34D399", "#059669", "#064E3B"] },
+  { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF1F2", "#FECDD3", "#FB7185", "#E11D48", "#881337"] },
+  { id: "5", name: "Blu Notte & Zaffiro", colors: ["#F0F9FF", "#93C5FD", "#3B82F6", "#1D4ED8", "#0F172A"] },
+  { id: "6", name: "Sabbia & Terracotta", colors: ["#FFF7ED", "#FED7AA", "#FB923C", "#EA580C", "#7C2D12"] },
+  { id: "7", name: "Lavanda & Lillà", colors: ["#F5F3FF", "#DDD6FE", "#A78BFA", "#7C3AED", "#4C1D95"] },
+  { id: "8", name: "Bianco & Minimal", colors: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8", "#0F172A"] },
+];
 
-  const [modules, setModules] = useState<Record<string, boolean>>({
-    busta3d: true,
-    grattaData: true,
-    effettoAcqua: true,
-    nuvole3d: true,
-    locationMappa: true,
-    codiceAbbigliamento: true,
-    negoziConvenzionati: true,
-    listaNozzeAmazon: true,
-    dedicheMarquee: true,
-    hubGiochiFesta: true,
-    guestPhotoWall: true,
-    confermaRsvp: true,
-  });
+export default function AgencyConfigurator(props: any) {
+  const {
+    activeTab,
+    selectedTemplate,
+    setSelectedTemplate,
+    coupleNames,
+    setCoupleNames,
+    weddingDateDay,
+    setWeddingDateDay,
+    weddingDateMonth,
+    setWeddingDateMonth,
+    weddingDateYear,
+    setWeddingDateYear,
+    locationName,
+    setLocationName,
+    locationAddress,
+    setLocationAddress,
+    audioUrl,
+    setAudioUrl,
+    selectedPhrasePreset,
+    setSelectedPhrasePreset,
+    customWelcomePhrase,
+    setCustomWelcomePhrase,
+    dressCodeNotes,
+    setDressCodeNotes,
+    selectedPaletteIdx,
+    setSelectedPaletteIdx,
+    partnerStores,
+    setPartnerStores,
+    marqueeText,
+    setMarqueeText,
+    customIban,
+    setCustomIban,
+    modules,
+    toggleModule,
+    style,
+  } = props;
 
-  function toggleModule(key: string) {
-    setModules((prev) => ({ ...prev, [key]: !prev[key] }));
+  function addStore() {
+    setPartnerStores([
+      ...partnerStores,
+      {
+        id: Date.now().toString(),
+        name: "Nuovo Negozio",
+        url: "https://www.negozio.it",
+        logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
+      },
+    ]);
   }
 
-  // Gestione Eventi Mouse per Trascinamento Ridimensionabile
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isResizingSidebar) {
-        const newWidth = Math.max(200, Math.min(360, e.clientX));
-        setSidebarWidth(newWidth);
-      } else if (isResizingConfigurator) {
-        const newWidth = Math.max(300, Math.min(550, e.clientX - sidebarWidth));
-        setConfiguratorWidth(newWidth);
-      }
-    };
+  function removeStore(id: string) {
+    setPartnerStores(partnerStores.filter((s: any) => s.id !== id));
+  }
 
-    const handleMouseUp = () => {
-      setIsResizingSidebar(false);
-      setIsResizingConfigurator(false);
-    };
-
-    if (isResizingSidebar || isResizingConfigurator) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isResizingSidebar, isResizingConfigurator, sidebarWidth]);
+  function updateStore(id: string, field: string, value: string) {
+    setPartnerStores(
+      partnerStores.map((s: any) => (s.id === id ? { ...s, [field]: value } : s))
+    );
+  }
 
   return (
-    <div className="flex h-screen w-full bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* COLONNA 1: SIDEBAR AGENZIA */}
-      <AgencySidebar
-        agencyId={agencyId}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        style={{ width: `${sidebarWidth}px` }}
-      />
+    <div style={style} className="p-8 max-w-2xl mx-auto space-y-8 text-[#1E293B]">
+      {activeTab === "create" && (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-      {/* SEPARATORE TRASCINABILE 1 */}
-      <div
-        onMouseDown={(e) => {
-          e.preventDefault();
-          setIsResizingSidebar(true);
-        }}
-        className="w-1.5 cursor-col-resize bg-[#D4AF37]/30 hover:bg-[#D4AF37] transition-colors flex-shrink-0 h-full z-20"
-        title="Trascina per ridimensionare Sidebar"
-      />
+          {/* 1. SELEZIONE TEMPLATE */}
+          <div>
+            <label className="block text-xs font-bold uppercase text-[#1E293B] mb-2 tracking-wider">
+              1. Template Grafico Layout
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTemplate("A");
+                  setCoupleNames("Elena & Davide");
+                }}
+                className={`p-5 rounded-2xl border-2 text-left transition-all ${
+                  selectedTemplate === "A"
+                    ? "border-[#D4AF37] bg-amber-50 shadow-md"
+                    : "border-slate-300 bg-white hover:border-[#D4AF37]"
+                }`}
+              >
+                <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
+                <h4 className="font-serif font-bold text-base text-[#1E293B]">Arco Romano &amp; Cigni</h4>
+                <p className="text-xs text-slate-600 mt-1">Sfondo avorio, cigni sul lago, ceralacca oro e mappa location.</p>
+              </button>
 
-      {/* COLONNA 2: CONFIGURATORE CENTRALE (Stringibile/Espandibile a piacere) */}
-      <AgencyConfigurator
-        style={{ width: `${configuratorWidth}px` }}
-        activeTab={activeTab}
-        selectedTemplate={selectedTemplate}
-        setSelectedTemplate={setSelectedTemplate}
-        selectedColorScheme={selectedColorScheme}
-        setSelectedColorScheme={setSelectedColorScheme}
-        coupleNames={coupleNames}
-        setCoupleNames={setCoupleNames}
-        weddingDateDay={weddingDateDay}
-        setWeddingDateDay={setWeddingDateDay}
-        weddingDateMonth={weddingDateMonth}
-        setWeddingDateMonth={setWeddingDateMonth}
-        weddingDateYear={weddingDateYear}
-        setWeddingDateYear={setWeddingDateYear}
-        locationName={locationName}
-        setLocationName={setLocationName}
-        locationAddress={locationAddress}
-        setLocationAddress={setLocationAddress}
-        audioUrl={audioUrl}
-        setAudioUrl={setAudioUrl}
-        waterImageUrl={waterImageUrl}
-        setWaterImageUrl={setWaterImageUrl}
-        selectedPhrasePreset={selectedPhrasePreset}
-        setSelectedPhrasePreset={setSelectedPhrasePreset}
-        customWelcomePhrase={customWelcomePhrase}
-        setCustomWelcomePhrase={setCustomWelcomePhrase}
-        dressCodeNotes={dressCodeNotes}
-        setDressCodeNotes={setDressCodeNotes}
-        selectedPaletteIdx={selectedPaletteIdx}
-        setSelectedPaletteIdx={setSelectedPaletteIdx}
-        partnerStores={partnerStores}
-        setPartnerStores={setPartnerStores}
-        marqueeText={marqueeText}
-        setMarqueeText={setMarqueeText}
-        customIban={customIban}
-        setCustomIban={setCustomIban}
-        modules={modules}
-        toggleModule={toggleModule}
-      />
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTemplate("B");
+                  setCoupleNames("Francesca & Luca");
+                }}
+                className={`p-5 rounded-2xl border-2 text-left transition-all ${
+                  selectedTemplate === "B"
+                    ? "border-sky-500 bg-sky-50 shadow-md"
+                    : "border-slate-300 bg-white hover:border-sky-500"
+                }`}
+              >
+                <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
+                <h4 className="font-serif font-bold text-base text-[#1E293B]">Cielo &amp; Nuvole 3D</h4>
+                <p className="text-xs text-slate-600 mt-1">3 Grattabili date, busta azzurra, Nuvole Parting Clouds e RSVP pastello.</p>
+              </button>
+            </div>
+          </div>
 
-      {/* SEPARATORE TRASCINABILE 2 */}
-      <div
-        onMouseDown={(e) => {
-          e.preventDefault();
-          setIsResizingConfigurator(true);
-        }}
-        className="w-1.5 cursor-col-resize bg-[#D4AF37]/30 hover:bg-[#D4AF37] transition-colors flex-shrink-0 h-full z-20"
-        title="Trascina per ridimensionare Configuratore"
-      />
+          {/* 2. DATI SPOSI & FRASE */}
+          <div className="space-y-4 pt-4 border-t border-slate-200">
+            <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+              2. Dati Sposi &amp; Frase di Benvenuto
+            </label>
 
-      {/* COLONNA 3: PREVIEW SMARTPHONE LIVE (Flex-1: Bilancia perfettamente la parte destra) */}
-      <div className="flex-1 h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4">
-        <AgencyPreview
-          selectedTemplate={selectedTemplate}
-          selectedColorScheme={selectedColorScheme}
-          coupleNames={coupleNames}
-          weddingDateDay={weddingDateDay}
-          weddingDateMonth={weddingDateMonth}
-          weddingDateYear={weddingDateYear}
-          locationName={locationName}
-          locationAddress={locationAddress}
-          audioUrl={audioUrl}
-          waterImageUrl={waterImageUrl}
-          selectedPhrasePreset={selectedPhrasePreset}
-          customWelcomePhrase={customWelcomePhrase}
-          dressCodeNotes={dressCodeNotes}
-          selectedPaletteIdx={selectedPaletteIdx}
-          partnerStores={partnerStores}
-          marqueeText={marqueeText}
-          customIban={customIban}
-          modules={modules}
-        />
-      </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Nomi Sposi</label>
+              <input
+                type="text"
+                value={coupleNames}
+                onChange={(e) => setCoupleNames(e.target.value)}
+                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm shadow-xs focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Frase di Benvenuto</label>
+              <select
+                value={selectedPhrasePreset}
+                onChange={(e) => setSelectedPhrasePreset(e.target.value)}
+                className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-sm focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+              >
+                {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
+                  <option key={idx} value={idx.toString()} className="text-[#1E293B]">
+                    {idx + 1}. {phrase.length > 60 ? phrase.substring(0, 60) + "..." : phrase}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {selectedPhrasePreset === "9" && (
+              <div>
+                <textarea
+                  rows={2}
+                  value={customWelcomePhrase}
+                  onChange={(e) => setCustomWelcomePhrase(e.target.value)}
+                  placeholder="Scrivi qui la tua frase personalizzata..."
+                  className="w-full p-3 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none focus:ring-2 focus:ring-[#D4AF37] focus:outline-none"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 3. MODULI ATTIVABILI */}
+          <div className="space-y-4 pt-4 border-t border-slate-200">
+            <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+              3. Moduli Attivi dell&apos;Ecosistema
+            </label>
+
+            {/* BUSTA 3D */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+              <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Sigillo Ceralacca</span>
+              <button
+                type="button"
+                onClick={() => toggleModule("busta3d")}
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
+                }`}
+              >
+                {modules.busta3d ? "Attivo" : "Disattivato"}
+              </button>
+            </div>
+
+            {/* GRATTA LA DATA */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">🎰 Gratta la Data col Dito</span>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("grattaData")}
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    modules.grattaData ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {modules.grattaData ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.grattaData && (
+                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+                  <div>
+                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Giorno</label>
+                    <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Mese</label>
+                    <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-slate-600 font-bold mb-1">Anno</label>
+                    <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* LOCATION MAPPA */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google</span>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("locationMappa")}
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {modules.locationMappa ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.locationMappa && (
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                </div>
+              )}
+            </div>
+
+            {/* DRESS CODE PALETTE */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">🎨 Codice Abbigliamento &amp; Palette</span>
+                <button
+                  type="button"
+                  onClick={() => toggleModule("codiceAbbigliamento")}
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.codiceAbbigliamento && (
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold text-[#1E293B]" />
+                  <div className="grid grid-cols-2 gap-2">
+                    {DRESS_CODE_PALETTES.map((pal, idx) => (
+                      <button
+                        key={pal.id}
+                        type="button"
+                        onClick={() => setSelectedPaletteIdx(idx)}
+                        className={`p-2.5 rounded-xl border text-left flex flex-col gap-1.5 ${
+                          selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"
+                        }`}
+                      >
+                        <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
+                        <div className="flex gap-1">
+                          {pal.colors.map((c, i) => (
+                            <div key={i} className="w-4 h-4 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
+                          ))}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
