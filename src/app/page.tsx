@@ -75,7 +75,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#FAF7F2] text-[#1E293B] font-sans selection:bg-[#D4AF37] selection:text-black relative overflow-x-hidden">
       
-      {/* ─── IMMAGINE DI SFONDO CONTINUA 100% ESTESA (hero-bg.jpg) ─── */}
+      {/* ─── IMMAGINE DI SFONDO CONTINUA (hero-bg.jpg) ─── */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-25">
         <Image 
           src="/hero-bg.jpg" 
@@ -87,7 +87,7 @@ export default function Home() {
       </div>
 
       {/* ─── KINETIC GRID (PUNTINI DORATI INTERATTIVI) ─── */}
-      <KineticGrid className="fixed inset-0 pointer-events-none opacity-40 z-0" />
+      <KineticGrid className="fixed inset-0 pointer-events-none opacity-30 z-0" />
 
       {/* ─── HEADER MINIMALISTA ─── */}
       <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-6 md:px-12 py-5 border-b border-[#D4AF37]/20 bg-[#FAF7F2]/90 backdrop-blur-md">
@@ -127,7 +127,7 @@ export default function Home() {
           &quot;{welcomePhrase}&quot;
         </p>
 
-        {/* DUE PULSANTI CON LINK ESTERNI ALLE DEMO (NON INSERITE NELLA LANDING) */}
+        {/* DUE PULSANTI CON LINK ESTERNI ALLE DEMO */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
           <Link
             href="/elena-e-davide"
@@ -148,6 +148,19 @@ export default function Home() {
       <div className="my-6 relative z-10">
         <Marquee text="✦ Busta con Ceralacca 3D • Gratta la Data col Dito • Musica FF Edizioni • Guest Photo Wall con Proiettore • Lista Nozze Amazon &amp; IBAN ✦" />
       </div>
+
+      {/* ─── SEZIONE INTERATTIVA: PROVA IL GRATTA LA DATA ─── */}
+      <section className="py-20 px-6 bg-white/60 border-y border-[#D4AF37]/20 text-center relative z-10 backdrop-blur-md">
+        <div className="max-w-2xl mx-auto space-y-4">
+          <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#D4AF37] font-mono">Test Interattivo</span>
+          <h2 className="font-serif text-3xl font-bold text-[#1E293B]">Prova il Modulo &quot;Gratta la Data&quot; col Dito</h2>
+          <p className="text-xs text-slate-500 mb-6">Trascina il cursore o il dito sul riquadro dorato per grattare via la vernice.</p>
+          
+          <div className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-inner inline-block">
+            <ScratchCard day="24" month="MAGGIO" year="2026" />
+          </div>
+        </div>
+      </section>
 
       {/* ─── SEZIONE PREZZI & PIANI COMMERCIALI (B2C & B2B) ─── */}
       <section className="py-24 px-6 max-w-5xl mx-auto relative z-10">
@@ -179,7 +192,7 @@ export default function Home() {
 
             <Link
               href="/elena-e-davide"
-              className="w-full py-3.5 bg-[#1E293B] text-white font-bold rounded-full text-xs uppercase tracking-wider text-center hover:bg-slate-800 transition font-mono"
+              className="w-full py-3.5 bg-[#1E293B] text-white font-bold rounded-full text-xs uppercase tracking-wider text-center hover:bg-slate-800 transition font-mono shadow-sm"
             >
               Testa la Demo Sposi ↗
             </Link>
@@ -199,7 +212,7 @@ export default function Home() {
                 €490 <span className="text-xs font-sans font-normal text-slate-300">/ anno</span>
               </div>
 
-3              <ul className="space-y-3 text-xs text-slate-200 mb-8">
+              <ul className="space-y-3 text-xs text-slate-200 mb-8">
                 <li className="flex items-center gap-2">✓ Fino a 10 Matrimoni Clienti / anno inclusi</li>
                 <li className="flex items-center gap-2">✓ Logo della tua agenzia nel footer di ogni sito</li>
                 <li className="flex items-center gap-2">✓ Studio configuratore a 3 colonne ridimensionabili</li>
