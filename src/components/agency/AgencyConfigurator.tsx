@@ -11,7 +11,7 @@ export interface PartnerStore {
 }
 
 interface AgencyConfiguratorProps {
-  activeTab: "list" | "create" | "brand";
+  activeTab: string;
   selectedTemplate: "A" | "B";
   setSelectedTemplate: (t: "A" | "B") => void;
   selectedColorScheme: string;
@@ -41,7 +41,7 @@ interface AgencyConfiguratorProps {
   selectedPaletteIdx: number;
   setSelectedPaletteIdx: (i: number) => void;
   partnerStores: PartnerStore[];
-  setPartnerStores: React.Dispatch<React.SetStateAction<PartnerStore[]>>;
+  setPartnerStores: (stores: PartnerStore[]) => void;
   modules: Record<string, boolean>;
   toggleModule: (k: string) => void;
   style?: React.CSSProperties;
