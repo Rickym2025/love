@@ -503,19 +503,20 @@ export default function AgencyConfigurator(props: any) {
               </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* TAB BRAND AGENZIA */}
-        {activeTab === "brand" && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
-            <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti dell&apos;agenzia.</p>
-            <div>
-              <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
-              <input type="file" className="text-xs text-slate-600" />
-            </div>
+      {/* TAB BRAND AGENZIA */}
+      {activeTab === "brand" && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-serif font-bold text-[#1E293B]">Personalizzazione Brand Agenzia</h2>
+          <p className="text-xs text-slate-500">Configura il tuo logo White-Label e i contatti dell&apos;agenzia.</p>
+          <div>
+            <label className="block text-xs font-bold text-slate-600 mb-1">Logo Agenzia (PNG Trasparente)</label>
+            <input type="file" className="text-xs text-slate-600" />
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 }
