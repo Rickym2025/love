@@ -2,161 +2,222 @@
 
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import EnvelopeWax from "@/components/EnvelopeWax";
-import AudioPlayer from "@/components/AudioPlayer";
+import { MapPin, Heart, Sparkles, Gift } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
-import PartingClouds from "@/components/PartingClouds";
-import PartnerStores from "@/components/PartnerStores";
+import AudioPlayer from "@/components/AudioPlayer";
 import Marquee from "@/components/Marquee";
-import { WaterRippleImage } from "@/components/ui/water-ripple-image";
-import KineticGrid from "@/components/ui/kinetic-grid";
-import { ShoppingBag, PartyPopper, MapPin } from "lucide-react";
+import PartingClouds from "@/components/PartingClouds";
 import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 
-function DynamicInvitationContent({ slug }: { slug: string }) {
+function InvitationContent({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
-  const isDemo2 = slug === "francesca-e-luca";
 
-  // DATI DINAMICI DALL'URL TRASMESSO DA AGENCY STUDIO
-  const day = searchParams.get("day") || (isDemo2 ? "12" : "24");
-  const month = searchParams.get("month") || (isDemo2 ? "SETTEMBRE" : "MAGGIO");
-  const year = searchParams.get("year") || "2026";
-  const coupleNames = searchParams.get("couple") || (isDemo2 ? "Francesca & Luca" : "Elena & Davide");
-  const locationName = searchParams.get("location") || (isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como");
-  const welcomePhrase = searchParams.get("phrase") || (isDemo2 ? "Un grande amore sotto le stelle." : "Due anime, un solo destino. Una storia scritta nel cuore.");
-  const audioFromUrl = searchParams.get("audio");
-  const paletteIdxParam = searchParams.get("palette");
-  
-  const paletteIdx = paletteIdxParam ? parseInt(paletteIdxParam, 10) : 0;
+  // Template e dati base con fallback sicuri
+  const isTemplateB = params.slug === "francesca-e-luca" || searchParams.get("template") === "B";
+
+  const coupleNames =
+    searchParams.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
+  const weddingDateDay = searchParams.get("day") || "15";
+  const weddingDateMonth = searchParams.get("month") || "Settembre";
+  const weddingDateYear = searchParams.get("year") || "2026";
+  const locationName = searchParams.get("location") || "Villa Rosa";
+  const locationAddress = searchParams.get("address") || "Via Roma 1, Roma";
+  const welcomePhrase =
+    searchParams.get("phrase") ||
+    "Due anime, un solo destino. Una storia scritta nel cuore.";
+  const audioUrl = searchParams.get("audio") || "";
+  const dressCodeNotes =
+    searchParams.get("dress") || "Abiti eleganti nei toni cromatici della palette";
+  const paletteIdx = parseInt(searchParams.get("palette") || "0", 10);
   const activePalette = DRESS_CODE_PALETTES[paletteIdx] || DRESS_CODE_PALETTES[0];
 
-  const weddingDate = `${day} ${month} ${year}`;
+  // DICHIARAZIONE FONDAMENTALE DI marqueeText (Risolve ReferenceError)
+  const marqueeText =
+    searchParams.get("marquee") ||
+    "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦";
 
-  const customAudioUrl =
-    audioFromUrl ||
-    (isDemo2
-      ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
-      : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
+  const customIban =
+    searchParams.get("iban") || "IT60 X 05428 11101 000000123456";
+
+  // Moduli attivi (letti dall'URL o attivi di default)
+  const modules = {
+    busta3d: searchParams.get("busta3d") !== "false",
+    grattaData: searchParams.get("grattaData") !== "false",
+    effettoAcqua: searchParams.get("effettoAcqua") !== "false",
+    nuvole3d: searchParams.get("nuvole3d") !== "false",
+    locationMappa: searchParams.get("locationMappa") !== "false",
+    codiceAbbigliamento: searchParams.get("codiceAbbigliamento") !== "false",
+    negoziConvenzionati: searchParams.get("negoziConvenzionati") !== "false",
+    listaNozzeAmazon: searchParams.get("listaNozzeAmazon") !== "false",
+    dedicheMarquee: searchParams.get("dedicheMarquee") !== "false",
+    hubGiochiFesta: searchParams.get("hubGiochiFesta") !== "false",
+    guestPhotoWall: searchParams.get("guestPhotoWall") !== "false",
+    confermaRsvp: searchParams.get("confermaRsvp") !== "false",
+  };
 
   return (
-    <div className={`min-h-screen ${isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"} font-sans pb-24 relative`}>
-      {isDemo2 && <KineticGrid className="fixed inset-0 pointer-events-none opacity-20 z-0" />}
+    <div
+      className={`min-h-screen w-full overflow-x-hidden ${
+        isTemplateB ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"
+      }`}
+    >
+      {/* PLAYER AUDIO PERSISTENTE */}
+      {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* BUSTA CON VERA CERALACCA */}
-      <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "E&D"} />
-
-      {/* PLAYER MUSICALE FISSO */}
-      <AudioPlayer audioUrl={customAudioUrl} songTitle={`Brano Inedito per ${coupleNames} — FF Edizioni`} />
-
-      {/* MARQUEE SCORREVOLE */}
-      <div className="relative z-10 my-2">
-        <Marquee text="Evviva gli Sposi! 🎉 • Vi aspettiamo per festeggiare insieme • Un giorno unico ed indimenticabile •" />
-      </div>
-
-      {/* HERO INTRO ANNOUNCEMENT */}
-      <section className="py-16 px-6 max-w-3xl mx-auto text-center relative z-10">
-        <div className={`border-4 border-double ${isDemo2 ? "border-sky-300 bg-white" : "border-[#D4AF37]/40 bg-white/90"} rounded-t-[180px] p-8 md:p-12 shadow-2xl backdrop-blur-sm`}>
-          {!isDemo2 && (
-            <div className="w-full h-48 rounded-2xl overflow-hidden mb-6 border border-[#D4AF37]/30 shadow-inner">
-              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Lago di Como" />
-            </div>
-          )}
-
-          <span className="text-[10px] tracking-[0.3em] font-bold text-[#D4AF37] uppercase block mb-2">
-            ✦ PARTECIPAZIONE DI MATRIMONIO ✦
-          </span>
-          <h1 className="font-serif text-4xl md:text-6xl font-bold tracking-wide my-3 text-[#1E293B]">{coupleNames}</h1>
-          <p className="text-sm font-serif italic text-slate-500 mb-4">&quot;{welcomePhrase}&quot;</p>
-          <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">{locationName}</p>
+      {/* MARQUEE DEDICHE SCORREVOLI */}
+      {modules.dedicheMarquee && (
+        <div className="bg-[#1E293B] text-[#D4AF37] py-2">
+          <Marquee text={marqueeText} />
         </div>
-      </section>
-
-      {/* TEMPLATE B: NUVOLE 3D */}
-      {isDemo2 && (
-        <section className="py-4 relative z-10">
-          <PartingClouds />
-        </section>
       )}
 
-      {/* GRATTIAMO LA DATA (DATA DINAMICA DALL'URL) */}
-      <section className="py-10 px-6 max-w-xl mx-auto text-center relative z-10">
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] block mb-3">
-            🎰 Gratta col Dito per Scoprire la Data delle Nozze!
-          </span>
-          <ScratchDate day={day} month={month} year={year} />
-        </div>
-      </section>
+      {/* NUVOLE 3D DI SFONDO */}
+      {modules.nuvole3d && <PartingClouds />}
 
-      {/* LOCATION MAPPA & INDICAZIONI STRADALI GOOGLE MAPS */}
-      <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
-        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-3">
-          <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Location &amp; Indicazioni Stradali</h3>
-          <p className="text-xs font-bold text-[#D4AF37] uppercase">{locationName}</p>
-          <div className="pt-2">
+      {/* CONTENITORE CENTRALE INVITO */}
+      <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
+        
+        {/* BUSTA D'EPOCA CON CERALACCA */}
+        {modules.busta3d && (
+          <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/30 text-center shadow-lg relative">
+            <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">
+              ✦ Partecipazione Digitale d&apos;Autore
+            </span>
+            <h2 className="font-serif font-bold text-xl text-[#1E293B]">{coupleNames}</h2>
+            <div className="relative w-16 h-16 mx-auto my-3">
+              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
+            </div>
+            <p className="text-xs text-slate-500 font-serif">Siete invitati a celebrare il nostro matrimonio</p>
+          </div>
+        )}
+
+        {/* HERO INTRODUZIONE */}
+        <div className="text-center space-y-3 pt-4">
+          <span className="text-xs tracking-widest uppercase font-semibold text-[#D4AF37]">
+            Wedding Celebration
+          </span>
+          <h1 className="text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
+          <p className="text-sm font-bold text-slate-500">
+            {weddingDateDay} {weddingDateMonth} {weddingDateYear}
+          </p>
+          <blockquote className="text-sm italic font-serif opacity-80 px-4 mt-2">
+            &quot;{welcomePhrase}&quot;
+          </blockquote>
+        </div>
+
+        {/* GRATTIAMO LA DATA */}
+        {modules.grattaData && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block">
+              🎰 Scopri la Data Speciale
+            </span>
+            <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
+          </div>
+        )}
+
+        {/* LOCATION & MAPPA GOOGLE */}
+        {modules.locationMappa && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block flex items-center justify-center gap-1.5">
+              <MapPin className="w-4 h-4" /> Location del Matrimonio
+            </span>
+            <h3 className="font-serif font-bold text-lg text-[#1E293B]">{locationName}</h3>
+            <p className="text-xs text-slate-500">{locationAddress}</p>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationName)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                locationAddress || locationName
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1E293B] text-white rounded-xl text-xs font-bold uppercase hover:bg-slate-800 transition shadow-md"
+              className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors"
             >
-              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Indicazioni Stradali su Google Maps ↗
+              Apri Mappa &amp; Indicazioni ↗
             </a>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* DRESS CODE CON ESATTA PALETTE MULTI-COLORE DALL'URL */}
-      <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
-        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
-          <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-2">Dress Code &amp; Palette Colori</h3>
-          <p className="text-xs text-slate-500 mb-3">{activePalette.name}</p>
-          <div className="flex justify-center items-center gap-3 my-4">
-            {activePalette.colors.map((color, idx) => (
-              <div key={idx} className="w-8 h-8 rounded-full border-2 border-slate-200 shadow-md transform hover:scale-110 transition" style={{ backgroundColor: color }} />
-            ))}
+        {/* DRESS CODE & PALETTE CROMATICA */}
+        {modules.codiceAbbigliamento && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block">
+              🎨 Codice Abbigliamento &amp; Palette
+            </span>
+            <p className="text-xs text-slate-600">{dressCodeNotes}</p>
+            <div className="flex justify-center gap-2 pt-1">
+              {activePalette.colors.map((color, i) => (
+                <div
+                  key={i}
+                  className="w-7 h-7 rounded-full border border-slate-300 shadow-sm"
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* LISTA NOZZE & NEGOZI CONVENZIONATI */}
-      <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
-        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-4">
-          <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Lista Nozze &amp; Regali</h3>
-          <PartnerStores />
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
-            <a href="https://www.amazon.it/baby-reg/homepage?tag=zero100store-21" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-[#FF9900] text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-amber-500 shadow-md">
-              <ShoppingBag className="w-4 h-4" /> Lista Nozze Amazon ↗
-            </a>
+        {/* LISTA NOZZE & IBAN */}
+        {modules.listaNozzeAmazon && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block flex items-center justify-center gap-1.5">
+              <Gift className="w-4 h-4" /> Lista Nozze &amp; Coordinate
+            </span>
+            <p className="text-xs text-slate-600">
+              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio:
+            </p>
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">
+              {customIban}
+            </div>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* MODULO RSVP */}
-      <section className="py-10 px-6 relative z-10">
-        <RsvpForm coupleNames={coupleNames} experienceSlug={slug} />
-      </section>
+        {/* LINK PAGINA DELLA FESTA */}
+        {modules.hubGiochiFesta && (
+          <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
+              <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
+            </span>
+            <p className="text-xs text-slate-300">
+              Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
+            </p>
+            <Link
+              href={`/${params.slug}/festa`}
+              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
+            >
+              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+            </Link>
+          </div>
+        )}
 
-      {/* BANNER FESTA */}
-      <section className="py-10 px-6 max-w-xl mx-auto text-center relative z-10">
-        <div className="bg-[#1E293B] text-white p-8 rounded-3xl shadow-2xl border border-[#D4AF37] space-y-4">
-          <span className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">✦ GIOCHI &amp; PHOTO WALL DELLA FESTA ✦</span>
-          <h3 className="font-serif text-2xl font-bold">Accedi alla Festa del Matrimonio!</h3>
-          <Link href={`/${slug}/festa`} className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D4AF37] text-slate-900 font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg">
-            <PartyPopper className="w-4 h-4" /> Entra nella Pagina della Festa 🎉
-          </Link>
-        </div>
-      </section>
+        {/* MODULO RSVP */}
+        {modules.confermaRsvp && (
+          <div className="pt-2">
+            <RsvpForm coupleNames={coupleNames} />
+          </div>
+        )}
+
+        {/* FOOTER WHITE-LABEL AGENZIA */}
+        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
+          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
+          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
+        </footer>
+      </main>
     </div>
   );
 }
 
 export default function InvitationPage({ params }: { params: { slug: string } }) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center text-xs font-bold text-[#D4AF37]">Caricamento Partecipazione...</div>}>
-      <DynamicInvitationContent slug={params?.slug} />
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#D4AF37] font-serif font-bold text-sm">
+          Caricamento Invito in corso...
+        </div>
+      }
+    >
+      <InvitationContent params={params} />
     </Suspense>
   );
 }
