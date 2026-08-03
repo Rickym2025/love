@@ -9,10 +9,9 @@ import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
 import Marquee from "@/components/Marquee";
-import WaterRippleImage from "@/components/ui/water-ripple-image";
+import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import KineticGrid from "@/components/ui/kinetic-grid";
 import { ShoppingBag, PartyPopper } from "lucide-react";
-import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 
 export default function InvitationPage({ params }: { params: { slug: string } }) {
   const isDemo2 = params?.slug === "francesca-e-luca";
