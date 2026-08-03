@@ -42,7 +42,7 @@ interface AgencyConfiguratorProps {
   setSelectedPaletteIdx: (i: number) => void;
   partnerStores: PartnerStore[];
   setPartnerStores: (stores: PartnerStore[]) => void;
-  modules: Record<string, boolean>;
+  modules: any;
   toggleModule: (k: string) => void;
   style?: React.CSSProperties;
 }
@@ -103,7 +103,7 @@ export default function AgencyConfigurator({
   toggleModule,
   style,
 }: AgencyConfiguratorProps) {
-  const addStore = () => {
+  function addStore() {
     setPartnerStores([
       ...partnerStores,
       {
@@ -113,23 +113,23 @@ export default function AgencyConfigurator({
         logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
       },
     ]);
-  };
+  }
 
-  const removeStore = (id: string) => {
+  function removeStore(id: string) {
     setPartnerStores(partnerStores.filter((s) => s.id !== id));
-  };
+  }
 
-  const handleAudioFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleAudioFileUpload(e: any) {
     if (e.target.files && e.target.files[0]) {
       setAudioUrl(URL.createObjectURL(e.target.files[0]));
     }
-  };
+  }
 
-  const handleWaterImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleWaterImageUpload(e: any) {
     if (e.target.files && e.target.files[0]) {
       setWaterImageUrl(URL.createObjectURL(e.target.files[0]));
     }
-  };
+  }
 
   return (
     <div style={style} className="p-8 border-r border-[#D4AF37]/30 overflow-y-auto max-h-screen min-w-[320px]">
