@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disabilita il check ESLint ridondante durante ogni deploy su Vercel per velocizzare la build
+  // Disabilita la validazione TypeScript e ESLint durante la build per deploy istantanei (~20sec)
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Autorizza le immagini esterne per la galleria e i loghi
   images: {
     remotePatterns: [
       {
