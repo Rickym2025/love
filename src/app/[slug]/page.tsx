@@ -8,17 +8,20 @@ import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
+import Marquee from "@/components/Marquee";
+import WaterRippleImage from "@/components/ui/water-ripple-image";
+import KineticGrid from "@/components/ui/kinetic-grid";
 import { ShoppingBag, PartyPopper } from "lucide-react";
 
 export default function InvitationPage({ params }: { params: { slug: string } }) {
   const isDemo2 = params?.slug === "francesca-e-luca";
 
-  // DATI TEMA 1 vs TEMA 2
+  // DATI DEMO 1 vs DEMO 2
   const coupleNames = isDemo2 ? "Francesca & Luca" : "Elena & Davide";
   const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "24 MAGGIO 2026";
   const locationName = isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como";
   
-  // URL MP3 REALI R2 PER I BRANI INEDITI FF EDIZIONI
+  // MP3 REALI R2 PER FF EDIZIONI
   const customAudioUrl = isDemo2
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -29,36 +32,53 @@ export default function InvitationPage({ params }: { params: { slug: string } })
     : ["#FAF7F2", "#D4AF37", "#E5DACB", "#1E293B", "#8B1E24"];
 
   return (
-    <div className={`min-h-screen ${isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"} font-sans pb-24 selection:bg-[#D4AF37] selection:text-white`}>
-      {/* 1. BUSTA CON VERA CERALACCA logo /wax-seal.png */}
+    <div className={`min-h-screen ${isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"} font-sans pb-24 selection:bg-[#D4AF37] selection:text-white relative`}>
+      
+      {/* KINETIC GRID: SFONDO CINETICO PER TEMA 2 */}
+      {isDemo2 && <KineticGrid className="fixed inset-0 pointer-events-none opacity-20 z-0" />}
+
+      {/* 1. BUSTA CON VERA CERALACCA LOGO public/wax-seal.png */}
       <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "E&D"} />
 
       {/* 2. AUDIO PLAYER CON BRANO REALE R2 */}
       <AudioPlayer audioUrl={customAudioUrl} songTitle={`Brano Inedito per ${coupleNames} — FF Edizioni`} />
 
-      {/* HERO INTRO ANNOUNCEMENT */}
-      <section className="py-20 px-6 max-w-3xl mx-auto text-center relative">
-        <div className={`border-4 border-double ${isDemo2 ? "border-sky-300 bg-white" : "border-[#D4AF37]/40 bg-white/90"} rounded-t-[180px] p-8 md:p-14 shadow-2xl backdrop-blur-sm`}>
+      {/* 3. MARQUEE SCORREVOLE DEDICHE */}
+      <div className="relative z-10 my-2">
+        <Marquee text="Evviva gli Sposi! 🎉 • Vi aspettiamo per festeggiare insieme • Un giorno unico ed indimenticabile •" />
+      </div>
+
+      {/* HERO INTRO ANNOUNCEMENT CON WATER RIPPLE PER TEMA 1 */}
+      <section className="py-16 px-6 max-w-3xl mx-auto text-center relative z-10">
+        <div className={`border-4 border-double ${isDemo2 ? "border-sky-300 bg-white" : "border-[#D4AF37]/40 bg-white/90"} rounded-t-[180px] p-8 md:p-12 shadow-2xl backdrop-blur-sm`}>
+          
+          {/* WATER RIPPLE IMAGE: RIFRAZIONE ACQUA LAGO DI COMO PER DEMO 1 */}
+          {!isDemo2 && (
+            <div className="w-full h-48 rounded-2xl overflow-hidden mb-6 border border-[#D4AF37]/30 shadow-inner">
+              <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Lago di Como" />
+            </div>
+          )}
+
           <span className="text-[10px] tracking-[0.3em] font-bold text-[#D4AF37] uppercase block mb-2">
             ✦ PARTECIPAZIONE DI MATRIMONIO ✦
           </span>
-          <h1 className="font-serif text-4xl md:text-6xl font-bold tracking-wide my-4 text-[#1E293B]">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold tracking-wide my-3 text-[#1E293B]">
             {coupleNames}
           </h1>
-          <p className="text-sm font-serif italic text-slate-500 mb-6">{weddingDate}</p>
+          <p className="text-sm font-serif italic text-slate-500 mb-4">{weddingDate}</p>
           <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">{locationName}</p>
         </div>
       </section>
 
-      {/* TEMA 2: EFFETTO NUVOLE 3D CON TIMELINE CHE SI APRE ALLO SCROLL */}
+      {/* TEMA 2: EFFETTO NUVOLE 3D (PARTING CLOUDS) */}
       {isDemo2 && (
-        <section className="py-4">
+        <section className="py-4 relative z-10">
           <PartingClouds />
         </section>
       )}
 
-      {/* MODULO GRATTIAMO LA DATA (3 TILES SCRATCH DATE) */}
-      <section className="py-12 px-6 max-w-xl mx-auto text-center">
+      {/* MODULO GRATTIAMO LA DATA (SCRATCH DATE) */}
+      <section className="py-10 px-6 max-w-xl mx-auto text-center relative z-10">
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
           <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] block mb-3">
             🎰 Gratta col Dito per Scoprire la Data delle Nozze!
@@ -67,9 +87,9 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         </div>
       </section>
 
-      {/* PROGRAMMA DELLA GIORNATA (TIMELINE CONTINUA VERTICALE PER TEMA 1) */}
+      {/* PROGRAMMA DELLA GIORNATA (TIMELINE VERTICALE PER TEMA 1) */}
       {!isDemo2 && (
-        <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+        <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
           <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
             <h3 className="font-serif text-3xl font-bold text-[#1E293B] mb-8">Programma dell&apos;Evento</h3>
             
@@ -96,7 +116,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
       )}
 
       {/* DRESS CODE CON CERCHI COLORE */}
-      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+      <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
         <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
           <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-2">Dress Code &amp; Palette Colori</h3>
           <p className="text-xs text-slate-600 mb-4">
@@ -114,15 +134,15 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         </div>
       </section>
 
-      {/* LISTA NOZZE, AMAZON AFFILIATO & NEGOZI CONVENZIONATI */}
-      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+      {/* LISTA NOZZE & NEGOZI CONVENZIONATI */}
+      <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
         <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-4">
           <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Lista Nozze &amp; Regali</h3>
           <p className="text-xs text-slate-600">
-            Per chi desidera farci un pensiero, è possibile consultare la Lista Nozze Amazon, i negozi convenzionati o contribuire al nostro viaggio:
+            Per chi desidera farci un pensiero, è possibile consultare i negozi convenzionati in città, la Lista Nozze Amazon o il nostro IBAN:
           </p>
 
-          {/* NEGOZI CONVENZIONATI CON LOGO E LINK CLICCABILE */}
+          {/* NEGOZI CONVENZIONATI CLICCABILI CON LOGO */}
           <PartnerStores />
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
@@ -144,19 +164,19 @@ export default function InvitationPage({ params }: { params: { slug: string } })
       </section>
 
       {/* MODULO RSVP */}
-      <section className="py-12 px-6">
+      <section className="py-10 px-6 relative z-10">
         <RsvpForm coupleNames={coupleNames} experienceSlug={params.slug} />
       </section>
 
-      {/* BANNER FESTA */}
-      <section className="py-12 px-6 max-w-xl mx-auto text-center">
+      {/* BANNER FESTA CON HUB GIOCHI & PHOTO WALL */}
+      <section className="py-10 px-6 max-w-xl mx-auto text-center relative z-10">
         <div className="bg-[#1E293B] text-white p-8 rounded-3xl shadow-2xl border border-[#D4AF37] space-y-4">
           <span className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">
             ✦ GIOCHI &amp; PHOTO WALL DELLA FESTA ✦
           </span>
           <h3 className="font-serif text-2xl font-bold">Accedi alla Festa del Matrimonio!</h3>
           <p className="text-xs text-slate-300">
-            Il giorno delle nozze entra nell&apos;Hub Giochi e carica le tue foto con i 10 filtri per la proiezione live dal vivo!
+            Entra nell&apos;Hub Giochi (Love Quiz, Puzzle Foto, Gratta Foto) e partecipa al Guest Photo Wall con 10 filtri!
           </p>
 
           <Link
