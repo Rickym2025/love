@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
@@ -9,6 +9,13 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
+  // RIDIMENSIONAMENTO COLONNE CON TRASCINAMENTO MOUSE (Colonna centrale leggermente ristretta a 380px)
+  const [sidebarWidth, setSidebarWidth] = useState(260);
+  const [configuratorWidth, setConfiguratorWidth] = useState(380);
+  const [isResizingSidebar, setIsResizingSidebar] = useState(false);
+  const [isResizingConfigurator, setIsResizingConfigurator] = useState(false);
+
+  // Stati Configuratore
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
@@ -49,58 +56,108 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
+  // Gestione Eventi Mouse per Trascinamento Ridimensionabile
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizingSidebar) {
+        const newWidth = Math.max(200, Math.min(360, e.clientX));
+        setSidebarWidth(newWidth);
+      } else if (isResizingConfigurator) {
+        const newWidth = Math.max(300, Math.min(550, e.clientX - sidebarWidth));
+        setConfiguratorWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizingSidebar(false);
+      setIsResizingConfigurator(false);
+    };
+
+    if (isResizingSidebar || isResizingConfigurator) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizingSidebar, isResizingConfigurator, sidebarWidth]);
+
   return (
-    <div className="flex h-screen w-full bg-[#FAF7F2] overflow-hidden font-sans">
-      {/* 1. SIDEBAR FISSA */}
-      <div className="w-64 flex-shrink-0 border-r border-[#D4AF37]/30 h-full">
-        <AgencySidebar agencyId={agencyId} activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+    <div className="flex h-screen w-full bg-[#FAF7F2] overflow-hidden font-sans select-none">
+      {/* COLONNA 1: SIDEBAR AGENZIA */}
+      <AgencySidebar
+        agencyId={agencyId}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        style={{ width: `${sidebarWidth}px` }}
+      />
 
-      {/* 2. CONFIGURATORE ESPANSO FLESSIBILE (Flex-1: Riempie lo spazio centrale senza schiacciare) */}
-      <div className="flex-1 h-full overflow-y-auto border-r border-[#D4AF37]/30 bg-[#FAF7F2]">
-        <AgencyConfigurator
-          activeTab={activeTab}
-          selectedTemplate={selectedTemplate}
-          setSelectedTemplate={setSelectedTemplate}
-          selectedColorScheme={selectedColorScheme}
-          setSelectedColorScheme={setSelectedColorScheme}
-          coupleNames={coupleNames}
-          setCoupleNames={setCoupleNames}
-          weddingDateDay={weddingDateDay}
-          setWeddingDateDay={setWeddingDateDay}
-          weddingDateMonth={weddingDateMonth}
-          setWeddingDateMonth={setWeddingDateMonth}
-          weddingDateYear={weddingDateYear}
-          setWeddingDateYear={setWeddingDateYear}
-          locationName={locationName}
-          setLocationName={setLocationName}
-          locationAddress={locationAddress}
-          setLocationAddress={setLocationAddress}
-          audioUrl={audioUrl}
-          setAudioUrl={setAudioUrl}
-          waterImageUrl={waterImageUrl}
-          setWaterImageUrl={setWaterImageUrl}
-          selectedPhrasePreset={selectedPhrasePreset}
-          setSelectedPhrasePreset={setSelectedPhrasePreset}
-          customWelcomePhrase={customWelcomePhrase}
-          setCustomWelcomePhrase={setCustomWelcomePhrase}
-          dressCodeNotes={dressCodeNotes}
-          setDressCodeNotes={setDressCodeNotes}
-          selectedPaletteIdx={selectedPaletteIdx}
-          setSelectedPaletteIdx={setSelectedPaletteIdx}
-          partnerStores={partnerStores}
-          setPartnerStores={setPartnerStores}
-          marqueeText={marqueeText}
-          setMarqueeText={setMarqueeText}
-          customIban={customIban}
-          setCustomIban={setCustomIban}
-          modules={modules}
-          toggleModule={toggleModule}
-        />
-      </div>
+      {/* SEPARATORE TRASCINABILE 1 */}
+      <div
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setIsResizingSidebar(true);
+        }}
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/30 hover:bg-[#D4AF37] transition-colors flex-shrink-0 h-full z-20"
+        title="Trascina per ridimensionare Sidebar"
+      />
 
-      {/* 3. PREVIEW DESTRO PERFETTAMENTE AGGANCIATO (380px) */}
-      <div className="w-[380px] flex-shrink-0 h-full bg-[#1E293B] flex items-center justify-center p-4">
+      {/* COLONNA 2: CONFIGURATORE CENTRALE (Stringibile/Espandibile a piacere) */}
+      <AgencyConfigurator
+        style={{ width: `${configuratorWidth}px` }}
+        activeTab={activeTab}
+        selectedTemplate={selectedTemplate}
+        setSelectedTemplate={setSelectedTemplate}
+        selectedColorScheme={selectedColorScheme}
+        setSelectedColorScheme={setSelectedColorScheme}
+        coupleNames={coupleNames}
+        setCoupleNames={setCoupleNames}
+        weddingDateDay={weddingDateDay}
+        setWeddingDateDay={setWeddingDateDay}
+        weddingDateMonth={weddingDateMonth}
+        setWeddingDateMonth={setWeddingDateMonth}
+        weddingDateYear={weddingDateYear}
+        setWeddingDateYear={setWeddingDateYear}
+        locationName={locationName}
+        setLocationName={setLocationName}
+        locationAddress={locationAddress}
+        setLocationAddress={setLocationAddress}
+        audioUrl={audioUrl}
+        setAudioUrl={setAudioUrl}
+        waterImageUrl={waterImageUrl}
+        setWaterImageUrl={setWaterImageUrl}
+        selectedPhrasePreset={selectedPhrasePreset}
+        setSelectedPhrasePreset={setSelectedPhrasePreset}
+        customWelcomePhrase={customWelcomePhrase}
+        setCustomWelcomePhrase={setCustomWelcomePhrase}
+        dressCodeNotes={dressCodeNotes}
+        setDressCodeNotes={setDressCodeNotes}
+        selectedPaletteIdx={selectedPaletteIdx}
+        setSelectedPaletteIdx={setSelectedPaletteIdx}
+        partnerStores={partnerStores}
+        setPartnerStores={setPartnerStores}
+        marqueeText={marqueeText}
+        setMarqueeText={setMarqueeText}
+        customIban={customIban}
+        setCustomIban={setCustomIban}
+        modules={modules}
+        toggleModule={toggleModule}
+      />
+
+      {/* SEPARATORE TRASCINABILE 2 */}
+      <div
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setIsResizingConfigurator(true);
+        }}
+        className="w-1.5 cursor-col-resize bg-[#D4AF37]/30 hover:bg-[#D4AF37] transition-colors flex-shrink-0 h-full z-20"
+        title="Trascina per ridimensionare Configuratore"
+      />
+
+      {/* COLONNA 3: PREVIEW SMARTPHONE LIVE (Flex-1: Bilancia perfettamente la parte destra) */}
+      <div className="flex-1 h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4">
         <AgencyPreview
           selectedTemplate={selectedTemplate}
           selectedColorScheme={selectedColorScheme}
