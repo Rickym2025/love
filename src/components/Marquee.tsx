@@ -9,19 +9,24 @@ export interface Testimonial {
 }
 
 export interface MarqueeProps {
-  text?: string; // <-- Accetta la stringa diretta delle dediche
-  items?: Testimonial[]; // <-- Accetta anche un array di recensioni/dediche
+  text?: string; // Accetta la stringa diretta delle dediche
+  marqueeText?: string; // Accetta anche marqueeText per retro-compatibilità
+  items?: Testimonial[]; // Accetta anche un array di recensioni/dediche
   speed?: number;
 }
 
 export default function Marquee({
   text = "Evviva gli Sposi! 🎉 • Vi aspettiamo per festeggiare insieme • Un giorno unico ed indimenticabile •",
+  marqueeText,
   items,
 }: MarqueeProps) {
+  // Usa marqueeText se presente, altrimenti passa a text
+  const effectiveText = marqueeText || text;
+
   const contentText =
     items && items.length > 0
       ? items.map((item) => `"${item.quote || ""}" — ${item.name || "Anonimo"}`).join(" • ")
-      : text;
+      : effectiveText;
 
   return (
     <div className="overflow-hidden whitespace-nowrap bg-[#1E293B] text-[#D4AF37] py-2 border-y border-[#D4AF37]/30 font-mono text-xs select-none shadow-md">
