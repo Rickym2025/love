@@ -22,7 +22,7 @@ export default function Home() {
       .catch((err) => console.log("Orbit load fallback:", err));
   }, []);
 
-  // Stato per l'apertura interattiva delle FAQ
+  // Stato per l'apertura interattiva delle 10 FAQ
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const toggleFaq = (index: number) => {
@@ -115,7 +115,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ─── HERO SECTION GOOGLE WIREFRAME (TEMA CREMA / AVORIO) ─── */}
+      {/* ─── HERO SECTION LAYOUT GOOGLE (TEMA CREMA / AVORIO) ─── */}
       <section className="pt-36 pb-20 px-6 max-w-5xl mx-auto text-center relative z-10">
         <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#D4AF37] block mb-3 font-mono">
           ✦ SAAS #16 RM STUDIO — LE PARTECIPAZIONI DIGITALI D&apos;AUTORE ✦
@@ -127,16 +127,18 @@ export default function Home() {
           &quot;{welcomePhrase}&quot;
         </p>
 
-        {/* DUE PULSANTI CON LINK ESTERNI ALLE DEMO */}
+        {/* DUE PULSANTI CON COLLEGAMENTO ESTERNO ALLE 2 DEMO */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
           <Link
             href="/elena-e-davide"
+            target="_blank"
             className="px-8 py-4 bg-[#D4AF37] text-slate-900 font-bold rounded-full text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg flex items-center justify-center gap-2 font-mono"
           >
             Apri Demo 1 (Villa &amp; Lago di Como) <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/francesca-e-luca"
+            target="_blank"
             className="px-8 py-4 bg-[#1E293B] text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-slate-800 transition shadow-lg flex items-center justify-center gap-2 font-mono"
           >
             Apri Demo 2 (Cielo &amp; Nuvole 3D) <ArrowRight className="w-4 h-4" />
@@ -192,6 +194,7 @@ export default function Home() {
 
             <Link
               href="/elena-e-davide"
+              target="_blank"
               className="w-full py-3.5 bg-[#1E293B] text-white font-bold rounded-full text-xs uppercase tracking-wider text-center hover:bg-slate-800 transition font-mono shadow-sm"
             >
               Testa la Demo Sposi ↗
