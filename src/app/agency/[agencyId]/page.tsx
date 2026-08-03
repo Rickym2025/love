@@ -157,11 +157,16 @@ export default function AgencyStudioPage({ params }: AgencyPageProps) {
         weddingDateYear={weddingDateYear}
         locationName={locationName}
         locationAddress={locationAddress}
-        welcomePhrase={welcomePhrase}
-        dressCodeNotes={dressCodeNotes}
-        partnerStores={partnerStores}
-        modules={modules}
         audioUrl={audioUrl}
+        waterImageUrl={waterImageUrl}
+        selectedPhrasePreset={selectedPhrasePreset}
+        customWelcomePhrase={customWelcomePhrase}
+        dressCodeNotes={dressCodeNotes}
+        selectedPaletteIdx={selectedPaletteIdx}
+        partnerStores={partnerStores}
+        marqueeText={marqueeText}
+        customIban={customIban}
+        modules={modules}
       />
 
       {/* MODALE WEB3FORMS */}
