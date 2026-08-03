@@ -5,7 +5,11 @@ import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
 
-export default function AgencyStudioPage({ params }: { params: { agencyId: string } }) {
+export default function AgencyStudioPage({ params }: { params?: { agencyId?: string } }) {
+  // Protezione totale su params.agencyId (Evita Errore 500 e TypeError .replace)
+  const rawAgencyId = params?.agencyId || "sposi-in-love";
+  const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
+
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
@@ -22,8 +26,6 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   const [partnerStores, setPartnerStores] = useState<any[]>([]);
-  
-  // DICHIARAZIONE FONDAMENTALE DELLO STATO marqueeText
   const [marqueeText, setMarqueeText] = useState(
     "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦"
   );
@@ -50,10 +52,10 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
 
   return (
     <div className="flex h-screen w-full bg-slate-900 overflow-hidden font-sans">
-      {/* 1. SIDEBAR SINISTRA */}
-      <AgencySidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* 1. SIDEBAR */}
+      <AgencySidebar agencyId={agencyId} activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* 2. PANNELLO CONFIGURATORE CENTRALE */}
+      {/* 2. CONFIGURATORE */}
       <AgencyConfigurator
         activeTab={activeTab}
         selectedTemplate={selectedTemplate}
@@ -94,7 +96,7 @@ export default function AgencyStudioPage({ params }: { params: { agencyId: strin
         toggleModule={toggleModule}
       />
 
-      {/* 3. ANTEPRIMA LIVE SMARTPHONE DESTRO */}
+      {/* 3. PREVIEW */}
       <AgencyPreview
         selectedTemplate={selectedTemplate}
         selectedColorScheme={selectedColorScheme}
