@@ -91,7 +91,7 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B]">
       
-      {/* SFONDO CONTINUO SU TUTTO IL SITO */}
+      {/* SFONDO CONTINUO SU TUTTO IL SITO (hero-bg.jpg) */}
       <div
         className="fixed inset-0 z-0 pointer-events-none opacity-15 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -310,7 +310,7 @@ export default function LandingPage() {
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Puntamento Domini Personalizzati dei Clienti</li>
                   </ul>
                 </div>
-                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiori%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#1E293B] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-black">
+                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiormente%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#1E293B] text-white font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-black">
                   Richiedi Licenza Agenzia
                 </a>
               </div>
