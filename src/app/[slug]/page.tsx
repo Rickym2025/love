@@ -21,7 +21,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
   const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "24 MAGGIO 2026";
   const locationName = isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como";
   
-  // DICHIARAZIONE WELCOME PHRASE (Risolve il ReferenceError)
+  // DICHIARAZIONE WELCOME PHRASE (Risolve definitivamente il ReferenceError)
   const welcomePhrase = isDemo2
     ? "Un amore grande nato sotto le stelle. Vi aspettiamo per festeggiare insieme!"
     : "Due anime, un solo destino. Una storia scritta nel cuore.";
@@ -57,7 +57,6 @@ export default function InvitationPage({ params }: { params: { slug: string } })
       <section className="py-16 px-6 max-w-3xl mx-auto text-center relative z-10">
         <div className={`border-4 border-double ${isDemo2 ? "border-sky-300 bg-white" : "border-[#D4AF37]/40 bg-white/90"} rounded-t-[180px] p-8 md:p-12 shadow-2xl backdrop-blur-sm`}>
           
-          {/* WATER RIPPLE IMAGE: RIFRAZIONE ACQUA LAGO DI COMO PER DEMO 1 */}
           {!isDemo2 && (
             <div className="w-full h-48 rounded-2xl overflow-hidden mb-6 border border-[#D4AF37]/30 shadow-inner">
               <WaterRippleImage src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Lago di Como" />
@@ -92,7 +91,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         </div>
       </section>
 
-      {/* PROGRAMMA DELLA GIORNATA (TIMELINE VERTICALE PER TEMA 1) */}
+      {/* PROGRAMMA DELLA GIORNATA */}
       {!isDemo2 && (
         <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
           <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
@@ -147,7 +146,6 @@ export default function InvitationPage({ params }: { params: { slug: string } })
             Per chi desidera farci un pensiero, è possibile consultare i negozi convenzionati in città, la Lista Nozze Amazon o il nostro IBAN:
           </p>
 
-          {/* NEGOZI CONVENZIONATI CLICCABILI CON LOGO */}
           <PartnerStores />
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
@@ -173,7 +171,7 @@ export default function InvitationPage({ params }: { params: { slug: string } })
         <RsvpForm coupleNames={coupleNames} experienceSlug={params.slug} />
       </section>
 
-      {/* BANNER FESTA CON HUB GIOCHI & PHOTO WALL */}
+      {/* BANNER FESTA */}
       <section className="py-10 px-6 max-w-xl mx-auto text-center relative z-10">
         <div className="bg-[#1E293B] text-white p-8 rounded-3xl shadow-2xl border border-[#D4AF37] space-y-4">
           <span className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">
