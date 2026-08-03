@@ -1,175 +1,170 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { CheckCircle2, Send, Utensils, Users, Music } from 'lucide-react';
+import React, { useState } from "react";
+import { Check, Send, Heart, Utensils } from "lucide-react";
 
-export default function RsvpForm({ experienceSlug }: { experienceSlug: string }) {
-  const [guestName, setGuestName] = useState('');
-  const [attending, setAttending] = useState(true);
-  const [guestsCount, setGuestsCount] = useState(1);
-  const [menuPreference, setMenuPreference] = useState('carne');
-  const [dietaryNotes, setDietaryNotes] = useState('');
-  const [songRequest, setSongRequest] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+// Interfaccia Props flessibile per accettare sia coupleNames che experienceSlug
+export interface RsvpFormProps {
+  coupleNames?: string;
+  experienceSlug?: string;
+  onSuccess?: () => void;
+}
+
+export default function RsvpForm({
+  coupleNames = "gli Sposi",
+  experienceSlug = "elena-e-davide",
+  onSuccess,
+}: RsvpFormProps) {
+  const [guestName, setGuestName] = useState("");
+  const [attending, setAttending] = useState<"yes" | "no">("yes");
+  const [guestCount, setGuestCount] = useState(1);
+  const [menuPreference, setMenuPreference] = useState("carne");
+  const [dietaryNotes, setDietaryNotes] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName.trim()) return;
+    setIsLoading(true);
 
-    setLoading(true);
-
-    const { error } = await supabase.from('love_rsvps').insert([
-      {
-        experience_slug: experienceSlug,
-        guest_name: guestName,
-        attending: attending,
-        guests_count: guestsCount,
-        menu_preference: menuPreference,
-        dietary_notes: dietaryNotes,
-        song_request: songRequest,
-      },
-    ]);
-
-    setLoading(false);
-
-    if (!error) {
-      setSubmitted(true);
-    } else {
-      alert("Si è verificato un errore durante l'invio. Riprova!");
+    try {
+      // Invio al Webhook n8n / Supabase
+      await fetch("https://n8n.rmstudio.app/webhook/love-notifica-conferma", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guestName,
+          attending,
+          guestCount,
+          menuPreference,
+          dietaryNotes,
+          coupleNames,
+          experienceSlug,
+        }),
+      });
+    } catch (err) {
+      console.log("Notifica webhook:", err);
+    } finally {
+      setIsLoading(false);
+      setIsSubmitted(true);
+      if (onSuccess) onSuccess();
     }
   };
 
-  if (submitted) {
+  if (isSubmitted) {
     return (
-      <div className="paper-card border border-[#D4AF37]/50 rounded-2xl p-8 text-center max-w-lg mx-auto shadow-md">
-        <CheckCircle2 className="w-12 h-12 text-[#8B1E24] mx-auto mb-3" />
-        <h3 className="font-serif text-2xl text-[#4A3D39] mb-2">
-          Conferma Ricevuta!
-        </h3>
-        <p className="text-xs text-[#9E8976] italic">
-          Grazie {guestName}, la tua risposta è stata registrata con successo. Non vediamo l'ora di festeggiare insieme!
+      <div className="bg-[#FAF7F2] p-8 rounded-3xl border border-[#D4AF37] text-center shadow-xl max-w-lg mx-auto">
+        <div className="w-16 h-16 bg-[#D4AF37]/20 rounded-full flex items-center justify-center mx-auto mb-4 text-[#D4AF37]">
+          <Check className="w-8 h-8" />
+        </div>
+        <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Grazie per la Conferma!</h3>
+        <p className="text-xs text-slate-600 mt-2">
+          La tua risposta è stata inviata a <span className="font-bold">{coupleNames}</span>. Non vediamo l'ora di festeggiare insieme!
         </p>
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="paper-card border border-[#E5DACB] rounded-2xl p-6 sm:p-8 max-w-lg mx-auto text-left shadow-md"
-    >
-      <h3 className="font-serif text-2xl text-[#4A3D39] mb-1 text-center">
-        Conferma la tua Partecipazione
-      </h3>
-      <p className="text-[10px] text-[#9E8976] text-center mb-6 uppercase tracking-wider">
-        Rispondi per aiutarci con la cucina
-      </p>
-
-      <div className="mb-4">
-        <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
-          Il tuo Nome e Cognome *
-        </label>
-        <input
-          type="text"
-          required
-          value={guestName}
-          onChange={(e) => setGuestName(e.target.value)}
-          placeholder="Es. Mario Rossi"
-          className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none focus:border-[#8B1E24]"
-        />
+    <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-xl max-w-lg mx-auto text-left">
+      <div className="text-center mb-6">
+        <span className="text-[10px] font-bold tracking-[0.25em] text-[#D4AF37] uppercase block mb-1">
+          ✦ CONFERMA PARTECIPAZIONE ✦
+        </span>
+        <h3 className="font-serif text-3xl font-bold text-[#1E293B]">Sarai dei Nostri?</h3>
+        <p className="text-xs text-slate-500 mt-1">Si prega di confermare entro la data indicata nell'invito.</p>
       </div>
 
-      <div className="mb-5">
-        <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
-          Sarai dei nostri?
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            onClick={() => setAttending(true)}
-            className={`py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
-              attending
-                ? 'bg-[#8B1E24] text-white border-[#8B1E24]'
-                : 'bg-[#FAF7F2] border-[#D8CBB7] text-[#9E8976]'
-            }`}
-          >
-            Sì, ci sarò con gioia! 🎉
-          </button>
-          <button
-            type="button"
-            onClick={() => setAttending(false)}
-            className={`py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
-              !attending
-                ? 'bg-[#8B1E24] text-white border-[#8B1E24]'
-                : 'bg-[#FAF7F2] border-[#D8CBB7] text-[#9E8976]'
-            }`}
-          >
-            Purtroppo no
-          </button>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-xs font-bold text-[#1E293B] mb-1">Nome e Cognome Invitato/i</label>
+          <input
+            type="text"
+            required
+            value={guestName}
+            onChange={(e) => setGuestName(e.target.value)}
+            placeholder="es. Marco Rossi e Famiglia"
+            className="w-full p-3 rounded-xl border border-slate-300 text-xs bg-[#FAF7F2] focus:outline-none focus:border-[#D4AF37]"
+          />
         </div>
-      </div>
 
-      {attending && (
-        <>
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-[#8B1E24]" />
-              Numero di Partecipanti
-            </label>
-            <select
-              value={guestsCount}
-              onChange={(e) => setGuestsCount(Number(e.target.value))}
-              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none"
+        <div>
+          <label className="block text-xs font-bold text-[#1E293B] mb-2">Partecipazione</label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setAttending("yes")}
+              className={`p-3 rounded-xl text-xs font-bold border transition ${
+                attending === "yes"
+                  ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                  : "bg-[#FAF7F2] text-slate-600 border-slate-200"
+              }`}
             >
-              <option value={1}>Solo io (1 persona)</option>
-              <option value={2}>Io + 1 accompagnatore (2 persone)</option>
-              <option value={3}>Famiglia (3 persone)</option>
-              <option value={4}>Famiglia (4 persone)</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Utensils className="w-3.5 h-3.5 text-[#8B1E24]" />
-              Preferenza Menu
-            </label>
-            <select
-              value={menuPreference}
-              onChange={(e) => setMenuPreference(e.target.value)}
-              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-sm focus:outline-none"
+              Confermo con Gioia 🎉
+            </button>
+            <button
+              type="button"
+              onClick={() => setAttending("no")}
+              className={`p-3 rounded-xl text-xs font-bold border transition ${
+                attending === "no"
+                  ? "bg-slate-800 text-white border-slate-800"
+                  : "bg-[#FAF7F2] text-slate-600 border-slate-200"
+              }`}
             >
-              <option value="carne">Menu Carne / Tradizionale</option>
-              <option value="pesce">Menu Pesce</option>
-              <option value="vegetariano">Menu Vegetariano / Vegano</option>
-              <option value="bimbi">Menu Bambini</option>
-            </select>
+              Non Potrò Esserci 😔
+            </button>
           </div>
+        </div>
 
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-[#4A3D39] uppercase tracking-wider mb-2">
-              Allergie o Intolleranze Alimentari
-            </label>
-            <textarea
-              rows={2}
-              value={dietaryNotes}
-              onChange={(e) => setDietaryNotes(e.target.value)}
-              placeholder="Es. Celiachia, intolleranza al lattosio..."
-              className="w-full bg-[#FAF7F2] border border-[#D8CBB7] rounded-xl px-4 py-3 text-[#4A3D39] text-xs focus:outline-none"
-            />
-          </div>
-        </>
-      )}
+        {attending === "yes" && (
+          <>
+            <div>
+              <label className="block text-xs font-bold text-[#1E293B] mb-1">Numero Partecipanti</label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={guestCount}
+                onChange={(e) => setGuestCount(parseInt(e.target.value) || 1)}
+                className="w-full p-3 rounded-xl border border-slate-300 text-xs bg-[#FAF7F2]"
+              />
+            </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-3.5 rounded-xl bg-[#8B1E24] text-[#FAF7F2] font-bold text-xs uppercase tracking-widest hover:bg-[#6E1216] transition-all shadow-md flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50 mt-4"
-      >
-        <Send className="w-3.5 h-3.5" />
-        {loading ? 'Inviando...' : 'Invia Conferma'}
-      </button>
-    </form>
+            <div>
+              <label className="block text-xs font-bold text-[#1E293B] mb-1">Preferenza Menu</label>
+              <select
+                value={menuPreference}
+                onChange={(e) => setMenuPreference(e.target.value)}
+                className="w-full p-3 rounded-xl border border-slate-300 text-xs bg-[#FAF7F2]"
+              >
+                <option value="carne">Menu Tradizionale (Carne/Pesce)</option>
+                <option value="vegetariano">Menu Vegetariano</option>
+                <option value="vegano">Menu Vegano</option>
+                <option value="bambini">Menu Bambini</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#1E293B] mb-1">Allergie o Intolleranze Alimentari</label>
+              <textarea
+                rows={2}
+                value={dietaryNotes}
+                onChange={(e) => setDietaryNotes(e.target.value)}
+                placeholder="es. Celiachia, intolleranza al lattosio..."
+                className="w-full p-3 rounded-xl border border-slate-300 text-xs bg-[#FAF7F2] resize-none"
+              />
+            </div>
+          </>
+        )}
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full py-3.5 bg-[#D4AF37] text-slate-900 font-bold rounded-xl text-xs uppercase tracking-widest hover:bg-amber-400 transition shadow-md flex items-center justify-center gap-2"
+        >
+          {isLoading ? "Invio in corso..." : "Invia Conferma Partecipazione 🚀"}
+        </button>
+      </form>
+    </div>
   );
 }
