@@ -13,12 +13,13 @@ import Marquee from "@/components/Marquee";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import KineticGrid from "@/components/ui/kinetic-grid";
 import { ShoppingBag, PartyPopper, MapPin } from "lucide-react";
+import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 
 function DynamicInvitationContent({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
   const isDemo2 = slug === "francesca-e-luca";
 
-  // DATI DINAMICI (Legge dall'URL trasmesso da AgencyStudio o usa i default)
+  // DATI DINAMICI DALL'URL TRASMESSO DA AGENCY STUDIO
   const day = searchParams.get("day") || (isDemo2 ? "12" : "24");
   const month = searchParams.get("month") || (isDemo2 ? "SETTEMBRE" : "MAGGIO");
   const year = searchParams.get("year") || "2026";
@@ -26,6 +27,10 @@ function DynamicInvitationContent({ slug }: { slug: string }) {
   const locationName = searchParams.get("location") || (isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como");
   const welcomePhrase = searchParams.get("phrase") || (isDemo2 ? "Un grande amore sotto le stelle." : "Due anime, un solo destino. Una storia scritta nel cuore.");
   const audioFromUrl = searchParams.get("audio");
+  const paletteIdxParam = searchParams.get("palette");
+  
+  const paletteIdx = paletteIdxParam ? parseInt(paletteIdxParam, 10) : 0;
+  const activePalette = DRESS_CODE_PALETTES[paletteIdx] || DRESS_CODE_PALETTES[0];
 
   const weddingDate = `${day} ${month} ${year}`;
 
@@ -35,21 +40,17 @@ function DynamicInvitationContent({ slug }: { slug: string }) {
       ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
       : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
 
-  const dressCodeColors = isDemo2
-    ? ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"]
-    : ["#FAF7F2", "#D4AF37", "#E5DACB", "#1E293B", "#8B1E24"];
-
   return (
     <div className={`min-h-screen ${isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]"} font-sans pb-24 relative`}>
       {isDemo2 && <KineticGrid className="fixed inset-0 pointer-events-none opacity-20 z-0" />}
 
-      {/* 1. BUSTA CON VERA CERALACCA */}
+      {/* BUSTA CON VERA CERALACCA */}
       <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "E&D"} />
 
-      {/* 2. PLAYER MUSICALE FISSO */}
+      {/* PLAYER MUSICALE FISSO */}
       <AudioPlayer audioUrl={customAudioUrl} songTitle={`Brano Inedito per ${coupleNames} — FF Edizioni`} />
 
-      {/* 3. MARQUEE SCORREVOLE */}
+      {/* MARQUEE SCORREVOLE */}
       <div className="relative z-10 my-2">
         <Marquee text="Evviva gli Sposi! 🎉 • Vi aspettiamo per festeggiare insieme • Un giorno unico ed indimenticabile •" />
       </div>
@@ -89,7 +90,7 @@ function DynamicInvitationContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* LOCATION MAPPA & INDICAZIONI GRATUITE */}
+      {/* LOCATION MAPPA & INDICAZIONI STRADALI GOOGLE MAPS */}
       <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
         <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-3">
           <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Location &amp; Indicazioni Stradali</h3>
@@ -107,12 +108,13 @@ function DynamicInvitationContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* DRESS CODE */}
+      {/* DRESS CODE CON ESATTA PALETTE MULTI-COLORE DALL'URL */}
       <section className="py-10 px-6 max-w-2xl mx-auto text-center relative z-10">
         <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
           <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-2">Dress Code &amp; Palette Colori</h3>
+          <p className="text-xs text-slate-500 mb-3">{activePalette.name}</p>
           <div className="flex justify-center items-center gap-3 my-4">
-            {dressCodeColors.map((color, idx) => (
+            {activePalette.colors.map((color, idx) => (
               <div key={idx} className="w-8 h-8 rounded-full border-2 border-slate-200 shadow-md transform hover:scale-110 transition" style={{ backgroundColor: color }} />
             ))}
           </div>
