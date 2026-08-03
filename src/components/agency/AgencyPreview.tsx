@@ -7,6 +7,7 @@ import { Sparkles, MapPin, Store } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
+import { DRESS_CODE_PALETTES } from "./AgencyConfigurator";
 
 export interface PartnerStore {
   id: string;
@@ -26,6 +27,7 @@ interface AgencyPreviewProps {
   locationAddress: string;
   welcomePhrase: string;
   dressCodeNotes: string;
+  selectedPaletteIdx: number;
   partnerStores: PartnerStore[];
   modules: Record<string, boolean>;
   audioUrl: string;
@@ -42,10 +44,13 @@ export default function AgencyPreview({
   locationAddress,
   welcomePhrase,
   dressCodeNotes,
+  selectedPaletteIdx,
   partnerStores,
   modules,
   audioUrl,
 }: AgencyPreviewProps) {
+  const activePalette = DRESS_CODE_PALETTES[selectedPaletteIdx] || DRESS_CODE_PALETTES[0];
+
   // Genera URL dinamico con tutti i parametri per sincronizzare il Fullscreen
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
@@ -55,7 +60,7 @@ export default function AgencyPreview({
     coupleNames
   )}&location=${encodeURIComponent(locationName)}&phrase=${encodeURIComponent(
     welcomePhrase
-  )}&audio=${encodeURIComponent(audioUrl)}`;
+  )}&audio=${encodeURIComponent(audioUrl)}&palette=${selectedPaletteIdx}`;
 
   return (
     <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[340px]">
@@ -102,32 +107,37 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* LOCATION & MAPPA GOOGLE / INDICAZIONI GRATUITE */}
+        {/* LOCATION & MAPPA GOOGLE / INDICAZIONI IDENTICHE A FULLSCREEN */}
         {modules.locationMappa && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
-            <span className="text-[10px] font-bold text-[#D4AF37] uppercase block">📍 Location &amp; Indicazioni</span>
+            <span className="text-[10px] font-bold text-[#D4AF37] uppercase block">📍 Location &amp; Indicazioni Stradali</span>
             <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
             <p className="text-[10px] text-slate-500 mb-2">{locationAddress}</p>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationAddress)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationAddress || locationName)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg hover:bg-slate-800"
             >
-              <MapPin className="w-3 h-3 text-[#D4AF37]" /> Indicazioni Mappa ↗
+              <MapPin className="w-3 h-3 text-[#D4AF37]" /> Indicazioni Stradali su Google Maps ↗
             </a>
           </div>
         )}
 
-        {/* DRESS CODE */}
+        {/* DRESS CODE CON ESATTA PALETTE MULTI-COLORE SELEZIONATA */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">Dress Code &amp; Palette</span>
             <p className="text-[10px] text-slate-500 mb-2">{dressCodeNotes}</p>
+            <div className="flex justify-center gap-1.5">
+              {activePalette.colors.map((c, i) => (
+                <div key={i} className="w-5 h-5 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
+              ))}
+            </div>
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI */}
+        {/* NEGOZI CONVENZIONATI MULTIPLI */}
         {modules.negoziConvenzionati && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">🏪 Negozi Convenzionati</span>
