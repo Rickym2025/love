@@ -1,205 +1,146 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Link from "next/link";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import AudioPlayer from "@/components/AudioPlayer";
-import PhotoWallSection from "@/components/PhotoWallSection";
 import ScratchDate from "@/components/ScratchDate";
-import { Calendar, MapPin, Heart, Clock, Gift, Sparkles, Check } from "lucide-react";
+import RsvpForm from "@/components/RsvpForm";
+import { Calendar, MapPin, Gift, ShoppingBag, Sparkles, PartyPopper } from "lucide-react";
 
-export default function WeddingPage({ params }: { params: { slug: string } }) {
+export default function InvitationPage({ params }: { params: { slug: string } }) {
   const isDemo2 = params?.slug === "francesca-e-luca";
 
-  // Nomi e Dati Dinamici della Coppia
-  const coupleNames = isDemo2 ? "Francesca & Luca" : "Zohan & Rose";
-  const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "27 SETTEMBRE 2026";
-  const locationName = isDemo2 ? "Villa Borghese, Puerto Vallarta" : "Islamic Center of Melville";
+  // Dati Demo 1 (Elena & Davide) e Demo 2 (Francesca & Luca)
+  const coupleNames = isDemo2 ? "Francesca & Luca" : "Elena & Davide";
+  const weddingDate = isDemo2 ? "12 SETTEMBRE 2026" : "24 MAGGIO 2026";
+  const locationName = isDemo2 ? "Villa Borromeo, Stresa" : "Villa del Balbianello, Lago di Como";
+  const themeBg = isDemo2 ? "bg-[#F0F7FF] text-[#1976D2]" : "bg-[#FAF7F2] text-[#1E293B]";
+  const goldAccent = "#D4AF37";
 
-  // Countdown State
-  const [timeLeft, setTimeLeft] = useState({ days: 129, hours: 14, minutes: 22, seconds: 45 });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        return { ...prev, seconds: 59, minutes: prev.minutes - 1 };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  // Palette Cerchi Colore Dress Code
+  const dressCodeColors = isDemo2
+    ? ["#E0F2FE", "#BAE6FD", "#7DD3FC", "#38BDF8", "#0284C7"]
+    : ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1E293B] font-sans selection:bg-[#D4AF37] selection:text-white pb-20">
-      
-      {/* 1. BUSTA D'EPOCA CON CERALACCA */}
-      <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "R&Z"} />
+    <div className={`min-h-screen ${themeBg} font-sans pb-24 selection:bg-[#D4AF37] selection:text-white`}>
+      {/* 1. BUSTA D'EPOCO CON VERA CERALACCA /wax-seal.png */}
+      <EnvelopeWax coupleNames={coupleNames} weddingDate={weddingDate} initials={isDemo2 ? "F&L" : "E&D"} />
 
-      {/* 2. PLAYER MUSICALE FISSO */}
-      <AudioPlayer songTitle={`Brano d'Autore Inedito — ${coupleNames}`} />
+      {/* 2. AUDIO PLAYER UNICO */}
+      <AudioPlayer songTitle={`Brano Inedito per ${coupleNames} — FF Edizioni`} />
 
-      {/* ─── SEZIONE 1: HERO ARCO ROMANO E LAGO CON CIGNI ANIMATI ─── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-between p-6 text-center bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px]">
-        
-        {/* Cornice Arco Architettonico */}
-        <div className="w-full max-w-xl mx-auto border-8 border-double border-[#D4AF37]/40 rounded-t-[180px] p-8 bg-gradient-to-b from-[#FFFDF9] to-[#FAF7F2] shadow-2xl mt-6">
-          <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#D4AF37] block mb-2">
-            IL GIORNO DEL NOSTRO MATRIMONIO
+      {/* ─── HERO ANNOUNCEMENT ─── */}
+      <section className="py-20 px-6 max-w-3xl mx-auto text-center">
+        <div className="border-4 border-double border-[#D4AF37]/40 rounded-t-[180px] p-8 md:p-14 bg-white/80 shadow-2xl backdrop-blur-sm">
+          <span className="text-[10px] tracking-[0.3em] font-bold text-[#D4AF37] uppercase block mb-2">
+            ✦ PARTECIPAZIONE DI MATRIMONIO ✦
           </span>
-          <p className="text-sm font-serif italic text-slate-500 mb-4">{weddingDate}</p>
-
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-[#1E293B] tracking-wide my-4">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold text-[#1E293B] tracking-wide my-4">
             {coupleNames}
           </h1>
-
-          <p className="text-xs tracking-[0.2em] uppercase text-[#D4AF37] font-bold mt-6 animate-pulse">
-            Scorri verso il basso ↓
-          </p>
-
-          {/* LAGO CON CIGNI ANIMATI IN CSS (Come Immagine 2) */}
-          <div className="relative w-full h-64 mt-8 rounded-b-2xl overflow-hidden border border-[#D4AF37]/30 shadow-inner bg-gradient-to-b from-sky-100 via-amber-50 to-blue-200">
-            {/* Specchio d'Acqua Animato */}
-            <div className="absolute inset-0 opacity-60 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-100/50 via-sky-200/30 to-blue-300/40 animate-pulse" />
-
-            {/* CIGNI CHE GALLEGGIANO (ANIMAZIONE CSS) */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 animate-[float_4s_ease-in-out_infinite]">
-              {/* Cigno Sinistra */}
-              <div className="text-4xl transform -scale-x-100 drop-shadow-md">🦢</div>
-              {/* Cuore Sospeso */}
-              <div className="text-xs text-rose-400 animate-ping">❤️</div>
-              {/* Cigno Destra */}
-              <div className="text-4xl drop-shadow-md">🦢</div>
-            </div>
-
-            {/* Riflesso sull'Acqua */}
-            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-2 bg-white/40 blur-sm rounded-full animate-pulse" />
-          </div>
+          <p className="text-sm font-serif italic text-slate-500 mb-6">{weddingDate}</p>
+          <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">{locationName}</p>
         </div>
       </section>
 
-      {/* ─── SEZIONE 2: DEDICA SU CARTA STRAPPATA E COUNTDOWN ─── */}
-      <section className="py-16 px-6 max-w-3xl mx-auto text-center">
-        {/* Scheda Carta Strappata Vintage */}
-        <div 
-          className="bg-[#FFFDF9] p-8 md:p-12 rounded-3xl border border-[#D4AF37]/40 shadow-xl relative"
-          style={{
-            boxShadow: "0 20px 40px rgba(212,175,55,0.08)"
-          }}
-        >
-          <span className="text-xs font-serif italic text-[#D4AF37] text-lg block mb-2">
-            "Due Anime, Un Solo Destino. Una vita scritta nel cuore."
+      {/* ─── MODULO: GRATTIAMO LA DATA (SCRATCH DATE) ─── */}
+      <section className="py-12 px-6 max-w-xl mx-auto text-center">
+        <div className="bg-white p-6 rounded-3xl border border-[#D4AF37]/30 shadow-lg">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] block mb-2">
+            🎰 Gratta col Dito per Scoprire la Data!
           </span>
-          <p className="text-sm text-slate-600 font-serif leading-relaxed my-4">
-            Cari parenti e amici, unitevi a noi per una serata piena d'amore, gioia, benedizioni e ricordi indimenticabili mentre iniziamo il nostro per sempre insieme.
+          <ScratchDate day="24" month="MAGGIO" year="2026" />
+        </div>
+      </section>
+
+      {/* ─── PROGRAMMA DELLA GIORNATA ─── */}
+      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+        <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md">
+          <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6">Programma della Giornata</h3>
+          <div className="space-y-4 text-xs font-medium text-slate-700">
+            <p>16:30 — Arrivo degli Invitati presso {locationName}</p>
+            <p>17:30 — Cerimonia di Nozze e Scambio degli Anelli</p>
+            <p>19:00 — Aperitivo di Benvenuto vista Lago</p>
+            <p>20:30 — Cena di Galà e Taglio della Torta</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── DRESS CODE CON PALETTE CERCHI COLORE ─── */}
+      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+        <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md">
+          <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-2">Dress Code & Palette Colori</h3>
+          <p className="text-xs text-slate-600 mb-4">
+            Saremmo felici se il vostro outfit fosse in armonia con le tonalità del nostro matrimonio:
+          </p>
+          {/* Cerchi Colore */}
+          <div className="flex justify-center items-center gap-3 my-4">
+            {dressCodeColors.map((color, idx) => (
+              <div
+                key={idx}
+                className="w-8 h-8 rounded-full border-2 border-slate-200 shadow-md transform hover:scale-110 transition"
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── LISTA NOZZE AMAZON AFFILIATO & IBAN ─── */}
+      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
+        <div className="bg-white p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-4">
+          <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Lista Nozze & Regali</h3>
+          <p className="text-xs text-slate-600">
+            La vostra presenza è per noi il dono più grande. Se desiderate farci un pensiero, potete consultare la nostra Lista Nozze Amazon o contribuire al nostro Viaggio di Nozze:
           </p>
 
-          {/* COUNTDOWN TIMER VINTAGE ORO (Come Immagine 3) */}
-          <div className="pt-8 border-t border-[#D4AF37]/20 mt-8">
-            <h3 className="font-serif italic text-2xl text-[#1E293B] mb-6">La Celebrazione Inizia Tra</h3>
-            <div className="grid grid-cols-4 gap-3 max-w-md mx-auto">
-              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
-                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.days}</span>
-                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Giorni</span>
-              </div>
-              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
-                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.hours}</span>
-                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Ore</span>
-              </div>
-              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
-                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.minutes}</span>
-                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Minuti</span>
-              </div>
-              <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30">
-                <span className="font-serif text-2xl font-bold text-[#D4AF37]">{timeLeft.seconds}</span>
-                <span className="block text-[10px] font-bold uppercase text-slate-400 mt-1">Secondi</span>
-              </div>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+            {/* Bottone Amazon Affiliato (tag zero100store-21) */}
+            <a
+              href="https://www.amazon.it/baby-reg/homepage?tag=zero100store-21"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-[#FF9900] text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-amber-500 transition shadow-md"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Lista Nozze Amazon ↗
+            </a>
+
+            {/* IBAN Sposi */}
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] flex items-center justify-center">
+              IBAN: IT60 X 0542 8111 0000 0012 3456
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── SEZIONE 3: PROGRAMMA ORARI DELLA GIORNATA (TIMELINE) ─── */}
-      <section className="py-16 px-6 max-w-2xl mx-auto text-center">
-        <div className="bg-[#FFFDF9] p-8 rounded-3xl border border-[#D4AF37]/30 shadow-lg">
-          <h2 className="font-serif text-3xl text-[#1E293B] mb-8 italic">Programma della Giornata</h2>
-
-          <div className="space-y-6 relative before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-[#D4AF37]/30">
-            <div className="flex items-center justify-between relative z-10">
-              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">17:00</span>
-              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Arrivo Ospiti</span>
-            </div>
-
-            <div className="flex items-center justify-between relative z-10">
-              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">18:00</span>
-              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Cerimonia di Nozze</span>
-            </div>
-
-            <div className="flex items-center justify-between relative z-10">
-              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">19:00</span>
-              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Aperitivo sul Lago</span>
-            </div>
-
-            <div className="flex items-center justify-between relative z-10">
-              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">20:00</span>
-              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Cena di Galà</span>
-            </div>
-
-            <div className="flex items-center justify-between relative z-10">
-              <span className="font-serif text-xl font-bold text-[#D4AF37] w-1/3 text-right pr-4">22:00</span>
-              <div className="w-4 h-4 rounded-full bg-[#D4AF37] border-4 border-white shadow-md" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E293B] w-1/3 text-left pl-4">Taglio Torta & Party</span>
-            </div>
-          </div>
-        </div>
+      {/* ─── MODULO CONFERMA PARTECIPAZIONE (RSVP) ─── */}
+      <section className="py-12 px-6">
+        <RsvpForm coupleNames={coupleNames} />
       </section>
 
-      {/* ─── SEZIONE 4: LOCATION & MAPPA ─── */}
-      <section className="py-12 px-6 max-w-3xl mx-auto text-center">
-        <h2 className="font-serif text-3xl text-[#1E293B] mb-2 italic">La Location</h2>
-        <p className="text-xs uppercase font-bold text-[#D4AF37] tracking-widest mb-6">{locationName}</p>
+      {/* ─── BANNER ACCESSO ALLA PAGINA FESTA GIOCHI & PHOTO WALL ─── */}
+      <section className="py-12 px-6 max-w-xl mx-auto text-center">
+        <div className="bg-[#1E293B] text-white p-8 rounded-3xl shadow-2xl border border-[#D4AF37] space-y-4">
+          <span className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">
+            ✦ PARTY HUB GIORNO DELLE NOZZE ✦
+          </span>
+          <h3 className="font-serif text-2xl font-bold">Partecipa alla Festa!</h3>
+          <p className="text-xs text-slate-300">
+            Il giorno del matrimonio accedi all'Hub Giochi (Love Quiz, Puzzle Foto Sposi) e al Guest Photo Wall per proiettare le tue foto dal vivo!
+          </p>
 
-        <div className="rounded-3xl overflow-hidden border-2 border-[#D4AF37]/40 shadow-xl bg-white p-2">
-          <iframe
-            title="Mappa Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2793.821!2d9.2558!3d45.9872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4784360e22700001%3A0x7d28734208a5d3f1!2sVilla%20del%20Balbianello!5e0!3m2!1sit!2sit!4v1650000000000"
-            className="w-full h-80 rounded-2xl border-0"
-            loading="lazy"
-          />
+          <Link
+            href={`/${params.slug}/festa`}
+            className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D4AF37] text-slate-900 font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg"
+          >
+            <PartyPopper className="w-4 h-4" />
+            Entra nella Pagina della Festa 🎉
+          </Link>
         </div>
       </section>
-
-      {/* ─── SEZIONE 5: DRESS CODE & LISTA NOZZE ─── */}
-      <section className="py-12 px-6 max-w-2xl mx-auto text-center">
-        <div className="bg-[#FFFDF9] p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-6">
-          <div>
-            <h3 className="font-serif text-2xl text-[#1E293B] italic">Dress Code & Palette Colori</h3>
-            <p className="text-xs text-slate-600 mt-2">
-              Chiediamo gentilmente agli ospiti di indossare abiti eleganti in toni pastello ed evitare i colori rosso scuro e bordeaux.
-            </p>
-          </div>
-
-          <div className="pt-4 border-t border-[#D4AF37]/20">
-            <h3 className="font-serif text-2xl text-[#1E293B] italic">Preferenza Regali / Lista Nozze</h3>
-            <p className="text-xs text-slate-600 mt-2">
-              Il regalo più bello è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze, è disponibile l'IBAN o la Lista Nozze Amazon.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── SEZIONE 6: GUEST PHOTO WALL DELLA FESTA ─── */}
-      <PhotoWallSection coupleNames={coupleNames} />
-
-      {/* Keyframe per l'animazione dei Cigni */}
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-8px) rotate(1deg); }
-        }
-      `}</style>
     </div>
   );
 }
