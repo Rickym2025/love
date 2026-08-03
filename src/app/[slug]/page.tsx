@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import RsvpForm from "@/components/RsvpForm";
 import AudioPlayer from "@/components/AudioPlayer";
 import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
+import PartnerStores from "@/components/PartnerStores";
 import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
 
 const DRESS_CODE_PHOTOS: Record<number, string[]> = {
@@ -86,54 +87,59 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"
       }`}
     >
+      {/* 1. AUDIO PLAYER PERSISTENTE */}
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
+      {/* 2. DEDICHE SCORREVOLI MARQUEE */}
       {modules.dedicheMarquee && <Marquee text={marqueeText} />}
 
+      {/* 3. NUVOLE 3D VOLUMETRICHE */}
       {modules.nuvole3d && <PartingClouds />}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         
-        {/* TEMPLATE A: BUSTA AVORIO CON VERA CERALACCA LOGO */}
+        {/* TEMPLATE A: BUSTA CON VERA CERALACCA WAX-SEAL.PNG */}
         {!isTemplateB && modules.busta3d && (
-          <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/30 text-center shadow-lg relative">
-            <span className="text-[10px] font-bold text-[#B8860B] uppercase tracking-widest block mb-1">
+          <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/40 text-center shadow-lg relative">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
               ✦ Partecipazione Digitale d&apos;Autore
             </span>
             <h2 className="font-serif font-bold text-2xl text-[#1E293B]">{coupleNames}</h2>
             <div className="relative w-20 h-20 mx-auto my-3 drop-shadow-md">
-              <Image src="/logo.png" alt="Ceralacca Logo" fill className="object-contain" priority />
+              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
             </div>
             <p className="text-xs text-slate-600 font-serif">Siete invitati a celebrare il nostro matrimonio</p>
           </div>
         )}
 
-        {/* HERO SPOSI AD ALTO CONTRASTO CROMATICO */}
+        {/* HERO INTRODUZIONE AD ALTO CONTRASTO CROMATICO */}
         <div className="text-center space-y-3 pt-4">
-          <span className="text-xs tracking-widest uppercase font-bold text-[#B8860B]">
+          <span className="text-xs tracking-widest uppercase font-bold text-[#8B6508]">
             Wedding Celebration
           </span>
-          <h1 className="text-4xl font-serif font-bold text-[#1E293B] drop-shadow-sm">{coupleNames}</h1>
-          <p className="text-sm font-bold text-slate-600">
+          <h1 className="text-4xl font-serif font-bold text-[#1E293B] drop-shadow-xs">{coupleNames}</h1>
+          <p className="text-sm font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <blockquote className="text-sm italic font-serif text-slate-700 opacity-90 px-4 mt-2">
+          <blockquote className="text-sm italic font-serif text-[#1E293B] opacity-90 px-4 mt-2 font-medium">
             &quot;{welcomePhrase}&quot;
           </blockquote>
         </div>
 
-        {/* COUNTDOWN TIMER REALE (TEMPLATE A) */}
+        {/* TEMPLATE A: COUNTDOWN TIMER REALE */}
         {!isTemplateB && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-[#D4AF37]/30 text-center space-y-2">
-            <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block">
-              ⏳ Il grande giorno inizia tra
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-[#D4AF37]/40 text-center space-y-2">
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
+              The Celebration Begins In
             </span>
             <div className="flex justify-center gap-4 text-[#1E293B] font-serif font-bold text-xl">
-              <div><span className="block text-2xl text-[#B8860B]">129</span><span className="text-[10px] uppercase text-slate-500 font-sans">Giorni</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Days</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#B8860B]">14</span><span className="text-[10px] uppercase text-slate-500 font-sans">Ore</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">00</span><span className="text-[10px] uppercase text-slate-600 font-sans">Hours</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#B8860B]">35</span><span className="text-[10px] uppercase text-slate-500 font-sans">Minuti</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minutes</span></div>
+              <span>:</span>
+              <div><span className="block text-2xl text-[#8B6508]">17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Seconds</span></div>
             </div>
           </div>
         )}
@@ -141,32 +147,32 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         {/* GRATTIAMO LA DATA */}
         {modules.grattaData && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block">
-              🎰 Scopri la Data Speciale
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
+              🎰 Scratch to reveal the date
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA */}
+        {/* PROGRAMMA DELLA GIORNATA (SCHEDULE OF EVENTS) */}
         <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-          <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block">
+          <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
             Schedule of Events
           </span>
           <div className="space-y-2 text-sm text-[#1E293B] font-serif pt-1">
-            <p><strong className="text-[#B8860B] font-sans">16:30</strong> — Opening of the doors</p>
-            <p><strong className="text-[#B8860B] font-sans">17:00</strong> — Ceremony</p>
-            <p><strong className="text-[#B8860B] font-sans">18:00</strong> — Cocktail and dancing time</p>
-            <p><strong className="text-[#B8860B] font-sans">20:00</strong> — Dinner</p>
-            <p><strong className="text-[#B8860B] font-sans">21:00</strong> — Party and Open Bar</p>
+            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Opening of the doors</p>
+            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Ceremony</p>
+            <p><strong className="text-[#8B6508] font-sans">18:00</strong> — Cocktail and dancing time</p>
+            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Dinner</p>
+            <p><strong className="text-[#8B6508] font-sans">21:00</strong> — Party and Open Bar</p>
           </div>
         </div>
 
         {/* LOCATION & MAPPA GOOGLE INTEGRATA + PULSANTE ESTERNO */}
         {modules.locationMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block flex items-center justify-center gap-1.5">
-              <MapPin className="w-4 h-4 text-[#B8860B]" /> Location del Matrimonio
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
+              <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
             </span>
             <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
             <p className="text-xs text-slate-600">{locationAddress}</p>
@@ -191,7 +197,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors shadow-md"
             >
-              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Indicazioni Stradali su Google Maps ↗
+              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Open in Maps ↗
             </a>
           </div>
         )}
@@ -199,10 +205,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         {/* DRESS CODE CON GALLERIA OUTFIT SCORREVOLE */}
         {modules.codiceAbbigliamento && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-4">
-            <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block">
-              🎨 Dress Code &amp; Palette Cromatica
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+              Dress Code &amp; Palette
             </span>
-            <p className="text-xs text-slate-600 font-serif">{dressCodeNotes}</p>
+            <p className="text-xs text-slate-700 font-serif leading-relaxed">{dressCodeNotes}</p>
 
             {/* PALETTE COLORI */}
             <div className="flex justify-center gap-2">
@@ -215,10 +221,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT SCORREVOLE */}
+            {/* GALLERIA OUTFIT SCORREVOLE ORIZZONTALE (scroll ➔) */}
             <div className="pt-2">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block mb-2">
-                Esempi di Outfit Consigliati (Scorri ➔)
+              <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
+                Outfit Inspiration (scroll ➔)
               </span>
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
                 {outfitPhotos.map((imgUrl, idx) => (
@@ -231,14 +237,19 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* LISTA NOZE */}
+        {/* NEGOZI CONVENZIONATI */}
+        {modules.negoziConvenzionati && (
+          <PartnerStores stores={[]} />
+        )}
+
+        {/* LISTA NOZZE & IBAN */}
         {modules.listaNozzeAmazon && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#B8860B] uppercase tracking-wider block flex items-center justify-center gap-1.5">
-              <Gift className="w-4 h-4 text-[#B8860B]" /> Lista Nozze &amp; Coordinate
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
+              <Gift className="w-4 h-4 text-[#8B6508]" /> Gift Preference &amp; IBAN
             </span>
-            <p className="text-xs text-slate-600">
-              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio:
+            <p className="text-xs text-slate-600 font-serif">
+              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
             </p>
             <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">
               {customIban}
@@ -246,7 +257,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* HUB FESTA */}
+        {/* HUB FESTA (QUIZ, PUZZLE, PHOTO WALL) */}
         {modules.hubGiochiFesta && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -264,7 +275,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP CON CERALACCA */}
+        {/* MODULO RSVP */}
         {modules.confermaRsvp && (
           <div className="pt-2">
             <RsvpForm coupleNames={coupleNames} />
@@ -284,7 +295,7 @@ export default function InvitationPage({ params }: { params?: { slug?: string } 
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#B8860B] font-serif font-bold text-sm">
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
           Caricamento Invito in corso...
         </div>
       }
