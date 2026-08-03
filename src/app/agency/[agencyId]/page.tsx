@@ -9,11 +9,11 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
-  // Dimensioni Esplicite per evitare collassi CSS
+  // Larghezze Pannelli (Sidebar e Preview fixed/resizable, Configuratore FLEX-1 CENTRALE)
   const [sidebarWidth, setSidebarWidth] = useState(240);
-  const [configuratorWidth, setConfiguratorWidth] = useState(440);
+  const [previewWidth, setPreviewWidth] = useState(380);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
-  const [isResizingConfigurator, setIsResizingConfigurator] = useState(false);
+  const [isResizingPreview, setIsResizingPreview] = useState(false);
 
   // Stati Configurazione Invito
   const [activeTab, setActiveTab] = useState("create");
@@ -56,24 +56,24 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
-  // Gestore Mouse per Trascinamento Ridimensionabile
+  // Gestore Ridimensionamento Mouse
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(180, Math.min(340, e.clientX));
+        const newWidth = Math.max(180, Math.min(320, e.clientX));
         setSidebarWidth(newWidth);
-      } else if (isResizingConfigurator) {
-        const newWidth = Math.max(300, Math.min(650, e.clientX - sidebarWidth));
-        setConfiguratorWidth(newWidth);
+      } else if (isResizingPreview) {
+        const newWidth = Math.max(320, Math.min(550, window.innerWidth - e.clientX));
+        setPreviewWidth(newWidth);
       }
     };
 
     const handleMouseUp = () => {
       setIsResizingSidebar(false);
-      setIsResizingConfigurator(false);
+      setIsResizingPreview(false);
     };
 
-    if (isResizingSidebar || isResizingConfigurator) {
+    if (isResizingSidebar || isResizingPreview) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     }
@@ -82,11 +82,11 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizingSidebar, isResizingConfigurator, sidebarWidth]);
+  }, [isResizingSidebar, isResizingPreview]);
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* COLONNA 1: SIDEBAR (240px) */}
+      {/* 1. COLONNA SINISTRA: SIDEBAR AGENZIA */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -95,7 +95,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE 1 */}
+      {/* SEPARATORE TRASCINABILE 1 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -105,10 +105,11 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* COLONNA 2: CONFIGURATORE CENTRALE (440px - Crema Avorio) */}
-      <div style={{ width: `${configuratorWidth}px` }} className="flex-shrink-0 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
+      {/* 2. COLONNA CENTRALE: CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
+      <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         <AgencyConfigurator
           activeTab={activeTab}
+          setActiveTab={setActiveTab}
           selectedTemplate={selectedTemplate}
           setSelectedTemplate={setSelectedTemplate}
           selectedColorScheme={selectedColorScheme}
@@ -148,18 +149,21 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE 2 */}
+      {/* SEPARATORE TRASCINABILE 2 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
-          setIsResizingConfigurator(true);
+          setIsResizingPreview(true);
         }}
         className="w-1.5 bg-[#D4AF37]/30 hover:bg-[#D4AF37] cursor-col-resize flex-shrink-0 h-full z-30 transition-colors"
-        title="Trascina per ridimensionare Configuratore"
+        title="Trascina per ridimensionare Preview"
       />
 
-      {/* COLONNA 3: PREVIEW SMARTPHONE LIVE (Spazio Rimanente) */}
-      <div className="flex-1 h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4">
+      {/* 3. COLONNA DESTRE: PREVIEW LIVE SMARTPHONE */}
+      <div
+        style={{ width: `${previewWidth}px` }}
+        className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
+      >
         <AgencyPreview
           selectedTemplate={selectedTemplate}
           selectedColorScheme={selectedColorScheme}
