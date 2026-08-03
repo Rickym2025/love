@@ -77,7 +77,8 @@ export default function AgencyPreview({
       : WELCOME_PHRASE_PRESETS[Number(selectedPhrasePreset) || 0]) ||
     "Benvenuti al nostro matrimonio";
 
-  // Genera URL dinamico con tutti i parametri per sincronizzare il Fullscreen
+  const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
+
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
   }?day=${encodeURIComponent(weddingDateDay)}&month=${encodeURIComponent(
@@ -89,10 +90,10 @@ export default function AgencyPreview({
   )}&audio=${encodeURIComponent(audioUrl)}&palette=${selectedPaletteIdx}`;
 
   return (
-    <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[340px]">
+    <div className="flex-1 p-6 bg-[#1E293B] flex flex-col items-center justify-center min-w-[340px] h-screen overflow-y-auto">
       <div className="flex justify-between items-center w-full max-w-[340px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4" /> VERO Invito Live Sincronizzato
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> VERO Invito Live Sincronizzato
         </span>
         <Link
           href={fullscreenDynamicUrl}
@@ -103,7 +104,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
+      {/* MOCKUP SMARTPHONE */}
       <div
         className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
           selectedTemplate === "B" || selectedColorScheme === "2"
@@ -111,7 +112,7 @@ export default function AgencyPreview({
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
-        {/* BUSTA D'EPOCA CON VERA CERALACCA */}
+        {/* BUSTA CERALACCA */}
         {modules.busta3d && (
           <div className="p-4 bg-[#F5EFE6] border-b border-[#D4AF37]/30 text-center relative shadow-sm">
             <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block mb-1">
@@ -127,7 +128,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* INTRO HERO */}
+        {/* HERO */}
         <div className="text-center pt-6 px-4">
           <span className="text-[10px] tracking-widest uppercase font-semibold text-[#D4AF37]">
             Wedding Day
@@ -152,28 +153,41 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* LOCATION & MAPPA GOOGLE / INDICAZIONI */}
+        {/* LOCATION CON MAPPA INTEGRATA + PULSANTE MAPS */}
         {modules.locationMappa && (
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase block">
               📍 Location &amp; Indicazioni Stradali
             </span>
             <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
-            <p className="text-[10px] text-slate-500 mb-2">{locationAddress}</p>
+            <p className="text-[10px] text-slate-500">{locationAddress}</p>
+
+            {/* MAPPA INTERATTIVA INTEGRATA DENTRO L'APP */}
+            <div className="w-full h-40 rounded-xl overflow-hidden border border-slate-200 my-2 relative">
+              <iframe
+                title="Mappa Location"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+              />
+            </div>
+
+            {/* PULSANTE ESTERNO PER GOOGLE MAPS */}
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                locationAddress || locationName
-              )}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg hover:bg-slate-800"
+              className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
             >
               <MapPin className="w-3 h-3 text-[#D4AF37]" /> Indicazioni Stradali su Google Maps ↗
             </a>
           </div>
         )}
 
-        {/* DRESS CODE CON ESATTA PALETTE MULTI-COLORE SELEZIONATA */}
+        {/* DRESS CODE */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">
@@ -192,7 +206,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI MULTIPLI */}
+        {/* NEGOZI CONVENZIONATI */}
         {modules.negoziConvenzionati && partnerStores && partnerStores.length > 0 && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase block mb-1">
@@ -213,7 +227,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* CONFERMA PARTECIPAZIONE RSVP */}
+        {/* RSVP */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
