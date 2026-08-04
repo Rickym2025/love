@@ -5,10 +5,10 @@ export interface PartnerStore {
   logoUrl: string;
 }
 
+// I 2 Brani Ufficiali dell'Ecosistema RM Studio
 export const AUDIO_TRACK_PRESETS = [
-  { name: "🎵 Colonna Sonora d'Autore 1 - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-1.mp3" },
-  { name: "🎵 Colonna Sonora d'Autore 2 - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-2.mp3" },
-  { name: "🎵 Marcia Nuziale Romantica - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-3.mp3" },
+  { name: "🎵 Demo 1 — Elena & Davide ('La Nostra Melodia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3" },
+  { name: "🎵 Demo 2 — Francesca & Luca ('Quella Fotografia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3" },
   { name: "🔗 Personalizzata (Inserisci Link MP3 sotto)", url: "" },
 ];
 
@@ -57,18 +57,19 @@ export const EVENT_THEME_PRESETS = [
   "Personalizzato (digita a mano)",
 ];
 
+// PALETTE COLORI MATRIMONIALI MORBIDE, ELEGANTI E TENUI
 export const DRESS_CODE_PALETTES = [
-  { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
-  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#D4AF37", "#B8860B", "#1E293B"] },
-  { id: "3", name: "Smeraldo & Salvia", colors: ["#F0FDF4", "#A7F3D0", "#34D399", "#059669", "#064E3B"] },
-  { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF1F2", "#FECDD3", "#FB7185", "#E11D48", "#881337"] },
-  { id: "5", name: "Blu Notte & Zaffiro", colors: ["#F0F9FF", "#93C5FD", "#3B82F6", "#1D4ED8", "#0F172A"] },
-  { id: "6", name: "Sabbia & Terracotta", colors: ["#FFF7ED", "#FED7AA", "#FB923C", "#EA580C", "#7C2D12"] },
-  { id: "7", name: "Lavanda & Lillà", colors: ["#F5F3FF", "#DDD6FE", "#A78BFA", "#7C3AED", "#4C1D95"] },
-  { id: "8", name: "Bianco & Minimal", colors: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8", "#0F172A"] },
+  { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"] },
+  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#E6C687", "#C5A059", "#2C261E"] },
+  { id: "3", name: "Salvia & Smeraldo Soft", colors: ["#F0F7F4", "#E2ECE9", "#A3C9A8", "#84B599", "#1C3A27"] },
+  { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF5F5", "#FCE7F0", "#F4ACB7", "#D88392", "#4A1521"] },
+  { id: "5", name: "Blu Zaffiro & Polvere", colors: ["#F0F4F8", "#D9E2EC", "#B0C4DE", "#486581", "#102A43"] },
+  { id: "6", name: "Sabbia & Terracotta Chiara", colors: ["#FFF8F0", "#F7EBDF", "#E8D3C3", "#C88D74", "#5C3828"] },
+  { id: "7", name: "Lavanda & Lillà Delicato", colors: ["#F7F5FC", "#EDE7F6", "#D8B4F8", "#A288E3", "#38215D"] },
+  { id: "8", name: "Bianco & Minimal Avorio", colors: ["#FFFFFF", "#FAF7F2", "#E2E8F0", "#8A92A6", "#1E293B"] },
 ];
 
-// Gallerie Unsplash Direct ad Alta Fedeltà Cromatica
+// FOTO OUTFIT UNSPLASH STRICTLY COORDINATE AI COLORI DELLA PALETTE
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
   0: [ // Pastello Romantico
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
@@ -78,7 +79,7 @@ export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
   ],
-  2: [ // Smeraldo & Salvia
+  2: [ // Salvia & Smeraldo
     "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
@@ -86,7 +87,7 @@ export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
   ],
-  4: [ // Blu Notte & Zaffiro
+  4: [ // Blu Zaffiro & Polvere
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
   ],
@@ -94,7 +95,7 @@ export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // LAVANDA & LILLÀ RIGOROSA (ESCLUSIVAMENTE VIOLA/LILLA)
+  6: [ // LAVANDA & LILLÀ RIGOROSA (RIGOROSAMENTE VIOLA/LILLA)
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
