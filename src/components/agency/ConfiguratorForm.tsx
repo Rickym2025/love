@@ -7,6 +7,7 @@ import {
   INTRO_START_PRESETS,
   DATE_DISPLAY_MODES,
   SCHEDULE_SCHEMAS,
+  RSVP_STYLES,
   EVENT_THEME_PRESETS,
   DRESS_CODE_PALETTES,
   AUDIO_TRACK_PRESETS,
@@ -22,6 +23,8 @@ export default function ConfiguratorForm(props: any) {
     setDateDisplayMode,
     scheduleSchema,
     setScheduleSchema,
+    rsvpStyle,
+    setRsvpStyle,
     eventThemePreset,
     setEventThemePreset,
     customEventTheme,
@@ -75,13 +78,13 @@ export default function ConfiguratorForm(props: any) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-      {/* 1. SELEZIONE TEMPLATE & EFFETTO START */}
-      <div className="space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
+      {/* SEZIONE 1: TEMPLATE & EFFETTO START */}
+      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+          1. Template Grafico Layout &amp; Effetto Iniziale (Start)
         </label>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -90,18 +93,18 @@ export default function ConfiguratorForm(props: any) {
             onClick={() => {
               setSelectedTemplate("A");
               setCoupleNames("Elena & Davide");
-              setIntroStart("arco");
+              setIntroStart("busta");
               setDateDisplayMode("countdown");
             }}
             className={`p-4 rounded-2xl border-2 text-left transition-all ${
               selectedTemplate === "A"
                 ? "border-[#D4AF37] bg-amber-50 shadow-md"
-                : "border-slate-300 bg-white hover:border-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-[#D4AF37]"
             }`}
           >
             <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
             <h4 className="font-serif font-bold text-sm text-[#1E293B]">Classico Romantico d&apos;Autore</h4>
-            <p className="text-[10px] text-slate-600 mt-1">Arco Romano, Countdown Timer, Mappa Google &amp; RSVP.</p>
+            <p className="text-[10px] text-slate-600 mt-1">Busta Ceralacca Bordeaux, Countdown Timer, Mappa Google &amp; RSVP.</p>
           </button>
 
           <button
@@ -115,7 +118,7 @@ export default function ConfiguratorForm(props: any) {
             className={`p-4 rounded-2xl border-2 text-left transition-all ${
               selectedTemplate === "B"
                 ? "border-sky-500 bg-sky-50 shadow-md"
-                : "border-slate-300 bg-white hover:border-sky-500"
+                : "border-slate-200 bg-white hover:border-sky-500"
             }`}
           >
             <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
@@ -124,7 +127,7 @@ export default function ConfiguratorForm(props: any) {
           </button>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Unico Effetto Start Attivo</label>
           <select
             value={introStart}
@@ -138,9 +141,8 @@ export default function ConfiguratorForm(props: any) {
             ))}
           </select>
 
-          {/* RIFRAZIONE ACQUA */}
           {introStart === "lago" && (
-            <div className="pt-2 border-t border-slate-100 mt-2">
+            <div className="pt-2 border-t border-slate-200 mt-2">
               <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (Link o File Immagine)</label>
               <input
                 type="text"
@@ -152,11 +154,14 @@ export default function ConfiguratorForm(props: any) {
             </div>
           )}
         </div>
-      </div>
+      </section>
 
-      {/* 2. DATI SPOSI & FRASE PERSONALIZZATA */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+      {/* LINEA DIVISORIA ELEGANTE */}
+      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
+
+      {/* SEZIONE 2: DATI SPOSI & FRASE PERSONALIZZATA */}
+      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
           2. Dati Sposi &amp; Frase Personalizzata di Benvenuto
         </label>
 
@@ -195,15 +200,18 @@ export default function ConfiguratorForm(props: any) {
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none"
           />
         </div>
-      </div>
+      </section>
 
-      {/* 3. COLONNA SONORA & BRANO INEDITO FF EDIZIONI */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+      {/* LINEA DIVISORIA ELEGANTE */}
+      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
+
+      {/* SEZIONE 3: COLONNA SONORA & BRANO INEDITO */}
+      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
           3. Brano Inedito / Colonna Sonora (FF Edizioni)
         </label>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-[#8B6508]">
             <Music className="w-4 h-4 text-[#D4AF37]" />
             <span>Colonna Sonora Inedita FF Edizioni (SIAE - Maestro Fausto Fusetti)</span>
@@ -232,15 +240,17 @@ export default function ConfiguratorForm(props: any) {
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 4. PALETTE CROMATICHE & TEMA DELL'EVENTO */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Palette Cromatiche &amp; Tema dell&apos;Evento (Con Digitazione Manuale)
+      {/* LINEA DIVISORIA ELEGANTE */}
+      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
+
+      {/* SEZIONE 4: PALETTE CROMATICHE & TEMA EVENTO */}
+      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+          4. Palette Cromatiche &amp; Tema dell&apos;Evento
         </label>
 
-        {/* TEMA EVENTO SPOSTATO VICINO ALLA PALETTE */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento</label>
           <select
@@ -264,10 +274,9 @@ export default function ConfiguratorForm(props: any) {
           />
         </div>
 
-        {/* PALETTE */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche</span>
+            <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche Morbide</span>
             <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
               {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
             </button>
@@ -295,15 +304,18 @@ export default function ConfiguratorForm(props: any) {
             </div>
           )}
         </div>
-      </div>
+      </section>
 
-      {/* 5. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+      {/* LINEA DIVISORIA ELEGANTE */}
+      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
+
+      {/* SEZIONE 5: VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
           5. Visualizzazione Data &amp; Programma Orari (Italiano)
         </label>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
           <select
             value={dateDisplayMode}
@@ -331,7 +343,7 @@ export default function ConfiguratorForm(props: any) {
           </div>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
           <select
             value={scheduleSchema}
@@ -343,12 +355,15 @@ export default function ConfiguratorForm(props: any) {
             ))}
           </select>
         </div>
-      </div>
+      </section>
 
-      {/* 6. NEGOZI CONVENZIONATI, IBAN & PAGINA FESTA */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          6. Negozi, IBAN &amp; Personalizzazione Pagina della Festa (/festa)
+      {/* LINEA DIVISORIA ELEGANTE */}
+      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
+
+      {/* SEZIONE 6: NEGOZI, IBAN, CONFERMA PARTECIPAZIONE & FESTA */}
+      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+          6. Negozi, Coordinate IBAN, Conferma Partecipazione &amp; Festa
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -395,8 +410,28 @@ export default function ConfiguratorForm(props: any) {
           )}
         </div>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30 space-y-3">
-          <span className="text-xs font-bold text-[#8B6508] block">🎉 Pagina della Festa &amp; Maxischermo (/festa)</span>
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs font-bold text-[#1E293B]">Stile Modulo Conferma Partecipazione</span>
+            <button type="button" onClick={() => toggleModule("confermaRsvp")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.confermaRsvp ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+              {modules.confermaRsvp ? "Attivo" : "Disattivato"}
+            </button>
+          </div>
+          {modules.confermaRsvp && (
+            <select
+              value={rsvpStyle}
+              onChange={(e) => setRsvpStyle(e.target.value)}
+              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
+            >
+              {RSVP_STYLES.map((r) => (
+                <option key={r.id} value={r.id}>{r.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <div className="p-4 bg-white rounded-2xl border border-[#D4AF37]/30 space-y-3">
+          <span className="text-xs font-bold text-[#8B6508] block font-serif">🎉 Pagina della Festa &amp; Maxischermo (/festa)</span>
           <div className="flex justify-between items-center">
             <span className="text-xs font-bold text-[#1E293B]">Hub Giochi della Festa (Quiz, Puzzle, Scratch)</span>
             <button type="button" onClick={() => toggleModule("hubGiochiFesta")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.hubGiochiFesta ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
@@ -410,7 +445,7 @@ export default function ConfiguratorForm(props: any) {
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
