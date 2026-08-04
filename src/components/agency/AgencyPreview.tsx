@@ -3,15 +3,15 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Gift, Clock, Utensils, GlassWater, Music } from "lucide-react";
+import { Sparkles, MapPin, Gift } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
-import EnvelopeWax from "@/components/EnvelopeWax";
 import PartingClouds from "@/components/PartingClouds";
 import Marquee from "@/components/Marquee";
 import PartnerStores from "@/components/PartnerStores";
 import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
+import EnvelopeWax from "@/components/EnvelopeWax";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface AgencyPreviewProps {
@@ -44,7 +44,7 @@ export interface AgencyPreviewProps {
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "busta",
+  introStart = "arco",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
   eventThemePreset = "Luxury Gold & Total White",
@@ -65,6 +65,7 @@ export default function AgencyPreview({
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
   audioUrl = "",
+  waterImageUrl = "",
 }: AgencyPreviewProps) {
   const palettes = DRESS_CODE_PALETTES || [
     { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
@@ -112,7 +113,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* MOCKUP SMARTPHONE */}
+      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className={`w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
           selectedTemplate === "B" || introStart === "nuvole"
@@ -120,7 +121,7 @@ export default function AgencyPreview({
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
-        {/* PLAYER AUDIO BRANO INEDITO */}
+        {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
         {/* MARQUEE DEDICHE */}
@@ -138,13 +139,23 @@ export default function AgencyPreview({
         )}
 
         {introStart === "nuvole" && modules.nuvole3d && (
-          <div className="relative py-2">
+          <div className="relative py-1">
             <PartingClouds />
           </div>
         )}
 
+        {/* SCHERMATA START ARCO ROMANO */}
+        {introStart === "arco" && (
+          <div className="relative w-full h-40 overflow-hidden border-b border-[#D4AF37]/30">
+            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Arco Romano e Lago" fill className="object-cover" priority />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/20 flex flex-col items-center justify-end pb-2">
+              <span className="font-serif font-bold text-xs text-[#8B6508]">Wedding Day</span>
+            </div>
+          </div>
+        )}
+
         {/* HERO SPOSI */}
-        <div className="text-center pt-4 px-4 space-y-1">
+        <div className="text-center pt-3 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
             Matrimonio • {activeTheme}
           </span>
@@ -160,7 +171,7 @@ export default function AgencyPreview({
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
-        {/* MODULO DATA (3 OPZIONI IN ITALIANO) */}
+        {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif">
@@ -194,11 +205,11 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI VISIVI DINAMICI IN ITALIANO) */}
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI DINAMICI VISIBILMENTE DIVERSI) */}
         {scheduleSchema === "classico" && (
           <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-              Programma della Giornata (Classico)
+              Programma della Giornata
             </span>
             <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
               <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
@@ -211,48 +222,46 @@ export default function AgencyPreview({
         )}
 
         {scheduleSchema === "timeline" && (
-          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-              📍 Timeline della Giornata
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border border-slate-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs mb-2">
+              📍 Timeline Verticale Orari
             </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 border-[#D4AF37] text-xs text-[#1E293B]">
-              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza</div>
-              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia</div>
-              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo</div>
+            <div className="relative pl-6 space-y-2 text-left border-l-2 border-[#D4AF37] text-xs text-[#1E293B]">
+              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo in Giardino</div>
               <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
-              <div><span className="font-bold text-[#8B6508]">22:00</span> — Party</div>
             </div>
           </div>
         )}
 
         {scheduleSchema === "nuvole" && (
-          <div className="mx-3 my-3 p-4 bg-sky-50/90 rounded-2xl border border-sky-200 text-center shadow-sm space-y-2">
+          <div className="mx-3 my-3 p-4 bg-sky-50 rounded-2xl border border-sky-200 text-center shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-sky-800 uppercase block font-serif text-xs">
-              ☁️ Programma tra le Nuvole
+              ☁️ Programma tra le Nuvole 3D
             </span>
             <div className="space-y-1.5 text-xs text-[#1E293B]">
               <p><strong>16:30</strong> ☁️ Arrivo Ospiti</p>
               <p><strong>17:00</strong> ☁️ Cerimonia</p>
               <p><strong>18:30</strong> ☁️ Aperitivo</p>
               <p><strong>20:00</strong> ☁️ Cena di Gala</p>
-              <p><strong>22:00</strong> ☁️ Festa Finale</p>
             </div>
           </div>
         )}
 
         {scheduleSchema === "schede" && (
           <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
-            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
-              <span className="text-[#8B6508] block text-[10px]">16:30</span> Arrivo Ospiti
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">16:30</span> Accoglienza
             </div>
-            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
               <span className="text-[#8B6508] block text-[10px]">17:00</span> Cerimonia
             </div>
-            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
               <span className="text-[#8B6508] block text-[10px]">18:30</span> Aperitivo
             </div>
-            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
-              <span className="text-[#8B6508] block text-[10px]">20:00</span> Cena
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">20:00</span> Cena &amp; Torta
             </div>
           </div>
         )}
@@ -349,11 +358,11 @@ export default function AgencyPreview({
         {/* MODULO CONFERMA RSVP (DINAMICO SULLA PALETTA COLORI) */}
         {modules.confermaRsvp && (
           <div className="p-3">
-            <RsvpForm coupleNames={coupleNames} />
+            <RsvpForm coupleNames={coupleNames} rsvpStyle={rsvpStyle} />
           </div>
         )}
 
-        {/* GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
+        {/* GIOCHI DELLA FESTA */}
         {modules.hubGiochiFesta && (
           <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
