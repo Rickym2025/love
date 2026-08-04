@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sparkles, MapPin, Gift } from "lucide-react";
@@ -12,6 +12,8 @@ import PartnerStores from "@/components/PartnerStores";
 import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
+import WaterRippleImage from "@/components/ui/water-ripple-image";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface AgencyPreviewProps {
@@ -19,6 +21,7 @@ export interface AgencyPreviewProps {
   introStart?: string;
   dateDisplayMode?: string;
   scheduleSchema?: string;
+  rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
   selectedColorScheme?: string;
@@ -112,7 +115,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI ALLA PALETTE */}
+      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors"
         style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
@@ -152,8 +155,13 @@ export default function AgencyPreview({
         )}
 
         {introStart === "lago" && (
-          <div className="relative w-full h-32 overflow-hidden border-b border-sky-300">
-            <Image src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} alt="Sfondo Lago" fill className="object-cover" priority />
+          <div className="relative w-full h-36 overflow-hidden border-b border-sky-300">
+            <WaterRippleImage src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="relative w-12 h-12 drop-shadow-lg">
+                <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority />
+              </div>
+            </div>
           </div>
         )}
 
