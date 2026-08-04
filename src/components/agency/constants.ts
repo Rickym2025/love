@@ -92,7 +92,7 @@ export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // LAVANDA & LILLÀ RIGOROSA (ESCLUSIVAMENTE LILLA/VIOLA)
+  6: [
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
