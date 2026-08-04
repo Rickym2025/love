@@ -68,7 +68,7 @@ export const DRESS_CODE_PALETTES = [
   { id: "8", name: "Bianco & Minimal", colors: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8", "#0F172A"] },
 ];
 
-// Immagini Unsplash Garantite e Coerenti per Ciascuna Palette
+// Gallerie Unsplash Direct ad Alta Fedeltà Cromatica
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
   0: [ // Pastello Romantico
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
@@ -94,7 +94,7 @@ export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA)
+  6: [ // LAVANDA & LILLÀ RIGOROSA (ESCLUSIVAMENTE VIOLA/LILLA)
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
