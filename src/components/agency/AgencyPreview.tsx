@@ -64,8 +64,14 @@ export default function AgencyPreview({
   modules = {},
   audioUrl = "",
 }: AgencyPreviewProps) {
-  const activePalette = DRESS_CODE_PALETTES[selectedPaletteIdx] || DRESS_CODE_PALETTES[0];
-  const outfitPhotos = DRESS_CODE_PHOTOS[selectedPaletteIdx % 8] || DRESS_CODE_PHOTOS[0];
+  // Defensive fallbacks per evitare qualsiasi ReferenceError
+  const palettes = DRESS_CODE_PALETTES || [
+    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
+  ];
+  const activePalette = palettes[selectedPaletteIdx] || palettes[0];
+
+  const photosMap = DRESS_CODE_PHOTOS || {};
+  const outfitPhotos = photosMap[selectedPaletteIdx % 8] || photosMap[0] || [];
   const [bustaAperta, setBustaAperta] = useState(false);
 
   const computedWelcomePhrase =
@@ -106,7 +112,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
+      {/* MOCKUP SMARTPHONE */}
       <div
         className={`w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
           selectedTemplate === "B" || introStart === "nuvole"
@@ -121,7 +127,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* EFFETTO START MUTUAMENTE ESCLUSIVO (INLINE SCHERMO) */}
+        {/* EFFETTO START MUTUAMENTE ESCLUSIVO */}
         {introStart === "busta" && modules.busta3d && (
           <div
             onClick={() => setBustaAperta(!bustaAperta)}
@@ -197,7 +203,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI IN ITALIANO) */}
+        {/* PROGRAMMA DELLA GIORNATA */}
         <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
           <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
             Programma della Giornata ({scheduleSchema})
@@ -243,7 +249,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COERENTE */}
+        {/* DRESS CODE CON GALLERIA OUTFIT */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
@@ -272,7 +278,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
+        {/* NEGOZI CONVENZIONATI */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
             <PartnerStores stores={partnerStores} />
@@ -291,14 +297,14 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA RSVP (DINAMICO SULLA PALETTA COLORI) */}
+        {/* MODULO CONFERMA RSVP */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
+        {/* GIOCHI DELLA FESTA */}
         {modules.hubGiochiFesta && (
           <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
