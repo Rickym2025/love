@@ -44,7 +44,7 @@ export interface AgencyPreviewProps {
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "busta",
+  introStart = "arco",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
   eventThemePreset = "Luxury Gold & Total White",
@@ -73,7 +73,7 @@ export default function AgencyPreview({
   const activePalette = palettes[selectedPaletteIdx] || palettes[0];
 
   const photosMap = DRESS_CODE_PHOTOS || {};
-  const outfitPhotos = photosMap[selectedPaletteIdx % 8] || photosMap[0] || [];
+  const outfitPhotos = (photosMap[selectedPaletteIdx % 8] || photosMap[0] || []);
 
   const computedWelcomePhrase =
     welcomePhrase ||
@@ -116,7 +116,7 @@ export default function AgencyPreview({
       {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6"
-        style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
+        style={{ backgroundColor: (activePalette?.colors && activePalette.colors[0]) || "#FAF7F2", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}
       >
         {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
@@ -154,38 +154,35 @@ export default function AgencyPreview({
 
         {/* HERO SPOSI */}
         <div className="text-center pt-3 px-4 space-y-1">
-          <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
             Il Matrimonio di {coupleNames} • {activeTheme}
           </span>
           <p className="text-xs font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <h3 className="text-2xl font-serif font-bold mt-1" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+          <h3 className="text-2xl font-serif font-bold mt-1" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
             {coupleNames}
           </h3>
-          <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+          <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
             &quot;{computedWelcomePhrase}&quot;
           </p>
-          <p className="text-xs font-bold uppercase pt-1" style={{ color: activePalette.colors[3] || "#8B6508" }}>{locationName}</p>
+          <p className="text-xs font-bold uppercase pt-1" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>{locationName}</p>
         </div>
-
-        {/* LINEA DIVISORIA ELEGANTE */}
-        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
 
         {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
+            <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-3 font-serif font-bold text-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
+            <div className="flex justify-center gap-3 font-serif font-bold text-xs" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
+              <div><span className="block text-sm" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-sm" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-sm" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-sm" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
@@ -205,9 +202,6 @@ export default function AgencyPreview({
             <p className="font-serif font-bold text-lg text-[#1E293B]">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
           </div>
         )}
-
-        {/* LINEA DIVISORIA ELEGANTE */}
-        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
 
         {/* PROGRAMMA DELLA GIORNATA */}
         {scheduleSchema === "classico" && (
@@ -265,9 +259,6 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* LINEA DIVISORIA ELEGANTE */}
-        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
-
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
@@ -309,7 +300,7 @@ export default function AgencyPreview({
             <p className="text-[10px] font-serif text-[#1E293B]">{dressCodeNotes}</p>
 
             <div className="flex justify-center gap-1.5 py-1">
-              {activePalette.colors.map((c, i) => (
+              {(activePalette?.colors || []).map((c, i) => (
                 <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
@@ -319,7 +310,7 @@ export default function AgencyPreview({
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
               </span>
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
-                {outfitPhotos.map((imgUrl, idx) => (
+                {(outfitPhotos || []).map((imgUrl, idx) => (
                   <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                     <Image src={imgUrl} alt={`Outfit ${idx}`} fill className="object-cover" />
                   </div>
@@ -348,10 +339,10 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA PARTECIPAZIONE (DINAMICO SU COLORI PALETTE & SENZA CERALACCA) */}
+        {/* MODULO CONFERMA RSVP (DINAMICO SU COLORI PALETTE) */}
         {modules.confermaRsvp && (
           <div className="p-3">
-            <RsvpForm coupleNames={coupleNames} paletteColors={activePalette.colors} />
+            <RsvpForm coupleNames={coupleNames} paletteColors={activePalette?.colors} />
           </div>
         )}
 
