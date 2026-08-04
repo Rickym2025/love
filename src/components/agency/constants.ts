@@ -6,9 +6,9 @@ export interface PartnerStore {
 }
 
 export const AUDIO_TRACK_PRESETS = [
-  { name: "🎵 Marcia Nuziale d'Autore - FF Edizioni (F. Fusetti)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-  { name: "🎵 Inedito d'Amore 'Due Anime' - FF Edizioni", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-  { name: "🎵 Sinfonia Romantica 'Il Nostro Per Sempre' - FF Edizioni", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { name: "🎵 Colonna Sonora d'Autore 1 - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-1.mp3" },
+  { name: "🎵 Colonna Sonora d'Autore 2 - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-2.mp3" },
+  { name: "🎵 Marcia Nuziale Romantica - FF Edizioni", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-3.mp3" },
   { name: "🔗 Personalizzata (Inserisci Link MP3 sotto)", url: "" },
 ];
 
@@ -27,36 +27,30 @@ export const WELCOME_PHRASE_PRESETS = [
 
 export const INTRO_START_PRESETS = [
   { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
-  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca (Busta 3D)" },
-  { id: "nuvole", name: "☁️ Cielo & Nuvole 3D Volumetriche (Apertura allo Scroll)" },
-  { id: "lago", name: "🌊 Rifrazione Acqua & Lago Romantico" },
+  { id: "busta", name: "✉️ Busta d'Epoca 3D con Ceralacca" },
+  { id: "nuvole", name: "☁️ Nuvole 3D Volumetriche (Apertura allo Scroll)" },
+  { id: "lago", name: "🌊 Rifrazione Liquida Acqua del Lago" },
 ];
 
 export const DATE_DISPLAY_MODES = [
-  { id: "scratch", name: "🎰 Gratta la Data col Dito (HTML5 Canvas)" },
   { id: "countdown", name: "⏳ Countdown Timer in Tempo Reale" },
+  { id: "scratch", name: "🎰 Gratta la Data col Dito (HTML5 Canvas)" },
   { id: "text", name: "📜 Data Fissa Elegant (Testo Grande Dorato)" },
 ];
 
 export const SCHEDULE_SCHEMAS = [
   { id: "classico", name: "🏛️ Classico Elegante" },
   { id: "timeline", name: "📍 Timeline Verticale con Nodi Dorati" },
-  { id: "nuvole", name: "☁️ Programma tra le Nuvole 3D" },
   { id: "schede", name: "🎴 Schede Card Separati" },
   { id: "minimal", name: "📜 Minimal Serif Pulito" },
-];
-
-export const RSVP_STYLES = [
-  { id: "classico", name: "📜 Classico Elegante (Modulo con Menu & Intolleranze)" },
-  { id: "ceralacca", name: "✉️ Sigillo Ceralacca Pop-Up (Con Ceralacca)" },
-  { id: "pastello", name: "🎨 Pastello Minimal (Bottoni Pillola)" },
+  { id: "orizzontale", name: "↔️ Timeline Orizzontale Scorrevole" },
 ];
 
 export const EVENT_THEME_PRESETS = [
+  "Luxury Gold & Total White",
   "Shabby Chic & Provenzale",
   "Botanico & Greenery",
   "Country Elegant",
-  "Luxury Gold & Total White",
   "BOHO Chic & Terracotta",
   "Minimal Modern",
   "Tropical Romance",
@@ -74,38 +68,38 @@ export const DRESS_CODE_PALETTES = [
   { id: "8", name: "Bianco & Minimal", colors: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8", "#0F172A"] },
 ];
 
-// Gallerie Pexels Ad Alta Fedeltà Cromatica
+// Immagini Unsplash Garantite e Coerenti per Ciascuna Palette
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
   0: [ // Pastello Romantico
-    "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
   1: [ // Oro & Champagne
-    "https://images.pexels.com/photos/291762/pexels-photo-291762.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
   ],
   2: [ // Smeraldo & Salvia
-    "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
   3: [ // Rose Gold & Cipria
-    "https://images.pexels.com/photos/985635/pexels-photo-985635.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/1462637/pexels-photo-1462637.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
   ],
   4: [ // Blu Notte & Zaffiro
-    "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/1308881/pexels-photo-1308881.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
   ],
   5: [ // Sabbia & Terracotta
-    "https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // LAVANDA & LILLÀ RIGOROSAMENTE VIOLA/LILLA
-    "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?auto=compress&cs=tinysrgb&w=400",
+  6: [ // Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA)
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
   7: [ // Bianco & Minimal
-    "https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400",
-    "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
 };
