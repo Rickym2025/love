@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,7 +23,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const template = searchParams?.get("template") || (cleanSlug === "francesca-e-luca" ? "B" : "A");
   const isTemplateB = template === "B";
 
-  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
+  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "arco");
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
   const rsvpStyle = searchParams?.get("rsvpStyle") || "classico";
@@ -39,6 +39,8 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const dressCodeNotes = searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
   const paletteIdxStr = searchParams?.get("palette") || "0";
   const paletteIdx = parseInt(paletteIdxStr, 10) || 0;
+
+  const [suonaMusica, setSuonaMusica] = useState(false);
 
   const palettes = DRESS_CODE_PALETTES || [
     { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
@@ -67,7 +69,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
   return (
     <div className={`min-h-screen w-full overflow-x-hidden ${isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
-      {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
+      {/* PLAYER AUDIO CHE PARTE ALL'APERTURA DELLA BUSTA */}
+      {(audioUrl || suonaMusica) && (
+        <AudioPlayer audioUrl={audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} />
+      )}
 
       {showMarquee && <Marquee text={marqueeText} />}
 
@@ -75,12 +80,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         {start === "busta" && showBusta && (
-          <EnvelopeWax coupleNames={coupleNames} />
+          <EnvelopeWax coupleNames={coupleNames} onOpen={() => setSuonaMusica(true)} />
         )}
 
         {start === "arco" && (
           <div className="relative w-full h-56 rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/30">
-            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano" fill className="object-cover" priority />
+            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/30 flex items-end justify-center pb-4">
               <span className="font-serif font-bold text-sm text-[#8B6508] uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border border-[#D4AF37]">
                 Wedding Day
@@ -125,6 +130,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI DINAMICI REALI) */}
         {schedule === "classico" && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
