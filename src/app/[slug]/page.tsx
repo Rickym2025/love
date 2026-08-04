@@ -12,7 +12,7 @@ import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
 import EnvelopeWax from "@/components/EnvelopeWax";
-import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "@/components/agency/constants";
+import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
   const searchParams = useSearchParams();
@@ -27,20 +27,17 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
 
-  const coupleNames =
-    searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
+  const coupleNames = searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
   const weddingDateDay = searchParams?.get("day") || "15";
   const weddingDateMonth = searchParams?.get("month") || "Settembre";
   const weddingDateYear = searchParams?.get("year") || "2026";
   const locationName = searchParams?.get("location") || "Villa Rosa";
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
-  const welcomePhrase =
-    searchParams?.get("phrase") ||
-    "Due anime, un solo destino. Una storia scritta nel cuore.";
+  const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   const audioUrl = searchParams?.get("audio") || "";
-  const dressCodeNotes =
-    searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
-  const paletteIdx = parseInt(searchParams?.get("palette") || "0", 10);
+  const dressCodeNotes = searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
+  const paletteIdxStr = searchParams?.get("palette") || "0";
+  const paletteIdx = parseInt(paletteIdxStr, 10) || 0;
 
   const palettes = DRESS_CODE_PALETTES || [
     { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
@@ -50,45 +47,33 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos = photosMap[paletteIdx % 8] || photosMap[0] || [];
 
-  const marqueeText =
-    searchParams?.get("marquee") ||
-    "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦";
+  const marqueeText = searchParams?.get("marquee") || "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦";
+  const customIban = searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
 
-  const customIban =
-    searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
+  const showBusta = searchParams?.get("busta3d") !== "false";
+  const showGrattaData = searchParams?.get("grattaData") !== "false";
+  const showNuvole = searchParams?.get("nuvole3d") !== "false";
+  const showMappa = searchParams?.get("locationMappa") !== "false";
+  const showDressCode = searchParams?.get("codiceAbbigliamento") !== "false";
+  const showNegozi = searchParams?.get("negoziConvenzionati") !== "false";
+  const showListaNozze = searchParams?.get("listaNozzeAmazon") !== "false";
+  const showMarquee = searchParams?.get("dedicheMarquee") !== "false";
+  const showHubGiochi = searchParams?.get("hubGiochiFesta") !== "false";
+  const showRsvp = searchParams?.get("confermaRsvp") !== "false";
 
-  const modules = {
-    busta3d: searchParams?.get("busta3d") !== "false",
-    grattaData: searchParams?.get("grattaData") !== "false",
-    effettoAcqua: searchParams?.get("effettoAcqua") !== "false",
-    nuvole3d: searchParams?.get("nuvole3d") !== "false",
-    locationMappa: searchParams?.get("locationMappa") !== "false",
-    codiceAbbigliamento: searchParams?.get("codiceAbbigliamento") !== "false",
-    negoziConvenzionati: searchParams?.get("negoziConvenzionati") !== "false",
-    listaNozzeAmazon: searchParams?.get("listaNozzeAmazon") !== "false",
-    dedicheMarquee: searchParams?.get("dedicheMarquee") !== "false",
-    hubGiochiFesta: searchParams?.get("hubGiochiFesta") !== "false",
-    guestPhotoWall: searchParams?.get("guestPhotoWall") !== "false",
-    confermaRsvp: searchParams?.get("confermaRsvp") !== "false",
-  };
-
-  const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
+  const rawAddress = locationAddress || locationName || "Villa Rosa";
+  const mapQuery = encodeURIComponent(rawAddress.trim());
 
   return (
-    <div
-      className={`min-h-screen w-full overflow-x-hidden ${
-        isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"
-      }`}
-    >
+    <div className={`min-h-screen w-full overflow-x-hidden ${isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {modules.dedicheMarquee && <Marquee text={marqueeText} />}
+      {showMarquee && <Marquee text={marqueeText} />}
 
-      {start === "nuvole" && modules.nuvole3d && <PartingClouds />}
+      {start === "nuvole" && showNuvole && <PartingClouds />}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
-        
-        {start === "busta" && modules.busta3d && (
+        {start === "busta" && showBusta && (
           <EnvelopeWax coupleNames={coupleNames} />
         )}
 
@@ -130,7 +115,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {dateMode === "scratch" && modules.grattaData && (
+        {dateMode === "scratch" && showGrattaData && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
               🎰 Gratta col dito per scoprire la data
@@ -139,7 +124,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA DINAMICO (5 SCHEMI) */}
         {schedule === "classico" && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
@@ -209,7 +193,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {modules.locationMappa && (
+        {showMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
               <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
@@ -240,7 +224,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {modules.codiceAbbigliamento && (
+        {showDressCode && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-4">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
               Dress Code &amp; Palette
@@ -272,14 +256,66 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {modules.negoziConvenzionati && (
+        {showNegozi && (
           <PartnerStores stores={[]} />
         )}
 
-        {modules.listaNozzeAmazon && (
+        {showListaNozze && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
               <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
-              Il regalo più grande è
+              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
+            </p>
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">
+              {customIban}
+            </div>
+          </div>
+        )}
+
+        {showRsvp && (
+          <div className="pt-2">
+            <RsvpForm coupleNames={coupleNames} />
+          </div>
+        )}
+
+        {showHubGiochi && (
+          <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
+              <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
+            </span>
+            <p className="text-xs text-slate-300">
+              Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
+            </p>
+            <Link
+              href={`/${cleanSlug}/festa`}
+              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
+            >
+              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+            </Link>
+          </div>
+        )}
+
+        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
+          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
+          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+export default function InvitationPage({ params }: { params?: { slug?: string } }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
+          Caricamento Invito in corso...
+        </div>
+      }
+    >
+      <InvitationContent params={params} />
+    </Suspense>
+  );
+}
