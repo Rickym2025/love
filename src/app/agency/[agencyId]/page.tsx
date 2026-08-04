@@ -9,7 +9,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
-  // Larghezze Pannelli (Sidebar e Preview fixed/resizable, Configuratore FLEX-1 CENTRALE)
+  // Larghezze Ridimensionabili (Sidebar 250px, Preview 400px, Configuratore FLEX-1 CENTRALE)
   const [sidebarWidth, setSidebarWidth] = useState(250);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
@@ -18,9 +18,10 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   // Stati Configurazione Invito
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
-  const [introStart, setIntroStart] = useState("arco");
+  const [introStart, setIntroStart] = useState("busta");
   const [dateDisplayMode, setDateDisplayMode] = useState("countdown");
   const [scheduleSchema, setScheduleSchema] = useState("classico");
+  const [rsvpStyle, setRsvpStyle] = useState("classico");
   const [eventThemePreset, setEventThemePreset] = useState("Luxury Gold & Total White");
   const [customEventTheme, setCustomEventTheme] = useState("");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
@@ -36,7 +37,17 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
-  const [partnerStores, setPartnerStores] = useState<any[]>([]);
+
+  // Negozi Convenzionati con Link Affiliato Amazon Ufficiale Tag zero100store-21
+  const [partnerStores, setPartnerStores] = useState<any[]>([
+    {
+      id: "amazon-default",
+      name: "Lista Nozze Ufficiale Amazon",
+      url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
+      logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
+    },
+  ]);
+
   const [marqueeText, setMarqueeText] = useState(
     "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦"
   );
@@ -91,7 +102,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. COLONNA SINISTRA: SIDEBAR AGENZIA */}
+      {/* 1. SIDEBAR AGENZIA */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -100,7 +111,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE TRASCINABILE 1 */}
+      {/* SEPARATORE 1 TRASCINABILE */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -110,7 +121,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. COLONNA CENTRALE: CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
+      {/* 2. CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         <AgencyConfigurator
           activeTab={activeTab}
@@ -123,6 +134,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           setDateDisplayMode={setDateDisplayMode}
           scheduleSchema={scheduleSchema}
           setScheduleSchema={setScheduleSchema}
+          rsvpStyle={rsvpStyle}
+          setRsvpStyle={setRsvpStyle}
           eventThemePreset={eventThemePreset}
           setEventThemePreset={setEventThemePreset}
           customEventTheme={customEventTheme}
@@ -164,7 +177,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE TRASCINABILE 2 */}
+      {/* SEPARATORE 2 TRASCINABILE */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -174,7 +187,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. COLONNA DESTRE: PREVIEW LIVE SMARTPHONE */}
+      {/* 3. PREVIEW LIVE SMARTPHONE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
@@ -184,6 +197,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           introStart={introStart}
           dateDisplayMode={dateDisplayMode}
           scheduleSchema={scheduleSchema}
+          rsvpStyle={rsvpStyle}
           eventThemePreset={eventThemePreset}
           customEventTheme={customEventTheme}
           selectedColorScheme={selectedColorScheme}
