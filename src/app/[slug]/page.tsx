@@ -23,7 +23,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const template = searchParams?.get("template") || (cleanSlug === "francesca-e-luca" ? "B" : "A");
   const isTemplateB = template === "B";
 
-  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
+  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "arco");
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
 
@@ -92,10 +92,18 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           <EnvelopeWax coupleNames={coupleNames} />
         )}
 
-        <div className="text-center space-y-3 pt-4">
-          <span className="text-xs tracking-widest uppercase font-bold text-[#8B6508]">
-            Wedding Celebration
-          </span>
+        {start === "arco" && (
+          <div className="relative w-full h-56 rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/30">
+            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano" fill className="object-cover" priority />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/30 flex items-end justify-center pb-4">
+              <span className="font-serif font-bold text-sm text-[#8B6508] uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border border-[#D4AF37]">
+                Wedding Day
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className="text-center space-y-3 pt-2">
           <h1 className="text-4xl font-serif font-bold text-[#1E293B] drop-shadow-xs">{coupleNames}</h1>
           <p className="text-sm font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
@@ -131,19 +139,75 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA DINAMICO IN ITALIANO */}
-        <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-          <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
-            Programma della Giornata
-          </span>
-          <div className="space-y-2 text-sm text-[#1E293B] font-serif pt-1">
-            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
-            <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-            <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+        {/* PROGRAMMA DELLA GIORNATA DINAMICO (5 SCHEMI) */}
+        {schedule === "classico" && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+              Programma della Giornata
+            </span>
+            <div className="space-y-2 text-sm text-[#1E293B] font-serif pt-1">
+              <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+            </div>
           </div>
-        </div>
+        )}
+
+        {schedule === "timeline" && (
+          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+              📍 Timeline Verticale Orari
+            </span>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 border-[#D4AF37] text-sm text-[#1E293B]">
+              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo in Giardino</div>
+              <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
+            </div>
+          </div>
+        )}
+
+        {schedule === "nuvole" && (
+          <div className="p-6 bg-sky-50 rounded-3xl shadow-sm border border-sky-200 text-center space-y-3">
+            <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif text-base">
+              ☁️ Programma tra le Nuvole 3D
+            </span>
+            <div className="space-y-2 text-sm text-[#1E293B]">
+              <p><strong>16:30</strong> ☁️ Arrivo Ospiti</p>
+              <p><strong>17:00</strong> ☁️ Cerimonia</p>
+              <p><strong>18:30</strong> ☁️ Aperitivo</p>
+              <p><strong>20:00</strong> ☁️ Cena di Gala</p>
+            </div>
+          </div>
+        )}
+
+        {schedule === "schede" && (
+          <div className="grid grid-cols-2 gap-3 text-center text-xs">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
+              <span className="text-[#8B6508] block text-xs">16:30</span> Accoglienza
+            </div>
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
+              <span className="text-[#8B6508] block text-xs">17:00</span> Cerimonia
+            </div>
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
+              <span className="text-[#8B6508] block text-xs">18:30</span> Aperitivo
+            </div>
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
+              <span className="text-[#8B6508] block text-xs">20:00</span> Cena &amp; Torta
+            </div>
+          </div>
+        )}
+
+        {schedule === "minimal" && (
+          <div className="p-4 text-center space-y-2 font-serif text-sm text-[#1E293B]">
+            <p>16:30 • Accoglienza Ospiti</p>
+            <p>17:00 • Cerimonia di Nozze</p>
+            <p>18:30 • Aperitivo</p>
+            <p>20:00 • Cena &amp; Torta</p>
+          </div>
+        )}
 
         {modules.locationMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
@@ -218,56 +282,4 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
-              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
-            </p>
-            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">
-              {customIban}
-            </div>
-          </div>
-        )}
-
-        {modules.confermaRsvp && (
-          <div className="pt-2">
-            <RsvpForm coupleNames={coupleNames} />
-          </div>
-        )}
-
-        {modules.hubGiochiFesta && (
-          <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
-              <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
-            </span>
-            <p className="text-xs text-slate-300">
-              Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
-            </p>
-            <Link
-              href={`/${cleanSlug}/festa`}
-              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
-            >
-              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
-            </Link>
-          </div>
-        )}
-
-        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
-          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
-          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
-        </footer>
-      </main>
-    </div>
-  );
-}
-
-export default function InvitationPage({ params }: { params?: { slug?: string } }) {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
-          Caricamento Invito in corso...
-        </div>
-      }
-    >
-      <InvitationContent params={params} />
-    </Suspense>
-  );
-}
+              Il regalo più grande è
