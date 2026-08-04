@@ -25,9 +25,9 @@ export const WELCOME_PHRASE_PRESETS = [
 ];
 
 export const INTRO_START_PRESETS = [
+  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
   { id: "busta", name: "✉️ Busta d'Epoca 3D con Ceralacca" },
   { id: "nuvole", name: "☁️ Nuvole 3D Volumetriche (Apertura allo Scroll)" },
-  { id: "expand", name: "🎬 Espansione Multimediale allo Scroll (ScrollExpandMedia)" },
   { id: "lago", name: "🌊 Rifrazione Liquida Acqua del Lago" },
 ];
 
@@ -43,6 +43,12 @@ export const SCHEDULE_SCHEMAS = [
   { id: "schede", name: "🎴 Schede Card Separati" },
   { id: "minimal", name: "📜 Minimal Serif Pulito" },
   { id: "orizzontale", name: "↔️ Timeline Orizzontale Scorrevole" },
+];
+
+export const RSVP_STYLES = [
+  { id: "classico", name: "📜 Classico Elegante (Menu & Intolleranze)" },
+  { id: "moderno", name: "🎴 Schede Card Moderne (Risposta Rapida & Icone)" },
+  { id: "pastello", name: "🎨 Pastello Minimal (Bottoni Pillola Arrotondati)" },
 ];
 
 export const EVENT_THEME_PRESETS = [
