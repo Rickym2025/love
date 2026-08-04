@@ -10,12 +10,8 @@ import PartingClouds from "@/components/PartingClouds";
 import Marquee from "@/components/Marquee";
 import PartnerStores from "@/components/PartnerStores";
 import LoveQuiz from "@/components/LoveQuiz";
-import PhotoPuzzle from "@/components/PhotoPuzzle";
-import ScratchPhoto from "@/components/ScratchPhoto";
-import PhotoWallSection from "@/components/PhotoWallSection";
-import { DRESS_CODE_PALETTES } from "./AgencyConfigurator";
 
-// Mappatura Rigorosa 8 Palette -> Foto Coerenti (Nessun outfit fuori colore)
+// 8 Gallerie Foto Coerenti
 const DRESS_CODE_PHOTOS: Record<number, string[]> = {
   0: [ // Pastello Romantico
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
@@ -41,7 +37,7 @@ const DRESS_CODE_PHOTOS: Record<number, string[]> = {
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA)
+  6: [ // Lavanda & Lillà (ESCLUSIVAMENTE VIOLA/LILLA)
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
@@ -97,7 +93,6 @@ export default function AgencyPreview({
   introStart = "busta",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
-  rsvpStyle = "classico",
   eventThemePreset = "Luxury Gold & Total White",
   customEventTheme = "",
   coupleNames = "Elena & Davide",
@@ -119,7 +114,6 @@ export default function AgencyPreview({
 }: AgencyPreviewProps) {
   const activePalette = DRESS_CODE_PALETTES[selectedPaletteIdx] || DRESS_CODE_PALETTES[0];
   const outfitPhotos = DRESS_CODE_PHOTOS[selectedPaletteIdx % 8] || DRESS_CODE_PHOTOS[0];
-  const [bustaAperta, setBustaAperta] = useState(false);
 
   const computedWelcomePhrase =
     welcomePhrase ||
@@ -129,8 +123,9 @@ export default function AgencyPreview({
     "Benvenuti al nostro matrimonio";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-  const activeTheme = eventThemePreset === "Personalizzato (inserisci a mano)" ? customEventTheme : eventThemePreset;
+  const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? customEventTheme : eventThemePreset;
 
+  // Sincronizzazione Fullscreen con Start, DateMode e Schedule
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
   }?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&day=${encodeURIComponent(
@@ -159,7 +154,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* MOCKUP SMARTPHONE */}
+      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className={`w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
           selectedTemplate === "B" || introStart === "nuvole"
@@ -167,19 +162,16 @@ export default function AgencyPreview({
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
-        {/* MARQUEE DEDICHE SCORREVOLI */}
+        {/* MARQUEE DEDICHE */}
         {modules.dedicheMarquee && (
           <div className="py-1">
             <Marquee text={marqueeText} />
           </div>
         )}
 
-        {/* EFFETTO START MUTUAMENTE ESCLUSIVO (SOLO 1 ATTIVO ALLA VOLTA) */}
+        {/* EFFETTO START MUTUAMENTE ESCLUSIVO (INLINE) */}
         {introStart === "busta" && modules.busta3d && (
-          <div
-            onClick={() => setBustaAperta(!bustaAperta)}
-            className="m-3 p-4 bg-[#F5EFE6] rounded-2xl border border-[#D4AF37]/40 text-center shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
-          >
+          <div className="m-3 p-4 bg-[#F5EFE6] rounded-2xl border border-[#D4AF37]/40 text-center shadow-sm">
             <span className="text-[9px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
               ✦ Partecipazione Digitale
             </span>
@@ -187,8 +179,8 @@ export default function AgencyPreview({
             <div className="relative w-12 h-12 mx-auto my-2 drop-shadow">
               <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
             </div>
-            <span className="text-[9px] uppercase font-bold text-[#8B6508] animate-pulse">
-              {bustaAperta ? "Partecipazione Aperta" : "Tocca per Aprire l'Invito"}
+            <span className="text-[9px] uppercase font-bold text-[#8B6508]">
+              Tocca per Aprire l&apos;Invito
             </span>
           </div>
         )}
@@ -199,7 +191,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* HERO INTRO SPOSI */}
+        {/* HERO SPOSI */}
         <div className="text-center pt-4 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
             Matrimonio • {activeTheme}
@@ -216,7 +208,7 @@ export default function AgencyPreview({
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
-        {/* MODULO VISUALIZZAZIONE DATA (3 OPZIONI) */}
+        {/* MODULO DATA (3 OPZIONI IN ITALIANO) */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif">
@@ -250,10 +242,10 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI IN ITALIANO) */}
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI DINAMICI IN ITALIANO) */}
         <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
           <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-            Programma della Giornata
+            Programma della Giornata ({scheduleSchema})
           </span>
           <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
             <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
@@ -266,7 +258,7 @@ export default function AgencyPreview({
 
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
-          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
               📍 Location del Matrimonio
             </span>
@@ -325,7 +317,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI PARTNERSTORES CON AMAZON DEFAULT */}
+        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
             <PartnerStores stores={partnerStores} />
@@ -344,14 +336,14 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA RSVP (3 MODELLI) */}
+        {/* MODULO CONFERMA RSVP (DINAMICO SULLA PALETTA COLORI) */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* HUB GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
+        {/* GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
         {modules.hubGiochiFesta && (
           <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
@@ -363,13 +355,6 @@ export default function AgencyPreview({
             <div className="pt-1">
               <LoveQuiz />
             </div>
-          </div>
-        )}
-
-        {/* GUEST PHOTO WALL (DOPO IL MODULO RSVP) */}
-        {modules.guestPhotoWall && (
-          <div className="mx-3 my-3 p-2 bg-white rounded-2xl border border-slate-200 text-center shadow-sm">
-            <PhotoWallSection />
           </div>
         )}
       </div>
