@@ -26,7 +26,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "arco");
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
-  const rsvpStyle = searchParams?.get("rsvpStyle") || "classico";
 
   const coupleNames = searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
   const weddingDateDay = searchParams?.get("day") || "15";
@@ -68,10 +67,13 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const mapQuery = encodeURIComponent(rawAddress.trim());
 
   return (
-    <div className={`min-h-screen w-full overflow-x-hidden ${isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"}`}>
-      {/* PLAYER AUDIO CHE PARTE ALL'APERTURA DELLA BUSTA */}
+    <div
+      className="min-h-screen w-full overflow-x-hidden transition-colors"
+      style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
+    >
+      {/* PLAYER AUDIO PERSISTENTE ALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
-        <AudioPlayer audioUrl={audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} />
+        <AudioPlayer audioUrl={audioUrl || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-1.mp3"} />
       )}
 
       {showMarquee && <Marquee text={marqueeText} />}
@@ -87,7 +89,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           <div className="relative w-full h-56 rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/30">
             <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/30 flex items-end justify-center pb-4">
-              <span className="font-serif font-bold text-sm text-[#8B6508] uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border border-[#D4AF37]">
+              <span className="font-serif font-bold text-sm uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border" style={{ color: activePalette.colors[3] || "#8B6508", borderColor: activePalette.colors[2] || "#D4AF37" }}>
                 Wedding Day
               </span>
             </div>
@@ -95,104 +97,90 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         <div className="text-center space-y-3 pt-2">
-          <h1 className="text-4xl font-serif font-bold text-[#1E293B] drop-shadow-xs">{coupleNames}</h1>
+          <h1 className="text-4xl font-serif font-bold drop-shadow-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>{coupleNames}</h1>
           <p className="text-sm font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <blockquote className="text-sm italic font-serif text-[#1E293B] opacity-90 px-4 mt-2 font-medium">
+          <blockquote className="text-sm italic font-serif opacity-90 px-4 mt-2 font-medium" style={{ color: activePalette.colors[4] || "#1E293B" }}>
             &quot;{welcomePhrase}&quot;
           </blockquote>
         </div>
 
         {dateMode === "countdown" && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-[#D4AF37]/40 text-center space-y-2">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-4 text-[#1E293B] font-serif font-bold text-xl">
-              <div><span className="block text-2xl text-[#8B6508]">129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
+            <div className="flex justify-center gap-4 font-serif font-bold text-xl" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
         {dateMode === "scratch" && showGrattaData && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI DINAMICI REALI) */}
+        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               Programma della Giornata
             </span>
-            <div className="space-y-2 text-sm text-[#1E293B] font-serif pt-1">
-              <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
-              <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-              <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-              <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+            <div className="space-y-2 text-sm font-serif pt-1" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>22:00</strong> — Festa &amp; Open Bar</p>
             </div>
           </div>
         )}
 
         {schedule === "timeline" && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               📍 Timeline Verticale Orari
             </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 border-[#D4AF37] text-sm text-[#1E293B]">
-              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza Ospiti</div>
-              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia Solenne</div>
-              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo in Giardino</div>
-              <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
-            </div>
-          </div>
-        )}
-
-        {schedule === "nuvole" && (
-          <div className="p-6 bg-sky-50 rounded-3xl shadow-sm border border-sky-200 text-center space-y-3">
-            <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif text-base">
-              ☁️ Programma tra le Nuvole 3D
-            </span>
-            <div className="space-y-2 text-sm text-[#1E293B]">
-              <p><strong>16:30</strong> ☁️ Arrivo Ospiti</p>
-              <p><strong>17:00</strong> ☁️ Cerimonia</p>
-              <p><strong>18:30</strong> ☁️ Aperitivo</p>
-              <p><strong>20:00</strong> ☁️ Cena di Gala</p>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: activePalette.colors[3] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>18:30</span> — Aperitivo in Giardino</div>
+              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>20:00</span> — Cena &amp; Torta</div>
             </div>
           </div>
         )}
 
         {schedule === "schede" && (
           <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
-              <span className="text-[#8B6508] block text-xs">16:30</span> Accoglienza
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+              <span className="block text-xs" style={{ color: activePalette.colors[3] }}>16:30</span> Accoglienza
             </div>
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
-              <span className="text-[#8B6508] block text-xs">17:00</span> Cerimonia
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+              <span className="block text-xs" style={{ color: activePalette.colors[3] }}>17:00</span> Cerimonia
             </div>
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
-              <span className="text-[#8B6508] block text-xs">18:30</span> Aperitivo
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+              <span className="block text-xs" style={{ color: activePalette.colors[3] }}>18:30</span> Aperitivo
             </div>
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 font-bold text-[#1E293B] shadow-sm">
-              <span className="text-[#8B6508] block text-xs">20:00</span> Cena &amp; Torta
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+              <span className="block text-xs" style={{ color: activePalette.colors[3] }}>20:00</span> Cena &amp; Torta
             </div>
           </div>
         )}
 
         {schedule === "minimal" && (
-          <div className="p-4 text-center space-y-2 font-serif text-sm text-[#1E293B]">
+          <div className="p-4 text-center space-y-2 font-serif text-sm" style={{ color: activePalette.colors[4] || "#1E293B" }}>
             <p>16:30 • Accoglienza Ospiti</p>
             <p>17:00 • Cerimonia di Nozze</p>
             <p>18:30 • Aperitivo</p>
@@ -201,11 +189,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showMappa && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
-              <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+              <MapPin className="w-4 h-4" style={{ color: activePalette.colors[3] }} /> Location del Matrimonio
             </span>
-            <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
+            <h3 className="font-serif font-bold text-xl" style={{ color: activePalette.colors[4] || "#1E293B" }}>{locationName}</h3>
             <p className="text-xs text-slate-600">{locationAddress}</p>
 
             <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
@@ -224,7 +212,8 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors shadow-md"
+              className="inline-flex items-center gap-2 text-xs font-bold text-white px-4 py-2.5 rounded-xl transition-colors shadow-md"
+              style={{ backgroundColor: activePalette.colors[4] || "#1E293B" }}
             >
               <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
             </a>
@@ -232,11 +221,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showDressCode && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-4">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               Dress Code &amp; Palette
             </span>
-            <p className="text-xs text-slate-700 font-serif leading-relaxed">{dressCodeNotes}</p>
+            <p className="text-xs font-serif leading-relaxed" style={{ color: activePalette.colors[4] || "#1E293B" }}>{dressCodeNotes}</p>
 
             <div className="flex justify-center gap-2">
               {activePalette.colors.map((color, i) => (
@@ -268,9 +257,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showListaNozze && (
-          <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
-            <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
-              <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+              <Gift className="w-4 h-4" style={{ color: activePalette.colors[3] }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
               Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
@@ -281,9 +270,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* MODULO RSVP DINAMICO SULLE PALETTE COLORI */}
         {showRsvp && (
           <div className="pt-2">
-            <RsvpForm coupleNames={coupleNames} rsvpStyle={rsvpStyle} />
+            <RsvpForm coupleNames={coupleNames} paletteColors={activePalette.colors} />
           </div>
         )}
 
