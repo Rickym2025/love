@@ -48,8 +48,12 @@ export default function EnvelopeWax({
       <div className={containerClass}>
         <div
           onClick={handleOpen}
-          className="relative w-[92%] max-w-[420px] h-[560px] bg-[#FAF7F2] rounded-2xl shadow-2xl border border-[#D4AF37]/40 cursor-pointer group flex flex-col justify-between p-8 select-none transition-transform duration-500 hover:scale-[1.01]"
+          className="relative w-[92%] max-w-[420px] h-[560px] bg-[#FAF7F2] rounded-2xl shadow-2xl border-2 border-[#D4AF37]/40 cursor-pointer group flex flex-col justify-between p-8 select-none transition-transform duration-500 hover:scale-[1.01] overflow-hidden"
         >
+          {/* RILIEVI FLOREALI BOTANICI SUI LATI (STILE FOTO 1) */}
+          <div className="absolute inset-y-0 left-2 w-10 opacity-30 pointer-events-none bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:12px_12px]" />
+          <div className="absolute inset-y-0 right-2 w-10 opacity-30 pointer-events-none bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:12px_12px]" />
+
           {/* Lembo Triangolare Superiore */}
           <div
             className="absolute top-0 left-0 right-0 h-1/2 bg-[#F5EFE6] rounded-t-2xl origin-top transition-transform duration-700 border-b border-[#D4AF37]/40 z-10 shadow-md"
