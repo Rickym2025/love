@@ -2,72 +2,61 @@
 
 import React from "react";
 import Image from "next/image";
-import { ExternalLink, ShoppingBag } from "lucide-react";
+import { Store, ExternalLink } from "lucide-react";
+import { PartnerStore } from "./agency/constants";
 
-export interface StoreItem {
-  id: string;
-  name: string;
-  logoUrl: string;
-  websiteUrl: string;
-  description: string;
+export interface PartnerStoresProps {
+  stores?: PartnerStore[];
 }
 
-interface PartnerStoresProps {
-  stores?: StoreItem[];
-}
+export default function PartnerStores({ stores = [] }: PartnerStoresProps) {
+  // Garanzia totale che stores sia sempre un array valido
+  const safeStores = stores && Array.isArray(stores) ? stores : [];
 
-export default function PartnerStores({
-  stores = [
-    {
-      id: "1",
-      name: "Gioielleria Valenza",
-      logoUrl: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=200&q=80",
-      websiteUrl: "https://www.gioielleriavalenza.it",
-      description: "Lista nozze per argenteria, fedi e articoli per la casa.",
-    },
-    {
-      id: "2",
-      name: "Rinascente Milano",
-      logoUrl: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=200&q=80",
-      websiteUrl: "https://www.rinascente.it",
-      description: "Lista nozze design, elettrodomestici e arredamento.",
-    },
-  ],
-}: PartnerStoresProps) {
-  return (
-    <div className="space-y-4 my-6">
-      <h4 className="font-serif font-bold text-[#1E293B] text-lg text-center">
-        🏪 Negozi Convenzionati in Città
-      </h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {stores.map((store) => (
-          <a
-            key={store.id}
-            href={store.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-[#D4AF37] hover:shadow-md transition flex items-center gap-4 text-left group"
-          >
-            <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200">
-              <Image
-                src={store.logoUrl}
-                alt={store.name}
-                fill
-                className="object-cover group-hover:scale-105 transition duration-300"
-              />
+  if (safeStores.length === 0) {
+    return (
+      <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+        <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
+          🏪 Negozi Convenzionati
+        </span>
+        <a
+          href="https://www.amazon.it/baby-reg/homepage?tag=zero100store-21"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2.5 bg-[#FAF7F2] rounded-xl text-xs font-bold text-[#1E293B] flex items-center justify-between border border-slate-200 hover:border-[#D4AF37] transition-all"
+        >
+          <div className="flex items-center gap-2">
+            <div className="relative w-6 h-6 flex-shrink-0">
+              <Image src="/logo.png" alt="Amazon Logo" fill className="object-contain" />
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1">
-                <h5 className="font-bold text-xs text-[#1E293B] truncate group-hover:text-[#D4AF37] transition">
-                  {store.name}
-                </h5>
-                <ExternalLink className="w-3 h-3 text-slate-400 flex-shrink-0" />
-              </div>
-              <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5">{store.description}</p>
-            </div>
-          </a>
-        ))}
+            <span>Lista Nozze Ufficiale Amazon ↗</span>
+          </div>
+          <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
+        </a>
       </div>
+    );
+  }
+
+  return (
+    <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
+      <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif text-xs">
+        🏪 Negozi Convenzionati
+      </span>
+      {safeStores.map((s) => (
+        <a
+          key={s.id || Math.random().toString()}
+          href={s.url || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2.5 bg-[#FAF7F2] rounded-xl text-xs font-bold text-[#1E293B] flex items-center justify-between border border-slate-200 hover:border-[#D4AF37] transition-all"
+        >
+          <div className="flex items-center gap-2">
+            <Store className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
+            <span className="truncate">{s.name || "Negozio Partner"} ↗</span>
+          </div>
+          <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
+        </a>
+      ))}
     </div>
   );
 }
