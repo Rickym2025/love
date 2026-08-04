@@ -27,14 +27,14 @@ export default function AgencySidebar({
       className="bg-[#1E293B] text-[#FAF7F2] border-r border-[#D4AF37]/30 p-6 flex flex-col justify-between h-full select-none overflow-y-auto"
     >
       <div className="space-y-6">
-        {/* LOGO AGENZIA PRESENTE IN ALTO */}
+        {/* LOGO AGENZIA */}
         <div className="flex items-center gap-3 border-b border-slate-700/60 pb-4">
           <div className="relative w-10 h-10 flex-shrink-0 drop-shadow">
-            <Image src="/wax-seal.png" alt="Logo Agenzia" fill className="object-contain" priority />
+            <Image src="/logo.png" alt="Logo Agenzia" fill className="object-contain" priority />
           </div>
           <div className="overflow-hidden">
             <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#D4AF37]" /> White-Label Hub
+              <Sparkles className="w-3 h-3 text-[#D4AF37]" /> White-Label Studio
             </span>
             <h1 className="font-serif font-bold text-base text-white truncate">
               {formattedAgencyName}
@@ -42,7 +42,7 @@ export default function AgencySidebar({
           </div>
         </div>
 
-        {/* MENU NAVIGAZIONE CON "INVITI GIÀ CREATI" */}
+        {/* NAVIGAZIONE CON PULSANTE INVITI GIÀ CREATI */}
         <nav className="space-y-2">
           <button
             type="button"
@@ -53,10 +53,9 @@ export default function AgencySidebar({
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
             }`}
           >
-            <LayoutGrid className="w-4 h-4" /> Crea Nuovo Invito
+            <LayoutGrid className="w-4 h-4" /> Crea / Modifica Invito
           </button>
 
-          {/* PULSANTE INVITI GIÀ CREATI */}
           <button
             type="button"
             onClick={() => setActiveTab("list")}
