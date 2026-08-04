@@ -22,28 +22,34 @@ const WELCOME_PHRASE_PRESETS = [
   "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
   "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
   "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
-  "Personalizzata (inserisci la tua frase nel campo sottostante)",
+  "Personalizzata (scrivi la tua frase personalizzata nel campo sottostante)",
 ];
 
 export const INTRO_START_PRESETS = [
-  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago", desc: "Sfondo romantico con specchio d'acqua e decorazioni floreali." },
-  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca", desc: "Apertura animata con sigillo bordeaux /wax-seal.png." },
-  { id: "lago", name: "🌊 Rifrazione Acqua & Lago", desc: "Effetto increspatura liquida interattiva WebGL." },
-  { id: "nuvole", name: "☁️ Cielo & Nuvole 3D Volumetriche", desc: "Spettacolare apertura a nuvole che si dividono allo scroll." },
+  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca (/wax-seal.png)" },
+  { id: "nuvole", name: "☁️ Cielo & Nuvole 3D Volumetriche (Apertura allo Scroll)" },
+  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
+  { id: "lago", name: "🌊 Rifrazione Acqua & Lago Romantico" },
 ];
 
 export const DATE_DISPLAY_MODES = [
-  { id: "scratch", name: "🎰 Gratta la Data (Col Dito / Mouse)" },
+  { id: "scratch", name: "🎰 Gratta la Data col Dito (HTML5 Canvas)" },
   { id: "countdown", name: "⏳ Countdown Timer in Tempo Reale" },
-  { id: "text", name: "📜 Data Fissa Elegant (Testo Dorato Grande)" },
+  { id: "text", name: "📜 Data Fissa Elegant (Testo Grande Dorato)" },
 ];
 
 export const SCHEDULE_SCHEMAS = [
-  { id: "classico", name: "🏛️ Classico Elegante" },
-  { id: "timeline", name: "📍 Timeline Verticale con Punti Dorati" },
+  { id: "classico", name: "🏛️ Classico Elegante (Elenco Orari Serf)" },
+  { id: "timeline", name: "📍 Timeline Verticale con Nodi Dorati" },
   { id: "nuvole", name: "☁️ Programma tra le Nuvole 3D" },
   { id: "schede", name: "🎴 Schede Card Separati" },
-  { id: "minimal", name: "📜 Minimal Serif" },
+  { id: "minimal", name: "📜 Minimal Serif Pulito" },
+];
+
+export const RSVP_STYLES = [
+  { id: "classico", name: "📜 Classico Elegante (Modulo con Menu & Intolleranze)" },
+  { id: "ceralacca", name: "✉️ Sigillo Ceralacca Pop-Up (/wax-seal.png)" },
+  { id: "pastello", name: "🎨 Pastello Minimal (Bottoni Pillola)" },
 ];
 
 export const EVENT_THEME_PRESETS = [
@@ -80,6 +86,8 @@ export default function AgencyConfigurator(props: any) {
     setDateDisplayMode,
     scheduleSchema,
     setScheduleSchema,
+    rsvpStyle,
+    setRsvpStyle,
     eventThemePreset,
     setEventThemePreset,
     customEventTheme,
@@ -140,17 +148,42 @@ export default function AgencyConfigurator(props: any) {
   }
 
   const sampleCreatedInvitations = [
-    { id: "1", couple: "Elena & Davide", date: "15 Settembre 2026", location: "Villa Rosa (Roma)", template: "Template A", slug: "elena-e-davide", status: "Attivo", rsvpCount: 84 },
-    { id: "2", couple: "Francesca & Luca", date: "28 Ottobre 2026", location: "Castello Sforzesco (Milano)", template: "Template B", slug: "francesca-e-luca", status: "Attivo", rsvpCount: 112 },
-    { id: "3", couple: "Marco & Giulia", date: "10 Maggio 2027", location: "Tenuta Borgo Antico", template: "Template A", slug: "marco-e-giulia", status: "Bozza", rsvpCount: 45 },
-    { id: "4", couple: "Sofia & Lorenzo", date: "22 Giugno 2027", location: "Villa Borromeo", template: "Template B", slug: "sofia-e-lorenzo", status: "Attivo", rsvpCount: 96 },
-    { id: "5", couple: "Chiara & Alessandro", date: "14 Luglio 2027", location: "Relais Villa Giulia", template: "Template A", slug: "chiara-e-alessandro", status: "Attivo", rsvpCount: 62 },
+    {
+      id: "1",
+      couple: "Elena & Davide",
+      date: "15 Settembre 2026",
+      location: "Villa Rosa (Roma)",
+      template: "Template A (Classico)",
+      slug: "elena-e-davide",
+      status: "Attivo",
+      rsvpCount: 84,
+    },
+    {
+      id: "2",
+      couple: "Francesca & Luca",
+      date: "28 Ottobre 2026",
+      location: "Castello Sforzesco (Milano)",
+      template: "Template B (Cielo 3D)",
+      slug: "francesca-e-luca",
+      status: "Attivo",
+      rsvpCount: 112,
+    },
+    {
+      id: "3",
+      couple: "Marco & Giulia",
+      date: "10 Maggio 2027",
+      location: "Tenuta Borgo Antico",
+      template: "Template A (Classico)",
+      slug: "marco-e-giulia",
+      status: "Bozza",
+      rsvpCount: 45,
+    },
   ];
 
   return (
     <div style={style} className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full">
       
-      {/* BARRA RAPIDA TAB */}
+      {/* BARRA TAB */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
         <button
           type="button"
@@ -173,7 +206,7 @@ export default function AgencyConfigurator(props: any) {
               : "bg-white text-slate-600 hover:bg-amber-50"
           }`}
         >
-          <FolderHeart className="w-3.5 h-3.5" /> ✉️ Inviti Già Creati (5)
+          <FolderHeart className="w-3.5 h-3.5" /> ✉️ Inviti Già Creati (3)
         </button>
 
         <button
@@ -194,20 +227,19 @@ export default function AgencyConfigurator(props: any) {
         <div className="space-y-6">
           <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-          {/* 1. SELEZIONE TEMPLATE E TIPO DI INTRO/START */}
+          {/* 1. SELEZIONE TEMPLATE & EFFETTO START MUTUAMENTE ESCLUSIVO */}
           <div className="space-y-4">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              1. Selezione Template &amp; Schermata Iniziale (Start)
+              1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
             </label>
 
-            {/* PULSANTI TEMPLATE A E B */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => {
                   setSelectedTemplate("A");
                   setCoupleNames("Elena & Davide");
-                  setIntroStart("arco");
+                  setIntroStart("busta");
                   setDateDisplayMode("countdown");
                 }}
                 className={`p-4 rounded-2xl border-2 text-left transition-all ${
@@ -218,7 +250,7 @@ export default function AgencyConfigurator(props: any) {
               >
                 <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
                 <h4 className="font-serif font-bold text-sm text-[#1E293B]">Classico Romantico d&apos;Autore</h4>
-                <p className="text-[10px] text-slate-600 mt-1">Arco Romano, Countdown, Ceralacca Bordeaux, Mappa &amp; Guest Photo Wall.</p>
+                <p className="text-[10px] text-slate-600 mt-1">Busta Ceralacca Bordeaux, Countdown Timer, Mappa Google &amp; RSVP.</p>
               </button>
 
               <button
@@ -237,13 +269,13 @@ export default function AgencyConfigurator(props: any) {
               >
                 <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
                 <h4 className="font-serif font-bold text-sm text-[#1E293B]">Moderno Cielo &amp; Nuvole 3D</h4>
-                <p className="text-[10px] text-slate-600 mt-1">3 Grattabili date, Busta azzurra, Nuvole Parting Clouds, Hub Giochi completo.</p>
+                <p className="text-[10px] text-slate-600 mt-1">3 Grattabili date, Nuvole Parting Clouds 3D, Hub Giochi completo.</p>
               </button>
             </div>
 
-            {/* SELETTORE SCHERMATA INIZIALE (START) */}
+            {/* EFFETTO START MUTUAMENTE ESCLUSIVO */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Inizio / Schermata di Benvenuto (Start)</label>
+              <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Unico Effetto Start Attivo</label>
               <select
                 value={introStart}
                 onChange={(e) => setIntroStart(e.target.value)}
@@ -258,10 +290,10 @@ export default function AgencyConfigurator(props: any) {
             </div>
           </div>
 
-          {/* 2. DATI SPOSI, FRASE PERSONALIZZATA & TEMA DELL'EVENTO */}
+          {/* 2. DATI SPOSI, FRASE PERSONALIZZATA & TEMA EVENTO */}
           <div className="space-y-4 pt-4 border-t border-slate-200">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              2. Dati Sposi, Frase di Benvenuto &amp; Tema dell&apos;Evento
+              2. Dati Sposi, Frase Personalizzata &amp; Tema dell&apos;Evento
             </label>
 
             <div>
@@ -276,7 +308,7 @@ export default function AgencyConfigurator(props: any) {
 
             {/* TEMA DELL'EVENTO */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento</label>
+              <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento (Preimpostato o Manuale)</label>
               <select
                 value={eventThemePreset}
                 onChange={(e) => setEventThemePreset(e.target.value)}
@@ -291,15 +323,15 @@ export default function AgencyConfigurator(props: any) {
                   type="text"
                   value={customEventTheme}
                   onChange={(e) => setCustomEventTheme(e.target.value)}
-                  placeholder="Scrivi qui il tema dell'evento a mano..."
+                  placeholder="Scrivi il tema dell'evento a mano..."
                   className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
                 />
               )}
             </div>
 
-            {/* FRASE DI BENVENUTO + TESTO LIBERO */}
+            {/* FRASE PERSONALIZZATA */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Frase di Benvenuto (Preset o Personalizzabile)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Frase di Benvenuto (Preset o Scritta a Piacimento)</label>
               <select
                 value={selectedPhrasePreset}
                 onChange={(e) => setSelectedPhrasePreset(e.target.value)}
@@ -319,19 +351,19 @@ export default function AgencyConfigurator(props: any) {
                   setSelectedPhrasePreset("9");
                   setCustomWelcomePhrase(e.target.value);
                 }}
-                placeholder="Oppure scrivi qui la tua frase personalizzata liberamente..."
+                placeholder="Scrivi qui la tua frase personalizzata liberamente..."
                 className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none"
               />
             </div>
           </div>
 
-          {/* 3. VISUALIZZAZIONE DATA & SCHEDULE OF EVENTS */}
+          {/* 3. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
           <div className="space-y-4 pt-4 border-t border-slate-200">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              3. Visualizzazione Data &amp; Programma Orari (Scaletta)
+              3. Visualizzazione Data &amp; Programma Orari (Italiano)
             </label>
 
-            {/* VISUALIZZAZIONE DATA (3 MODULI) */}
+            {/* 3 MODULI DATA */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
               <select
@@ -360,9 +392,9 @@ export default function AgencyConfigurator(props: any) {
               </div>
             </div>
 
-            {/* SCHEDULE OF EVENTS (5 SCHEMI IN ITALIANO) */}
+            {/* 5 SCHEMI PROGRAMMA ORARI IN ITALIANO */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-[#1E293B]">Schema Scaletta Orari (Programma della Giornata)</label>
+              <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
               <select
                 value={scheduleSchema}
                 onChange={(e) => setScheduleSchema(e.target.value)}
@@ -375,46 +407,14 @@ export default function AgencyConfigurator(props: any) {
             </div>
           </div>
 
-          {/* 4. MODULI ECOSISTEMA REPO ATTIVABILI */}
+          {/* 4. DRESS CODE, NEGOZI CONVENZIONATI & LISTA NOZZE */}
           <div className="space-y-4 pt-4 border-t border-slate-200">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              4. Attiva &amp; Configura i Moduli dell&apos;Ecosistema
+              4. Palette Cromatiche, Negozi &amp; IBAN Sposi
             </label>
 
-            {/* BUSTA 3D */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-              <span className="text-xs font-bold text-[#1E293B]">✉️ Busta d&apos;Epoca &amp; Ceralacca (EnvelopeWax)</span>
-              <button type="button" onClick={() => toggleModule("busta3d")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.busta3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                {modules.busta3d ? "Attivo" : "Disattivato"}
-              </button>
-            </div>
-
-            {/* NUVOLE 3D */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-              <span className="text-xs font-bold text-[#1E293B]">☁️ Nuvole 3D Volumetriche (PartingClouds)</span>
-              <button type="button" onClick={() => toggleModule("nuvole3d")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.nuvole3d ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                {modules.nuvole3d ? "Attivo" : "Disattivato"}
-              </button>
-            </div>
-
-            {/* LOCATION MAPPA */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#1E293B]">📍 Location &amp; Mappa Google</span>
-                <button type="button" onClick={() => toggleModule("locationMappa")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.locationMappa ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                  {modules.locationMappa ? "Attivo" : "Disattivato"}
-                </button>
-              </div>
-              {modules.locationMappa && (
-                <div className="space-y-2 pt-1 border-t border-slate-100">
-                  <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Nome Location" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
-                  <input type="text" value={locationAddress} onChange={(e) => setLocationAddress(e.target.value)} placeholder="Indirizzo completo" className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
-                </div>
-              )}
-            </div>
-
-            {/* DRESS CODE PALETTE & FOTO COERENTI */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            {/* DRESS CODE PALETTE CON FOTO COERENTI */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche</span>
                 <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
@@ -445,26 +445,10 @@ export default function AgencyConfigurator(props: any) {
               )}
             </div>
 
-            {/* HUB GIOCHI FESTA */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-              <span className="text-xs font-bold text-[#1E293B]">🎮 Hub Giochi Festa (LoveQuiz, PhotoPuzzle, ScratchPhoto)</span>
-              <button type="button" onClick={() => toggleModule("hubGiochiFesta")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.hubGiochiFesta ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                {modules.hubGiochiFesta ? "Attivo" : "Disattivato"}
-              </button>
-            </div>
-
-            {/* GUEST PHOTO WALL */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-              <span className="text-xs font-bold text-[#1E293B]">📸 Guest Photo Wall (10 Filtri Polaroid + Proiettore)</span>
-              <button type="button" onClick={() => toggleModule("guestPhotoWall")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.guestPhotoWall ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                {modules.guestPhotoWall ? "Attivo" : "Disattivato"}
-              </button>
-            </div>
-
-            {/* NEGOZI CONVENZIONATI MULTIPLI */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            {/* NEGOZI CONVENZIONATI CON LINK AMAZON AFFILIATO DEFAULT */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (PartnerStores)</span>
+                <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (Include Amazon Affiliato)</span>
                 <button type="button" onClick={() => toggleModule("negoziConvenzionati")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.negoziConvenzionati ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
                   {modules.negoziConvenzionati ? "Attivo" : "Disattivato"}
                 </button>
@@ -472,29 +456,66 @@ export default function AgencyConfigurator(props: any) {
               {modules.negoziConvenzionati && (
                 <div className="space-y-2 pt-2 border-t border-slate-100">
                   {partnerStores.map((store: any) => (
-                    <div key={store.id} className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                    <div key={store.id} className="p-2.5 bg-[#FAF7F2] rounded-xl border border-slate-200 flex justify-between items-center text-xs">
                       <div>
                         <p className="font-bold text-[#1E293B]">{store.name}</p>
-                        <p className="text-[10px] text-slate-500">{store.url}</p>
+                        <p className="text-[10px] text-slate-500 font-mono truncate max-w-[200px]">{store.url}</p>
                       </div>
-                      <button type="button" onClick={() => removeStore(store.id)} className="text-rose-600 p-1">
+                      <button type="button" onClick={() => removeStore(store.id)} className="text-rose-600 p-1 hover:bg-rose-50 rounded-lg">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ))}
-                  <button type="button" onClick={addStore} className="px-3 py-1 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1">
-                    <Plus className="w-3 h-3" /> Aggiungi Negozio
+                  <button type="button" onClick={addStore} className="px-3 py-1.5 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1">
+                    <Plus className="w-3 h-3" /> Aggiungi Altro Negozio
                   </button>
                 </div>
               )}
             </div>
 
-            {/* RSVP FORM */}
-            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-              <span className="text-xs font-bold text-[#1E293B]">✉️ Modulo Conferma Partecipazione (RsvpForm)</span>
-              <button type="button" onClick={() => toggleModule("confermaRsvp")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.confermaRsvp ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-                {modules.confermaRsvp ? "Attivo" : "Disattivato"}
-              </button>
+            {/* IBAN SPOSI */}
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#1E293B]">🎁 Coordinate IBAN Sposi</span>
+                <button type="button" onClick={() => toggleModule("listaNozzeAmazon")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.listaNozzeAmazon ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+                  {modules.listaNozzeAmazon ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.listaNozzeAmazon && (
+                <input
+                  type="text"
+                  value={customIban}
+                  onChange={(e) => setCustomIban(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono font-bold text-[#1E293B]"
+                />
+              )}
+            </div>
+          </div>
+
+          {/* 5. MODULO CONFERMA RSVP (3 MODELLI) */}
+          <div className="space-y-4 pt-4 border-t border-slate-200">
+            <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+              5. Modulo Conferma Partecipazione RSVP (3 Modelli)
+            </label>
+
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-bold text-[#1E293B]">Stile Grafico Modulo RSVP</span>
+                <button type="button" onClick={() => toggleModule("confermaRsvp")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.confermaRsvp ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+                  {modules.confermaRsvp ? "Attivo" : "Disattivato"}
+                </button>
+              </div>
+              {modules.confermaRsvp && (
+                <select
+                  value={rsvpStyle}
+                  onChange={(e) => setRsvpStyle(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
+                >
+                  {RSVP_STYLES.map((r) => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
         </div>
@@ -506,7 +527,7 @@ export default function AgencyConfigurator(props: any) {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-serif font-bold text-[#1E293B]">I Tuoi Inviti Creati</h2>
-              <p className="text-xs text-slate-500">Gestisci i matrimoni attivi della tua agenzia (5 di 10 sbloccati)</p>
+              <p className="text-xs text-slate-500">Gestisci i matrimoni attivi della tua agenzia (3 di 10 sbloccati)</p>
             </div>
             {setActiveTab && (
               <button type="button" onClick={() => setActiveTab("create")} className="px-4 py-2 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-xl hover:bg-amber-400 transition-all flex items-center gap-1.5 shadow-sm">
@@ -536,8 +557,8 @@ export default function AgencyConfigurator(props: any) {
                   <button type="button" onClick={() => { if (setCoupleNames) setCoupleNames(item.couple); if (setActiveTab) setActiveTab("create"); }} className="p-2 bg-[#FAF7F2] text-[#1E293B] hover:text-[#B8860B] rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1">
                     <Edit3 className="w-3.5 h-3.5" /> Modifica
                   </button>
-                  <button type="button" onClick={() => alert(`Download Excel Catering per ${item.couple} avviato!`)} className="p-2 bg-[#1E293B] text-white hover:bg-slate-800 rounded-xl text-xs font-bold flex items-center gap-1" title="Export Excel Catering">
-                    <Download className="w-3.5 h-3.5 text-[#D4AF37]" /> Excel
+                  <button type="button" onClick={() => alert(`Download File Excel Catering con risposte RSVP (intolleranze e menu) per ${item.couple} avviato!`)} className="p-2 bg-[#1E293B] text-white hover:bg-slate-800 rounded-xl text-xs font-bold flex items-center gap-1" title="Export Excel Catering">
+                    <Download className="w-3.5 h-3.5 text-[#D4AF37]" /> Excel Catering
                   </button>
                 </div>
               </div>
