@@ -44,7 +44,7 @@ export interface AgencyPreviewProps {
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "arco",
+  introStart = "busta",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
   eventThemePreset = "Luxury Gold & Total White",
@@ -63,7 +63,7 @@ export default function AgencyPreview({
   dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
   selectedPaletteIdx = 0,
   partnerStores = [],
-  marqueeText = "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦",
+  marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
 }: AgencyPreviewProps) {
@@ -113,7 +113,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI ALLA PALETTE */}
+      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors"
         style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
@@ -121,10 +121,10 @@ export default function AgencyPreview({
         {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* MARQUEE DEDICHE */}
+        {/* MARQUEE CON NOME SPOSI SCORREVOLE */}
         {modules.dedicheMarquee && (
           <div className="py-1">
-            <Marquee text={marqueeText} />
+            <Marquee text={marqueeText} coupleNames={coupleNames} />
           </div>
         )}
 
@@ -137,60 +137,52 @@ export default function AgencyPreview({
 
         {introStart === "nuvole" && modules.nuvole3d && (
           <div className="relative py-1">
-            <PartingClouds />
-          </div>
-        )}
-
-        {introStart === "arco" && (
-          <div className="relative w-full h-36 overflow-hidden border-b border-[#D4AF37]/30">
-            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/20 flex flex-col items-center justify-end pb-2">
-              <span className="font-serif font-bold text-[10px] uppercase tracking-widest bg-white/90 px-3 py-0.5 rounded-full border border-[#D4AF37] text-[#8B6508]">
-                Wedding Day
-              </span>
-            </div>
+            <PartingClouds inline={true} />
           </div>
         )}
 
         {introStart === "lago" && (
-          <div className="relative w-full h-32 overflow-hidden border-b border-sky-300">
+          <div className="relative w-full h-36 overflow-hidden border-b border-sky-300">
             <WaterRippleImage src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="relative w-12 h-12 drop-shadow-lg">
+                <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority />
+              </div>
+            </div>
           </div>
         )}
 
-        {/* HERO SPOSI AD ALTO CONTRASTO CROMATICO */}
+        {/* HERO SPOSI SENZA SCRITTE IN INGLESE */}
         <div className="text-center pt-3 px-4 space-y-1">
-          <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
-            Matrimonio • {activeTheme}
+          <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+            Il Matrimonio di {coupleNames} • {activeTheme}
           </span>
           <p className="text-xs font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-
-          {/* NOMI SPOSI CON CONTRASTO SCURO BEN LEGGIBILE */}
-          <h3 className="text-2xl font-serif font-bold text-[#1E293B] mt-1">
+          <h3 className="text-2xl font-serif font-bold mt-1" style={{ color: activePalette.colors[4] || "#1E293B" }}>
             {coupleNames}
           </h3>
-          <p className="text-xs italic font-serif text-[#1E293B] opacity-90 px-2 pt-1 font-medium">
+          <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: activePalette.colors[4] || "#1E293B" }}>
             &quot;{computedWelcomePhrase}&quot;
           </p>
-          <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
+          <p className="text-xs font-bold uppercase pt-1" style={{ color: activePalette.colors[3] || "#8B6508" }}>{locationName}</p>
         </div>
 
         {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block mb-1 font-serif text-[#8B6508]">
+            <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-3 font-serif font-bold text-xs text-[#1E293B]">
-              <div><span className="block text-sm text-[#8B6508]">129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
+            <div className="flex justify-center gap-3 font-serif font-bold text-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-sm text-[#8B6508]">14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-sm text-[#8B6508]">23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-sm text-[#8B6508]">17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#8B6508" }}>17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
@@ -211,7 +203,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI VISIVI DINAMICI IN ITALIANO SENZA EMOJI NUVOLE) */}
+        {/* PROGRAMMA DELLA GIORNATA (SENZA EMOJI NUVOLE) */}
         {scheduleSchema === "classico" && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs text-[#8B6508]">
