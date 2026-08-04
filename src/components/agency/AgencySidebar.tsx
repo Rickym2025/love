@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { LayoutGrid, FolderHeart, Palette, Sparkles } from "lucide-react";
+import { LayoutGrid, FolderHeart, Palette, Sparkles, Send } from "lucide-react";
 
 export interface AgencySidebarProps {
   agencyId?: string;
@@ -17,9 +17,17 @@ export default function AgencySidebar({
   setActiveTab,
   style,
 }: AgencySidebarProps) {
+  const [richiestaAperta, setRichiestaAperta] = useState(false);
+  const [inviatoWeb3, setInviatoWeb3] = useState(false);
+
   const formattedAgencyName = (agencyId || "sposi-in-love")
     .replace(/-/g, " ")
     .toUpperCase();
+
+  const handleWeb3Submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInviatoWeb3(true);
+  };
 
   return (
     <aside
@@ -82,9 +90,38 @@ export default function AgencySidebar({
         </nav>
       </div>
 
-      <div className="pt-6 border-t border-slate-700/60 text-[10px] text-slate-400">
-        <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
-        <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
+      {/* MODULO RICHIESTA WEB3FORMS */}
+      <div className="pt-6 border-t border-slate-700/60 text-[10px] space-y-3">
+        {!richiestaAperta ? (
+          <button
+            type="button"
+            onClick={() => setRichiestaAperta(true)}
+            className="w-full py-2.5 px-3 bg-[#FAF7F2]/10 hover:bg-[#FAF7F2]/20 border border-[#D4AF37]/40 rounded-xl text-xs font-bold text-[#D4AF37] flex items-center justify-center gap-1.5 transition-all"
+          >
+            <Send className="w-3.5 h-3.5" /> Richiedi Brano / Assistenza
+          </button>
+        ) : (
+          <form onSubmit={handleWeb3Submit} className="p-3 bg-slate-900/90 rounded-2xl border border-[#D4AF37]/30 space-y-2 text-left">
+            <span className="font-bold text-[#D4AF37] block">Richiesta Web3Form</span>
+            {inviatoWeb3 ? (
+              <p className="text-emerald-400 font-bold">Richiesta Inviata!</p>
+            ) : (
+              <>
+                <input type="text" placeholder="Oggetto" required className="w-full p-1.5 rounded bg-slate-800 border border-slate-700 text-white text-[10px]" />
+                <textarea rows={2} placeholder="Descrivi la richiesta..." required className="w-full p-1.5 rounded bg-slate-800 border border-slate-700 text-white text-[10px] resize-none" />
+                <div className="flex gap-1 pt-1">
+                  <button type="submit" className="flex-1 py-1 bg-[#D4AF37] text-slate-900 font-bold rounded">Invia</button>
+                  <button type="button" onClick={() => setRichiestaAperta(false)} className="py-1 px-2 bg-slate-800 text-slate-400 rounded">X</button>
+                </div>
+              </>
+            )}
+          </form>
+        )}
+
+        <div className="text-slate-400">
+          <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
+          <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
+        </div>
       </div>
     </aside>
   );
