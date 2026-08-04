@@ -11,6 +11,7 @@ export default function PartingClouds({ onOpen }: PartingCloudsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
+    if (isOpen) return;
     setIsOpen(true);
 
     const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
@@ -22,7 +23,7 @@ export default function PartingClouds({ onOpen }: PartingCloudsProps) {
   };
 
   return (
-    <div className="relative w-full h-44 my-2 overflow-hidden select-none">
+    <div className="relative w-full h-48 my-2 overflow-hidden select-none">
       {/* NUVOLA 3D SINISTRA (STILE FOTO 2) */}
       <div
         className={`absolute top-0 left-0 w-3/4 h-full transition-transform duration-1000 ease-out z-10 ${
