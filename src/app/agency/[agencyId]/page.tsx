@@ -38,13 +38,13 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
 
-  // Negozi Convenzionati con Link Affiliato Amazon Ufficiale Tag zero100store-21
+  // Negozi Convenzionati con Link Affiliato Amazon Ufficiale Tag zero100store-21 e /logo.png
   const [partnerStores, setPartnerStores] = useState<any[]>([
     {
       id: "amazon-default",
       name: "Lista Nozze Ufficiale Amazon",
       url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
-      logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
+      logoUrl: "/logo.png",
     },
   ]);
 
@@ -102,7 +102,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. SIDEBAR AGENZIA */}
+      {/* 1. COLONNA SINISTRA: SIDEBAR AGENZIA */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -111,7 +111,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE 1 TRASCINABILE */}
+      {/* SEPARATORE TRASCINABILE 1 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -121,7 +121,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
+      {/* 2. COLONNA CENTRALE: CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         <AgencyConfigurator
           activeTab={activeTab}
@@ -177,7 +177,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         />
       </div>
 
-      {/* SEPARATORE 2 TRASCINABILE */}
+      {/* SEPARATORE TRASCINABILE 2 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -187,7 +187,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. PREVIEW LIVE SMARTPHONE */}
+      {/* 3. COLONNA DESTRE: PREVIEW LIVE SMARTPHONE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
