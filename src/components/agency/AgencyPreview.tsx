@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Gift } from "lucide-react";
+import { Sparkles, MapPin, Gift, Clock, Utensils, GlassWater, Music } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
+import EnvelopeWax from "@/components/EnvelopeWax";
 import PartingClouds from "@/components/PartingClouds";
 import Marquee from "@/components/Marquee";
 import PartnerStores from "@/components/PartnerStores";
 import LoveQuiz from "@/components/LoveQuiz";
+import AudioPlayer from "@/components/AudioPlayer";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface AgencyPreviewProps {
@@ -64,7 +66,6 @@ export default function AgencyPreview({
   modules = {},
   audioUrl = "",
 }: AgencyPreviewProps) {
-  // Defensive fallbacks per evitare qualsiasi ReferenceError
   const palettes = DRESS_CODE_PALETTES || [
     { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
   ];
@@ -72,7 +73,6 @@ export default function AgencyPreview({
 
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos = photosMap[selectedPaletteIdx % 8] || photosMap[0] || [];
-  const [bustaAperta, setBustaAperta] = useState(false);
 
   const computedWelcomePhrase =
     welcomePhrase ||
@@ -120,6 +120,9 @@ export default function AgencyPreview({
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
+        {/* PLAYER AUDIO BRANO INEDITO */}
+        {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
+
         {/* MARQUEE DEDICHE */}
         {modules.dedicheMarquee && (
           <div className="py-1">
@@ -129,20 +132,8 @@ export default function AgencyPreview({
 
         {/* EFFETTO START MUTUAMENTE ESCLUSIVO */}
         {introStart === "busta" && modules.busta3d && (
-          <div
-            onClick={() => setBustaAperta(!bustaAperta)}
-            className="m-3 p-4 bg-[#F5EFE6] rounded-2xl border border-[#D4AF37]/40 text-center shadow-sm cursor-pointer"
-          >
-            <span className="text-[9px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
-              ✦ Partecipazione Digitale
-            </span>
-            <p className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</p>
-            <div className="relative w-12 h-12 mx-auto my-2 drop-shadow">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-            <span className="text-[9px] uppercase font-bold text-[#8B6508]">
-              {bustaAperta ? "Partecipazione Aperta" : "Tocca per Aprire l'Invito"}
-            </span>
+          <div className="p-3">
+            <EnvelopeWax coupleNames={coupleNames} />
           </div>
         )}
 
@@ -169,7 +160,7 @@ export default function AgencyPreview({
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
-        {/* MODULO VISUALIZZAZIONE DATA (3 OPZIONI) */}
+        {/* MODULO DATA (3 OPZIONI IN ITALIANO) */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif">
@@ -203,19 +194,77 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA */}
-        <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
-          <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-            Programma della Giornata ({scheduleSchema})
-          </span>
-          <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
-            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
-            <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-            <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI VISIVI DINAMICI IN ITALIANO) */}
+        {scheduleSchema === "classico" && (
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
+              Programma della Giornata (Classico)
+            </span>
+            <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
+              <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+            </div>
           </div>
-        </div>
+        )}
+
+        {scheduleSchema === "timeline" && (
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
+              📍 Timeline della Giornata
+            </span>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 border-[#D4AF37] text-xs text-[#1E293B]">
+              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza</div>
+              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia</div>
+              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo</div>
+              <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
+              <div><span className="font-bold text-[#8B6508]">22:00</span> — Party</div>
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "nuvole" && (
+          <div className="mx-3 my-3 p-4 bg-sky-50/90 rounded-2xl border border-sky-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-sky-800 uppercase block font-serif text-xs">
+              ☁️ Programma tra le Nuvole
+            </span>
+            <div className="space-y-1.5 text-xs text-[#1E293B]">
+              <p><strong>16:30</strong> ☁️ Arrivo Ospiti</p>
+              <p><strong>17:00</strong> ☁️ Cerimonia</p>
+              <p><strong>18:30</strong> ☁️ Aperitivo</p>
+              <p><strong>20:00</strong> ☁️ Cena di Gala</p>
+              <p><strong>22:00</strong> ☁️ Festa Finale</p>
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "schede" && (
+          <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
+            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">16:30</span> Arrivo Ospiti
+            </div>
+            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">17:00</span> Cerimonia
+            </div>
+            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">18:30</span> Aperitivo
+            </div>
+            <div className="p-2 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">20:00</span> Cena
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "minimal" && (
+          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs text-[#1E293B]">
+            <p>16:30 • Accoglienza Ospiti</p>
+            <p>17:00 • Cerimonia di Nozze</p>
+            <p>18:30 • Aperitivo</p>
+            <p>20:00 • Cena &amp; Torta</p>
+          </div>
+        )}
 
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
@@ -249,7 +298,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT */}
+        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COERENTE */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
@@ -278,7 +327,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI */}
+        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
             <PartnerStores stores={partnerStores} />
@@ -297,14 +346,14 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA RSVP */}
+        {/* MODULO CONFERMA RSVP (DINAMICO SULLA PALETTA COLORI) */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* GIOCHI DELLA FESTA */}
+        {/* GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
         {modules.hubGiochiFesta && (
           <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
