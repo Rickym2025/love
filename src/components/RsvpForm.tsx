@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2, XCircle, Utensils, Users, AlertCircle } from "lucide-react";
+import { CheckCircle2, XCircle, Users, AlertCircle } from "lucide-react";
 
 export interface RsvpFormProps {
   coupleNames?: string;
@@ -17,12 +17,12 @@ export default function RsvpForm({
   const [nome, setNome] = useState("");
   const [presenza, setPresenza] = useState("si");
   const [ospiti, setOspiti] = useState("1");
-  const [menuScelto, setMenuScelto] = useState("carne");
   const [intolleranze, setIntolleranze] = useState("");
   const [inviato, setInviato] = useState(false);
 
-  const mainAccent = paletteColors[3] || "#D4AF37";
-  const darkText = paletteColors[4] || "#1E293B";
+  const mainAccent = paletteColors?.[3] || "#D4AF37";
+  const darkText = paletteColors?.[4] || "#1E293B";
+  const bgCard = paletteColors?.[0] || "#FFFFFF";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,14 +39,65 @@ export default function RsvpForm({
     );
   }
 
-  // MODELLO 2: SCHEDE CARD MODERNE CON ICONE
+  // STILE PASTELLO MINIMAL
+  if (rsvpStyle === "pastello") {
+    return (
+      <form onSubmit={handleSubmit} className="p-5 bg-sky-50/90 rounded-3xl border border-sky-200 shadow-sm space-y-3 text-center">
+        <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif">
+          Conferma di Partecipazione
+        </span>
+
+        <input
+          type="text"
+          required
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          placeholder="Il tuo Nome e Cognome"
+          className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
+        />
+
+        <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setPresenza("si")}
+            className={`p-2.5 rounded-full transition-all ${
+              presenza === "si" ? "bg-sky-700 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
+            }`}
+          >
+            Parteciperò
+          </button>
+          <button
+            type="button"
+            onClick={() => setPresenza("no")}
+            className={`p-2.5 rounded-full transition-all ${
+              presenza === "no" ? "bg-rose-500 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
+            }`}
+          >
+            Non Ci Sarò
+          </button>
+        </div>
+
+        {presenza === "si" && (
+          <input
+            type="text"
+            value={intolleranze}
+            onChange={(e) => setIntolleranze(e.target.value)}
+            placeholder="Intolleranze alimentari / Allergie..."
+            className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
+          />
+        )}
+
+        <button type="submit" className="w-full py-3 bg-sky-800 text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-sky-900 shadow-md transition-all mt-2">
+          Invia Risposta
+        </button>
+      </form>
+    );
+  }
+
+  // STILE MODERNO CARD
   if (rsvpStyle === "moderno") {
     return (
-      <form
-        onSubmit={handleSubmit}
-        className="p-6 rounded-3xl border shadow-lg space-y-4 text-left transition-colors bg-white"
-        style={{ borderColor: mainAccent }}
-      >
+      <form onSubmit={handleSubmit} className="p-6 rounded-3xl border shadow-lg space-y-4 text-left transition-colors bg-white" style={{ borderColor: mainAccent }}>
         <div className="text-center space-y-1">
           <span className="text-xs font-bold uppercase tracking-widest block font-serif" style={{ color: mainAccent }}>
             Conferma di Partecipazione
@@ -119,29 +170,6 @@ export default function RsvpForm({
 
             <div>
               <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
-                <Utensils className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Preferenza Menu
-              </label>
-              <div className="grid grid-cols-3 gap-2 text-[11px] font-bold">
-                {["carne", "pesce", "vegetariano"].map((menu) => (
-                  <button
-                    key={menu}
-                    type="button"
-                    onClick={() => setMenuScelto(menu)}
-                    className="p-2 rounded-xl border text-center uppercase tracking-wider transition-all"
-                    style={{
-                      backgroundColor: menuScelto === menu ? darkText : "#FAF7F2",
-                      color: menuScelto === menu ? mainAccent : darkText,
-                      borderColor: menuScelto === menu ? darkText : "#CBD5E1",
-                    }}
-                  >
-                    {menu}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
                 <AlertCircle className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Allergie o Intolleranze
               </label>
               <input
@@ -167,73 +195,12 @@ export default function RsvpForm({
     );
   }
 
-  // MODELLO 3: PASTELLO MINIMAL
-  if (rsvpStyle === "pastello") {
-    return (
-      <form
-        onSubmit={handleSubmit}
-        className="p-5 rounded-3xl border border-sky-200 shadow-sm space-y-3 text-center transition-colors bg-sky-50/90"
-      >
-        <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif">
-          Conferma di Partecipazione
-        </span>
-
-        <input
-          type="text"
-          required
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          placeholder="Il tuo Nome e Cognome"
-          className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
-        />
-
-        <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-          <button
-            type="button"
-            onClick={() => setPresenza("si")}
-            className={`p-2.5 rounded-full transition-all ${
-              presenza === "si" ? "bg-sky-700 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
-            }`}
-          >
-            Parteciperò
-          </button>
-          <button
-            type="button"
-            onClick={() => setPresenza("no")}
-            className={`p-2.5 rounded-full transition-all ${
-              presenza === "no" ? "bg-rose-500 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
-            }`}
-          >
-            Non Ci Sarò
-          </button>
-        </div>
-
-        {presenza === "si" && (
-          <input
-            type="text"
-            value={intolleranze}
-            onChange={(e) => setIntolleranze(e.target.value)}
-            placeholder="Intolleranze alimentari / Allergie..."
-            className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
-          />
-        )}
-
-        <button
-          type="submit"
-          className="w-full py-3 bg-sky-800 text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-sky-900 shadow-md transition-all mt-2"
-        >
-          Invia Risposta
-        </button>
-      </form>
-    );
-  }
-
-  // MODELLO 1: CLASSICO ELEGANTE (DEFAULT)
+  // STILE CLASSICO ELEGANTE (DEFAULT)
   return (
     <form
       onSubmit={handleSubmit}
       className="p-5 rounded-3xl border shadow-md space-y-3 text-center transition-colors"
-      style={{ backgroundColor: paletteColors[0] || "#FFFFFF", borderColor: mainAccent }}
+      style={{ backgroundColor: bgCard, borderColor: mainAccent }}
     >
       <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: mainAccent }}>
         Conferma di Partecipazione
@@ -303,4 +270,20 @@ export default function RsvpForm({
               value={intolleranze}
               onChange={(e) => setIntolleranze(e.target.value)}
               placeholder="es. Celiaco, Vegetariano, Nessuna..."
-              className="w-full p-2.5 r
+              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
+              style={{ color: darkText }}
+            />
+          </div>
+        </>
+      )}
+
+      <button
+        type="submit"
+        className="w-full py-3 font-bold rounded-xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
+        style={{ backgroundColor: darkText, color: mainAccent }}
+      >
+        Invia Conferma Partecipazione
+      </button>
+    </form>
+  );
+}
