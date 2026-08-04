@@ -1,0 +1,103 @@
+export interface PartnerStore {
+  id: string;
+  name: string;
+  url: string;
+  logoUrl: string;
+}
+
+export const WELCOME_PHRASE_PRESETS = [
+  "Due anime, un solo destino. Una storia scritta nel cuore.",
+  "L'amore non consiste nello guardarsi l'un l'altro, ma nel guardare insieme nella stessa direzione.",
+  "Niente è per caso, ogni passo ci ha condotti qui. Unisciti alla nostra gioia.",
+  "Oggi inizia il nostro 'per sempre'. Siete i benvenuti a celebrare con noi.",
+  "Due cuori, una sola melodia. Festeggia il nostro giorno speciale!",
+  "Con gioia e gratitudine vi invitiamo a condividere l'inizio della nostra vita insieme.",
+  "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
+  "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
+  "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
+  "Personalizzata (scrivi la tua frase nel campo sottostante)",
+];
+
+export const INTRO_START_PRESETS = [
+  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca (/wax-seal.png)" },
+  { id: "nuvole", name: "☁️ Cielo & Nuvole 3D Volumetriche (Apertura allo Scroll)" },
+  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
+  { id: "lago", name: "🌊 Rifrazione Acqua & Lago Romantico" },
+];
+
+export const DATE_DISPLAY_MODES = [
+  { id: "scratch", name: "🎰 Gratta la Data col Dito (HTML5 Canvas)" },
+  { id: "countdown", name: "⏳ Countdown Timer in Tempo Reale" },
+  { id: "text", name: "📜 Data Fissa Elegant (Testo Grande Dorato)" },
+];
+
+export const SCHEDULE_SCHEMAS = [
+  { id: "classico", name: "🏛️ Classico Elegante" },
+  { id: "timeline", name: "📍 Timeline Verticale con Nodi Dorati" },
+  { id: "nuvole", name: "☁️ Programma tra le Nuvole 3D" },
+  { id: "schede", name: "🎴 Schede Card Separati" },
+  { id: "minimal", name: "📜 Minimal Serif Pulito" },
+];
+
+export const RSVP_STYLES = [
+  { id: "classico", name: "📜 Classico Elegante (Modulo con Menu & Intolleranze)" },
+  { id: "ceralacca", name: "✉️ Sigillo Ceralacca Pop-Up (/wax-seal.png)" },
+  { id: "pastello", name: "🎨 Pastello Minimal (Bottoni Pillola)" },
+];
+
+export const EVENT_THEME_PRESETS = [
+  "Shabby Chic & Provenzale",
+  "Botanico & Greenery",
+  "Country Elegant",
+  "Luxury Gold & Total White",
+  "BOHO Chic & Terracotta",
+  "Minimal Modern",
+  "Tropical Romance",
+  "Personalizzato (digita a mano)",
+];
+
+export const DRESS_CODE_PALETTES = [
+  { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
+  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#D4AF37", "#B8860B", "#1E293B"] },
+  { id: "3", name: "Smeraldo & Salvia", colors: ["#F0FDF4", "#A7F3D0", "#34D399", "#059669", "#064E3B"] },
+  { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF1F2", "#FECDD3", "#FB7185", "#E11D48", "#881337"] },
+  { id: "5", name: "Blu Notte & Zaffiro", colors: ["#F0F9FF", "#93C5FD", "#3B82F6", "#1D4ED8", "#0F172A"] },
+  { id: "6", name: "Sabbia & Terracotta", colors: ["#FFF7ED", "#FED7AA", "#FB923C", "#EA580C", "#7C2D12"] },
+  { id: "7", name: "Lavanda & Lillà", colors: ["#F5F3FF", "#DDD6FE", "#A78BFA", "#7C3AED", "#4C1D95"] },
+  { id: "8", name: "Bianco & Minimal", colors: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8", "#0F172A"] },
+];
+
+export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
+  0: [
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
+  ],
+  1: [
+    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+  ],
+  2: [
+    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
+  ],
+  3: [
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
+  ],
+  4: [
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+  ],
+  5: [
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
+  ],
+  6: [ // LAVANDA & LILLÀ RIGOROSA (ESCLUSIVAMENTE LILLA/VIOLA)
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
+  ],
+  7: [
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
+  ],
+};
