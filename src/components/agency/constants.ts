@@ -19,7 +19,7 @@ export const WELCOME_PHRASE_PRESETS = [
 ];
 
 export const INTRO_START_PRESETS = [
-  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca (/wax-seal.png)" },
+  { id: "busta", name: "✉️ Busta d'Epoca & Sigillo Ceralacca (Busta 3D)" },
   { id: "nuvole", name: "☁️ Cielo & Nuvole 3D Volumetriche (Apertura allo Scroll)" },
   { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
   { id: "lago", name: "🌊 Rifrazione Acqua & Lago Romantico" },
@@ -41,7 +41,7 @@ export const SCHEDULE_SCHEMAS = [
 
 export const RSVP_STYLES = [
   { id: "classico", name: "📜 Classico Elegante (Modulo con Menu & Intolleranze)" },
-  { id: "ceralacca", name: "✉️ Sigillo Ceralacca Pop-Up (/wax-seal.png)" },
+  { id: "ceralacca", name: "✉️ Sigillo Ceralacca Pop-Up (Con Ceralacca)" },
   { id: "pastello", name: "🎨 Pastello Minimal (Bottoni Pillola)" },
 ];
 
@@ -68,35 +68,35 @@ export const DRESS_CODE_PALETTES = [
 ];
 
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [
+  0: [ // Pastello Romantico
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  1: [
+  1: [ // Oro & Champagne
     "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
   ],
-  2: [
+  2: [ // Smeraldo & Salvia
     "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
-  3: [
+  3: [ // Rose Gold & Cipria
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
   ],
-  4: [
+  4: [ // Blu Notte & Zaffiro
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
   ],
-  5: [
+  5: [ // Sabbia & Terracotta
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [
+  6: [ // Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA)
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
-  7: [
+  7: [ // Bianco & Minimal
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
