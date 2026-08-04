@@ -13,7 +13,6 @@ export default function AgencyConfigurator(props: any) {
 
   return (
     <div style={style} className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full">
-      {/* CONTENUTO TAB MODULARE */}
       {activeTab === "create" && <ConfiguratorForm {...props} />}
       {activeTab === "list" && <ConfiguratorList {...props} />}
       {activeTab === "brand" && <ConfiguratorBrand {...props} />}
