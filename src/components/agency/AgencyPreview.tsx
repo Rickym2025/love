@@ -1,32 +1,53 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Store, Heart, Gift } from "lucide-react";
+import { Sparkles, MapPin, Gift, Heart } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
-import EnvelopeWax from "@/components/EnvelopeWax";
 import PartingClouds from "@/components/PartingClouds";
 import Marquee from "@/components/Marquee";
 import PartnerStores from "@/components/PartnerStores";
+import LoveQuiz from "@/components/LoveQuiz";
+import PhotoPuzzle from "@/components/PhotoPuzzle";
+import ScratchPhoto from "@/components/ScratchPhoto";
+import PhotoWallSection from "@/components/PhotoWallSection";
 import { DRESS_CODE_PALETTES } from "./AgencyConfigurator";
 
+// Mappatura Rigorosa 8 Palette -> Foto Coerenti (Nessun outfit fuori colore)
 const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [
+  0: [ // Pastello Romantico
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
   ],
-  1: [
+  1: [ // Oro & Champagne
     "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
-  2: [
+  2: [ // Smeraldo & Salvia
     "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
+  ],
+  3: [ // Rose Gold & Cipria
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
+  ],
+  4: [ // Blu Notte & Zaffiro
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+  ],
+  5: [ // Sabbia & Terracotta
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
+  ],
+  6: [ // Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA)
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
+  ],
+  7: [ // Bianco & Minimal
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
 };
 
@@ -35,6 +56,7 @@ export interface AgencyPreviewProps {
   introStart?: string;
   dateDisplayMode?: string;
   scheduleSchema?: string;
+  rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
   selectedColorScheme?: string;
@@ -72,9 +94,10 @@ const WELCOME_PHRASE_PRESETS = [
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "arco",
+  introStart = "busta",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
+  rsvpStyle = "classico",
   eventThemePreset = "Luxury Gold & Total White",
   customEventTheme = "",
   coupleNames = "Elena & Davide",
@@ -95,7 +118,8 @@ export default function AgencyPreview({
   audioUrl = "",
 }: AgencyPreviewProps) {
   const activePalette = DRESS_CODE_PALETTES[selectedPaletteIdx] || DRESS_CODE_PALETTES[0];
-  const outfitPhotos = DRESS_CODE_PHOTOS[selectedPaletteIdx % 3] || DRESS_CODE_PHOTOS[0];
+  const outfitPhotos = DRESS_CODE_PHOTOS[selectedPaletteIdx % 8] || DRESS_CODE_PHOTOS[0];
+  const [bustaAperta, setBustaAperta] = useState(false);
 
   const computedWelcomePhrase =
     welcomePhrase ||
@@ -105,7 +129,6 @@ export default function AgencyPreview({
     "Benvenuti al nostro matrimonio";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-
   const activeTheme = eventThemePreset === "Personalizzato (inserisci a mano)" ? customEventTheme : eventThemePreset;
 
   const fullscreenDynamicUrl = `/${
@@ -121,119 +144,136 @@ export default function AgencyPreview({
   )}&palette=${selectedPaletteIdx}`;
 
   return (
-    <div className="w-full h-full p-4 flex flex-col items-center justify-center overflow-y-auto">
+    <div className="w-full h-full flex flex-col items-center justify-center p-2">
       {/* TESTATA ANTEPRIMA */}
-      <div className="flex justify-between items-center w-full max-w-[340px] mb-3 text-white">
+      <div className="flex justify-between items-center w-full max-w-[340px] mb-2 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
+          <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" /> Live Preview Sincronizzata
         </span>
         <Link
           href={fullscreenDynamicUrl}
           target="_blank"
-          className="text-[11px] text-[#D4AF37] hover:text-white flex items-center gap-1 font-bold bg-[#FAF7F2]/10 px-2.5 py-1 rounded-lg transition-all"
+          className="text-[10px] text-[#D4AF37] hover:text-white flex items-center gap-1 font-bold bg-[#FAF7F2]/10 px-2 py-1 rounded-lg transition-all"
         >
           Apri Fullscreen ↗
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
+      {/* MOCKUP SMARTPHONE */}
       <div
-        className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
+        className={`w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
           selectedTemplate === "B" || introStart === "nuvole"
             ? "bg-[#F0F7FF] text-[#1E293B]"
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
-        {/* MARQUEE DEDICHE */}
+        {/* MARQUEE DEDICHE SCORREVOLI */}
         {modules.dedicheMarquee && (
           <div className="py-1">
             <Marquee text={marqueeText} />
           </div>
         )}
 
-        {/* NUVOLE 3D */}
-        {modules.nuvole3d && <PartingClouds />}
-
-        {/* BUSTA CERALACCA ENVELOPEWAX */}
-        {modules.busta3d && (
-          <div className="p-3 my-2">
-            <EnvelopeWax coupleNames={coupleNames} />
+        {/* EFFETTO START MUTUAMENTE ESCLUSIVO (SOLO 1 ATTIVO ALLA VOLTA) */}
+        {introStart === "busta" && modules.busta3d && (
+          <div
+            onClick={() => setBustaAperta(!bustaAperta)}
+            className="m-3 p-4 bg-[#F5EFE6] rounded-2xl border border-[#D4AF37]/40 text-center shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
+          >
+            <span className="text-[9px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
+              ✦ Partecipazione Digitale
+            </span>
+            <p className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</p>
+            <div className="relative w-12 h-12 mx-auto my-2 drop-shadow">
+              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
+            </div>
+            <span className="text-[9px] uppercase font-bold text-[#8B6508] animate-pulse">
+              {bustaAperta ? "Partecipazione Aperta" : "Tocca per Aprire l'Invito"}
+            </span>
           </div>
         )}
 
-        {/* HERO SPOSI */}
+        {introStart === "nuvole" && modules.nuvole3d && (
+          <div className="relative py-2">
+            <PartingClouds />
+          </div>
+        )}
+
+        {/* HERO INTRO SPOSI */}
         <div className="text-center pt-4 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
-            Wedding Celebration • {activeTheme}
+            Matrimonio • {activeTheme}
           </span>
           <p className="text-xs font-bold text-slate-700">
-            {weddingDateDay}.{weddingDateMonth}.{weddingDateYear}
+            {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <h3 className="text-2xl font-serif font-bold text-[#1E293B] mt-1 drop-shadow-xs">
+          <h3 className="text-2xl font-serif font-bold text-[#1E293B] mt-1">
             {coupleNames}
           </h3>
-          <p className="text-xs italic font-serif text-[#1E293B] opacity-90 px-2 pt-1 font-semibold">
+          <p className="text-xs italic font-serif text-[#1E293B] opacity-90 px-2 pt-1 font-medium">
             &quot;{computedWelcomePhrase}&quot;
           </p>
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
-        {/* MODULO DATA (3 OPZIONI) */}
+        {/* MODULO VISUALIZZAZIONE DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
-          <div className="my-4 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1">
-              ⏳ The Celebration Begins In
+          <div className="my-3 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif">
+              ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-3 text-[#1E293B] font-serif font-bold text-sm">
-              <div><span className="block text-base text-[#8B6508]">129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Days</span></div>
+            <div className="flex justify-center gap-3 text-[#1E293B] font-serif font-bold text-xs">
+              <div><span className="block text-sm text-[#8B6508]">129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-base text-[#8B6508]">00</span><span className="text-[8px] uppercase text-slate-600 font-sans">Hours</span></div>
+              <div><span className="block text-sm text-[#8B6508]">14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-base text-[#8B6508]">23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minutes</span></div>
+              <div><span className="block text-sm text-[#8B6508]">23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <span>:</span>
+              <div><span className="block text-sm text-[#8B6508]">17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
         {dateDisplayMode === "scratch" && modules.grattaData && (
-          <div className="my-4 mx-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm">
-            <span className="text-[10px] font-bold text-sky-800 uppercase block mb-2">
-              🎰 Scratch to reveal the date
+          <div className="my-3 mx-3 p-3 bg-white rounded-2xl text-center border border-slate-200 shadow-sm">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-2">
+              🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
           </div>
         )}
 
         {dateDisplayMode === "text" && (
-          <div className="my-4 mx-3 p-4 bg-white rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
+          <div className="my-3 mx-3 p-3 bg-white rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1">Data del Matrimonio</span>
-            <p className="font-serif font-bold text-xl text-[#1E293B]">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
+            <p className="font-serif font-bold text-lg text-[#1E293B]">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
           </div>
         )}
 
-        {/* SCHEDULE OF EVENTS (PROGRAMMA ORARI IN ITALIANO) */}
-        <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
-          <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI IN ITALIANO) */}
+        <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+          <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
             Programma della Giornata
           </span>
           <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
-            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo e Accoglienza Ospiti</p>
+            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
             <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
             <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cene di Gala &amp; Taglio Torta</p>
+            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
             <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
           </div>
         </div>
 
-        {/* LOCATION & MAPPA INTEGRATA */}
+        {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
               📍 Location del Matrimonio
             </span>
             <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
             <p className="text-[10px] text-slate-600 font-medium">{locationAddress}</p>
 
-            <div className="w-full h-36 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
+            <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
               <iframe
                 title="Mappa Location"
                 width="100%"
@@ -249,34 +289,34 @@ export default function AgencyPreview({
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
             >
-              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Open in Maps ↗
+              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
             </a>
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT SCORREVOLE */}
+        {/* DRESS CODE CON GALLERIA OUTFIT COERENTE */}
         {modules.codiceAbbigliamento && (
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
               Dress Code &amp; Palette
             </span>
-            <p className="text-[10px] text-slate-700 font-serif leading-relaxed">{dressCodeNotes}</p>
+            <p className="text-[10px] text-slate-700 font-serif">{dressCodeNotes}</p>
 
             <div className="flex justify-center gap-1.5 py-1">
               {activePalette.colors.map((c, i) => (
-                <div key={i} className="w-5 h-5 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
+                <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
 
-            <div className="pt-2">
+            <div className="pt-1">
               <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
-                Outfit Inspiration (scroll ➔)
+                Esempi di Abbigliamento Consigliati (Scorri ➔)
               </span>
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x">
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
                 {outfitPhotos.map((imgUrl, idx) => (
-                  <div key={idx} className="w-24 h-32 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
+                  <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                     <Image src={imgUrl} alt={`Outfit ${idx}`} fill className="object-cover" />
                   </div>
                 ))}
@@ -285,18 +325,18 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
+        {/* NEGOZI CONVENZIONATI PARTNERSTORES CON AMAZON DEFAULT */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
             <PartnerStores stores={partnerStores} />
           </div>
         )}
 
-        {/* LISTA NOZZE & IBAN */}
+        {/* LISTA NOZZE IBAN */}
         {modules.listaNozzeAmazon && (
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-2">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm flex items-center justify-center gap-1">
-              <Gift className="w-3.5 h-3.5 text-[#8B6508]" /> Gift Preference &amp; IBAN
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs flex items-center justify-center gap-1">
+              <Gift className="w-3.5 h-3.5 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <div className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 text-[10px] font-mono font-bold text-[#1E293B] break-all">
               {customIban}
@@ -304,10 +344,32 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* RSVP FORM */}
+        {/* MODULO CONFERMA RSVP (3 MODELLI) */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
+          </div>
+        )}
+
+        {/* HUB GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
+        {modules.hubGiochiFesta && (
+          <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
+            <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
+              🎮 Giochi della Festa per gli Invitati
+            </span>
+            <p className="text-[10px] text-slate-300">
+              Partecipa al Quiz della coppia, gioca al Puzzle e scopri la foto speciale!
+            </p>
+            <div className="pt-1">
+              <LoveQuiz />
+            </div>
+          </div>
+        )}
+
+        {/* GUEST PHOTO WALL (DOPO IL MODULO RSVP) */}
+        {modules.guestPhotoWall && (
+          <div className="mx-3 my-3 p-2 bg-white rounded-2xl border border-slate-200 text-center shadow-sm">
+            <PhotoWallSection />
           </div>
         )}
       </div>
