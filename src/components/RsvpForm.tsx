@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import { CheckCircle2, XCircle, Utensils, Users, AlertCircle } from "lucide-react";
 
 export interface RsvpFormProps {
   coupleNames?: string;
@@ -17,9 +17,9 @@ export default function RsvpForm({
   const [nome, setNome] = useState("");
   const [presenza, setPresenza] = useState("si");
   const [ospiti, setOspiti] = useState("1");
+  const [menuScelto, setMenuScelto] = useState("carne");
   const [intolleranze, setIntolleranze] = useState("");
   const [inviato, setInviato] = useState(false);
-  const [apertoCeralacca, setApertoCeralacca] = useState(false);
 
   const mainAccent = paletteColors[3] || "#D4AF37";
   const darkText = paletteColors[4] || "#1E293B";
@@ -32,30 +32,138 @@ export default function RsvpForm({
   if (inviato) {
     return (
       <div className="p-6 bg-emerald-50 border border-emerald-300 rounded-3xl text-center space-y-2">
-        <span className="text-2xl">✨</span>
-        <h4 className="font-serif font-bold text-sm text-emerald-900">Grazie {nome}!</h4>
-        <p className="text-xs text-emerald-700">La tua risposta per {coupleNames} è stata registrata con successo.</p>
+        <span className="text-3xl">✨</span>
+        <h4 className="font-serif font-bold text-base text-emerald-900">Grazie {nome}!</h4>
+        <p className="text-xs text-emerald-700">La tua risposta per il matrimonio di {coupleNames} è stata registrata con successo.</p>
       </div>
     );
   }
 
-  // MODELLO 2: SIGILLO CERALACCA POP-UP
-  if (rsvpStyle === "ceralacca" && !apertoCeralacca) {
+  // MODELLO 2: SCHEDE CARD MODERNE CON ICONE
+  if (rsvpStyle === "moderno") {
     return (
-      <div
-        onClick={() => setApertoCeralacca(true)}
-        className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/40 text-center shadow-md cursor-pointer transition-all hover:scale-[1.02] space-y-2 select-none"
+      <form
+        onSubmit={handleSubmit}
+        className="p-6 rounded-3xl border shadow-lg space-y-4 text-left transition-colors bg-white"
+        style={{ borderColor: mainAccent }}
       >
-        <span className="text-[10px] font-bold text-[#8B6508] uppercase block tracking-widest font-serif">
-          Conferma la tua Partecipazione
-        </span>
-        <div className="relative w-14 h-14 mx-auto my-1 drop-shadow animate-pulse">
-          <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
+        <div className="text-center space-y-1">
+          <span className="text-xs font-bold uppercase tracking-widest block font-serif" style={{ color: mainAccent }}>
+            Conferma di Partecipazione
+          </span>
+          <p className="text-[11px] text-slate-500 font-serif">Facci sapere se sarai dei nostri per festeggiare insieme!</p>
         </div>
-        <span className="text-xs font-bold text-[#1E293B] block font-serif">
-          Tocca qui per inserire i tuoi dati e confermare ↗
-        </span>
-      </div>
+
+        <div>
+          <label className="block text-xs font-bold mb-1" style={{ color: darkText }}>Il tuo Nome e Cognome</label>
+          <input
+            type="text"
+            required
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            placeholder="es. Mario Rossi"
+            className="w-full p-3 rounded-2xl border border-slate-300 text-xs font-bold text-[#1E293B] bg-[#FAF7F2] focus:outline-none"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold" style={{ color: darkText }}>Confermi la tua presenza?</label>
+          <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => setPresenza("si")}
+              className="p-3 rounded-2xl border flex items-center justify-center gap-2 transition-all"
+              style={{
+                backgroundColor: presenza === "si" ? mainAccent : "#FAF7F2",
+                color: presenza === "si" ? "#FFFFFF" : darkText,
+                borderColor: mainAccent,
+              }}
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Sì, ci sarò!</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPresenza("no")}
+              className="p-3 rounded-2xl border flex items-center justify-center gap-2 transition-all"
+              style={{
+                backgroundColor: presenza === "no" ? "#FFE4E6" : "#FAF7F2",
+                color: presenza === "no" ? "#9F1239" : darkText,
+                borderColor: presenza === "no" ? "#FDA4AF" : "#CBD5E1",
+              }}
+            >
+              <XCircle className="w-4 h-4" />
+              <span>Purtroppo no</span>
+            </button>
+          </div>
+        </div>
+
+        {presenza === "si" && (
+          <>
+            <div>
+              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
+                <Users className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Numero Partecipanti
+              </label>
+              <select
+                value={ospiti}
+                onChange={(e) => setOspiti(e.target.value)}
+                className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-[#FAF7F2]"
+                style={{ color: darkText }}
+              >
+                <option value="1">Solo Io (1 Persona)</option>
+                <option value="2">In Coppia (2 Persone)</option>
+                <option value="3">Famiglia (3 Persone)</option>
+                <option value="4">Gruppo (4+ Persone)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
+                <Utensils className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Preferenza Menu
+              </label>
+              <div className="grid grid-cols-3 gap-2 text-[11px] font-bold">
+                {["carne", "pesce", "vegetariano"].map((menu) => (
+                  <button
+                    key={menu}
+                    type="button"
+                    onClick={() => setMenuScelto(menu)}
+                    className="p-2 rounded-xl border text-center uppercase tracking-wider transition-all"
+                    style={{
+                      backgroundColor: menuScelto === menu ? darkText : "#FAF7F2",
+                      color: menuScelto === menu ? mainAccent : darkText,
+                      borderColor: menuScelto === menu ? darkText : "#CBD5E1",
+                    }}
+                  >
+                    {menu}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
+                <AlertCircle className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Allergie o Intolleranze
+              </label>
+              <input
+                type="text"
+                value={intolleranze}
+                onChange={(e) => setIntolleranze(e.target.value)}
+                placeholder="es. Celiaco, Lattosio, Crostacei..."
+                className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-[#FAF7F2]"
+                style={{ color: darkText }}
+              />
+            </div>
+          </>
+        )}
+
+        <button
+          type="submit"
+          className="w-full py-3.5 font-bold rounded-2xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
+          style={{ backgroundColor: darkText, color: mainAccent }}
+        >
+          Conferma la Partecipazione
+        </button>
+      </form>
     );
   }
 
@@ -195,20 +303,4 @@ export default function RsvpForm({
               value={intolleranze}
               onChange={(e) => setIntolleranze(e.target.value)}
               placeholder="es. Celiaco, Vegetariano, Nessuna..."
-              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
-              style={{ color: darkText }}
-            />
-          </div>
-        </>
-      )}
-
-      <button
-        type="submit"
-        className="w-full py-3 font-bold rounded-xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
-        style={{ backgroundColor: darkText, color: mainAccent }}
-      >
-        Invia Conferma Partecipazione
-      </button>
-    </form>
-  );
-}
+              className="w-full p-2.5 r
