@@ -12,6 +12,8 @@ import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
 import EnvelopeWax from "@/components/EnvelopeWax";
+import WaterRippleImage from "@/components/ui/water-ripple-image";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
@@ -35,7 +37,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   
-  // Assegnazione Automatica dei 2 Brani Ufficiali dell'Ecosistema in base al Demo / Slug
+  // Brani Ufficiali Ecosistema
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -77,14 +79,14 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
     >
-      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALLA BUSTA O AUTOPLAY */}
+      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'EVENTO PLAY */}
       {(audioUrl || suonaMusica) && (
-        <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} autoPlay={suonaMusica} />
+        <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
 
       {showMarquee && <Marquee text={marqueeText} />}
 
-      {start === "nuvole" && showNuvole && <PartingClouds />}
+      {start === "nuvole" && showNuvole && <PartingClouds onOpen={() => setSuonaMusica(true)} />}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         {start === "busta" && showBusta && (
@@ -92,13 +94,22 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {start === "arco" && (
-          <div className="relative w-full h-56 rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/30">
-            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/30 flex items-end justify-center pb-4">
-              <span className="font-serif font-bold text-sm uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border" style={{ color: activePalette.colors[3] || "#C5A059", borderColor: activePalette.colors[2] || "#E6C687" }}>
-                Wedding Day
+          <ContainerScroll
+            titleComponent={
+              <span className="font-serif font-bold text-sm uppercase tracking-widest bg-white/90 px-4 py-1.5 rounded-full border shadow-sm" style={{ color: activePalette.colors[3] || "#C5A059", borderColor: activePalette.colors[2] || "#E6C687" }}>
+                Wedding Celebration • {coupleNames}
               </span>
+            }
+          >
+            <div className="relative w-full h-full min-h-[280px]">
+              <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80" alt="Arco Romano e Cigni" fill className="object-cover rounded-xl" priority />
             </div>
+          </ContainerScroll>
+        )}
+
+        {start === "lago" && (
+          <div className="w-full h-64 rounded-3xl overflow-hidden shadow-xl border border-sky-300 relative">
+            <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" />
           </div>
         )}
 
@@ -263,7 +274,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               <Gift className="w-4 h-4" style={{ color: activePalette.colors[3] }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
