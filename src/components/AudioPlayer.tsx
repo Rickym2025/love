@@ -9,7 +9,7 @@ interface AudioPlayerProps {
 }
 
 export default function AudioPlayer({
-  audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
   songTitle = "Brano d'Autore Inedito — FF Edizioni",
 }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -65,6 +65,7 @@ export default function AudioPlayer({
         </div>
 
         <button
+          type="button"
           onClick={togglePlay}
           className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-[#D4AF37] transition"
           title={isPlaying ? "Metti in Pausa" : "Riproduci Musica"}
@@ -73,6 +74,7 @@ export default function AudioPlayer({
         </button>
 
         <button
+          type="button"
           onClick={toggleMute}
           className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
           title={isMuted ? "Attiva Audio" : "Disattiva Audio"}
