@@ -34,7 +34,13 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationName = searchParams?.get("location") || "Villa Rosa";
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
-  const audioUrl = searchParams?.get("audio") || "";
+  
+  // Assegnazione Automatica dei 2 Brani Ufficiali dell'Ecosistema in base al Demo / Slug
+  const defaultAudioUrl = isTemplateB
+    ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
+    : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
+    
+  const audioUrl = searchParams?.get("audio") || defaultAudioUrl;
   const dressCodeNotes = searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
   const paletteIdxStr = searchParams?.get("palette") || "0";
   const paletteIdx = parseInt(paletteIdxStr, 10) || 0;
@@ -42,7 +48,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [suonaMusica, setSuonaMusica] = useState(false);
 
   const palettes = DRESS_CODE_PALETTES || [
-    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
+    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"] },
   ];
   const activePalette = palettes[paletteIdx] || palettes[0];
 
@@ -71,9 +77,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
     >
-      {/* PLAYER AUDIO PERSISTENTE ALL'APERTURA */}
+      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALLA BUSTA O AUTOPLAY */}
       {(audioUrl || suonaMusica) && (
-        <AudioPlayer audioUrl={audioUrl || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/love-song-1.mp3"} />
+        <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} autoPlay={suonaMusica} />
       )}
 
       {showMarquee && <Marquee text={marqueeText} />}
@@ -89,7 +95,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           <div className="relative w-full h-56 rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/30">
             <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/30 flex items-end justify-center pb-4">
-              <span className="font-serif font-bold text-sm uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border" style={{ color: activePalette.colors[3] || "#8B6508", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+              <span className="font-serif font-bold text-sm uppercase tracking-widest bg-white/90 px-4 py-1 rounded-full border" style={{ color: activePalette.colors[3] || "#C5A059", borderColor: activePalette.colors[2] || "#E6C687" }}>
                 Wedding Day
               </span>
             </div>
@@ -107,25 +113,25 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         </div>
 
         {dateMode === "countdown" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
             <div className="flex justify-center gap-4 font-serif font-bold text-xl" style={{ color: activePalette.colors[4] || "#1E293B" }}>
-              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#C5A059" }}>129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#C5A059" }}>14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#C5A059" }}>23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#8B6508" }}>17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-2xl" style={{ color: activePalette.colors[3] || "#C5A059" }}>17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
         {dateMode === "scratch" && showGrattaData && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
@@ -134,8 +140,8 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               Programma della Giornata
             </span>
             <div className="space-y-2 text-sm font-serif pt-1" style={{ color: activePalette.colors[4] || "#1E293B" }}>
@@ -149,11 +155,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {schedule === "timeline" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               📍 Timeline Verticale Orari
             </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: activePalette.colors[3] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: activePalette.colors[3] || "#C5A059", color: activePalette.colors[4] || "#1E293B" }}>
               <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>16:30</span> — Accoglienza Ospiti</div>
               <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>17:00</span> — Cerimonia Solenne</div>
               <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>18:30</span> — Aperitivo in Giardino</div>
@@ -164,16 +170,16 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {schedule === "schede" && (
           <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
               <span className="block text-xs" style={{ color: activePalette.colors[3] }}>16:30</span> Accoglienza
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
               <span className="block text-xs" style={{ color: activePalette.colors[3] }}>17:00</span> Cerimonia
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
               <span className="block text-xs" style={{ color: activePalette.colors[3] }}>18:30</span> Aperitivo
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37", color: activePalette.colors[4] || "#1E293B" }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
               <span className="block text-xs" style={{ color: activePalette.colors[3] }}>20:00</span> Cena &amp; Torta
             </div>
           </div>
@@ -189,8 +195,8 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showMappa && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               <MapPin className="w-4 h-4" style={{ color: activePalette.colors[3] }} /> Location del Matrimonio
             </span>
             <h3 className="font-serif font-bold text-xl" style={{ color: activePalette.colors[4] || "#1E293B" }}>{locationName}</h3>
@@ -222,7 +228,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {showDressCode && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               Dress Code &amp; Palette
             </span>
             <p className="text-xs font-serif leading-relaxed" style={{ color: activePalette.colors[4] || "#1E293B" }}>{dressCodeNotes}</p>
@@ -258,7 +264,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {showListaNozze && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#8B6508" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: activePalette.colors[3] || "#C5A059" }}>
               <Gift className="w-4 h-4" style={{ color: activePalette.colors[3] }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
