@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { LayoutGrid, FolderHeart, Palette, Sparkles } from "lucide-react";
+import { LayoutGrid, FolderHeart, Palette, Sparkles, Send } from "lucide-react";
 
 export interface AgencySidebarProps {
   agencyId?: string;
@@ -17,9 +17,17 @@ export default function AgencySidebar({
   setActiveTab,
   style,
 }: AgencySidebarProps) {
+  const [richiestaAperta, setRichiestaAperta] = useState(false);
+  const [inviatoWeb3, setInviatoWeb3] = useState(false);
+
   const formattedAgencyName = (agencyId || "sposi-in-love")
     .replace(/-/g, " ")
     .toUpperCase();
+
+  const handleWeb3Submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInviatoWeb3(true);
+  };
 
   return (
     <aside
@@ -82,9 +90,51 @@ export default function AgencySidebar({
         </nav>
       </div>
 
-      <div className="pt-6 border-t border-slate-700/60 text-[10px] text-slate-400">
-        <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
-        <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
+      {/* MODULO RICHIESTA WEB3FORMS CON EVIDENTE EFFETTO GLOW DORATO */}
+      <div className="pt-6 border-t border-slate-700/60 text-[10px] space-y-3">
+        {!richiestaAperta ? (
+          <button
+            type="button"
+            onClick={() => setRichiestaAperta(true)}
+            className="w-full py-3 px-3 bg-gradient-to-r from-[#D4AF37] to-amber-500 text-slate-900 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:shadow-[0_0_20px_rgba(212,175,55,0.8)] transition-all animate-pulse"
+          >
+            <Send className="w-4 h-4 text-slate-900" /> Richiedi Brano / Assistenza
+          </button>
+        ) : (
+          <form
+            onSubmit={handleWeb3Submit}
+            className="p-3 bg-slate-900 rounded-2xl border-2 border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.6)] space-y-2 text-left"
+          >
+            <span className="font-bold text-[#D4AF37] block text-xs">Richiesta Assistenza B2B</span>
+            {inviatoWeb3 ? (
+              <p className="text-emerald-400 font-bold">Richiesta inviata con successo!</p>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Oggetto (es. Brano SIAE)"
+                  required
+                  className="w-full p-2 rounded-lg bg-slate-800 border border-slate-700 text-white text-[10px] font-bold"
+                />
+                <textarea
+                  rows={2}
+                  placeholder="Messaggio per il team..."
+                  required
+                  className="w-full p-2 rounded-lg bg-slate-800 border border-slate-700 text-white text-[10px] resize-none"
+                />
+                <div className="flex gap-1 pt-1">
+                  <button type="submit" className="flex-1 py-1.5 bg-[#D4AF37] text-slate-900 font-bold rounded-lg text-[10px]">Invia Web3</button>
+                  <button type="button" onClick={() => setRichiestaAperta(false)} className="py-1.5 px-2 bg-slate-800 text-slate-400 rounded-lg text-[10px]">Chiudi</button>
+                </div>
+              </>
+            )}
+          </form>
+        )}
+
+        <div className="text-slate-400">
+          <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
+          <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
+        </div>
       </div>
     </aside>
   );
