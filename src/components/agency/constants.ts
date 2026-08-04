@@ -5,7 +5,6 @@ export interface PartnerStore {
   logoUrl: string;
 }
 
-// I 2 Brani Ufficiali dell'Ecosistema RM Studio
 export const AUDIO_TRACK_PRESETS = [
   { name: "🎵 Demo 1 — Elena & Davide ('La Nostra Melodia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3" },
   { name: "🎵 Demo 2 — Francesca & Luca ('Quella Fotografia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3" },
@@ -26,9 +25,9 @@ export const WELCOME_PHRASE_PRESETS = [
 ];
 
 export const INTRO_START_PRESETS = [
-  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
   { id: "busta", name: "✉️ Busta d'Epoca 3D con Ceralacca" },
   { id: "nuvole", name: "☁️ Nuvole 3D Volumetriche (Apertura allo Scroll)" },
+  { id: "expand", name: "🎬 Espansione Multimediale allo Scroll (ScrollExpandMedia)" },
   { id: "lago", name: "🌊 Rifrazione Liquida Acqua del Lago" },
 ];
 
@@ -57,10 +56,9 @@ export const EVENT_THEME_PRESETS = [
   "Personalizzato (digita a mano)",
 ];
 
-// PALETTE COLORI MATRIMONIALI MORBIDE, ELEGANTI E TENUI
 export const DRESS_CODE_PALETTES = [
   { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"] },
-  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#E6C687", "#C5A059", "#2C261E"] },
+  { id: "2", name: "Oro & Champagne", colors: ["#FAF7F2", "#F3EDE2", "#D4AF37", "#B8860B", "#1E293B"] },
   { id: "3", name: "Salvia & Smeraldo Soft", colors: ["#F0F7F4", "#E2ECE9", "#A3C9A8", "#84B599", "#1C3A27"] },
   { id: "4", name: "Rose Gold & Cipria", colors: ["#FFF5F5", "#FCE7F0", "#F4ACB7", "#D88392", "#4A1521"] },
   { id: "5", name: "Blu Zaffiro & Polvere", colors: ["#F0F4F8", "#D9E2EC", "#B0C4DE", "#486581", "#102A43"] },
@@ -69,37 +67,36 @@ export const DRESS_CODE_PALETTES = [
   { id: "8", name: "Bianco & Minimal Avorio", colors: ["#FFFFFF", "#FAF7F2", "#E2E8F0", "#8A92A6", "#1E293B"] },
 ];
 
-// FOTO OUTFIT UNSPLASH STRICTLY COORDINATE AI COLORI DELLA PALETTE
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [ // Pastello Romantico
+  0: [
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  1: [ // Oro & Champagne
+  1: [
     "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
   ],
-  2: [ // Salvia & Smeraldo
+  2: [
     "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
-  3: [ // Rose Gold & Cipria
+  3: [
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
   ],
-  4: [ // Blu Zaffiro & Polvere
+  4: [
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
   ],
-  5: [ // Sabbia & Terracotta
+  5: [
     "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
   ],
-  6: [ // LAVANDA & LILLÀ RIGOROSA (RIGOROSAMENTE VIOLA/LILLA)
+  6: [
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
   ],
-  7: [ // Bianco & Minimal
+  7: [
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
