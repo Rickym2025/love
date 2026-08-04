@@ -176,4 +176,156 @@ export function WaterRippleImage({
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
   const uniformsRef = useRef<Record<string, WebGLUniformLocation | null>>({});
-  const tex
+  const texRef = useRef<WebGLTexture | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const animRef = useRef<number | null>(null);
+
+  const [params] = useState<Params>({
+    blueish,
+    scale,
+    illumination,
+    surfaceDistortion,
+    waterDistortion,
+    src,
+  });
+
+  const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+
+  const updateUniforms = (gl: WebGLRenderingContext) => {
+    const u = uniformsRef.current;
+    gl.uniform1f(u['u_blueish'], params.blueish);
+    gl.uniform1f(u['u_scale'], params.scale);
+    gl.uniform1f(u['u_illumination'], params.illumination);
+    gl.uniform1f(u['u_surface_distortion'], params.surfaceDistortion);
+    gl.uniform1f(u['u_water_distortion'], params.waterDistortion);
+  };
+
+  const setTextureFromImage = (gl: WebGLRenderingContext, image: HTMLImageElement) => {
+    if (texRef.current) gl.deleteTexture(texRef.current);
+    const texture = gl.createTexture()!;
+    texRef.current = texture;
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+    const u = uniformsRef.current;
+    gl.uniform1i(u['u_image_texture'], 0);
+
+    const imgRatio = image.naturalWidth / image.naturalHeight;
+    const canvas = canvasRef.current!;
+    gl.uniform1f(u['u_ratio'], canvas.width / canvas.height);
+    gl.uniform1f(u['u_img_ratio'], imgRatio);
+  };
+
+  const loadImage = (srcUrl: string, gl: WebGLRenderingContext) =>
+    new Promise<void>((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        imgRef.current = img;
+        setTextureFromImage(gl, img);
+        resolve();
+      };
+      img.onerror = reject;
+      img.src = srcUrl;
+    });
+
+  const resize = () => {
+    const gl = glRef.current;
+    const canvas = canvasRef.current;
+    if (!gl || !canvas) return;
+
+    const w = Math.floor(canvas.clientWidth * dpr) || 600;
+    const h = Math.floor(canvas.clientHeight * dpr) || 400;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    gl.viewport(0, 0, canvas.width, canvas.height);
+
+    const u = uniformsRef.current;
+    gl.uniform1f(u['u_ratio'], canvas.width / canvas.height);
+
+    if (imgRef.current) {
+      const imgRatio = imgRef.current.naturalWidth / imgRef.current.naturalHeight;
+      gl.uniform1f(u['u_img_ratio'], imgRatio);
+    }
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    const gl =
+      canvas.getContext('webgl', { alpha: true, antialias: true }) ||
+      (canvas.getContext('experimental-webgl') as WebGLRenderingContext | null);
+
+    if (!gl) {
+      setWebGlSupported(false);
+      return;
+    }
+    glRef.current = gl;
+
+    const program = createProgram(gl, VERT, FRAG);
+    programRef.current = program;
+    gl.useProgram(program);
+
+    const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+    for (let i = 0; i < uniformCount; i++) {
+      const info = gl.getActiveUniform(program, i);
+      if (!info) continue;
+      uniformsRef.current[info.name] = gl.getUniformLocation(program, info.name);
+    }
+
+    const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+    const vbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    const posLoc = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+    updateUniforms(gl);
+    loadImage(params.src, gl).catch((e) => console.error(e));
+
+    resize();
+    const onResize = () => resize();
+    window.addEventListener('resize', onResize);
+
+    const render = () => {
+      const u = uniformsRef.current;
+      if (u['u_time']) {
+        gl.uniform1f(u['u_time'], performance.now());
+      }
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      animRef.current = requestAnimationFrame(render);
+    };
+    animRef.current = requestAnimationFrame(render);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+      if (texRef.current) gl.deleteTexture(texRef.current);
+      gl.useProgram(null);
+      if (programRef.current) gl.deleteProgram(programRef.current);
+    };
+  }, [params.blueish, params.scale, params.illumination, params.surfaceDistortion, params.waterDistortion, params.src]);
+
+  return (
+    <div className={`relative overflow-hidden w-full h-full min-h-[250px] rounded-2xl shadow-xl ${className}`}>
+      {webGlSupported ? (
+        <canvas ref={canvasRef} className="w-full h-full block cursor-pointer" />
+      ) : (
+        <div className="relative w-full h-full">
+          <img src={src} alt="Sfondo Lago" className="w-full h-full object-cover" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default WaterRippleImage;
