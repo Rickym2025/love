@@ -7,7 +7,6 @@ import {
   INTRO_START_PRESETS,
   DATE_DISPLAY_MODES,
   SCHEDULE_SCHEMAS,
-  RSVP_STYLES,
   EVENT_THEME_PRESETS,
   DRESS_CODE_PALETTES,
   AUDIO_TRACK_PRESETS,
@@ -23,8 +22,6 @@ export default function ConfiguratorForm(props: any) {
     setDateDisplayMode,
     scheduleSchema,
     setScheduleSchema,
-    rsvpStyle,
-    setRsvpStyle,
     eventThemePreset,
     setEventThemePreset,
     customEventTheme,
@@ -141,7 +138,7 @@ export default function ConfiguratorForm(props: any) {
             ))}
           </select>
 
-          {/* RIFRAZIONE ACQUA SE SELEZIONATA */}
+          {/* RIFRAZIONE ACQUA */}
           {introStart === "lago" && (
             <div className="pt-2 border-t border-slate-100 mt-2">
               <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (Link o File Immagine)</label>
@@ -150,17 +147,17 @@ export default function ConfiguratorForm(props: any) {
                 value={waterImageUrl}
                 onChange={(e) => setWaterImageUrl(e.target.value)}
                 placeholder="https://.../sfondo-lago.jpg"
-                className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]"
+                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B]"
               />
             </div>
           )}
         </div>
       </div>
 
-      {/* 2. DATI SPOSI, FRASE PERSONALIZZATA & TEMA EVENTO */}
+      {/* 2. DATI SPOSI & FRASE PERSONALIZZATA */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          2. Dati Sposi, Frase Personalizzata &amp; Tema dell&apos;Evento
+          2. Dati Sposi &amp; Frase Personalizzata di Benvenuto
         </label>
 
         <div>
@@ -170,29 +167,6 @@ export default function ConfiguratorForm(props: any) {
             value={coupleNames}
             onChange={(e) => setCoupleNames(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37]"
-          />
-        </div>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento (Scegli o Digita a Mano)</label>
-          <select
-            value={eventThemePreset}
-            onChange={(e) => setEventThemePreset(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
-          >
-            {EVENT_THEME_PRESETS.map((t, idx) => (
-              <option key={idx} value={t}>{t}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={customEventTheme}
-            onChange={(e) => {
-              setEventThemePreset("Personalizzato (digita a mano)");
-              setCustomEventTheme(e.target.value);
-            }}
-            placeholder="Digita qui il tema dell'evento personalizzato..."
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
           />
         </div>
 
@@ -260,10 +234,73 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 4. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      {/* 4. PALETTE CROMATICHE & TEMA DELL'EVENTO */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Visualizzazione Data &amp; Programma Orari (Italiano)
+          4. Palette Cromatiche &amp; Tema dell&apos;Evento (Con Digitazione Manuale)
+        </label>
+
+        {/* TEMA EVENTO SPOSTATO VICINO ALLA PALETTE */}
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+          <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento</label>
+          <select
+            value={eventThemePreset}
+            onChange={(e) => setEventThemePreset(e.target.value)}
+            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
+          >
+            {EVENT_THEME_PRESETS.map((t, idx) => (
+              <option key={idx} value={t}>{t}</option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={customEventTheme}
+            onChange={(e) => {
+              setEventThemePreset("Personalizzato (digita a mano)");
+              setCustomEventTheme(e.target.value);
+            }}
+            placeholder="Digita il tema dell'evento a mano..."
+            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
+          />
+        </div>
+
+        {/* PALETTE */}
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche</span>
+            <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+              {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
+            </button>
+          </div>
+          {modules.codiceAbbigliamento && (
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
+              <div className="grid grid-cols-2 gap-2">
+                {DRESS_CODE_PALETTES.map((pal, idx) => (
+                  <button
+                    key={pal.id}
+                    type="button"
+                    onClick={() => setSelectedPaletteIdx(idx)}
+                    className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"}`}
+                  >
+                    <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
+                    <div className="flex gap-1">
+                      {pal.colors.map((c, i) => (
+                        <div key={i} className="w-3.5 h-3.5 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
+                      ))}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 5. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+          5. Visualizzazione Data &amp; Programma Orari (Italiano)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -308,42 +345,11 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 5. DRESS CODE, NEGOZI CONVENZIONATI & LISTA NOZZE */}
+      {/* 6. NEGOZI CONVENZIONATI, IBAN & PAGINA FESTA */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          5. Palette Cromatiche, Negozi Convenzionati &amp; IBAN Sposi
+          6. Negozi, IBAN &amp; Personalizzazione Pagina della Festa (/festa)
         </label>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche</span>
-            <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.codiceAbbigliamento && (
-            <div className="space-y-2 pt-2 border-t border-slate-100">
-              <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
-              <div className="grid grid-cols-2 gap-2">
-                {DRESS_CODE_PALETTES.map((pal, idx) => (
-                  <button
-                    key={pal.id}
-                    type="button"
-                    onClick={() => setSelectedPaletteIdx(idx)}
-                    className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"}`}
-                  >
-                    <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
-                    <div className="flex gap-1">
-                      {pal.colors.map((c, i) => (
-                        <div key={i} className="w-3.5 h-3.5 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
-                      ))}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <div className="flex justify-between items-center">
@@ -386,33 +392,6 @@ export default function ConfiguratorForm(props: any) {
               onChange={(e) => setCustomIban(e.target.value)}
               className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono font-bold text-[#1E293B]"
             />
-          )}
-        </div>
-      </div>
-
-      {/* 6. MODULO CONFERMA RSVP & PERSONALIZZAZIONE FESTA */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          6. Modulo RSVP &amp; Personalizzazione Pagina della Festa (/festa)
-        </label>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-bold text-[#1E293B]">Stile Grafico Modulo RSVP</span>
-            <button type="button" onClick={() => toggleModule("confermaRsvp")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.confermaRsvp ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.confermaRsvp ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.confermaRsvp && (
-            <select
-              value={rsvpStyle}
-              onChange={(e) => setRsvpStyle(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
-            >
-              {RSVP_STYLES.map((r) => (
-                <option key={r.id} value={r.id}>{r.name}</option>
-              ))}
-            </select>
           )}
         </div>
 
