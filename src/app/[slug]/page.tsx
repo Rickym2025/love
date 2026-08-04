@@ -23,9 +23,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const template = searchParams?.get("template") || (cleanSlug === "francesca-e-luca" ? "B" : "A");
   const isTemplateB = template === "B";
 
-  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "arco");
+  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
+  const rsvpStyle = searchParams?.get("rsvpStyle") || "classico";
 
   const coupleNames = searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
   const weddingDateDay = searchParams?.get("day") || "15";
@@ -276,7 +277,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {showRsvp && (
           <div className="pt-2">
-            <RsvpForm coupleNames={coupleNames} />
+            <RsvpForm coupleNames={coupleNames} rsvpStyle={rsvpStyle} />
           </div>
         )}
 
