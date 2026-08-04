@@ -4,96 +4,52 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 export interface EnvelopeWaxProps {
-  initials?: string;
   coupleNames?: string;
-  weddingDate?: string;
-  audioUrl?: string;
-  themeColor?: string;
   onOpen?: () => void;
-  children?: React.ReactNode;
 }
 
 export default function EnvelopeWax({
   coupleNames = "Elena & Davide",
-  weddingDate = "24 MAGGIO 2026",
   onOpen,
-  children,
 }: EnvelopeWaxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
-    if (isOpen) return;
     setIsOpen(true);
-
-    const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
-    if (audio) {
-      audio.play().catch((err) => console.log("Autoplay audio limitato:", err));
-    }
-
     if (onOpen) onOpen();
   };
 
   return (
-    <>
+    <div className="w-full my-4 flex flex-col items-center justify-center select-none">
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center bg-[#1E293B]/80 backdrop-blur-md transition-opacity duration-1000 ${
-          isOpen ? "opacity-0 pointer-events-none delay-700" : "opacity-100"
+        onClick={handleOpen}
+        className={`w-full max-w-sm aspect-[4/5] bg-[#FAF7F2] rounded-3xl border-2 border-[#D4AF37]/40 shadow-2xl relative overflow-hidden transition-all duration-700 cursor-pointer ${
+          isOpen ? "scale-95 opacity-20 pointer-events-none" : "hover:scale-[1.02]"
         }`}
       >
-        {/* Busta Materica Avorio */}
-        <div
-          onClick={handleOpen}
-          className="relative w-[92%] max-w-[420px] h-[580px] bg-[#FAF7F2] rounded-2xl shadow-2xl border border-[#D4AF37]/40 cursor-pointer group flex flex-col justify-between p-8 select-none transition-transform duration-500 hover:scale-[1.01] overflow-hidden"
-          style={{
-            boxShadow: "0 30px 60px -12px rgba(0,0,0,0.5), inset 0 0 50px rgba(212,175,55,0.15)",
-          }}
-        >
-          {/* Lembo Triangolare Superiore Pieghevole 3D */}
-          <div
-            className="absolute top-0 left-0 right-0 h-1/2 bg-[#F5EFE6] rounded-t-2xl origin-top transition-transform duration-700 border-b border-[#D4AF37]/40 z-10 shadow-md"
-            style={{
-              clipPath: "polygon(0 0, 50% 80%, 100% 0)",
-              transform: isOpen ? "rotateX(180deg)" : "rotateX(0deg)",
-            }}
-          />
+        {/* RILIEVI FLOREALI SUI LATI (STILE FOTO 1) */}
+        <div className="absolute inset-y-0 left-2 w-12 opacity-30 pointer-events-none bg-[radial-[#D4AF37]_1px,transparent_1px)] [background-size:12px_12px]" />
+        <div className="absolute inset-y-0 right-2 w-12 opacity-30 pointer-events-none bg-[radial-[#D4AF37]_1px,transparent_1px)] [background-size:12px_12px]" />
 
-          {/* Lembo Triangolare Inferiore */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#EFE8DC] rounded-b-2xl origin-bottom z-10 border-t border-[#D4AF37]/20"
-            style={{
-              clipPath: "polygon(0 100%, 50% 20%, 100% 100%)",
-            }}
-          />
+        {/* LEMBO INFERIORE E SUPERIORE A V */}
+        <div className="absolute top-0 inset-x-0 h-1/2 bg-[#F5EFE6] border-b border-[#D4AF37]/30 [clip-path:polygon(0_0,100%_0,50%_100%)] drop-shadow-sm" />
+        <div className="absolute bottom-0 inset-x-0 h-1/2 bg-[#F5EFE6] border-t border-[#D4AF37]/30 [clip-path:polygon(0_100%,100%_100%,50%_0)] drop-shadow-sm" />
 
-          {/* Nomi Sposi nell'Intestazione */}
-          <div className="z-20 text-center pt-8">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-1">
-              PARTECIPAZIONE DI MATRIMONIO
-            </span>
-            <h2 className="font-serif text-3xl text-[#1E293B] font-bold tracking-wide">{coupleNames}</h2>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-semibold mt-2">{weddingDate}</p>
+        {/* SIGILLO CERALACCA BORDEAUX CENTRALE (FOTO 1) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+          <div className="relative w-20 h-20 drop-shadow-xl animate-pulse">
+            <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
           </div>
 
-          {/* SIGILLO CERALACCA LOGO PNG public/wax-seal.png */}
-          <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${
-              isOpen ? "scale-150 opacity-0" : "scale-100 group-hover:scale-110"
-            }`}
-          >
-            <div className="relative w-28 h-28 drop-shadow-[0_12px_24px_rgba(212,175,55,0.45)]">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-          </div>
+          <span className="font-serif font-bold text-xs uppercase tracking-widest text-[#8B6508] mt-4 bg-white/90 px-4 py-1.5 rounded-full border border-[#D4AF37]/40 shadow-sm">
+            ▲ TOCCA PER APRIRE
+          </span>
 
-          {/* Dicitura TOCCA PER APRIRE */}
-          <div className="z-20 text-center pb-4">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-[0.25em] animate-pulse block mb-1">^</span>
-            <span className="text-xs font-bold text-[#1E293B] uppercase tracking-[0.2em]">TOCCA PER APRIRE</span>
-          </div>
+          <p className="font-serif font-bold text-base text-[#1E293B] mt-2 drop-shadow-xs">
+            {coupleNames}
+          </p>
         </div>
       </div>
-
-      {children}
-    </>
+    </div>
   );
 }
