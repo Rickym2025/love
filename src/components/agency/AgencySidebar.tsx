@@ -34,7 +34,7 @@ export default function AgencySidebar({
           </div>
           <div className="overflow-hidden">
             <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#D4AF37]" /> White-Label Studio
+              <Sparkles className="w-3 h-3 text-[#D4AF37]" /> White-Label Hub
             </span>
             <h1 className="font-serif font-bold text-base text-white truncate">
               {formattedAgencyName}
@@ -42,7 +42,7 @@ export default function AgencySidebar({
           </div>
         </div>
 
-        {/* NAVIGAZIONE CON PULSANTE INVITI GIÀ CREATI */}
+        {/* MENU NAVIGAZIONE */}
         <nav className="space-y-2">
           <button
             type="button"
@@ -65,7 +65,7 @@ export default function AgencySidebar({
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
             }`}
           >
-            <FolderHeart className="w-4 h-4 text-[#D4AF37]" /> Inviti Già Creati (5)
+            <FolderHeart className="w-4 h-4 text-[#D4AF37]" /> Inviti Già Creati (3)
           </button>
 
           <button
@@ -84,7 +84,7 @@ export default function AgencySidebar({
 
       <div className="pt-6 border-t border-slate-700/60 text-[10px] text-slate-400">
         <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
-        <p className="mt-0.5">5 di 10 Matrimoni Utilizzati</p>
+        <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
       </div>
     </aside>
   );
