@@ -78,7 +78,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
     >
-      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -152,7 +151,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
@@ -290,7 +288,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP DINAMICO SULLE PALETTE COLORI */}
         {showRsvp && (
           <div className="pt-2">
             <RsvpForm coupleNames={coupleNames} paletteColors={activePalette.colors} />
