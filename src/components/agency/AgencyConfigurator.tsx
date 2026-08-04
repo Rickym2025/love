@@ -22,7 +22,7 @@ const WELCOME_PHRASE_PRESETS = [
   "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
   "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
   "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
-  "Personalizzata (scrivi la tua frase personalizzata nel campo sottostante)",
+  "Personalizzata (scrivi la tua frase nel campo sottostante)",
 ];
 
 export const INTRO_START_PRESETS = [
@@ -39,7 +39,7 @@ export const DATE_DISPLAY_MODES = [
 ];
 
 export const SCHEDULE_SCHEMAS = [
-  { id: "classico", name: "🏛️ Classico Elegante (Elenco Orari Serf)" },
+  { id: "classico", name: "🏛️ Classico Elegante" },
   { id: "timeline", name: "📍 Timeline Verticale con Nodi Dorati" },
   { id: "nuvole", name: "☁️ Programma tra le Nuvole 3D" },
   { id: "schede", name: "🎴 Schede Card Separati" },
@@ -60,7 +60,7 @@ export const EVENT_THEME_PRESETS = [
   "BOHO Chic & Terracotta",
   "Minimal Modern",
   "Tropical Romance",
-  "Personalizzato (inserisci a mano)",
+  "Personalizzato (digita a mano)",
 ];
 
 export const DRESS_CODE_PALETTES = [
@@ -141,12 +141,6 @@ export default function AgencyConfigurator(props: any) {
     setPartnerStores(partnerStores.filter((s: any) => s.id !== id));
   }
 
-  function updateStore(id: string, field: string, value: string) {
-    setPartnerStores(
-      partnerStores.map((s: any) => (s.id === id ? { ...s, [field]: value } : s))
-    );
-  }
-
   const sampleCreatedInvitations = [
     {
       id: "1",
@@ -170,10 +164,10 @@ export default function AgencyConfigurator(props: any) {
     },
     {
       id: "3",
-      couple: "Marco & Giulia",
+      couple: "Marco & Sofia",
       date: "10 Maggio 2027",
-      location: "Tenuta Borgo Antico",
-      template: "Template A (Classico)",
+      location: "Tenuta Borgo Antico (Firenze)",
+      template: "Template A (Smeraldo)",
       slug: "marco-e-giulia",
       status: "Bozza",
       rsvpCount: 45,
@@ -183,7 +177,7 @@ export default function AgencyConfigurator(props: any) {
   return (
     <div style={style} className="p-6 md:p-8 space-y-6 text-[#1E293B] w-full">
       
-      {/* BARRA TAB */}
+      {/* BARRA TAB NAVIGAZIONE */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
         <button
           type="button"
@@ -227,10 +221,10 @@ export default function AgencyConfigurator(props: any) {
         <div className="space-y-6">
           <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-          {/* 1. SELEZIONE TEMPLATE & EFFETTO START MUTUAMENTE ESCLUSIVO */}
+          {/* 1. SELEZIONE TEMPLATE & EFFETTO START */}
           <div className="space-y-4">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
+              1. Selezione Template &amp; Effetto Start Mutuamente Esclusivo
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -273,7 +267,7 @@ export default function AgencyConfigurator(props: any) {
               </button>
             </div>
 
-            {/* EFFETTO START MUTUAMENTE ESCLUSIVO */}
+            {/* SELETTORE UNICO EFFETTO START */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Unico Effetto Start Attivo</label>
               <select
@@ -306,9 +300,9 @@ export default function AgencyConfigurator(props: any) {
               />
             </div>
 
-            {/* TEMA DELL'EVENTO */}
+            {/* TEMA DELL'EVENTO CON DIGITAZIONE MANUALE */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento (Preimpostato o Manuale)</label>
+              <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento (Scegli o Digita a Mano)</label>
               <select
                 value={eventThemePreset}
                 onChange={(e) => setEventThemePreset(e.target.value)}
@@ -318,18 +312,19 @@ export default function AgencyConfigurator(props: any) {
                   <option key={idx} value={t}>{t}</option>
                 ))}
               </select>
-              {eventThemePreset === "Personalizzato (inserisci a mano)" && (
-                <input
-                  type="text"
-                  value={customEventTheme}
-                  onChange={(e) => setCustomEventTheme(e.target.value)}
-                  placeholder="Scrivi il tema dell'evento a mano..."
-                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
-                />
-              )}
+              <input
+                type="text"
+                value={customEventTheme}
+                onChange={(e) => {
+                  setEventThemePreset("Personalizzato (digita a mano)");
+                  setCustomEventTheme(e.target.value);
+                }}
+                placeholder="Digita qui il tema dell'evento personalizzato..."
+                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
+              />
             </div>
 
-            {/* FRASE PERSONALIZZATA */}
+            {/* FRASE PERSONALIZZATA LIBERA */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">Frase di Benvenuto (Preset o Scritta a Piacimento)</label>
               <select
@@ -363,7 +358,7 @@ export default function AgencyConfigurator(props: any) {
               3. Visualizzazione Data &amp; Programma Orari (Italiano)
             </label>
 
-            {/* 3 MODULI DATA */}
+            {/* MODULO DATA */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
               <select
@@ -392,7 +387,7 @@ export default function AgencyConfigurator(props: any) {
               </div>
             </div>
 
-            {/* 5 SCHEMI PROGRAMMA ORARI IN ITALIANO */}
+            {/* PROGRAMMA ORARI IN ITALIANO (5 SCHEMI) */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
               <select
@@ -410,10 +405,10 @@ export default function AgencyConfigurator(props: any) {
           {/* 4. DRESS CODE, NEGOZI CONVENZIONATI & LISTA NOZZE */}
           <div className="space-y-4 pt-4 border-t border-slate-200">
             <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-              4. Palette Cromatiche, Negozi &amp; IBAN Sposi
+              4. Palette Cromatiche, Negozi Convenzionati &amp; IBAN Sposi
             </label>
 
-            {/* DRESS CODE PALETTE CON FOTO COERENTI */}
+            {/* DRESS CODE PALETTE */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche</span>
@@ -445,10 +440,10 @@ export default function AgencyConfigurator(props: any) {
               )}
             </div>
 
-            {/* NEGOZI CONVENZIONATI CON LINK AMAZON AFFILIATO DEFAULT */}
+            {/* NEGOZI CONVENZIONATI CON LOGO.PNG AMAZON DEFAULT */}
             <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (Include Amazon Affiliato)</span>
+                <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (Include Amazon Affiliato /logo.png)</span>
                 <button type="button" onClick={() => toggleModule("negoziConvenzionati")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.negoziConvenzionati ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
                   {modules.negoziConvenzionati ? "Attivo" : "Disattivato"}
                 </button>
