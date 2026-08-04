@@ -68,7 +68,7 @@ export default function ConfiguratorForm(props: any) {
         id: Date.now().toString(),
         name: "Nuovo Negozio Convenzionato",
         url: "https://www.negozio.it",
-        logoUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=200&q=80",
+        logoUrl: "/logo.png",
       },
     ]);
   }
@@ -140,6 +140,20 @@ export default function ConfiguratorForm(props: any) {
               </option>
             ))}
           </select>
+
+          {/* RIFRAZIONE ACQUA SE SELEZIONATA */}
+          {introStart === "lago" && (
+            <div className="pt-2 border-t border-slate-100 mt-2">
+              <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (Link o File Immagine)</label>
+              <input
+                type="text"
+                value={waterImageUrl}
+                onChange={(e) => setWaterImageUrl(e.target.value)}
+                placeholder="https://.../sfondo-lago.jpg"
+                className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]"
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -234,7 +248,7 @@ export default function ConfiguratorForm(props: any) {
           </div>
           
           <div>
-            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci Link URL File Audio MP3</label>
+            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci URL File Audio MP3 Personalizzato</label>
             <input
               type="text"
               value={audioUrl}
@@ -246,13 +260,12 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 4. VISUALIZZAZIONE DATA, PROGRAMMA ORARI & RIFRAZIONE ACQUA */}
+      {/* 4. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Visualizzazione Data, Programma Orari &amp; Rifrazione Acqua
+          4. Visualizzazione Data &amp; Programma Orari (Italiano)
         </label>
 
-        {/* MODULO DATA */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
           <select
@@ -281,7 +294,6 @@ export default function ConfiguratorForm(props: any) {
           </div>
         </div>
 
-        {/* PROGRAMMA ORARI IN ITALIANO */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
           <select
@@ -293,28 +305,6 @@ export default function ConfiguratorForm(props: any) {
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
-        </div>
-
-        {/* RIFRAZIONE ACQUA */}
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">💧 Rifrazione Liquida dell&apos;Acqua (Sfondo Lago)</span>
-            <button type="button" onClick={() => toggleModule("effettoAcqua")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.effettoAcqua ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.effettoAcqua ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.effettoAcqua && (
-            <div>
-              <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (File o Link Immagine)</label>
-              <input
-                type="text"
-                value={waterImageUrl}
-                onChange={(e) => setWaterImageUrl(e.target.value)}
-                placeholder="https://.../sfondo-lago.jpg"
-                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B]"
-              />
-            </div>
-          )}
         </div>
       </div>
 
@@ -400,7 +390,7 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 6. MODULO CONFERMA RSVP & CONFIGURAZIONE PAGINA FESTA */}
+      {/* 6. MODULO CONFERMA RSVP & PERSONALIZZAZIONE FESTA */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
           6. Modulo RSVP &amp; Personalizzazione Pagina della Festa (/festa)
