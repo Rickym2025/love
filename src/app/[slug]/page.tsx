@@ -11,6 +11,7 @@ import AudioPlayer from "@/components/AudioPlayer";
 import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
+import EnvelopeWax from "@/components/EnvelopeWax";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
@@ -21,6 +22,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
   const template = searchParams?.get("template") || (cleanSlug === "francesca-e-luca" ? "B" : "A");
   const isTemplateB = template === "B";
+
+  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
+  const dateMode = searchParams?.get("dateMode") || "countdown";
+  const schedule = searchParams?.get("schedule") || "classico";
 
   const coupleNames =
     searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
@@ -79,20 +84,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {modules.dedicheMarquee && <Marquee text={marqueeText} />}
 
-      {modules.nuvole3d && <PartingClouds />}
+      {start === "nuvole" && modules.nuvole3d && <PartingClouds />}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
-        {!isTemplateB && modules.busta3d && (
-          <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/40 text-center shadow-lg relative">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
-              ✦ Partecipazione Digitale d&apos;Autore
-            </span>
-            <h2 className="font-serif font-bold text-2xl text-[#1E293B]">{coupleNames}</h2>
-            <div className="relative w-20 h-20 mx-auto my-3 drop-shadow-md">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-            <p className="text-xs text-slate-600 font-serif">Siete invitati a celebrare il nostro matrimonio</p>
-          </div>
+        
+        {start === "busta" && modules.busta3d && (
+          <EnvelopeWax coupleNames={coupleNames} />
         )}
 
         <div className="text-center space-y-3 pt-4">
@@ -108,7 +105,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </blockquote>
         </div>
 
-        {!isTemplateB && (
+        {dateMode === "countdown" && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-[#D4AF37]/40 text-center space-y-2">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
               ⏳ Il nostro grande giorno inizia tra
@@ -125,7 +122,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {modules.grattaData && (
+        {dateMode === "scratch" && modules.grattaData && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
               🎰 Gratta col dito per scoprire la data
@@ -134,6 +131,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* PROGRAMMA DELLA GIORNATA DINAMICO IN ITALIANO */}
         <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
           <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
             Programma della Giornata
@@ -228,6 +226,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {modules.confermaRsvp && (
+          <div className="pt-2">
+            <RsvpForm coupleNames={coupleNames} />
+          </div>
+        )}
+
         {modules.hubGiochiFesta && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -242,12 +246,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             >
               <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
             </Link>
-          </div>
-        )}
-
-        {modules.confermaRsvp && (
-          <div className="pt-2">
-            <RsvpForm coupleNames={coupleNames} />
           </div>
         )}
 
