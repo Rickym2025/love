@@ -11,25 +11,7 @@ import AudioPlayer from "@/components/AudioPlayer";
 import Marquee from "@/components/Marquee";
 import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
-import { DRESS_CODE_PALETTES } from "@/components/agency/AgencyConfigurator";
-
-const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
-  ],
-  1: [
-    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=500&q=80",
-  ],
-  2: [
-    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=500&q=80",
-    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=500&q=80",
-  ],
-};
+import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
   const searchParams = useSearchParams();
@@ -54,8 +36,14 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const dressCodeNotes =
     searchParams?.get("dress") || "Abiti eleganti nei toni cromatici della palette";
   const paletteIdx = parseInt(searchParams?.get("palette") || "0", 10);
-  const activePalette = DRESS_CODE_PALETTES[paletteIdx] || DRESS_CODE_PALETTES[0];
-  const outfitPhotos = DRESS_CODE_PHOTOS[paletteIdx % 3] || DRESS_CODE_PHOTOS[0];
+
+  const palettes = DRESS_CODE_PALETTES || [
+    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FDE68A", "#FCA5A5", "#93C5FD", "#60A5FA"] },
+  ];
+  const activePalette = palettes[paletteIdx] || palettes[0];
+
+  const photosMap = DRESS_CODE_PHOTOS || {};
+  const outfitPhotos = photosMap[paletteIdx % 8] || photosMap[0] || [];
 
   const marqueeText =
     searchParams?.get("marquee") ||
@@ -87,18 +75,13 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         isTemplateB ? "bg-[#F0F7FF] text-[#1E293B]" : "bg-[#FAF7F2] text-[#1E293B]"
       }`}
     >
-      {/* 1. AUDIO PLAYER PERSISTENTE */}
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* 2. DEDICHE SCORREVOLI MARQUEE */}
       {modules.dedicheMarquee && <Marquee text={marqueeText} />}
 
-      {/* 3. NUVOLE 3D VOLUMETRICHE */}
       {modules.nuvole3d && <PartingClouds />}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
-        
-        {/* TEMPLATE A: BUSTA CON VERA CERALACCA WAX-SEAL.PNG */}
         {!isTemplateB && modules.busta3d && (
           <div className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/40 text-center shadow-lg relative">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
@@ -112,7 +95,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* HERO INTRODUZIONE AD ALTO CONTRASTO CROMATICO */}
         <div className="text-center space-y-3 pt-4">
           <span className="text-xs tracking-widest uppercase font-bold text-[#8B6508]">
             Wedding Celebration
@@ -126,49 +108,45 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </blockquote>
         </div>
 
-        {/* TEMPLATE A: COUNTDOWN TIMER REALE */}
         {!isTemplateB && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-[#D4AF37]/40 text-center space-y-2">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
-              The Celebration Begins In
+              ⏳ Il nostro grande giorno inizia tra
             </span>
             <div className="flex justify-center gap-4 text-[#1E293B] font-serif font-bold text-xl">
-              <div><span className="block text-2xl text-[#8B6508]">129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Days</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">00</span><span className="text-[10px] uppercase text-slate-600 font-sans">Hours</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minutes</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-2xl text-[#8B6508]">17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Seconds</span></div>
+              <div><span className="block text-2xl text-[#8B6508]">17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
-        {/* GRATTIAMO LA DATA */}
         {modules.grattaData && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif">
-              🎰 Scratch to reveal the date
+              🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (SCHEDULE OF EVENTS) */}
         <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
           <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
-            Schedule of Events
+            Programma della Giornata
           </span>
           <div className="space-y-2 text-sm text-[#1E293B] font-serif pt-1">
-            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Opening of the doors</p>
-            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Ceremony</p>
-            <p><strong className="text-[#8B6508] font-sans">18:00</strong> — Cocktail and dancing time</p>
-            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Dinner</p>
-            <p><strong className="text-[#8B6508] font-sans">21:00</strong> — Party and Open Bar</p>
+            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
+            <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+            <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
           </div>
         </div>
 
-        {/* LOCATION & MAPPA GOOGLE INTEGRATA + PULSANTE ESTERNO */}
         {modules.locationMappa && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
@@ -177,7 +155,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
             <p className="text-xs text-slate-600">{locationAddress}</p>
 
-            {/* MAPPA INTERATTIVA INTEGRATA DENTRO L'APP */}
             <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
               <iframe
                 title="Mappa Location"
@@ -190,19 +167,17 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               />
             </div>
 
-            {/* PULSANTE ESTERNO GOOGLE MAPS */}
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-colors shadow-md"
             >
-              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Open in Maps ↗
+              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
             </a>
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT SCORREVOLE */}
         {modules.codiceAbbigliamento && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-4">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base">
@@ -210,7 +185,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <p className="text-xs text-slate-700 font-serif leading-relaxed">{dressCodeNotes}</p>
 
-            {/* PALETTE COLORI */}
             <div className="flex justify-center gap-2">
               {activePalette.colors.map((color, i) => (
                 <div
@@ -221,10 +195,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT SCORREVOLE ORIZZONTALE (scroll ➔) */}
             <div className="pt-2">
               <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
-                Outfit Inspiration (scroll ➔)
+                Esempi di Abbigliamento Consigliati (Scorri ➔)
               </span>
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
                 {outfitPhotos.map((imgUrl, idx) => (
@@ -237,16 +210,14 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI */}
         {modules.negoziConvenzionati && (
           <PartnerStores stores={[]} />
         )}
 
-        {/* LISTA NOZZE & IBAN */}
         {modules.listaNozzeAmazon && (
           <div className="p-6 bg-white rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
             <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5">
-              <Gift className="w-4 h-4 text-[#8B6508]" /> Gift Preference &amp; IBAN
+              <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
               Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
@@ -257,7 +228,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* HUB FESTA (QUIZ, PUZZLE, PHOTO WALL) */}
         {modules.hubGiochiFesta && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -275,7 +245,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP */}
         {modules.confermaRsvp && (
           <div className="pt-2">
             <RsvpForm coupleNames={coupleNames} />
