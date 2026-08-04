@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sparkles, MapPin, Gift } from "lucide-react";
@@ -44,10 +44,10 @@ export interface AgencyPreviewProps {
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "busta",
+  introStart = "arco",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
-  rsvpStyle = "classico", // <-- DESTRUTTURATO CON VALORE DI FALLBACK SICURO
+  rsvpStyle = "classico",
   eventThemePreset = "Luxury Gold & Total White",
   customEventTheme = "",
   selectedColorScheme = "1",
@@ -146,8 +146,25 @@ export default function AgencyPreview({
           </div>
         )}
 
+        {introStart === "arco" && (
+          <div className="relative w-full h-36 overflow-hidden border-b border-[#D4AF37]/30">
+            <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Arco Romano" fill className="object-cover" priority />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/20 flex flex-col items-center justify-end pb-2">
+              <span className="font-serif font-bold text-[10px] text-[#8B6508] uppercase tracking-widest bg-white/90 px-3 py-0.5 rounded-full border border-[#D4AF37]">
+                Wedding Day
+              </span>
+            </div>
+          </div>
+        )}
+
+        {introStart === "lago" && (
+          <div className="relative w-full h-32 overflow-hidden border-b border-sky-300">
+            <Image src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} alt="Sfondo Lago" fill className="object-cover" priority />
+          </div>
+        )}
+
         {/* HERO SPOSI */}
-        <div className="text-center pt-4 px-4 space-y-1">
+        <div className="text-center pt-3 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
             Matrimonio • {activeTheme}
           </span>
@@ -197,19 +214,75 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI IN ITALIANO) */}
-        <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
-          <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-            Programma della Giornata ({scheduleSchema})
-          </span>
-          <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
-            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
-            <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-            <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+        {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI VISIVI DINAMICI IN ITALIANO) */}
+        {scheduleSchema === "classico" && (
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
+              Programma della Giornata
+            </span>
+            <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
+              <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
+            </div>
           </div>
-        </div>
+        )}
+
+        {scheduleSchema === "timeline" && (
+          <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs mb-2">
+              📍 Timeline Verticale Orari
+            </span>
+            <div className="relative pl-6 space-y-2 text-left border-l-2 border-[#D4AF37] text-xs text-[#1E293B]">
+              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo in Giardino</div>
+              <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "nuvole" && (
+          <div className="mx-3 my-3 p-4 bg-sky-50 rounded-2xl border border-sky-200 text-center shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-sky-800 uppercase block font-serif text-xs">
+              ☁️ Programma tra le Nuvole 3D
+            </span>
+            <div className="space-y-1.5 text-xs text-[#1E293B]">
+              <p><strong>16:30</strong> ☁️ Arrivo Ospiti</p>
+              <p><strong>17:00</strong> ☁️ Cerimonia</p>
+              <p><strong>18:30</strong> ☁️ Aperitivo</p>
+              <p><strong>20:00</strong> ☁️ Cena di Gala</p>
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "schede" && (
+          <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">16:30</span> Accoglienza
+            </div>
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">17:00</span> Cerimonia
+            </div>
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">18:30</span> Aperitivo
+            </div>
+            <div className="p-2.5 bg-white rounded-xl border border-slate-200 font-bold text-[#1E293B]">
+              <span className="text-[#8B6508] block text-[10px]">20:00</span> Cena &amp; Torta
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "minimal" && (
+          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs text-[#1E293B]">
+            <p>16:30 • Accoglienza Ospiti</p>
+            <p>17:00 • Cerimonia di Nozze</p>
+            <p>18:30 • Aperitivo</p>
+            <p>20:00 • Cena &amp; Torta</p>
+          </div>
+        )}
 
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
@@ -243,7 +316,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT */}
+        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COERENTE */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
@@ -272,7 +345,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI */}
+        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
             <PartnerStores stores={partnerStores} />
@@ -291,14 +364,14 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA RSVP */}
+        {/* MODULO CONFERMA RSVP (DINAMICO SULLA PALETTA COLORI) */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} rsvpStyle={rsvpStyle} />
           </div>
         )}
 
-        {/* GIOCHI DELLA FESTA */}
+        {/* GIOCHI DELLA FESTA (DOPO IL MODULO RSVP) */}
         {modules.hubGiochiFesta && (
           <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
             <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
