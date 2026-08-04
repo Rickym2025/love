@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sparkles, MapPin, Gift } from "lucide-react";
@@ -13,7 +13,6 @@ import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
-import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface AgencyPreviewProps {
@@ -21,7 +20,6 @@ export interface AgencyPreviewProps {
   introStart?: string;
   dateDisplayMode?: string;
   scheduleSchema?: string;
-  rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
   selectedColorScheme?: string;
@@ -115,7 +113,7 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
+      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI ALLA PALETTE */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors"
         style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
@@ -147,7 +145,7 @@ export default function AgencyPreview({
           <div className="relative w-full h-36 overflow-hidden border-b border-[#D4AF37]/30">
             <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Arco Romano e Cigni" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-black/20 flex flex-col items-center justify-end pb-2">
-              <span className="font-serif font-bold text-[10px] uppercase tracking-widest bg-white/90 px-3 py-0.5 rounded-full border" style={{ color: activePalette.colors[3] || "#C5A059", borderColor: activePalette.colors[2] || "#E6C687" }}>
+              <span className="font-serif font-bold text-[10px] uppercase tracking-widest bg-white/90 px-3 py-0.5 rounded-full border border-[#D4AF37] text-[#8B6508]">
                 Wedding Day
               </span>
             </div>
@@ -155,54 +153,51 @@ export default function AgencyPreview({
         )}
 
         {introStart === "lago" && (
-          <div className="relative w-full h-36 overflow-hidden border-b border-sky-300">
+          <div className="relative w-full h-32 overflow-hidden border-b border-sky-300">
             <WaterRippleImage src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="relative w-12 h-12 drop-shadow-lg">
-                <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority />
-              </div>
-            </div>
           </div>
         )}
 
-        {/* HERO SPOSI */}
+        {/* HERO SPOSI AD ALTO CONTRASTO CROMATICO */}
         <div className="text-center pt-3 px-4 space-y-1">
-          <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
             Matrimonio • {activeTheme}
           </span>
           <p className="text-xs font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <h3 className="text-2xl font-serif font-bold mt-1" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+
+          {/* NOMI SPOSI CON CONTRASTO SCURO BEN LEGGIBILE */}
+          <h3 className="text-2xl font-serif font-bold text-[#1E293B] mt-1">
             {coupleNames}
           </h3>
-          <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+          <p className="text-xs italic font-serif text-[#1E293B] opacity-90 px-2 pt-1 font-medium">
             &quot;{computedWelcomePhrase}&quot;
           </p>
-          <p className="text-xs font-bold uppercase pt-1" style={{ color: activePalette.colors[3] || "#C5A059" }}>{locationName}</p>
+          <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
         {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+            <span className="text-[10px] font-bold uppercase block mb-1 font-serif text-[#8B6508]">
               ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-3 font-serif font-bold text-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#C5A059" }}>129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
+            <div className="flex justify-center gap-3 font-serif font-bold text-xs text-[#1E293B]">
+              <div><span className="block text-sm text-[#8B6508]">129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#C5A059" }}>14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-sm text-[#8B6508]">14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#C5A059" }}>23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-sm text-[#8B6508]">23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-sm" style={{ color: activePalette.colors[3] || "#C5A059" }}>17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-sm text-[#8B6508]">17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
         {dateDisplayMode === "scratch" && modules.grattaData && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block mb-2" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block mb-2 text-[#8B6508]">
               🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
@@ -210,61 +205,61 @@ export default function AgencyPreview({
         )}
 
         {dateDisplayMode === "text" && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block mb-1" style={{ color: activePalette.colors[3] || "#C5A059" }}>Data del Matrimonio</span>
-            <p className="font-serif font-bold text-lg" style={{ color: activePalette.colors[4] || "#1E293B" }}>{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white border-[#D4AF37]/40">
+            <span className="text-[10px] font-bold uppercase block mb-1 text-[#8B6508]">Data del Matrimonio</span>
+            <p className="font-serif font-bold text-lg text-[#1E293B]">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
           </div>
         )}
 
         {/* PROGRAMMA DELLA GIORNATA (5 SCHEMI VISIVI DINAMICI IN ITALIANO SENZA EMOJI NUVOLE) */}
         {scheduleSchema === "classico" && (
-          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs text-[#8B6508]">
               Programma della Giornata
             </span>
-            <div className="space-y-1.5 text-xs pt-1 font-serif" style={{ color: activePalette.colors[4] || "#1E293B" }}>
-              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>17:00</strong> — Cerimonia di Nozze</p>
-              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-              <p><strong className="font-sans" style={{ color: activePalette.colors[3] }}>22:00</strong> — Festa &amp; Open Bar</p>
+            <div className="space-y-1.5 text-xs pt-1 font-serif text-[#1E293B]">
+              <p><strong className="font-sans text-[#8B6508]">16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="font-sans text-[#8B6508]">17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="font-sans text-[#8B6508]">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="font-sans text-[#8B6508]">20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="font-sans text-[#8B6508]">22:00</strong> — Festa &amp; Open Bar</p>
             </div>
           </div>
         )}
 
         {scheduleSchema === "timeline" && (
-          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-2" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-2 text-[#8B6508]">
               📍 Timeline Verticale Orari
             </span>
-            <div className="relative pl-6 space-y-2 text-left border-l-2 text-xs" style={{ borderColor: activePalette.colors[3] || "#C5A059", color: activePalette.colors[4] || "#1E293B" }}>
-              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>16:30</span> — Accoglienza Ospiti</div>
-              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>17:00</span> — Cerimonia Solenne</div>
-              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>18:30</span> — Aperitivo in Giardino</div>
-              <div><span className="font-bold" style={{ color: activePalette.colors[3] }}>20:00</span> — Cena &amp; Torta</div>
+            <div className="relative pl-6 space-y-2 text-left border-l-2 border-[#D4AF37] text-xs text-[#1E293B]">
+              <div><span className="font-bold text-[#8B6508]">16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold text-[#8B6508]">17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold text-[#8B6508]">18:30</span> — Aperitivo in Giardino</div>
+              <div><span className="font-bold text-[#8B6508]">20:00</span> — Cena &amp; Torta</div>
             </div>
           </div>
         )}
 
         {scheduleSchema === "schede" && (
           <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
-            <div className="p-2.5 rounded-xl border font-bold" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
-              <span className="block text-[10px]" style={{ color: activePalette.colors[3] }}>16:30</span> Accoglienza
+            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200 text-[#1E293B]">
+              <span className="block text-[10px] text-[#8B6508]">16:30</span> Accoglienza
             </div>
-            <div className="p-2.5 rounded-xl border font-bold" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
-              <span className="block text-[10px]" style={{ color: activePalette.colors[3] }}>17:00</span> Cerimonia
+            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200 text-[#1E293B]">
+              <span className="block text-[10px] text-[#8B6508]">17:00</span> Cerimonia
             </div>
-            <div className="p-2.5 rounded-xl border font-bold" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
-              <span className="block text-[10px]" style={{ color: activePalette.colors[3] }}>18:30</span> Aperitivo
+            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200 text-[#1E293B]">
+              <span className="block text-[10px] text-[#8B6508]">18:30</span> Aperitivo
             </div>
-            <div className="p-2.5 rounded-xl border font-bold" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: activePalette.colors[4] || "#1E293B" }}>
-              <span className="block text-[10px]" style={{ color: activePalette.colors[3] }}>20:00</span> Cena &amp; Torta
+            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200 text-[#1E293B]">
+              <span className="block text-[10px] text-[#8B6508]">20:00</span> Cena &amp; Torta
             </div>
           </div>
         )}
 
         {scheduleSchema === "minimal" && (
-          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>
+          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs text-[#1E293B]">
             <p>16:30 • Accoglienza Ospiti</p>
             <p>17:00 • Cerimonia di Nozze</p>
             <p>18:30 • Aperitivo</p>
@@ -274,11 +269,11 @@ export default function AgencyPreview({
 
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
-          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs text-[#8B6508]">
               📍 Location del Matrimonio
             </span>
-            <p className="font-bold text-xs" style={{ color: activePalette.colors[4] || "#1E293B" }}>{locationName}</p>
+            <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
             <p className="text-[10px] font-medium text-slate-600">{locationAddress}</p>
 
             <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
@@ -297,8 +292,7 @@ export default function AgencyPreview({
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold text-white px-3 py-1.5 rounded-lg transition-colors shadow-sm"
-              style={{ backgroundColor: activePalette.colors[4] || "#1E293B" }}
+              className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg transition-colors shadow-sm"
             >
               <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
             </a>
@@ -307,11 +301,11 @@ export default function AgencyPreview({
 
         {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COERENTE */}
         {modules.codiceAbbigliamento && (
-          <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: activePalette.colors[3] || "#C5A059" }}>
+          <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs text-[#8B6508]">
               Dress Code &amp; Palette
             </span>
-            <p className="text-[10px] font-serif" style={{ color: activePalette.colors[4] || "#1E293B" }}>{dressCodeNotes}</p>
+            <p className="text-[10px] font-serif text-[#1E293B]">{dressCodeNotes}</p>
 
             <div className="flex justify-center gap-1.5 py-1">
               {activePalette.colors.map((c, i) => (
@@ -343,9 +337,9 @@ export default function AgencyPreview({
 
         {/* LISTA NOZZE IBAN */}
         {modules.listaNozzeAmazon && (
-          <div className="mx-3 my-3 p-4 rounded-2xl border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs flex items-center justify-center gap-1" style={{ color: activePalette.colors[3] || "#C5A059" }}>
-              <Gift className="w-3.5 h-3.5" style={{ color: activePalette.colors[3] }} /> Lista Nozze &amp; Coordinate IBAN
+          <div className="mx-3 my-3 p-4 rounded-2xl border text-center space-y-2 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs flex items-center justify-center gap-1 text-[#8B6508]">
+              <Gift className="w-3.5 h-3.5 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <div className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 text-[10px] font-mono font-bold text-[#1E293B] break-all">
               {customIban}
