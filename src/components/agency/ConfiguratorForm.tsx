@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Music } from "lucide-react";
 import {
   WELCOME_PHRASE_PRESETS,
   INTRO_START_PRESETS,
@@ -40,6 +40,8 @@ export default function ConfiguratorForm(props: any) {
     setLocationName,
     locationAddress,
     setLocationAddress,
+    audioUrl,
+    setAudioUrl,
     selectedPhrasePreset,
     setSelectedPhrasePreset,
     customWelcomePhrase,
@@ -79,7 +81,7 @@ export default function ConfiguratorForm(props: any) {
       {/* 1. SELEZIONE TEMPLATE & EFFETTO START */}
       <div className="space-y-4">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          1. Selezione Template &amp; Effetto Start Mutuamente Esclusivo
+          1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
         </label>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -204,10 +206,38 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 3. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      {/* 3. COLONNA SONORA & BRANO INEDITO FF EDIZIONI */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          3. Visualizzazione Data &amp; Programma Orari (Italiano)
+          3. Brano Inedito / Colonna Sonora (FF Edizioni)
+        </label>
+
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#8B6508]">
+            <Music className="w-4 h-4 text-[#D4AF37]" />
+            <span>Colonna Sonora Inedita FF Edizioni (Maestro Fausto Fusetti - SIAE)</span>
+          </div>
+          
+          <div>
+            <label className="block text-[10px] font-bold text-slate-600 mb-1">Carica File MP3 dal PC / Smartphone</label>
+            <input type="file" accept="audio/*" className="text-xs text-slate-600 block w-full mb-2" />
+            
+            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci URL File Audio MP3</label>
+            <input
+              type="text"
+              value={audioUrl}
+              onChange={(e) => setAudioUrl(e.target.value)}
+              placeholder="https://.../canzone-sposi.mp3"
+              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono font-bold text-[#1E293B]"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 4. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+          4. Visualizzazione Data &amp; Programma Orari (Italiano)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -252,10 +282,10 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 4. DRESS CODE, NEGOZI CONVENZIONATI & LISTA NOZZE */}
+      {/* 5. DRESS CODE, NEGOZI CONVENZIONATI & LISTA NOZZE */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Palette Cromatiche, Negozi Convenzionati &amp; IBAN Sposi
+          5. Palette Cromatiche, Negozi Convenzionati &amp; IBAN Sposi
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
@@ -334,10 +364,10 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 5. MODULO CONFERMA RSVP */}
+      {/* 6. MODULO CONFERMA RSVP (3 MODELLI) */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          5. Modulo Conferma Partecipazione RSVP (3 Modelli)
+          6. Modulo Conferma Partecipazione RSVP (3 Modelli Dinamici)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
