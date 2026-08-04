@@ -10,7 +10,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
   // Larghezze Pannelli (Sidebar e Preview fixed/resizable, Configuratore FLEX-1 CENTRALE)
-  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [sidebarWidth, setSidebarWidth] = useState(250);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
@@ -18,6 +18,11 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   // Stati Configurazione Invito
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
+  const [introStart, setIntroStart] = useState("arco");
+  const [dateDisplayMode, setDateDisplayMode] = useState("countdown");
+  const [scheduleSchema, setScheduleSchema] = useState("classico");
+  const [eventThemePreset, setEventThemePreset] = useState("Luxury Gold & Total White");
+  const [customEventTheme, setCustomEventTheme] = useState("");
   const [selectedColorScheme, setSelectedColorScheme] = useState("1");
   const [coupleNames, setCoupleNames] = useState("Elena & Davide");
   const [weddingDateDay, setWeddingDateDay] = useState("15");
@@ -60,7 +65,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(180, Math.min(320, e.clientX));
+        const newWidth = Math.max(180, Math.min(360, e.clientX));
         setSidebarWidth(newWidth);
       } else if (isResizingPreview) {
         const newWidth = Math.max(320, Math.min(550, window.innerWidth - e.clientX));
@@ -112,6 +117,16 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           setActiveTab={setActiveTab}
           selectedTemplate={selectedTemplate}
           setSelectedTemplate={setSelectedTemplate}
+          introStart={introStart}
+          setIntroStart={setIntroStart}
+          dateDisplayMode={dateDisplayMode}
+          setDateDisplayMode={setDateDisplayMode}
+          scheduleSchema={scheduleSchema}
+          setScheduleSchema={setScheduleSchema}
+          eventThemePreset={eventThemePreset}
+          setEventThemePreset={setEventThemePreset}
+          customEventTheme={customEventTheme}
+          setCustomEventTheme={setCustomEventTheme}
           selectedColorScheme={selectedColorScheme}
           setSelectedColorScheme={setSelectedColorScheme}
           coupleNames={coupleNames}
@@ -166,6 +181,11 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
       >
         <AgencyPreview
           selectedTemplate={selectedTemplate}
+          introStart={introStart}
+          dateDisplayMode={dateDisplayMode}
+          scheduleSchema={scheduleSchema}
+          eventThemePreset={eventThemePreset}
+          customEventTheme={customEventTheme}
           selectedColorScheme={selectedColorScheme}
           coupleNames={coupleNames}
           weddingDateDay={weddingDateDay}
