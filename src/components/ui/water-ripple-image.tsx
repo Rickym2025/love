@@ -1,228 +1,179 @@
-"use client";
+'use client';
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
-export interface WaterRippleProps {
+type Params = {
+  blueish: number;
+  scale: number;
+  illumination: number;
+  surfaceDistortion: number;
+  waterDistortion: number;
   src: string;
-  blueish?: number;
-  scale?: number;
-  illumination?: number;
-  surfaceDistortion?: number;
-  waterDistortion?: number;
-  alt?: string;
+};
+
+export type WaterRippleImageProps = Partial<Params> & {
   className?: string;
+};
+
+const VERT = `
+precision mediump float;
+varying vec2 vUv;
+attribute vec2 a_position;
+void main() {
+  vUv = .5 * (a_position + 1.);
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
+
+const FRAG = `
+precision mediump float;
+
+varying vec2 vUv;
+uniform sampler2D u_image_texture;
+uniform float u_time;
+uniform float u_ratio;
+uniform float u_img_ratio;
+uniform float u_blueish;
+uniform float u_scale;
+uniform float u_illumination;
+uniform float u_surface_distortion;
+uniform float u_water_distortion;
+
+#define TWO_PI 6.28318530718
+#define PI 3.14159265358979323846
+
+vec3 mod289(vec3 x) { return x - floor(x * (1. / 289.)) * 289.; }
+vec2 mod289(vec2 x) { return x - floor(x * (1. / 289.)) * 289.; }
+vec3 permute(vec3 x) { return mod289(((x*34.)+1.)*x); }
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1., 0.) : vec2(0., 1.);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod289(i);
+  vec3 p = permute(permute(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
+  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.);
+  m = m*m;
+  m = m*m;
+  vec3 x = 2. * fract(p * C.www) - 1.;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130. * dot(m, g);
+}
+
+mat2 rotate2D(float r) {
+  return mat2(cos(r), sin(r), -sin(r), cos(r));
+}
+
+float surface_noise(vec2 uv, float t, float scale) {
+  vec2 n = vec2(.1);
+  vec2 N = vec2(.1);
+  mat2 m = rotate2D(.5);
+  for (int j = 0; j < 10; j++) {
+    uv *= m;
+    n *= m;
+    vec2 q = uv * scale + float(j) + n + (.5 + .5 * float(j)) * (mod(float(j), 2.) - 1.) * t;
+    n += sin(q);
+    N += cos(q) / scale;
+    scale *= 1.2;
+  }
+  return (N.x + N.y + .1);
+}
+
+void main() {
+  vec2 uv = vUv;
+  uv.y = 1. - uv.y;
+  uv.x *= u_ratio;
+
+  float t = .002 * u_time;
+  vec3 color = vec3(0.);
+  float opacity = 0.;
+
+  float outer_noise = snoise((.3 + .1 * sin(t)) * uv + vec2(0., .2 * t));
+  vec2 surface_noise_uv = 2. * uv + (outer_noise * .2);
+
+  float surf = surface_noise(surface_noise_uv, t, u_scale);
+  surf *= pow(uv.y, .3);
+  surf = pow(surf, 2.);
+
+  vec2 img_uv = vUv;
+  img_uv -= .5;
+  if (u_ratio > u_img_ratio) {
+    img_uv.x = img_uv.x * u_ratio / u_img_ratio;
+  } else {
+    img_uv.y = img_uv.y * u_img_ratio / u_ratio;
+  }
+  float scale_factor = 1.4;
+  img_uv *= scale_factor;
+  img_uv += .5;
+  img_uv.y = 1. - img_uv.y;
+
+  img_uv += (u_water_distortion * outer_noise);
+  img_uv += (u_surface_distortion * surf);
+
+  vec4 img = texture2D(u_image_texture, img_uv);
+  img *= (1. + u_illumination * surf);
+
+  color += img.rgb;
+  color += u_illumination * vec3(1. - u_blueish, 1., 1.) * surf;
+  opacity += img.a;
+
+  float edge_width = .02;
+  float edge_alpha = smoothstep(0., edge_width, img_uv.x) * smoothstep(1., 1. - edge_width, img_uv.x);
+  edge_alpha *= smoothstep(0., edge_width, img_uv.y) * smoothstep(1., 1. - edge_width, img_uv.y);
+  color *= edge_alpha;
+  opacity *= edge_alpha;
+
+  gl_FragColor = vec4(color, opacity);
+}
+`;
+
+function compileShader(gl: WebGLRenderingContext, src: string, type: number) {
+  const sh = gl.createShader(type)!;
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    const info = gl.getShaderInfoLog(sh);
+    gl.deleteShader(sh);
+    throw new Error(`Shader compile error: ${info || 'unknown'}`);
+  }
+  return sh;
+}
+
+function createProgram(gl: WebGLRenderingContext, vs: string, fs: string) {
+  const v = compileShader(gl, vs, gl.VERTEX_SHADER);
+  const f = compileShader(gl, fs, gl.FRAGMENT_SHADER);
+  const prog = gl.createProgram()!;
+  gl.attachShader(prog, v);
+  gl.attachShader(prog, f);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    const info = gl.getProgramInfoLog(prog);
+    gl.deleteProgram(prog);
+    throw new Error(`Program link error: ${info || 'unknown'}`);
+  }
+  return prog;
 }
 
 export function WaterRippleImage({
-  src,
-  blueish = 0.4,
+  blueish = 0.6,
   scale = 7,
   illumination = 0.15,
-  surfaceDistortion = 0.03,
-  waterDistortion = 0.02,
-  alt = "Effetto Acqua",
-  className = "",
-}: WaterRippleProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  surfaceDistortion = 0.07,
+  waterDistortion = 0.03,
+  src = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+  className = '',
+}: WaterRippleImageProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [webGlSupported, setWebGlSupported] = useState(true);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const gl = (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
-    if (!gl) {
-      setWebGlSupported(false);
-      return;
-    }
-
-    const vsSource = `
-      attribute vec2 a_position;
-      attribute vec2 a_texCoord;
-      varying vec2 v_texCoord;
-      void main() {
-        gl_Position = vec4(a_position, 0.0, 1.0);
-        v_texCoord = vec2(a_texCoord.x, 1.0 - a_texCoord.y);
-      }
-    `;
-
-    const fsSource = `
-      precision mediump float;
-      varying vec2 v_texCoord;
-      uniform sampler2D u_image;
-      uniform float u_time;
-      uniform vec2 u_mouse;
-      uniform float u_blueish;
-      uniform float u_scale;
-      uniform float u_illumination;
-      uniform float u_surfaceDistortion;
-      uniform float u_waterDistortion;
-
-      float noise(vec2 p) {
-        return sin(p.x * 12.0 + u_time * 2.0) * cos(p.y * 12.0 + u_time * 1.5) * 0.5 + 0.5;
-      }
-
-      void main() {
-        vec2 uv = v_texCoord;
-        float dist = distance(uv, u_mouse);
-        float mouseWave = sin(dist * u_scale * 15.0 - u_time * 4.0) * exp(-dist * 4.0) * u_surfaceDistortion;
-
-        float waveX = sin(uv.y * u_scale * 8.0 + u_time * 1.8) * u_waterDistortion;
-        float waveY = cos(uv.x * u_scale * 8.0 + u_time * 1.5) * u_waterDistortion;
-
-        vec2 distortedUv = uv + vec2(waveX + mouseWave, waveY + mouseWave);
-        distortedUv = clamp(distortedUv, 0.0, 1.0);
-
-        vec4 texColor = texture2D(u_image, distortedUv);
-        float caustic = noise(distortedUv * u_scale * 2.0) * u_illumination;
-        vec3 waterTint = mix(texColor.rgb, vec3(0.0, 0.4, 0.8), u_blueish * 0.25);
-        vec3 finalColor = waterTint + vec3(caustic);
-
-        gl_FragColor = vec4(finalColor, texColor.a);
-      }
-    `;
-
-    function createShader(gl: WebGLRenderingContext, type: number, source: string) {
-      const shader = gl.createShader(type);
-      if (!shader) return null;
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error("Errore compilazione shader:", gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
-        return null;
-      }
-      return shader;
-    }
-
-    const vertShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-    const fragShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-    if (!vertShader || !fragShader) return;
-
-    const program = gl.createProgram();
-    if (!program) return;
-    gl.attachShader(program, vertShader);
-    gl.attachShader(program, fragShader);
-    gl.linkProgram(program);
-    gl.useProgram(program);
-
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
-      gl.STATIC_DRAW
-    );
-
-    const positionLocation = gl.getAttribLocation(program, "a_position");
-    gl.enableVertexAttribArray(positionLocation);
-    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-    const texCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
-      gl.STATIC_DRAW
-    );
-
-    const texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
-    gl.enableVertexAttribArray(texCoordLocation);
-    gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
-
-    const texture = gl.createTexture();
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.src = src;
-
-    image.onload = () => {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    };
-
-    const uTimeLoc = gl.getUniformLocation(program, "u_time");
-    const uMouseLoc = gl.getUniformLocation(program, "u_mouse");
-    const uBlueishLoc = gl.getUniformLocation(program, "u_blueish");
-    const uScaleLoc = gl.getUniformLocation(program, "u_scale");
-    const uIllumLoc = gl.getUniformLocation(program, "u_illumination");
-    const uSurfDistLoc = gl.getUniformLocation(program, "u_surfaceDistortion");
-    const uWaterDistLoc = gl.getUniformLocation(program, "u_waterDistortion");
-
-    gl.uniform1f(uBlueishLoc, blueish);
-    gl.uniform1f(uScaleLoc, scale);
-    gl.uniform1f(uIllumLoc, illumination);
-    gl.uniform1f(uSurfDistLoc, surfaceDistortion);
-    gl.uniform1f(uWaterDistLoc, waterDistortion);
-
-    let mouseX = 0.5;
-    let mouseY = 0.5;
-
-    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      let clientX = 0;
-      let clientY = 0;
-      if ("touches" in e && e.touches.length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else if ("clientX" in e) {
-        clientX = (e as MouseEvent).clientX;
-        clientY = (e as MouseEvent).clientY;
-      }
-      mouseX = (clientX - rect.left) / rect.width;
-      mouseY = 1.0 - (clientY - rect.top) / rect.height;
-    };
-
-    const container = containerRef.current;
-    container?.addEventListener("mousemove", handlePointerMove);
-    container?.addEventListener("touchmove", handlePointerMove);
-
-    let animId: number;
-    let startTime = performance.now();
-
-    const render = () => {
-      const parent = containerRef.current;
-      if (parent) {
-        if (canvas.width !== parent.clientWidth || canvas.height !== parent.clientHeight) {
-          canvas.width = parent.clientWidth || 600;
-          canvas.height = parent.clientHeight || 400;
-          gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-      }
-
-      const elapsed = (performance.now() - startTime) * 0.001;
-      gl.uniform1f(uTimeLoc, elapsed);
-      gl.uniform2f(uMouseLoc, mouseX, mouseY);
-
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-      animId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      container?.removeEventListener("mousemove", handlePointerMove);
-      container?.removeEventListener("touchmove", handlePointerMove);
-    };
-  }, [src, blueish, scale, illumination, surfaceDistortion, waterDistortion]);
-
-  return (
-    <div ref={containerRef} className={`relative overflow-hidden w-full h-full min-h-[300px] rounded-3xl shadow-xl ${className}`}>
-      {webGlSupported ? (
-        <canvas ref={canvasRef} className="w-full h-full block cursor-pointer" />
-      ) : (
-        <div className="relative w-full h-full">
-          <img src={src} alt={alt} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-blue-500/10 pointer-events-none" />
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default WaterRippleImage;
+  const glRef = useRef<WebGLRenderingContext | null>(null);
+  const programRef = useRef<WebGLProgram | null>(null);
+  const uniformsRef = useRef<Record<string, WebGLUniformLocation | null>>({});
+  const tex
