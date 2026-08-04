@@ -10,6 +10,7 @@ import {
   RSVP_STYLES,
   EVENT_THEME_PRESETS,
   DRESS_CODE_PALETTES,
+  AUDIO_TRACK_PRESETS,
 } from "./constants";
 
 export default function ConfiguratorForm(props: any) {
@@ -42,6 +43,8 @@ export default function ConfiguratorForm(props: any) {
     setLocationAddress,
     audioUrl,
     setAudioUrl,
+    waterImageUrl,
+    setWaterImageUrl,
     selectedPhrasePreset,
     setSelectedPhrasePreset,
     customWelcomePhrase,
@@ -90,7 +93,7 @@ export default function ConfiguratorForm(props: any) {
             onClick={() => {
               setSelectedTemplate("A");
               setCoupleNames("Elena & Davide");
-              setIntroStart("busta");
+              setIntroStart("arco");
               setDateDisplayMode("countdown");
             }}
             className={`p-4 rounded-2xl border-2 text-left transition-all ${
@@ -101,7 +104,7 @@ export default function ConfiguratorForm(props: any) {
           >
             <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
             <h4 className="font-serif font-bold text-sm text-[#1E293B]">Classico Romantico d&apos;Autore</h4>
-            <p className="text-[10px] text-slate-600 mt-1">Busta Ceralacca Bordeaux, Countdown Timer, Mappa Google &amp; RSVP.</p>
+            <p className="text-[10px] text-slate-600 mt-1">Arco Romano, Countdown Timer, Mappa Google &amp; RSVP.</p>
           </button>
 
           <button
@@ -215,14 +218,23 @@ export default function ConfiguratorForm(props: any) {
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-xs font-bold text-[#8B6508]">
             <Music className="w-4 h-4 text-[#D4AF37]" />
-            <span>Colonna Sonora Inedita FF Edizioni (Maestro Fausto Fusetti - SIAE)</span>
+            <span>Colonna Sonora Inedita FF Edizioni (SIAE - Maestro Fausto Fusetti)</span>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-bold text-slate-600 mb-1">Scegli tra i Brani d&apos;Autore Preimpostati</label>
+            <select
+              onChange={(e) => setAudioUrl(e.target.value)}
+              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs mb-2"
+            >
+              {AUDIO_TRACK_PRESETS.map((track, idx) => (
+                <option key={idx} value={track.url}>{track.name}</option>
+              ))}
+            </select>
           </div>
           
           <div>
-            <label className="block text-[10px] font-bold text-slate-600 mb-1">Carica File MP3 dal PC / Smartphone</label>
-            <input type="file" accept="audio/*" className="text-xs text-slate-600 block w-full mb-2" />
-            
-            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci URL File Audio MP3</label>
+            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci Link URL File Audio MP3</label>
             <input
               type="text"
               value={audioUrl}
@@ -234,12 +246,13 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 4. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      {/* 4. VISUALIZZAZIONE DATA, PROGRAMMA ORARI & RIFRAZIONE ACQUA */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Visualizzazione Data &amp; Programma Orari (Italiano)
+          4. Visualizzazione Data, Programma Orari &amp; Rifrazione Acqua
         </label>
 
+        {/* MODULO DATA */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
           <select
@@ -268,6 +281,7 @@ export default function ConfiguratorForm(props: any) {
           </div>
         </div>
 
+        {/* PROGRAMMA ORARI IN ITALIANO */}
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
           <select
@@ -279,6 +293,28 @@ export default function ConfiguratorForm(props: any) {
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
+        </div>
+
+        {/* RIFRAZIONE ACQUA */}
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-[#1E293B]">💧 Rifrazione Liquida dell&apos;Acqua (Sfondo Lago)</span>
+            <button type="button" onClick={() => toggleModule("effettoAcqua")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.effettoAcqua ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+              {modules.effettoAcqua ? "Attivo" : "Disattivato"}
+            </button>
+          </div>
+          {modules.effettoAcqua && (
+            <div>
+              <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (File o Link Immagine)</label>
+              <input
+                type="text"
+                value={waterImageUrl}
+                onChange={(e) => setWaterImageUrl(e.target.value)}
+                placeholder="https://.../sfondo-lago.jpg"
+                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B]"
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -364,10 +400,10 @@ export default function ConfiguratorForm(props: any) {
         </div>
       </div>
 
-      {/* 6. MODULO CONFERMA RSVP (3 MODELLI) */}
+      {/* 6. MODULO CONFERMA RSVP & CONFIGURAZIONE PAGINA FESTA */}
       <div className="space-y-4 pt-4 border-t border-slate-200">
         <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          6. Modulo Conferma Partecipazione RSVP (3 Modelli Dinamici)
+          6. Modulo RSVP &amp; Personalizzazione Pagina della Festa (/festa)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -388,6 +424,22 @@ export default function ConfiguratorForm(props: any) {
               ))}
             </select>
           )}
+        </div>
+
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30 space-y-3">
+          <span className="text-xs font-bold text-[#8B6508] block">🎉 Pagina della Festa &amp; Maxischermo (/festa)</span>
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-[#1E293B]">Hub Giochi della Festa (Quiz, Puzzle, Scratch)</span>
+            <button type="button" onClick={() => toggleModule("hubGiochiFesta")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.hubGiochiFesta ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+              {modules.hubGiochiFesta ? "Attivo" : "Disattivato"}
+            </button>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-[#1E293B]">Guest Photo Wall &amp; Proiettore Sala</span>
+            <button type="button" onClick={() => toggleModule("guestPhotoWall")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.guestPhotoWall ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
+              {modules.guestPhotoWall ? "Attivo" : "Disattivato"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
