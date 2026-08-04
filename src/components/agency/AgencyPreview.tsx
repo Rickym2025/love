@@ -115,7 +115,7 @@ export default function AgencyPreview({
 
       {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI */}
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors"
+        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6"
         style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
       >
         {/* PLAYER AUDIO PERSISTENTE */}
@@ -152,7 +152,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* HERO SPOSI SENZA SCRITTE IN INGLESE */}
+        {/* HERO SPOSI */}
         <div className="text-center pt-3 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: activePalette.colors[3] || "#8B6508" }}>
             Il Matrimonio di {coupleNames} • {activeTheme}
@@ -168,6 +168,9 @@ export default function AgencyPreview({
           </p>
           <p className="text-xs font-bold uppercase pt-1" style={{ color: activePalette.colors[3] || "#8B6508" }}>{locationName}</p>
         </div>
+
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
 
         {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
@@ -203,7 +206,10 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (SENZA EMOJI NUVOLE) */}
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
+
+        {/* PROGRAMMA DELLA GIORNATA */}
         {scheduleSchema === "classico" && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs text-[#8B6508]">
@@ -258,6 +264,9 @@ export default function AgencyPreview({
             <p>20:00 • Cena &amp; Torta</p>
           </div>
         )}
+
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
 
         {/* LOCATION CON MAPPA INTEGRATA */}
         {modules.locationMappa && (
@@ -339,7 +348,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* MODULO CONFERMA RSVP (DINAMICO SU COLORI PALETTE & SENZA CERALACCA) */}
+        {/* MODULO CONFERMA PARTECIPAZIONE (DINAMICO SU COLORI PALETTE & SENZA CERALACCA) */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} paletteColors={activePalette.colors} />
