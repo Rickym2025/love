@@ -1,22 +1,33 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 export default function PartingClouds() {
   return (
-    <div className="relative w-full h-32 my-2 overflow-hidden select-none pointer-events-none">
-      {/* SVG Volumetrico Nuvola Sinistra */}
-      <div className="absolute top-0 left-0 w-2/3 h-full transition-transform duration-1000 ease-out hover:-translate-x-3/4">
-        <svg viewBox="0 0 200 100" className="w-full h-full fill-white/90 drop-shadow-md">
-          <path d="M 0,50 Q 20,20 50,30 Q 80,10 120,30 Q 150,10 180,40 Q 200,60 170,80 Q 130,100 80,90 Q 30,100 0,70 Z" />
-        </svg>
+    <div className="relative w-full h-40 my-2 overflow-hidden select-none pointer-events-none">
+      {/* NUVOLA 3D SINISTRA (STILE FOTO 2) */}
+      <div className="absolute top-0 left-0 w-3/4 h-full transition-transform duration-1000 ease-out hover:-translate-x-full">
+        <div className="relative w-full h-full opacity-90 drop-shadow-lg">
+          <Image
+            src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=600&q=80"
+            alt="Nuvola 3D Sinistra"
+            fill
+            className="object-cover rounded-r-full"
+          />
+        </div>
       </div>
 
-      {/* SVG Volumetrico Nuvola Destra */}
-      <div className="absolute top-0 right-0 w-2/3 h-full transition-transform duration-1000 ease-out hover:translate-x-3/4">
-        <svg viewBox="0 0 200 100" className="w-full h-full fill-sky-100/90 drop-shadow-md">
-          <path d="M 200,50 Q 180,20 150,30 Q 120,10 80,30 Q 50,10 20,40 Q 0,60 30,80 Q 70,100 120,90 Q 170,100 200,70 Z" />
-        </svg>
+      {/* NUVOLA 3D DESTRA (STILE FOTO 2) */}
+      <div className="absolute top-0 right-0 w-3/4 h-full transition-transform duration-1000 ease-out hover:translate-x-full">
+        <div className="relative w-full h-full opacity-90 drop-shadow-lg">
+          <Image
+            src="https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?auto=format&fit=crop&w=600&q=80"
+            alt="Nuvola 3D Destra"
+            fill
+            className="object-cover rounded-l-full"
+          />
+        </div>
       </div>
     </div>
   );
