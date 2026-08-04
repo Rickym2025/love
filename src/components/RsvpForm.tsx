@@ -1,21 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 export interface RsvpFormProps {
   coupleNames?: string;
   paletteColors?: string[];
+  rsvpStyle?: string;
 }
 
 export default function RsvpForm({
   coupleNames = "Elena & Davide",
-  paletteColors = ["#FAF7F2", "#FDE68A", "#FCA5A5", "#D4AF37", "#1E293B"],
+  paletteColors = ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#D4AF37", "#1E293B"],
+  rsvpStyle = "classico",
 }: RsvpFormProps) {
   const [nome, setNome] = useState("");
   const [presenza, setPresenza] = useState("si");
   const [ospiti, setOspiti] = useState("1");
   const [intolleranze, setIntolleranze] = useState("");
   const [inviato, setInviato] = useState(false);
+  const [apertoCeralacca, setApertoCeralacca] = useState(false);
 
   const mainAccent = paletteColors[3] || "#D4AF37";
   const darkText = paletteColors[4] || "#1E293B";
@@ -35,6 +39,88 @@ export default function RsvpForm({
     );
   }
 
+  // MODELLO 2: SIGILLO CERALACCA POP-UP
+  if (rsvpStyle === "ceralacca" && !apertoCeralacca) {
+    return (
+      <div
+        onClick={() => setApertoCeralacca(true)}
+        className="p-6 bg-[#F5EFE6] rounded-3xl border border-[#D4AF37]/40 text-center shadow-md cursor-pointer transition-all hover:scale-[1.02] space-y-2 select-none"
+      >
+        <span className="text-[10px] font-bold text-[#8B6508] uppercase block tracking-widest font-serif">
+          Conferma la tua Partecipazione
+        </span>
+        <div className="relative w-14 h-14 mx-auto my-1 drop-shadow animate-pulse">
+          <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
+        </div>
+        <span className="text-xs font-bold text-[#1E293B] block font-serif">
+          Tocca qui per inserire i tuoi dati e confermare ↗
+        </span>
+      </div>
+    );
+  }
+
+  // MODELLO 3: PASTELLO MINIMAL
+  if (rsvpStyle === "pastello") {
+    return (
+      <form
+        onSubmit={handleSubmit}
+        className="p-5 rounded-3xl border border-sky-200 shadow-sm space-y-3 text-center transition-colors bg-sky-50/90"
+      >
+        <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif">
+          Conferma di Partecipazione
+        </span>
+
+        <input
+          type="text"
+          required
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          placeholder="Il tuo Nome e Cognome"
+          className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
+        />
+
+        <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setPresenza("si")}
+            className={`p-2.5 rounded-full transition-all ${
+              presenza === "si" ? "bg-sky-700 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
+            }`}
+          >
+            Parteciperò
+          </button>
+          <button
+            type="button"
+            onClick={() => setPresenza("no")}
+            className={`p-2.5 rounded-full transition-all ${
+              presenza === "no" ? "bg-rose-500 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
+            }`}
+          >
+            Non Ci Sarò
+          </button>
+        </div>
+
+        {presenza === "si" && (
+          <input
+            type="text"
+            value={intolleranze}
+            onChange={(e) => setIntolleranze(e.target.value)}
+            placeholder="Intolleranze alimentari / Allergie..."
+            className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
+          />
+        )}
+
+        <button
+          type="submit"
+          className="w-full py-3 bg-sky-800 text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-sky-900 shadow-md transition-all mt-2"
+        >
+          Invia Risposta
+        </button>
+      </form>
+    );
+  }
+
+  // MODELLO 1: CLASSICO ELEGANTE (DEFAULT)
   return (
     <form
       onSubmit={handleSubmit}
@@ -42,7 +128,7 @@ export default function RsvpForm({
       style={{ backgroundColor: paletteColors[0] || "#FFFFFF", borderColor: mainAccent }}
     >
       <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: mainAccent }}>
-        ✉️ Conferma Partecipazione RSVP
+        Conferma di Partecipazione
       </span>
 
       <div>
@@ -53,7 +139,7 @@ export default function RsvpForm({
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           placeholder="es. Mario Rossi"
-          className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white"
+          className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
           style={{ color: darkText }}
         />
       </div>
@@ -92,7 +178,7 @@ export default function RsvpForm({
             <select
               value={ospiti}
               onChange={(e) => setOspiti(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white"
+              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
               style={{ color: darkText }}
             >
               <option value="1">Solo Io (1 Persona)</option>
@@ -109,7 +195,7 @@ export default function RsvpForm({
               value={intolleranze}
               onChange={(e) => setIntolleranze(e.target.value)}
               placeholder="es. Celiaco, Vegetariano, Nessuna..."
-              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white"
+              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
               style={{ color: darkText }}
             />
           </div>
@@ -121,7 +207,7 @@ export default function RsvpForm({
         className="w-full py-3 font-bold rounded-xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
         style={{ backgroundColor: darkText, color: mainAccent }}
       >
-        Invia Conferma RSVP
+        Invia Conferma Partecipazione
       </button>
     </form>
   );
