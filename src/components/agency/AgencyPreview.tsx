@@ -3,9 +3,13 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Store } from "lucide-react";
+import { Sparkles, MapPin, Store, Heart, Gift } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
+import EnvelopeWax from "@/components/EnvelopeWax";
+import PartingClouds from "@/components/PartingClouds";
+import Marquee from "@/components/Marquee";
+import PartnerStores from "@/components/PartnerStores";
 import { DRESS_CODE_PALETTES } from "./AgencyConfigurator";
 
 const DRESS_CODE_PHOTOS: Record<number, string[]> = {
@@ -26,15 +30,13 @@ const DRESS_CODE_PHOTOS: Record<number, string[]> = {
   ],
 };
 
-export interface PartnerStore {
-  id: string;
-  name: string;
-  url: string;
-  logoUrl: string;
-}
-
 export interface AgencyPreviewProps {
   selectedTemplate?: "A" | "B";
+  introStart?: string;
+  dateDisplayMode?: string;
+  scheduleSchema?: string;
+  eventThemePreset?: string;
+  customEventTheme?: string;
   selectedColorScheme?: string;
   coupleNames?: string;
   weddingDateDay?: string;
@@ -49,7 +51,7 @@ export interface AgencyPreviewProps {
   customWelcomePhrase?: string;
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
-  partnerStores?: PartnerStore[];
+  partnerStores?: any[];
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -70,6 +72,11 @@ const WELCOME_PHRASE_PRESETS = [
 
 export default function AgencyPreview({
   selectedTemplate = "A",
+  introStart = "arco",
+  dateDisplayMode = "countdown",
+  scheduleSchema = "classico",
+  eventThemePreset = "Luxury Gold & Total White",
+  customEventTheme = "",
   coupleNames = "Elena & Davide",
   weddingDateDay = "15",
   weddingDateMonth = "Settembre",
@@ -82,6 +89,8 @@ export default function AgencyPreview({
   dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
   selectedPaletteIdx = 0,
   partnerStores = [],
+  marqueeText = "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦",
+  customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
   audioUrl = "",
 }: AgencyPreviewProps) {
@@ -97,9 +106,11 @@ export default function AgencyPreview({
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
+  const activeTheme = eventThemePreset === "Personalizzato (inserisci a mano)" ? customEventTheme : eventThemePreset;
+
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
-  }?template=${selectedTemplate}&day=${encodeURIComponent(
+  }?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&day=${encodeURIComponent(
     weddingDateDay
   )}&month=${encodeURIComponent(weddingDateMonth)}&year=${encodeURIComponent(
     weddingDateYear
@@ -110,7 +121,7 @@ export default function AgencyPreview({
   )}&palette=${selectedPaletteIdx}`;
 
   return (
-    <div className="w-full h-full p-6 flex flex-col items-center justify-center overflow-y-auto">
+    <div className="w-full h-full p-4 flex flex-col items-center justify-center overflow-y-auto">
       {/* TESTATA ANTEPRIMA */}
       <div className="flex justify-between items-center w-full max-w-[340px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
@@ -128,50 +139,32 @@ export default function AgencyPreview({
       {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className={`w-[340px] h-[600px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto ${
-          selectedTemplate === "B"
+          selectedTemplate === "B" || introStart === "nuvole"
             ? "bg-[#F0F7FF] text-[#1E293B]"
             : "bg-[#FAF7F2] text-[#1E293B]"
         }`}
       >
-        {/* TEMPLATE A: BUSTA AVORIO CON VERA CERALACCA WAX-SEAL.PNG */}
-        {selectedTemplate === "A" && modules.busta3d && (
-          <div className="p-4 bg-[#F5EFE6] border-b border-[#D4AF37]/30 text-center relative shadow-sm">
-            <span className="text-[9px] font-bold text-[#8B6508] uppercase tracking-widest block mb-1">
-              ✦ Partecipazione Digitale
-            </span>
-            <p className="font-serif font-bold text-base text-[#1E293B]">{coupleNames}</p>
-            
-            {/* Ceralacca wax-seal.png Reale */}
-            <div className="relative w-14 h-14 mx-auto my-2 drop-shadow-md">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-            
-            <span className="text-[9px] uppercase font-bold text-[#8B6508] animate-pulse">
-              TAP TO OPEN
-            </span>
+        {/* MARQUEE DEDICHE */}
+        {modules.dedicheMarquee && (
+          <div className="py-1">
+            <Marquee text={marqueeText} />
           </div>
         )}
 
-        {/* TEMPLATE B: BUSTA AZZURRA E LETTERA */}
-        {selectedTemplate === "B" && modules.busta3d && (
-          <div className="p-4 bg-[#E0F2FE] border-b border-sky-200 text-center relative shadow-sm">
-            <span className="text-[9px] font-bold text-sky-800 uppercase tracking-widest block mb-1">
-              ✉️ Invito Speciale
-            </span>
-            <p className="font-serif font-bold text-base text-[#1E293B]">{coupleNames}</p>
-            <div className="relative w-12 h-12 mx-auto my-2 drop-shadow-sm">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-            <span className="text-[9px] uppercase font-bold text-sky-700 animate-pulse">
-              Scorri per scoprire
-            </span>
+        {/* NUVOLE 3D */}
+        {modules.nuvole3d && <PartingClouds />}
+
+        {/* BUSTA CERALACCA ENVELOPEWAX */}
+        {modules.busta3d && (
+          <div className="p-3 my-2">
+            <EnvelopeWax coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* HERO SPOSI (Testo Oro Scuro/Antracite Nitido e Leggibile) */}
-        <div className="text-center pt-6 px-4 space-y-1">
+        {/* HERO SPOSI */}
+        <div className="text-center pt-4 px-4 space-y-1">
           <span className="text-[10px] tracking-widest uppercase font-bold text-[#8B6508]">
-            Wedding Day
+            Wedding Celebration • {activeTheme}
           </span>
           <p className="text-xs font-bold text-slate-700">
             {weddingDateDay}.{weddingDateMonth}.{weddingDateYear}
@@ -185,11 +178,11 @@ export default function AgencyPreview({
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{locationName}</p>
         </div>
 
-        {/* TEMPLATE A: COUNTDOWN TIMER REALE */}
-        {selectedTemplate === "A" && (
+        {/* MODULO DATA (3 OPZIONI) */}
+        {dateDisplayMode === "countdown" && (
           <div className="my-4 mx-3 p-3 bg-white/90 rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1">
-              The Celebration Begins In
+              ⏳ The Celebration Begins In
             </span>
             <div className="flex justify-center gap-3 text-[#1E293B] font-serif font-bold text-sm">
               <div><span className="block text-base text-[#8B6508]">129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Days</span></div>
@@ -197,14 +190,11 @@ export default function AgencyPreview({
               <div><span className="block text-base text-[#8B6508]">00</span><span className="text-[8px] uppercase text-slate-600 font-sans">Hours</span></div>
               <span>:</span>
               <div><span className="block text-base text-[#8B6508]">23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minutes</span></div>
-              <span>:</span>
-              <div><span className="block text-base text-[#8B6508]">17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Seconds</span></div>
             </div>
           </div>
         )}
 
-        {/* TEMPLATE B: 3 GRATTABILI DATA */}
-        {selectedTemplate === "B" && modules.grattaData && (
+        {dateDisplayMode === "scratch" && modules.grattaData && (
           <div className="my-4 mx-3 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm">
             <span className="text-[10px] font-bold text-sky-800 uppercase block mb-2">
               🎰 Scratch to reveal the date
@@ -213,40 +203,36 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* TEMPLATE A: GRATTABILE DATA */}
-        {selectedTemplate === "A" && modules.grattaData && (
-          <div className="my-4 mx-3 p-4 bg-white rounded-2xl text-center border border-[#D4AF37]/30 shadow-sm">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-2">
-              ✦ Gratta e scopri la data ✦
-            </span>
-            <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
+        {dateDisplayMode === "text" && (
+          <div className="my-4 mx-3 p-4 bg-white rounded-2xl text-center border border-[#D4AF37]/40 shadow-sm">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1">Data del Matrimonio</span>
+            <p className="font-serif font-bold text-xl text-[#1E293B]">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA (SCHEDULE OF EVENTS) */}
+        {/* SCHEDULE OF EVENTS (PROGRAMMA ORARI IN ITALIANO) */}
         <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
           <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
-            Schedule of Events
+            Programma della Giornata
           </span>
           <div className="space-y-1.5 text-xs text-[#1E293B] pt-1 font-serif">
-            <p><strong className="text-[#8B6508] font-sans">5 PM</strong> — Guest Arrival</p>
-            <p><strong className="text-[#8B6508] font-sans">6 PM</strong> — Nikkah Ceremony</p>
-            <p><strong className="text-[#8B6508] font-sans">7 PM</strong> — Mocktail Hour</p>
-            <p><strong className="text-[#8B6508] font-sans">8 PM</strong> — Dinner</p>
-            <p><strong className="text-[#8B6508] font-sans">9 PM</strong> — Dance &amp; Party</p>
+            <p><strong className="text-[#8B6508] font-sans">16:30</strong> — Arrivo e Accoglienza Ospiti</p>
+            <p><strong className="text-[#8B6508] font-sans">17:00</strong> — Cerimonia di Nozze</p>
+            <p><strong className="text-[#8B6508] font-sans">18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+            <p><strong className="text-[#8B6508] font-sans">20:00</strong> — Cene di Gala &amp; Taglio Torta</p>
+            <p><strong className="text-[#8B6508] font-sans">22:00</strong> — Festa &amp; Open Bar</p>
           </div>
         </div>
 
-        {/* LOCATION CON MAPPA INTEGRATA + PULSANTE GOOGLE MAPS */}
+        {/* LOCATION & MAPPA INTEGRATA */}
         {modules.locationMappa && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-3">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
-              Location &amp; Indicazioni
+              📍 Location del Matrimonio
             </span>
             <p className="font-bold text-xs text-[#1E293B]">{locationName}</p>
             <p className="text-[10px] text-slate-600 font-medium">{locationAddress}</p>
 
-            {/* MAPPA INTERATTIVA INTEGRATA DENTRO L'APP */}
             <div className="w-full h-36 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
               <iframe
                 title="Mappa Location"
@@ -259,7 +245,6 @@ export default function AgencyPreview({
               />
             </div>
 
-            {/* PULSANTE ESTERNO GOOGLE MAPS */}
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
               target="_blank"
@@ -271,7 +256,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT SCORREVOLE (REPLICATA DA FOTO) */}
+        {/* DRESS CODE CON GALLERIA OUTFIT SCORREVOLE */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-4 p-4 bg-white rounded-2xl text-center border border-slate-200 shadow-sm space-y-2">
             <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm">
@@ -279,18 +264,12 @@ export default function AgencyPreview({
             </span>
             <p className="text-[10px] text-slate-700 font-serif leading-relaxed">{dressCodeNotes}</p>
 
-            {/* CERCHI PALETTE CROMATICA */}
             <div className="flex justify-center gap-1.5 py-1">
               {activePalette.colors.map((c, i) => (
-                <div
-                  key={i}
-                  className="w-5 h-5 rounded-full border border-slate-300 shadow-sm"
-                  style={{ backgroundColor: c }}
-                />
+                <div key={i} className="w-5 h-5 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT SCORREVOLE ORIZZONTALE (scroll ➔) */}
             <div className="pt-2">
               <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                 Outfit Inspiration (scroll ➔)
@@ -306,28 +285,26 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* NEGOZI CONVENZIONATI */}
-        {modules.negoziConvenzionati && partnerStores && partnerStores.length > 0 && (
-          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
-            <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif text-sm">
-              🏪 Negozi Convenzionati
-            </span>
-            {partnerStores.map((s) => (
-              <a
-                key={s.id}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-[#FAF7F2] rounded-xl text-[10px] font-bold text-[#1E293B] flex items-center gap-2 border border-slate-200 hover:border-[#D4AF37]"
-              >
-                <Store className="w-3.5 h-3.5 text-[#D4AF37] flex-shrink-0" />
-                <span className="truncate">{s.name} ↗</span>
-              </a>
-            ))}
+        {/* NEGOZI CONVENZIONATI PARTNERSTORES */}
+        {modules.negoziConvenzionati && (
+          <div className="p-2">
+            <PartnerStores stores={partnerStores} />
           </div>
         )}
 
-        {/* CONFERMA PARTECIPAZIONE RSVP CON WAX-SEAL */}
+        {/* LISTA NOZZE & IBAN */}
+        {modules.listaNozzeAmazon && (
+          <div className="mx-3 my-4 p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-2">
+            <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-sm flex items-center justify-center gap-1">
+              <Gift className="w-3.5 h-3.5 text-[#8B6508]" /> Gift Preference &amp; IBAN
+            </span>
+            <div className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 text-[10px] font-mono font-bold text-[#1E293B] break-all">
+              {customIban}
+            </div>
+          </div>
+        )}
+
+        {/* RSVP FORM */}
         {modules.confermaRsvp && (
           <div className="p-3">
             <RsvpForm coupleNames={coupleNames} />
