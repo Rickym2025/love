@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2, XCircle, Users, AlertCircle } from "lucide-react";
 
 export interface RsvpFormProps {
   coupleNames?: string;
@@ -39,221 +38,125 @@ export default function RsvpForm({
     );
   }
 
-  // STILE PASTELLO MINIMAL
-  if (rsvpStyle === "pastello") {
-    return (
-      <form onSubmit={handleSubmit} className="p-5 bg-sky-50/90 rounded-3xl border border-sky-200 shadow-sm space-y-3 text-center">
-        <span className="text-xs font-bold text-sky-800 uppercase tracking-wider block font-serif">
-          Conferma di Partecipazione
-        </span>
-
-        <input
-          type="text"
-          required
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          placeholder="Il tuo Nome e Cognome"
-          className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
-        />
-
-        <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-          <button
-            type="button"
-            onClick={() => setPresenza("si")}
-            className={`p-2.5 rounded-full transition-all ${
-              presenza === "si" ? "bg-sky-700 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
-            }`}
-          >
-            Parteciperò
-          </button>
-          <button
-            type="button"
-            onClick={() => setPresenza("no")}
-            className={`p-2.5 rounded-full transition-all ${
-              presenza === "no" ? "bg-rose-500 text-white shadow" : "bg-white text-slate-600 border border-sky-200"
-            }`}
-          >
-            Non Ci Sarò
-          </button>
-        </div>
-
-        {presenza === "si" && (
-          <input
-            type="text"
-            value={intolleranze}
-            onChange={(e) => setIntolleranze(e.target.value)}
-            placeholder="Intolleranze alimentari / Allergie..."
-            className="w-full p-2.5 rounded-2xl border border-sky-200 text-xs font-bold text-[#1E293B] bg-white focus:outline-none"
-          />
-        )}
-
-        <button type="submit" className="w-full py-3 bg-sky-800 text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-sky-900 shadow-md transition-all mt-2">
-          Invia Risposta
-        </button>
-      </form>
-    );
-  }
-
-  // STILE MODERNO CARD
-  if (rsvpStyle === "moderno") {
-    return (
-      <form onSubmit={handleSubmit} className="p-6 rounded-3xl border shadow-lg space-y-4 text-left transition-colors bg-white" style={{ borderColor: mainAccent }}>
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-widest block font-serif" style={{ color: mainAccent }}>
-            Conferma di Partecipazione
-          </span>
-          <p className="text-[11px] text-slate-500 font-serif">Facci sapere se sarai dei nostri per festeggiare insieme!</p>
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold mb-1" style={{ color: darkText }}>Il tuo Nome e Cognome</label>
-          <input
-            type="text"
-            required
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            placeholder="es. Mario Rossi"
-            className="w-full p-3 rounded-2xl border border-slate-300 text-xs font-bold text-[#1E293B] bg-[#FAF7F2] focus:outline-none"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="block text-xs font-bold" style={{ color: darkText }}>Confermi la tua presenza?</label>
-          <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-            <button
-              type="button"
-              onClick={() => setPresenza("si")}
-              className="p-3 rounded-2xl border flex items-center justify-center gap-2 transition-all"
-              style={{
-                backgroundColor: presenza === "si" ? mainAccent : "#FAF7F2",
-                color: presenza === "si" ? "#FFFFFF" : darkText,
-                borderColor: mainAccent,
-              }}
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Sì, ci sarò!</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPresenza("no")}
-              className="p-3 rounded-2xl border flex items-center justify-center gap-2 transition-all"
-              style={{
-                backgroundColor: presenza === "no" ? "#FFE4E6" : "#FAF7F2",
-                color: presenza === "no" ? "#9F1239" : darkText,
-                borderColor: presenza === "no" ? "#FDA4AF" : "#CBD5E1",
-              }}
-            >
-              <XCircle className="w-4 h-4" />
-              <span>Purtroppo no</span>
-            </button>
-          </div>
-        </div>
-
-        {presenza === "si" && (
-          <>
-            <div>
-              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
-                <Users className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Numero Partecipanti
-              </label>
-              <select
-                value={ospiti}
-                onChange={(e) => setOspiti(e.target.value)}
-                className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-[#FAF7F2]"
-                style={{ color: darkText }}
-              >
-                <option value="1">Solo Io (1 Persona)</option>
-                <option value="2">In Coppia (2 Persone)</option>
-                <option value="3">Famiglia (3 Persone)</option>
-                <option value="4">Gruppo (4+ Persone)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: darkText }}>
-                <AlertCircle className="w-3.5 h-3.5" style={{ color: mainAccent }} /> Allergie o Intolleranze
-              </label>
-              <input
-                type="text"
-                value={intolleranze}
-                onChange={(e) => setIntolleranze(e.target.value)}
-                placeholder="es. Celiaco, Lattosio, Crostacei..."
-                className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-[#FAF7F2]"
-                style={{ color: darkText }}
-              />
-            </div>
-          </>
-        )}
-
-        <button
-          type="submit"
-          className="w-full py-3.5 font-bold rounded-2xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
-          style={{ backgroundColor: darkText, color: mainAccent }}
-        >
-          Conferma la Partecipazione
-        </button>
-      </form>
-    );
-  }
-
-  // STILE CLASSICO ELEGANTE (DEFAULT)
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-5 rounded-3xl border shadow-md space-y-3 text-center transition-colors"
-      style={{ backgroundColor: bgCard, borderColor: mainAccent }}
+      className={`p-6 rounded-3xl border shadow-md space-y-4 text-center transition-all ${
+        rsvpStyle === "pastello" ? "bg-sky-50/90 border-sky-200" : "bg-white"
+      }`}
+      style={
+        rsvpStyle === "pastello"
+          ? {}
+          : { backgroundColor: bgCard, borderColor: mainAccent }
+      }
     >
-      <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: mainAccent }}>
+      <span
+        className="text-xs font-bold uppercase tracking-wider block font-serif"
+        style={{ color: rsvpStyle === "pastello" ? "#075985" : mainAccent }}
+      >
         Conferma di Partecipazione
       </span>
 
-      <div>
-        <label className="block text-[10px] font-bold mb-1 text-left" style={{ color: darkText }}>Nome e Cognome</label>
+      {rsvpStyle === "moderno" && (
+        <p className="text-[11px] text-slate-500 font-serif -mt-2">
+          Facci sapere se sarai dei nostri per festeggiare insieme!
+        </p>
+      )}
+
+      {/* CAMPO NOME */}
+      <div className="text-left">
+        <label
+          className="block text-[10px] font-bold mb-1"
+          style={{ color: rsvpStyle === "pastello" ? "#075985" : darkText }}
+        >
+          Il tuo Nome e Cognome
+        </label>
         <input
           type="text"
           required
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           placeholder="es. Mario Rossi"
-          className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
-          style={{ color: darkText }}
+          className={`w-full p-3 rounded-2xl border text-xs font-bold focus:outline-none ${
+            rsvpStyle === "pastello"
+              ? "border-sky-200 bg-white text-[#1E293B]"
+              : "border-slate-300 bg-white"
+          }`}
+          style={rsvpStyle === "pastello" ? {} : { color: darkText }}
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-        <button
-          type="button"
-          onClick={() => setPresenza("si")}
-          className="p-2.5 rounded-xl border transition-all"
-          style={{
-            backgroundColor: presenza === "si" ? mainAccent : "#FFFFFF",
-            color: presenza === "si" ? "#FFFFFF" : darkText,
-            borderColor: mainAccent,
-          }}
+      {/* SELEZIONE PRESENZA */}
+      <div className="space-y-1">
+        <label
+          className="block text-[10px] font-bold text-left mb-1"
+          style={{ color: rsvpStyle === "pastello" ? "#075985" : darkText }}
         >
-          Parteciperò con Gioia
-        </button>
-        <button
-          type="button"
-          onClick={() => setPresenza("no")}
-          className="p-2.5 rounded-xl border transition-all"
-          style={{
-            backgroundColor: presenza === "no" ? "#FFE4E6" : "#FFFFFF",
-            color: presenza === "no" ? "#9F1239" : darkText,
-            borderColor: presenza === "no" ? "#FDA4AF" : "#CBD5E1",
-          }}
-        >
-          Non Potrò Esserci
-        </button>
+          Confermi la tua presenza?
+        </label>
+        <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setPresenza("si")}
+            className={`p-3 transition-all ${
+              rsvpStyle === "pastello" ? "rounded-full" : "rounded-xl border"
+            }`}
+            style={
+              rsvpStyle === "pastello"
+                ? {
+                    backgroundColor: presenza === "si" ? "#0369A1" : "#FFFFFF",
+                    color: presenza === "si" ? "#FFFFFF" : "#334155",
+                    border: "1px solid #BAE6FD",
+                  }
+                : {
+                    backgroundColor: presenza === "si" ? mainAccent : "#FFFFFF",
+                    color: presenza === "si" ? "#FFFFFF" : darkText,
+                    borderColor: mainAccent,
+                  }
+            }
+          >
+            {presenza === "si" ? "✓ " : ""}Parteciperò con Gioia
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPresenza("no")}
+            className={`p-3 transition-all ${
+              rsvpStyle === "pastello" ? "rounded-full" : "rounded-xl border"
+            }`}
+            style={
+              rsvpStyle === "pastello"
+                ? {
+                    backgroundColor: presenza === "no" ? "#F43F5E" : "#FFFFFF",
+                    color: presenza === "no" ? "#FFFFFF" : "#334155",
+                    border: "1px solid #BAE6FD",
+                  }
+                : {
+                    backgroundColor: presenza === "no" ? "#FFE4E6" : "#FFFFFF",
+                    color: presenza === "no" ? "#9F1239" : darkText,
+                    borderColor: presenza === "no" ? "#FDA4AF" : "#CBD5E1",
+                  }
+            }
+          >
+            {presenza === "no" ? "✗ " : ""}Non Potrò Esserci
+          </button>
+        </div>
       </div>
 
+      {/* CAMPI EXTRA SE PRESENTE */}
       {presenza === "si" && (
-        <>
+        <div className="space-y-3 pt-1 text-left">
           <div>
-            <label className="block text-[10px] font-bold mb-1 text-left" style={{ color: darkText }}>Numero di Partecipanti</label>
+            <label
+              className="block text-[10px] font-bold mb-1"
+              style={{ color: rsvpStyle === "pastello" ? "#075985" : darkText }}
+            >
+              Numero di Partecipanti
+            </label>
             <select
               value={ospiti}
               onChange={(e) => setOspiti(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
+              className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
               style={{ color: darkText }}
             >
               <option value="1">Solo Io (1 Persona)</option>
@@ -264,23 +167,35 @@ export default function RsvpForm({
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold mb-1 text-left" style={{ color: darkText }}>Intolleranze Alimentari / Allergie</label>
+            <label
+              className="block text-[10px] font-bold mb-1"
+              style={{ color: rsvpStyle === "pastello" ? "#075985" : darkText }}
+            >
+              Intolleranze Alimentari / Allergie
+            </label>
             <input
               type="text"
               value={intolleranze}
               onChange={(e) => setIntolleranze(e.target.value)}
-              placeholder="es. Celiaco, Vegetariano, Nessuna..."
-              className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
+              placeholder="es. Celiaco, Vegetariano, Lattosio..."
+              className="w-full p-2.5 rounded-2xl border border-slate-300 text-xs font-bold bg-white focus:outline-none"
               style={{ color: darkText }}
             />
           </div>
-        </>
+        </div>
       )}
 
+      {/* PULSANTE SUBMIT */}
       <button
         type="submit"
-        className="w-full py-3 font-bold rounded-xl text-xs uppercase tracking-wider shadow-md mt-2 transition-all"
-        style={{ backgroundColor: darkText, color: mainAccent }}
+        className={`w-full py-3.5 font-bold text-xs uppercase tracking-wider shadow-md mt-2 transition-all ${
+          rsvpStyle === "pastello" ? "rounded-full bg-sky-800 text-white" : "rounded-2xl"
+        }`}
+        style={
+          rsvpStyle === "pastello"
+            ? {}
+            : { backgroundColor: darkText, color: mainAccent }
+        }
       >
         Invia Conferma Partecipazione
       </button>
