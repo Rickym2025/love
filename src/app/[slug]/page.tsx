@@ -13,7 +13,6 @@ import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
-import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
@@ -37,6 +36,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   
+  // Assegnazione Automatica dei 2 Brani Ufficiali dell'Ecosistema in base allo Slug
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -78,6 +78,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: activePalette.colors[4] || "#1E293B" }}
     >
+      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -85,16 +86,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       {showMarquee && <Marquee text={marqueeText} coupleNames={coupleNames} />}
 
       {start === "nuvole" && showNuvole && <PartingClouds onOpen={() => setSuonaMusica(true)} />}
-
-      {start === "expand" && (
-        <ScrollExpandMedia
-          bgImageSrc="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
-          mediaSrc="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
-          title={coupleNames}
-          date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-          scrollToExpand="Scorri per Ingrandire"
-        />
-      )}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         {start === "busta" && showBusta && (
@@ -125,6 +116,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </blockquote>
         </div>
 
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
+
         {dateMode === "countdown" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: activePalette.colors[3] || "#8B6508" }}>
@@ -151,6 +145,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
+
+        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: activePalette.colors[3] || "#8B6508" }}>
@@ -205,6 +203,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             <p>20:00 • Cena &amp; Torta</p>
           </div>
         )}
+
+        {/* LINEA DIVISORIA ELEGANTE */}
+        <div className="text-center text-xs font-bold tracking-widest opacity-40 select-none" style={{ color: activePalette.colors[3] || "#D4AF37" }}>✦ ✦ ✦</div>
 
         {showMappa && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
@@ -288,6 +289,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* MODULO RSVP DINAMICO SULLE PALETTE COLORI */}
         {showRsvp && (
           <div className="pt-2">
             <RsvpForm coupleNames={coupleNames} paletteColors={activePalette.colors} />
