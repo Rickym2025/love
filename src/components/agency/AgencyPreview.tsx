@@ -13,7 +13,7 @@ import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
-import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
+import TimelineHowItWorks from "@/components/ui/TimelineHowItWorksCard";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface ScheduleItem {
