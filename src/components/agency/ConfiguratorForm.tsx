@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, CheckSquare, Heart, MessageSquare } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -24,7 +24,6 @@ export interface ConfiguratorFormProps {
   schedule?: string;
   rsvpStyle?: string;
   eventThemePreset?: string;
-  eventTheme?: string;
   customEventTheme?: string;
   coupleNames?: string;
   weddingDateDay?: string;
@@ -33,10 +32,8 @@ export interface ConfiguratorFormProps {
   locationName?: string;
   locationAddress?: string;
   audioUrl?: string;
-  audio?: string;
   welcomePhrase?: string;
   selectedPhrasePreset?: string;
-  phrasePreset?: string;
   customWelcomePhrase?: string;
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
@@ -47,19 +44,37 @@ export interface ConfiguratorFormProps {
   onUpdate: (field: string, value: any) => void;
 }
 
+// PULSANTE SWITCH MODERNO (PILL TOGGLE)
+function Switch({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onChange}
+      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${
+        checked ? "bg-[#D4AF37]" : "bg-slate-300"
+      }`}
+    >
+      <span
+        className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out ${
+          checked ? "translate-x-4" : "translate-x-1"
+        }`}
+      />
+    </button>
+  );
+}
+
 export default function ConfiguratorForm(props: ConfiguratorFormProps) {
   const {
-    selectedTemplate,
+    selectedTemplate = "A",
     template,
-    introStart,
+    introStart = "busta",
     start,
-    dateDisplayMode,
+    dateDisplayMode = "countdown",
     dateMode,
-    scheduleSchema,
+    scheduleSchema = "classico",
     schedule,
     rsvpStyle = "classico",
-    eventThemePreset,
-    eventTheme,
+    eventThemePreset = "Luxury Gold & Total White",
     customEventTheme = "",
     coupleNames = "Elena & Davide",
     weddingDateDay = "15",
@@ -67,17 +82,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     weddingDateYear = "2026",
     locationName = "Villa Rosa",
     locationAddress = "Via Roma 1, Roma",
-    audioUrl,
-    audio,
+    audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
     welcomePhrase = "Benvenuti al nostro matrimonio",
-    selectedPhrasePreset,
-    phrasePreset,
+    selectedPhrasePreset = "0",
     customWelcomePhrase = "",
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
-    selectedPaletteIdx,
+    selectedPaletteIdx = 0,
     palette,
     customIban = "IT60 X 05428 11101 000000123456",
-    marqueeText = "",
     modules = {
       busta3d: true,
       grattaData: true,
@@ -93,43 +105,42 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     onUpdate,
   } = props;
 
-  // VALORI CORRENTI CON FALLBACK SU ENTI BINDING
-  const currentTemplate = selectedTemplate || template || "A";
-  const currentStart = introStart || start || "busta";
-  const currentDateMode = dateDisplayMode || dateMode || "countdown";
-  const currentSchedule = scheduleSchema || schedule || "classico";
-  const currentPaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
-  const currentPhrasePreset = selectedPhrasePreset || phrasePreset || "0";
-  const currentAudioUrl = audioUrl || audio || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
-  const currentEventTheme = eventThemePreset || eventTheme || "Luxury Gold & Total White";
+  const activeTemplate = selectedTemplate || template || "A";
+  const activeStart = introStart || start || "busta";
+  const activeDateMode = dateDisplayMode || dateMode || "countdown";
+  const activeSchedule = scheduleSchema || schedule || "classico";
+  const activePaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
 
-  // AGGIORNAMENTO SINCRONIZZATO PER ENTRAMBE LE CHIAVI (PERMETTE LA SELEZIONE NEI DROPDOWN)
-  const handleUpdate = (field: string, value: any) => {
-    onUpdate(field, value);
+  // APPLICAZIONE PRESET TEMPLATE A
+  const applyTemplateA = () => {
+    onUpdate("selectedTemplate", "A");
+    onUpdate("template", "A");
+    onUpdate("coupleNames", "Elena & Davide");
+    onUpdate("introStart", "busta");
+    onUpdate("start", "busta");
+    onUpdate("dateDisplayMode", "countdown");
+    onUpdate("dateMode", "countdown");
+    onUpdate("scheduleSchema", "classico");
+    onUpdate("schedule", "classico");
+    onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
+    onUpdate("selectedPaletteIdx", 0);
+    onUpdate("palette", 0);
+  };
 
-    if (field === "selectedTemplate") onUpdate("template", value);
-    if (field === "template") onUpdate("selectedTemplate", value);
-
-    if (field === "introStart") onUpdate("start", value);
-    if (field === "start") onUpdate("introStart", value);
-
-    if (field === "dateDisplayMode") onUpdate("dateMode", value);
-    if (field === "dateMode") onUpdate("dateDisplayMode", value);
-
-    if (field === "scheduleSchema") onUpdate("schedule", value);
-    if (field === "schedule") onUpdate("scheduleSchema", value);
-
-    if (field === "selectedPaletteIdx") onUpdate("palette", value);
-    if (field === "palette") onUpdate("selectedPaletteIdx", value);
-
-    if (field === "selectedPhrasePreset") onUpdate("phrasePreset", value);
-    if (field === "phrasePreset") onUpdate("selectedPhrasePreset", value);
-
-    if (field === "eventThemePreset") onUpdate("eventTheme", value);
-    if (field === "eventTheme") onUpdate("eventThemePreset", value);
-
-    if (field === "audioUrl") onUpdate("audio", value);
-    if (field === "audio") onUpdate("audioUrl", value);
+  // APPLICAZIONE PRESET TEMPLATE B
+  const applyTemplateB = () => {
+    onUpdate("selectedTemplate", "B");
+    onUpdate("template", "B");
+    onUpdate("coupleNames", "Francesca & Luca");
+    onUpdate("introStart", "nuvole");
+    onUpdate("start", "nuvole");
+    onUpdate("dateDisplayMode", "scratch");
+    onUpdate("dateMode", "scratch");
+    onUpdate("scheduleSchema", "timeline");
+    onUpdate("schedule", "timeline");
+    onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
+    onUpdate("selectedPaletteIdx", 1);
+    onUpdate("palette", 1);
   };
 
   const toggleModule = (key: string) => {
@@ -142,45 +153,72 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* ✦ 1. MODELLO & EFFETTO APERTURA INIZIALE ✦ */}
+      {/* ✦ SELEZIONE TEMPLATE PREIMPOSTATO MODELLO A / B ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Seleziona Modello Preimpostato
+        </h3>
+        <p className="text-[11px] text-slate-600">
+          Scegli uno dei due modelli d&apos;autore preconfigurati per caricare istantaneamente il layout coordinato:
+        </p>
+
+        <div className="grid grid-cols-2 gap-3 pt-1">
+          <button
+            type="button"
+            onClick={applyTemplateA}
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              activeTemplate === "A"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello A — Elena &amp; Davide</span>
+            <span className="text-[10px] text-slate-500 mt-1 block">Luxury Gold • Busta 3D • Countdown</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateB}
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              activeTemplate === "B"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello B — Francesca &amp; Luca</span>
+            <span className="text-[10px] text-slate-500 mt-1 block">Boho Chic • Nuvole 3D • Gratta Data</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ✦ 1. MODELLO & EFFETTO APERTURA ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello &amp; Apertura Iniziale
+            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Animazione Start</span>
+            <Switch
               checked={!!modules.busta3d || !!modules.nuvole3d}
               onChange={() => {
                 toggleModule("busta3d");
                 toggleModule("nuvole3d");
               }}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Animazione Start
-          </label>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] font-bold mb-1">Modello Invito</label>
-            <select
-              value={currentTemplate}
-              onChange={(e) => handleUpdate("selectedTemplate", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
-            >
-              <option value="A">Modello A — Elena &amp; Davide</option>
-              <option value="B">Modello B — Francesca &amp; Luca</option>
-            </select>
-          </div>
-
-          <div>
             <label className="block text-[11px] font-bold mb-1">Effetto Start Iniziale</label>
             <select
-              value={currentStart}
-              onChange={(e) => handleUpdate("introStart", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+              value={activeStart}
+              onChange={(e) => {
+                onUpdate("introStart", e.target.value);
+                onUpdate("start", e.target.value);
+              }}
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
@@ -189,32 +227,35 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               ))}
             </select>
           </div>
+
+          <div>
+            <label className="block text-[11px] font-bold mb-1">Tema dell&apos;Evento</label>
+            <select
+              value={eventThemePreset}
+              onChange={(e) => {
+                onUpdate("eventThemePreset", e.target.value);
+                onUpdate("eventTheme", e.target.value);
+              }}
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            >
+              {(EVENT_THEMES || []).map((t, idx) => (
+                <option key={idx} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-[11px] font-bold mb-1">Tema dell&apos;Evento</label>
-          <select
-            value={currentEventTheme}
-            onChange={(e) => handleUpdate("eventThemePreset", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
-          >
-            {(EVENT_THEMES || []).map((t, idx) => (
-              <option key={idx} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-
-          {currentEventTheme === "Personalizzato (digita a mano)" && (
-            <input
-              type="text"
-              placeholder="Es. Country Chic Vintage..."
-              value={customEventTheme}
-              onChange={(e) => handleUpdate("customEventTheme", e.target.value)}
-              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
-            />
-          )}
-        </div>
+        {eventThemePreset === "Personalizzato (digita a mano)" && (
+          <input
+            type="text"
+            placeholder="Es. Country Chic Vintage..."
+            value={customEventTheme}
+            onChange={(e) => onUpdate("customEventTheme", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+          />
+        )}
       </div>
 
       {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
@@ -223,15 +264,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Testo Scorrevole</span>
+            <Switch
               checked={!!modules.dedicheMarquee}
               onChange={() => toggleModule("dedicheMarquee")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Testo Scorrevole
-          </label>
+          </div>
         </div>
 
         <div>
@@ -239,7 +278,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <input
             type="text"
             value={coupleNames}
-            onChange={(e) => handleUpdate("coupleNames", e.target.value)}
+            onChange={(e) => onUpdate("coupleNames", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
           />
         </div>
@@ -247,9 +286,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
           <select
-            value={currentPhrasePreset}
-            onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
+            value={selectedPhrasePreset}
+            onChange={(e) => {
+              onUpdate("selectedPhrasePreset", e.target.value);
+              onUpdate("phrasePreset", e.target.value);
+            }}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
               <option key={idx} value={String(idx)}>
@@ -258,12 +300,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             ))}
           </select>
 
-          {currentPhrasePreset === "9" && (
+          {selectedPhrasePreset === "9" && (
             <textarea
               rows={2}
               placeholder="Scrivi la tua frase speciale d'accoglienza..."
               value={customWelcomePhrase}
-              onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
+              onChange={(e) => onUpdate("customWelcomePhrase", e.target.value)}
               className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif"
             />
           )}
@@ -274,17 +316,15 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data e Visualizzazione
+            <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Gratta Data</span>
+            <Switch
               checked={!!modules.grattaData}
               onChange={() => toggleModule("grattaData")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Gratta la Data
-          </label>
+          </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -293,7 +333,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <input
               type="text"
               value={weddingDateDay}
-              onChange={(e) => handleUpdate("weddingDateDay", e.target.value)}
+              onChange={(e) => onUpdate("weddingDateDay", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -302,7 +342,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <input
               type="text"
               value={weddingDateMonth}
-              onChange={(e) => handleUpdate("weddingDateMonth", e.target.value)}
+              onChange={(e) => onUpdate("weddingDateMonth", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -311,7 +351,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <input
               type="text"
               value={weddingDateYear}
-              onChange={(e) => handleUpdate("weddingDateYear", e.target.value)}
+              onChange={(e) => onUpdate("weddingDateYear", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -320,9 +360,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Modulo Visualizzazione Data</label>
           <select
-            value={currentDateMode}
-            onChange={(e) => handleUpdate("dateDisplayMode", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            value={activeDateMode}
+            onChange={(e) => {
+              onUpdate("dateDisplayMode", e.target.value);
+              onUpdate("dateMode", e.target.value);
+            }}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(DATE_DISPLAY_MODES || []).map((mode) => (
               <option key={mode.id} value={mode.id}>
@@ -342,9 +385,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Schema Visualizzazione Orari</label>
           <select
-            value={currentSchedule}
-            onChange={(e) => handleUpdate("scheduleSchema", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            value={activeSchedule}
+            onChange={(e) => {
+              onUpdate("scheduleSchema", e.target.value);
+              onUpdate("schedule", e.target.value);
+            }}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(SCHEDULE_SCHEMAS || []).map((item) => (
               <option key={item.id} value={item.id}>
@@ -364,9 +410,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Brano Inedito per gli Sposi</label>
           <select
-            value={currentAudioUrl}
-            onChange={(e) => handleUpdate("audioUrl", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            value={audioUrl}
+            onChange={(e) => {
+              onUpdate("audioUrl", e.target.value);
+              onUpdate("audio", e.target.value);
+            }}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(AUDIO_DEMOS || []).map((track) => (
               <option key={track.id} value={track.url}>
@@ -383,15 +432,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Mappa Interattiva</span>
+            <Switch
               checked={!!modules.locationMappa}
               onChange={() => toggleModule("locationMappa")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Mappa Interattiva
-          </label>
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -400,7 +447,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <input
               type="text"
               value={locationName}
-              onChange={(e) => handleUpdate("locationName", e.target.value)}
+              onChange={(e) => onUpdate("locationName", e.target.value)}
               className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
@@ -409,7 +456,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <input
               type="text"
               value={locationAddress}
-              onChange={(e) => handleUpdate("locationAddress", e.target.value)}
+              onChange={(e) => onUpdate("locationAddress", e.target.value)}
               className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
@@ -422,27 +469,28 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Galleria Outfit</span>
+            <Switch
               checked={!!modules.codiceAbbigliamento}
               onChange={() => toggleModule("codiceAbbigliamento")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Galleria Dress Code
-          </label>
+          </div>
         </div>
 
         <div>
           <label className="block text-[11px] font-bold mb-2">Seleziona Palette (8 Opzioni Coordinate)</label>
           <div className="grid grid-cols-2 gap-2">
             {palettesList.map((p: any, idx: number) => {
-              const isSelected = currentPaletteIdx === idx;
+              const isSelected = activePaletteIdx === idx;
               return (
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => handleUpdate("selectedPaletteIdx", idx)}
+                  onClick={() => {
+                    onUpdate("selectedPaletteIdx", idx);
+                    onUpdate("palette", idx);
+                  }}
                   className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
@@ -470,7 +518,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <input
             type="text"
             value={dressCodeNotes}
-            onChange={(e) => handleUpdate("dressCodeNotes", e.target.value)}
+            onChange={(e) => onUpdate("dressCodeNotes", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
           />
         </div>
@@ -482,15 +530,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Box Lista Nozze</span>
+            <Switch
               checked={!!modules.listaNozzeAmazon}
               onChange={() => toggleModule("listaNozzeAmazon")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Lista Nozze &amp; IBAN
-          </label>
+          </div>
         </div>
 
         <div>
@@ -498,7 +544,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <input
             type="text"
             value={customIban}
-            onChange={(e) => handleUpdate("customIban", e.target.value)}
+            onChange={(e) => onUpdate("customIban", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold"
           />
         </div>
@@ -510,23 +556,21 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Giochi Festa
           </h3>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-600">Modulo RSVP</span>
+            <Switch
               checked={!!modules.confermaRsvp}
               onChange={() => toggleModule("confermaRsvp")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
             />
-            Attiva Modulo RSVP
-          </label>
+          </div>
         </div>
 
         <div>
           <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP</label>
           <select
             value={rsvpStyle}
-            onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            onChange={(e) => onUpdate("rsvpStyle", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(RSVP_STYLES || []).map((style) => (
               <option key={style.id} value={style.id}>
@@ -538,47 +582,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
           <span className="text-xs font-bold">Attiva Hub Giochi della Festa per Invitati</span>
-          <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={!!modules.hubGiochiFesta}
-              onChange={() => toggleModule("hubGiochiFesta")}
-              className="w-3.5 h-3.5 rounded text-[#D4AF37]"
-            />
-            Abilita Giochi Festa
-          </label>
-        </div>
-      </div>
-
-      {/* ✦ 10. RIEPILOGO GENERALE MODULI ATTIVI ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <CheckSquare className="w-4 h-4 text-[#D4AF37]" /> Panoramica Generale Moduli Attivi
-        </h3>
-
-        <div className="grid grid-cols-2 gap-2 text-xs font-medium">
-          {Object.entries({
-            busta3d: "Busta Luxury con Ceralacca",
-            grattaData: "Gioco Gratta la Data",
-            nuvole3d: "Apertura Nuvole 3D",
-            locationMappa: "Mappa Google Maps",
-            codiceAbbigliamento: "Galleria Dress Code",
-            negoziConvenzionati: "Negozi Amazon",
-            listaNozzeAmazon: "Box Lista Nozze & IBAN",
-            dedicheMarquee: "Nomi Scorrenvoli",
-            hubGiochiFesta: "Hub Giochi Festa",
-            confermaRsvp: "Modulo RSVP Partecipazione",
-          }).map(([key, label]) => (
-            <label key={key} className="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-slate-100/60">
-              <input
-                type="checkbox"
-                checked={!!modules[key]}
-                onChange={() => toggleModule(key)}
-                className="w-4 h-4 rounded text-[#D4AF37] focus:ring-[#D4AF37]"
-              />
-              <span className="truncate">{label}</span>
-            </label>
-          ))}
+          <Switch
+            checked={!!modules.hubGiochiFesta}
+            onChange={() => toggleModule("hubGiochiFesta")}
+          />
         </div>
       </div>
     </div>
