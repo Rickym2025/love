@@ -48,13 +48,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const paletteIdx = parseInt(paletteIdxStr, 10) || 0;
 
   const [suonaMusica, setSuonaMusica] = useState(false);
+  const [apertoAcqua, setApertoAcqua] = useState(false);
 
-  // GESTIONE ROBUSTA E DIFENSIVA DELLE PALETTE
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
-    ? Object.values(DRESS_CODE_PALETTES)
-    : [];
+    : Object.values(DRESS_CODE_PALETTES || {});
 
   const fallbackPalette = {
     id: "1",
@@ -64,10 +62,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
     accentColor: "#8B6508",
   };
 
-  const safeIdx = Math.max(0, Math.min(paletteIdx, Math.max(0, (palettesList.length || 1) - 1)));
-  const activePalette = (palettesList && palettesList[safeIdx]) || fallbackPalette;
+  const safeIdx = Math.max(0, Math.min(paletteIdx, (palettesList.length || 1) - 1));
+  const activePalette = palettesList[safeIdx] || fallbackPalette;
 
-  // SICUREZZA TOTALE SU ARRAY COLORI
   const colors = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
     ? activePalette.colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
@@ -79,15 +76,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const textColor = (activePalette as any)?.textColor || "#1E293B";
   const accentColor = (activePalette as any)?.accentColor || "#8B6508";
 
-  // SELEZIONE FOTO RIGOROSA E SICURA
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
     Array.isArray((activePalette as any)?.images) && (activePalette as any).images.length > 0
       ? (activePalette as any).images
-      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [
-          "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
-          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80"
-        ];
+      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [];
 
   const marqueeText = searchParams?.get("marquee") || `✦ IL MATRIMONIO DI ${coupleNames.toUpperCase()} ✦ BENVENUTI AL NOSTRO GIORNO SPECIALE ✦`;
   const customIban = searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
@@ -120,6 +113,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {start === "nuvole" && showNuvole && <PartingClouds onOpen={() => setSuonaMusica(true)} />}
 
+      {/* HERO: ZOOM MULTIMEDIALE ALLO SCROLL CON MUSICA AUTOMATICA */}
       {start === "expand" && (
         <ScrollExpandMedia
           bgImageSrc="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
@@ -127,23 +121,34 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           title={coupleNames}
           date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
           scrollToExpand="Scorri per Ingrandire"
+          onExpand={() => setSuonaMusica(true)}
         />
+      )}
+
+      {/* HERO: SPECCHIO D'ACQUA FULL SCREEN CON CERALACCA PER APRIRE E FAR PARTIRE MUSICA */}
+      {start === "lago" && !apertoAcqua && (
+        <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
+          <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" />
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
+            onClick={() => {
+              setSuonaMusica(true);
+              setApertoAcqua(true);
+            }}
+          >
+            <div className="relative w-24 h-20 drop-shadow-2xl animate-pulse">
+              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority unoptimized />
+            </div>
+            <p className="mt-4 text-[#D4AF37] font-serif font-bold text-sm tracking-widest uppercase drop-shadow">
+              Tocca il Sigillo per Entrare
+            </p>
+          </div>
+        </div>
       )}
 
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         {start === "busta" && showBusta && (
           <EnvelopeWax coupleNames={coupleNames} onOpen={() => setSuonaMusica(true)} />
-        )}
-
-        {start === "lago" && (
-          <div className="w-full h-64 rounded-3xl overflow-hidden shadow-xl border border-sky-300 relative">
-            <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" />
-            <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={() => setSuonaMusica(true)}>
-              <div className="relative w-20 h-20 drop-shadow-2xl animate-pulse">
-                <Image src="/wax-seal.png" alt="Sigillo Ceralacca Acqua" fill className="object-contain" priority unoptimized />
-              </div>
-            </div>
-          </div>
         )}
 
         <div className="text-center space-y-3 pt-2">
@@ -185,7 +190,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA */}
+        {/* PROGRAMMA GIORNATA */}
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -193,51 +198,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <div className="space-y-2 text-sm font-serif pt-1" style={{ color: textColor }}>
               <p><strong className="font-sans" style={{ color: accentColor }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>17:00</strong> — Cerimonia di Nozze</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>17:00</strong> — Cerimonia Solenne di Nozze</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>18:30</strong> — Aperitivo &amp; Cocktail Hour in Giardino</p>
               <p><strong className="font-sans" style={{ color: accentColor }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
               <p><strong className="font-sans" style={{ color: accentColor }}>22:00</strong> — Festa &amp; Open Bar</p>
             </div>
-          </div>
-        )}
-
-        {schedule === "timeline" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
-              📍 Timeline Verticale Orari
-            </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: accentColor, color: textColor }}>
-              <div><span className="font-bold" style={{ color: accentColor }}>16:30</span> — Accoglienza Ospiti</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>17:00</span> — Cerimonia Solenne</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>18:30</span> — Aperitivo in Giardino</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>20:00</span> — Cena &amp; Torta</div>
-            </div>
-          </div>
-        )}
-
-        {schedule === "schede" && (
-          <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
-              <span className="block text-xs" style={{ color: accentColor }}>16:30</span> Accoglienza
-            </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
-              <span className="block text-xs" style={{ color: accentColor }}>17:00</span> Cerimonia
-            </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
-              <span className="block text-xs" style={{ color: accentColor }}>18:30</span> Aperitivo
-            </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
-              <span className="block text-xs" style={{ color: accentColor }}>20:00</span> Cena &amp; Torta
-            </div>
-          </div>
-        )}
-
-        {schedule === "minimal" && (
-          <div className="p-4 text-center space-y-2 font-serif text-sm" style={{ color: textColor }}>
-            <p>16:30 • Accoglienza Ospiti</p>
-            <p>17:00 • Cerimonia di Nozze</p>
-            <p>18:30 • Aperitivo</p>
-            <p>20:00 • Cena &amp; Torta</p>
           </div>
         )}
 
@@ -273,7 +238,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT COORDINATA */}
         {showDressCode && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -281,7 +245,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <p className="text-xs font-serif leading-relaxed" style={{ color: textColor }}>{dressCodeNotes}</p>
 
-            {/* PALLINI COLORI PALETTE */}
             <div className="flex justify-center gap-2">
               {colors.map((color, i) => (
                 <div
@@ -292,7 +255,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT COORDINATI */}
             <div className="pt-2">
               <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
@@ -302,7 +264,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                   <div key={idx} className="w-32 h-44 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                     <img
                       src={imgUrl}
-                      alt={`Outfit Dress Code ${idx + 1}`}
+                      alt={`Outfit ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -312,9 +274,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {showNegozi && (
-          <PartnerStores stores={[]} />
-        )}
+        {showNegozi && <PartnerStores stores={[]} showAmazonAffiliate={true} />}
 
         {showListaNozze && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
@@ -330,7 +290,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP */}
         {showRsvp && (
           <div className="pt-2">
             <RsvpForm
