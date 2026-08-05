@@ -42,9 +42,9 @@ export default function PartnerStores({ stores = [] }: PartnerStoresProps) {
       <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif text-xs">
         🏪 Negozi Convenzionati
       </span>
-      {safeStores.map((s) => (
+      {safeStores.map((s, idx) => (
         <a
-          key={s.id || Math.random().toString()}
+          key={s.id || idx}
           href={s.url || "#"}
           target="_blank"
           rel="noopener noreferrer"
