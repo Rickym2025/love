@@ -1,436 +1,412 @@
 "use client";
 
 import React from "react";
-import { Plus, Trash2, Music } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, CheckSquare, Heart } from "lucide-react";
 import {
+  DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
-  INTRO_START_PRESETS,
   DATE_DISPLAY_MODES,
   SCHEDULE_SCHEMAS,
+  EVENT_THEMES,
+  INTRO_START_OPTIONS,
   RSVP_STYLES,
-  EVENT_THEME_PRESETS,
-  DRESS_CODE_PALETTES,
-  AUDIO_TRACK_PRESETS,
+  AUDIO_DEMOS
 } from "./constants";
 
-export default function ConfiguratorForm(props: any) {
-  const {
-    selectedTemplate,
-    setSelectedTemplate,
-    introStart,
-    setIntroStart,
-    dateDisplayMode,
-    setDateDisplayMode,
-    scheduleSchema,
-    setScheduleSchema,
-    rsvpStyle,
-    setRsvpStyle,
-    eventThemePreset,
-    setEventThemePreset,
-    customEventTheme,
-    setCustomEventTheme,
-    coupleNames,
-    setCoupleNames,
-    weddingDateDay,
-    setWeddingDateDay,
-    weddingDateMonth,
-    setWeddingDateMonth,
-    weddingDateYear,
-    setWeddingDateYear,
-    locationName,
-    setLocationName,
-    locationAddress,
-    setLocationAddress,
-    audioUrl,
-    setAudioUrl,
-    waterImageUrl,
-    setWaterImageUrl,
-    selectedPhrasePreset,
-    setSelectedPhrasePreset,
-    customWelcomePhrase,
-    setCustomWelcomePhrase,
-    dressCodeNotes,
-    setDressCodeNotes,
-    selectedPaletteIdx,
-    setSelectedPaletteIdx,
-    partnerStores = [],
-    setPartnerStores,
-    customIban,
-    setCustomIban,
-    modules = {},
-    toggleModule,
-  } = props;
+export interface ConfiguratorFormProps {
+  selectedTemplate?: "A" | "B";
+  introStart?: string;
+  dateDisplayMode?: string;
+  scheduleSchema?: string;
+  rsvpStyle?: string;
+  eventThemePreset?: string;
+  customEventTheme?: string;
+  coupleNames?: string;
+  weddingDateDay?: string;
+  weddingDateMonth?: string;
+  weddingDateYear?: string;
+  locationName?: string;
+  locationAddress?: string;
+  audioUrl?: string;
+  welcomePhrase?: string;
+  selectedPhrasePreset?: string;
+  customWelcomePhrase?: string;
+  dressCodeNotes?: string;
+  selectedPaletteIdx?: number;
+  customIban?: string;
+  marqueeText?: string;
+  modules?: Record<string, boolean>;
+  onUpdate: (field: string, value: any) => void;
+}
 
-  const safePartnerStores = Array.isArray(partnerStores) ? partnerStores : [];
+export default function ConfiguratorForm({
+  selectedTemplate = "A",
+  introStart = "busta",
+  dateDisplayMode = "countdown",
+  scheduleSchema = "classico",
+  rsvpStyle = "classico",
+  eventThemePreset = "Luxury Gold & Total White",
+  customEventTheme = "",
+  coupleNames = "Elena & Davide",
+  weddingDateDay = "15",
+  weddingDateMonth = "Settembre",
+  weddingDateYear = "2026",
+  locationName = "Villa Rosa",
+  locationAddress = "Via Roma 1, Roma",
+  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+  welcomePhrase = "Benvenuti al nostro matrimonio",
+  selectedPhrasePreset = "0",
+  customWelcomePhrase = "",
+  dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
+  selectedPaletteIdx = 0,
+  customIban = "IT60 X 05428 11101 000000123456",
+  marqueeText = "",
+  modules = {
+    busta3d: true,
+    grattaData: true,
+    nuvole3d: true,
+    locationMappa: true,
+    codiceAbbigliamento: true,
+    negoziConvenzionati: true,
+    listaNozzeAmazon: true,
+    dedicheMarquee: true,
+    hubGiochiFesta: true,
+    confermaRsvp: true,
+  },
+  onUpdate,
+}: ConfiguratorFormProps) {
+  const toggleModule = (key: string) => {
+    onUpdate("modules", { ...modules, [key]: !modules[key] });
+  };
 
-  function addStore() {
-    setPartnerStores([
-      ...safePartnerStores,
-      {
-        id: Date.now().toString(),
-        name: "Nuovo Negozio Convenzionato",
-        url: "https://www.negozio.it",
-        logoUrl: "/logo.png",
-      },
-    ]);
-  }
-
-  function removeStore(id: string) {
-    setPartnerStores(safePartnerStores.filter((s: any) => s.id !== id));
-  }
+  const palettesList = Array.isArray(DRESS_CODE_PALETTES)
+    ? DRESS_CODE_PALETTES
+    : Object.values(DRESS_CODE_PALETTES || {});
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
+    <div className="w-full space-y-6 text-[#1E293B]">
+      {/* ✦ 1. MODELLO & EFFETTO INIZIALE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello &amp; Apertura Iniziale
+        </h3>
 
-      {/* 1. SELEZIONE TEMPLATE & EFFETTO START */}
-      <div className="space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
-        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-[11px] font-bold mb-1">Modello Invito</label>
+            <select
+              value={selectedTemplate}
+              onChange={(e) => onUpdate("selectedTemplate", e.target.value)}
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
+            >
+              <option value="A">Modello A — Elena &amp; Davide</option>
+              <option value="B">Modello B — Francesca &amp; Luca</option>
+            </select>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedTemplate("A");
-              setCoupleNames("Elena & Davide");
-              setIntroStart("arco");
-              setDateDisplayMode("countdown");
-            }}
-            className={`p-4 rounded-2xl border-2 text-left transition-all ${
-              selectedTemplate === "A"
-                ? "border-[#D4AF37] bg-amber-50 shadow-md"
-                : "border-slate-300 bg-white hover:border-[#D4AF37]"
-            }`}
-          >
-            <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
-            <h4 className="font-serif font-bold text-sm text-[#1E293B]">Classico Romantico d&apos;Autore</h4>
-            <p className="text-[10px] text-slate-600 mt-1">Arco Romano, Countdown Timer, Mappa Google &amp; RSVP.</p>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedTemplate("B");
-              setCoupleNames("Francesca & Luca");
-              setIntroStart("nuvole");
-              setDateDisplayMode("scratch");
-            }}
-            className={`p-4 rounded-2xl border-2 text-left transition-all ${
-              selectedTemplate === "B"
-                ? "border-sky-500 bg-sky-50 shadow-md"
-                : "border-slate-300 bg-white hover:border-sky-500"
-            }`}
-          >
-            <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
-            <h4 className="font-serif font-bold text-sm text-[#1E293B]">Moderno Cielo &amp; Nuvole 3D</h4>
-            <p className="text-[10px] text-slate-600 mt-1">3 Grattabili date, Nuvole Parting Clouds 3D, Hub Giochi completo.</p>
-          </button>
+          <div>
+            <label className="block text-[11px] font-bold mb-1">Effetto Start Iniziale</label>
+            <select
+              value={introStart}
+              onChange={(e) => onUpdate("introStart", e.target.value)}
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
+            >
+              {(INTRO_START_OPTIONS || []).map((opt) => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Unico Effetto Start Attivo</label>
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Tema dell&apos;Evento</label>
           <select
-            value={introStart}
-            onChange={(e) => setIntroStart(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37]"
+            value={eventThemePreset}
+            onChange={(e) => onUpdate("eventThemePreset", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
           >
-            {(INTRO_START_PRESETS || []).map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
+            {(EVENT_THEMES || []).map((theme, idx) => (
+              <option key={idx} value={theme}>
+                {theme}
               </option>
             ))}
           </select>
 
-          {introStart === "lago" && (
-            <div className="pt-2 border-t border-slate-100 mt-2">
-              <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (Link o File Immagine)</label>
-              <input
-                type="text"
-                value={waterImageUrl}
-                onChange={(e) => setWaterImageUrl(e.target.value)}
-                placeholder="https://.../sfondo-lago.jpg"
-                className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B]"
-              />
-            </div>
+          {eventThemePreset === "Personalizzato (digita a mano)" && (
+            <input
+              type="text"
+              placeholder="Es. Country Chic Vintage..."
+              value={customEventTheme}
+              onChange={(e) => onUpdate("customEventTheme", e.target.value)}
+              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+            />
           )}
         </div>
       </div>
 
-      {/* 2. DATI SPOSI & FRASE PERSONALIZZATA */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          2. Dati Sposi &amp; Frase Personalizzata di Benvenuto
-        </label>
+      {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati degli Sposi e Frase d&apos;Accoglienza
+        </h3>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Nomi Sposi</label>
+          <label className="block text-[11px] font-bold mb-1">Nomi degli Sposi</label>
           <input
             type="text"
             value={coupleNames}
-            onChange={(e) => setCoupleNames(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37]"
+            onChange={(e) => onUpdate("coupleNames", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Frase di Benvenuto (Preset o Scritta a Piacimento)</label>
+          <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
           <select
             value={selectedPhrasePreset}
-            onChange={(e) => setSelectedPhrasePreset(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs mb-2"
+            onChange={(e) => onUpdate("selectedPhrasePreset", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
-              <option key={idx} value={idx.toString()}>
-                {idx + 1}. {phrase.length > 55 ? phrase.substring(0, 55) + "..." : phrase}
+              <option key={idx} value={String(idx)}>
+                {idx === 9 ? "✍️ Personalizzato (digita la tua frase)" : `"${phrase}"`}
               </option>
             ))}
           </select>
-          
-          <textarea
-            rows={2}
-            value={selectedPhrasePreset === "9" ? customWelcomePhrase : (customWelcomePhrase || WELCOME_PHRASE_PRESETS[Number(selectedPhrasePreset)] || "")}
-            onChange={(e) => {
-              setSelectedPhrasePreset("9");
-              setCustomWelcomePhrase(e.target.value);
-            }}
-            placeholder="Scrivi qui la tua frase personalizzata liberamente..."
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none"
-          />
-        </div>
-      </div>
 
-      {/* 3. COLONNA SONORA & BRANO INEDITO FF EDIZIONI */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          3. Brano Inedito / Colonna Sonora (FF Edizioni)
-        </label>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-bold text-[#8B6508]">
-            <Music className="w-4 h-4 text-[#D4AF37]" />
-            <span>Colonna Sonora Inedita FF Edizioni (SIAE - Maestro Fausto Fusetti)</span>
-          </div>
-
-          <div>
-            <label className="block text-[10px] font-bold text-slate-600 mb-1">Scegli tra i Brani d&apos;Autore Preimpostati</label>
-            <select
-              onChange={(e) => setAudioUrl(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs mb-2"
-            >
-              {(AUDIO_TRACK_PRESETS || []).map((track, idx) => (
-                <option key={idx} value={track.url}>{track.name}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-[10px] font-bold text-slate-600 mb-1">Oppure Inserisci URL File Audio MP3 Personalizzato</label>
-            <input
-              type="text"
-              value={audioUrl}
-              onChange={(e) => setAudioUrl(e.target.value)}
-              placeholder="https://.../canzone-sposi.mp3"
-              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono font-bold text-[#1E293B]"
+          {selectedPhrasePreset === "9" && (
+            <textarea
+              rows={2}
+              placeholder="Scrivi la tua frase speciale d'accoglienza..."
+              value={customWelcomePhrase}
+              onChange={(e) => onUpdate("customWelcomePhrase", e.target.value)}
+              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif"
             />
-          </div>
-        </div>
-      </div>
-
-      {/* 4. PALETTE CROMATICHE & TEMA DELL'EVENTO */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          4. Palette Cromatiche &amp; Tema dell&apos;Evento (Con Digitazione Manuale)
-        </label>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <label className="block text-xs font-bold text-[#1E293B]">Tema dell&apos;Evento</label>
-          <select
-            value={eventThemePreset}
-            onChange={(e) => setEventThemePreset(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
-          >
-            {(EVENT_THEME_PRESETS || []).map((t, idx) => (
-              <option key={idx} value={t}>{t}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={customEventTheme}
-            onChange={(e) => {
-              setEventThemePreset("Personalizzato (digita a mano)");
-              setCustomEventTheme(e.target.value);
-            }}
-            placeholder="Digita il tema dell'evento a mano..."
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-[#1E293B] mt-2"
-          />
-        </div>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">🎨 Dress Code &amp; Palette Cromatiche Morbide</span>
-            <button type="button" onClick={() => toggleModule("codiceAbbigliamento")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.codiceAbbigliamento ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.codiceAbbigliamento && (
-            <div className="space-y-2 pt-2 border-t border-slate-100">
-              <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
-              <div className="grid grid-cols-2 gap-2">
-                {(DRESS_CODE_PALETTES || []).map((pal, idx) => (
-                  <button
-                    key={pal.id}
-                    type="button"
-                    onClick={() => setSelectedPaletteIdx(idx)}
-                    className={`p-2 rounded-xl border text-left flex flex-col gap-1 ${selectedPaletteIdx === idx ? "border-[#D4AF37] bg-amber-50 shadow-sm" : "border-slate-200 bg-white"}`}
-                  >
-                    <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
-                    <div className="flex gap-1">
-                      {(pal.colors || []).map((c, i) => (
-                        <div key={i} className="w-3.5 h-3.5 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
-                      ))}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
           )}
         </div>
       </div>
 
-      {/* 5. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          5. Visualizzazione Data &amp; Programma Orari (Italiano)
-        </label>
+      {/* ✦ 3. DATA E MODULO CONTO ALLA ROVESCIA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data e Visualizzazione
+        </h3>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
+        <div className="grid grid-cols-3 gap-2">
+          <div>
+            <label className="block text-[10px] font-bold mb-1">Giorno</label>
+            <input
+              type="text"
+              value={weddingDateDay}
+              onChange={(e) => onUpdate("weddingDateDay", e.target.value)}
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold mb-1">Mese</label>
+            <input
+              type="text"
+              value={weddingDateMonth}
+              onChange={(e) => onUpdate("weddingDateMonth", e.target.value)}
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold mb-1">Anno</label>
+            <input
+              type="text"
+              value={weddingDateYear}
+              onChange={(e) => onUpdate("weddingDateYear", e.target.value)}
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Modulo Visualizzazione Data</label>
           <select
             value={dateDisplayMode}
-            onChange={(e) => setDateDisplayMode(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
+            onChange={(e) => onUpdate("dateDisplayMode", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
           >
-            {(DATE_DISPLAY_MODES || []).map((d) => (
-              <option key={d.id} value={d.id}>{d.name}</option>
-            ))}
-          </select>
-
-          <div className="grid grid-cols-3 gap-2 pt-2">
-            <div>
-              <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Giorno</label>
-              <input type="text" value={weddingDateDay} onChange={(e) => setWeddingDateDay(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
-            </div>
-            <div>
-              <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Mese</label>
-              <input type="text" value={weddingDateMonth} onChange={(e) => setWeddingDateMonth(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
-            </div>
-            <div>
-              <label className="block text-[10px] text-slate-600 font-bold mb-0.5">Anno</label>
-              <input type="text" value={weddingDateYear} onChange={(e) => setWeddingDateYear(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-center text-[#1E293B]" />
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
-          <select
-            value={scheduleSchema}
-            onChange={(e) => setScheduleSchema(e.target.value)}
-            className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
-          >
-            {(SCHEDULE_SCHEMAS || []).map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
+            {(DATE_DISPLAY_MODES || []).map((mode) => (
+              <option key={mode.id} value={mode.id}>
+                {mode.label}
+              </option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* 6. NEGOZI, IBAN & PAGINA FESTA */}
-      <div className="space-y-4 pt-4 border-t border-slate-200">
-        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
-          6. Negozi, IBAN &amp; Personalizzazione Pagina della Festa (/festa)
-        </label>
+      {/* ✦ 4. PROGRAMMA DELLA GIORNATA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari
+        </h3>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">🏪 Negozi Convenzionati (Include Amazon /logo.png)</span>
-            <button type="button" onClick={() => toggleModule("negoziConvenzionati")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.negoziConvenzionati ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.negoziConvenzionati ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.negoziConvenzionati && (
-            <div className="space-y-2 pt-2 border-t border-slate-100">
-              {safePartnerStores.map((store: any) => (
-                <div key={store.id} className="p-2.5 bg-[#FAF7F2] rounded-xl border border-slate-200 flex justify-between items-center text-xs">
-                  <div>
-                    <p className="font-bold text-[#1E293B]">{store.name}</p>
-                    <p className="text-[10px] text-slate-500 font-mono truncate max-w-[200px]">{store.url}</p>
-                  </div>
-                  <button type="button" onClick={() => removeStore(store.id)} className="text-rose-600 p-1 hover:bg-rose-50 rounded-lg">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-              <button type="button" onClick={addStore} className="px-3 py-1.5 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-lg flex items-center gap-1">
-                <Plus className="w-3 h-3" /> Aggiungi Altro Negozio
-              </button>
-            </div>
-          )}
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Schema Visualizzazione Orari</label>
+          <select
+            value={scheduleSchema}
+            onChange={(e) => onUpdate("scheduleSchema", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
+          >
+            {(SCHEDULE_SCHEMAS || []).map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label} — {item.description}
+              </option>
+            ))}
+          </select>
         </div>
+      </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">🎁 Coordinate IBAN Sposi</span>
-            <button type="button" onClick={() => toggleModule("listaNozzeAmazon")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.listaNozzeAmazon ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.listaNozzeAmazon ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.listaNozzeAmazon && (
+      {/* ✦ 5. COLONNA SONORA D'AUTORE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore FF Edizioni
+        </h3>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Brano Inedito per gli Sposi</label>
+          <select
+            value={audioUrl}
+            onChange={(e) => onUpdate("audioUrl", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-medium"
+          >
+            {(AUDIO_DEMOS || []).map((track) => (
+              <option key={track.id} value={track.url}>
+                {track.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* ✦ 6. LOCATION & MAPPA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
+        </h3>
+
+        <div className="space-y-3">
+          <div>
+            <label className="block text-[11px] font-bold mb-1">Nome della Location / Villa</label>
             <input
               type="text"
-              value={customIban}
-              onChange={(e) => setCustomIban(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono font-bold text-[#1E293B]"
+              value={locationName}
+              onChange={(e) => onUpdate("locationName", e.target.value)}
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
-          )}
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold mb-1">Indirizzo per Navigatore / Google Maps</label>
+            <input
+              type="text"
+              value={locationAddress}
+              onChange={(e) => onUpdate("locationAddress", e.target.value)}
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ✦ 7. PALETTE DEI COLORI & DRESS CODE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette
+        </h3>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-2">Seleziona Palette Cromatica (8 Optioni)</label>
+          <div className="grid grid-cols-2 gap-2">
+            {palettesList.map((palette: any, idx: number) => {
+              const isSelected = selectedPaletteIdx === idx;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => onUpdate("selectedPaletteIdx", idx)}
+                  className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                    isSelected
+                      ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-1 ring-[#D4AF37]"
+                      : "border-slate-200 bg-white hover:border-slate-300"
+                  }`}
+                >
+                  <span className="text-[10px] font-bold block mb-1.5 truncate">{palette.name}</span>
+                  <div className="flex gap-1">
+                    {(palette.colors || []).map((c: string, cIdx: number) => (
+                      <span
+                        key={cIdx}
+                        className="w-3.5 h-3.5 rounded-full border border-black/10"
+                        style={{ backgroundColor: c }}
+                      />
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-bold text-[#1E293B]">Stile Modulo Conferma Partecipazione</span>
-            <button type="button" onClick={() => toggleModule("confermaRsvp")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.confermaRsvp ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.confermaRsvp ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          {modules.confermaRsvp && (
-            <select
-              value={rsvpStyle}
-              onChange={(e) => setRsvpStyle(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
-            >
-              {(RSVP_STYLES || []).map((r) => (
-                <option key={r.id} value={r.id}>{r.name}</option>
-              ))}
-            </select>
-          )}
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Note per il Dress Code</label>
+          <input
+            type="text"
+            value={dressCodeNotes}
+            onChange={(e) => onUpdate("dressCodeNotes", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+          />
         </div>
+      </div>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30 space-y-3">
-          <span className="text-xs font-bold text-[#8B6508] block font-serif">🎉 Pagina della Festa &amp; Maxischermo (/festa)</span>
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">Hub Giochi della Festa (Quiz, Puzzle, Scratch)</span>
-            <button type="button" onClick={() => toggleModule("hubGiochiFesta")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.hubGiochiFesta ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.hubGiochiFesta ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-bold text-[#1E293B]">Guest Photo Wall &amp; Proiettore Sala</span>
-            <button type="button" onClick={() => toggleModule("guestPhotoWall")} className={`px-3 py-1.5 rounded-xl text-xs font-bold ${modules.guestPhotoWall ? "bg-[#D4AF37] text-slate-900" : "bg-slate-200 text-slate-600"}`}>
-              {modules.guestPhotoWall ? "Attivo" : "Disattivato"}
-            </button>
-          </div>
+      {/* ✦ 8. LISTA NOZZE & IBAN ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
+        </h3>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Codice IBAN per Contributi</label>
+          <input
+            type="text"
+            value={customIban}
+            onChange={(e) => onUpdate("customIban", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold"
+          />
+        </div>
+      </div>
+
+      {/* ✦ 9. MODULI E FUNZIONALITÀ ATTIVE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <CheckSquare className="w-4 h-4 text-[#D4AF37]" /> Moduli Attivi nell&apos;Invito
+        </h3>
+
+        <div className="space-y-2 text-xs font-medium">
+          {Object.entries({
+            busta3d: "Busta Luxury con Ceralacca 3D",
+            grattaData: "Gioco 'Gratta la Data'",
+            nuvole3d: "Apertura Nuvole Volumetriche",
+            locationMappa: "Mappa Interattiva Google Maps",
+            codiceAbbigliamento: "Galleria Dress Code e Outfit",
+            negoziConvenzionati: "Negozi Convenzionati Amazon",
+            listaNozzeAmazon: "Box Lista Nozze & IBAN",
+            dedicheMarquee: "Nomi Scorrenvoli in Testata",
+            hubGiochiFesta: "Hub Giochi della Festa & Quiz",
+            confermaRsvp: "Modulo Conferma Partecipazione (RSVP)",
+          }).map(([key, label]) => (
+            <label key={key} className="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-slate-100/60">
+              <input
+                type="checkbox"
+                checked={!!modules[key]}
+                onChange={() => toggleModule(key)}
+                className="w-4 h-4 rounded text-[#D4AF37] focus:ring-[#D4AF37]"
+              />
+              <span>{label}</span>
+            </label>
+          ))}
         </div>
       </div>
     </div>
