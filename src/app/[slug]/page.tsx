@@ -14,6 +14,8 @@ import PartnerStores from "@/components/PartnerStores";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
+import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
+import CosmosHero from "@/components/ui/CosmosHero";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
@@ -49,6 +51,18 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
   const [suonaMusica, setSuonaMusica] = useState(false);
   const [apertoAcqua, setApertoAcqua] = useState(false);
+  const [apertoCosmos, setApertoCosmos] = useState(false);
+
+  // AVVIA LA MUSICA TRAMITE GESTO UTENTE
+  const playWeddingAudio = () => {
+    setSuonaMusica(true);
+    if (typeof window !== "undefined") {
+      const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
+      if (audio) {
+        audio.play().catch(() => {});
+      }
+    }
+  };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
@@ -99,6 +113,15 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const rawAddress = locationAddress || locationName || "Villa Rosa";
   const mapQuery = encodeURIComponent(rawAddress.trim());
 
+  // SCHEDULE ITEMS PER LA TIMELINE
+  const scheduleItems = [
+    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+  ];
+
   return (
     <div
       className="min-h-screen w-full overflow-x-hidden transition-colors"
@@ -111,9 +134,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {showMarquee && <Marquee text={marqueeText} coupleNames={coupleNames} />}
 
-      {start === "nuvole" && showNuvole && <PartingClouds onOpen={() => setSuonaMusica(true)} />}
+      {start === "nuvole" && showNuvole && <PartingClouds onOpen={playWeddingAudio} />}
 
-      {/* HERO: ZOOM MULTIMEDIALE ALLO SCROLL CON MUSICA AUTOMATICA */}
+      {/* HERO: ZOOM MULTIMEDIALE ALLO SCROLL */}
       {start === "expand" && (
         <ScrollExpandMedia
           bgImageSrc="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
@@ -121,22 +144,22 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           title={coupleNames}
           date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
           scrollToExpand="Scorri per Ingrandire"
-          onExpand={() => setSuonaMusica(true)}
+          onExpand={playWeddingAudio}
         />
       )}
 
-      {/* HERO: SPECCHIO D'ACQUA FULL SCREEN CON CERALACCA PER APRIRE E FAR PARTIRE MUSICA */}
+      {/* HERO: SPECCHIO D'ACQUA WEBGL FULL SCREEN */}
       {start === "lago" && !apertoAcqua && (
         <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
           <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" />
           <div
             className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
             onClick={() => {
-              setSuonaMusica(true);
+              playWeddingAudio();
               setApertoAcqua(true);
             }}
           >
-            <div className="relative w-24 h-20 drop-shadow-2xl animate-pulse">
+            <div className="relative w-24 h-24 drop-shadow-2xl animate-pulse">
               <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority unoptimized />
             </div>
             <p className="mt-4 text-[#D4AF37] font-serif font-bold text-sm tracking-widest uppercase drop-shadow">
@@ -146,9 +169,21 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         </div>
       )}
 
+      {/* HERO: ORIZZONTE COSMICO 3D */}
+      {start === "cosmos" && !apertoCosmos && (
+        <CosmosHero
+          coupleNames={coupleNames}
+          weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+          onEnter={() => {
+            playWeddingAudio();
+            setApertoCosmos(true);
+          }}
+        />
+      )}
+
       <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
         {start === "busta" && showBusta && (
-          <EnvelopeWax coupleNames={coupleNames} onOpen={() => setSuonaMusica(true)} />
+          <EnvelopeWax coupleNames={coupleNames} onOpen={playWeddingAudio} />
         )}
 
         <div className="text-center space-y-3 pt-2">
@@ -190,18 +225,27 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA */}
+        {/* PROGRAMMA GIORNATA CON NUOVA TIMELINE A CARTE 3D */}
+        {schedule === "howitworks" && (
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
+              📍 Programma della Giornata
+            </span>
+            <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
+          </div>
+        )}
+
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
             <div className="space-y-2 text-sm font-serif pt-1" style={{ color: textColor }}>
-              <p><strong className="font-sans" style={{ color: accentColor }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>17:00</strong> — Cerimonia Solenne di Nozze</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>18:30</strong> — Aperitivo &amp; Cocktail Hour in Giardino</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>22:00</strong> — Festa &amp; Open Bar</p>
+              {scheduleItems.map((item) => (
+                <p key={item.id}>
+                  <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> — {item.title}
+                </p>
+              ))}
             </div>
           </div>
         )}
