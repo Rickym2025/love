@@ -64,7 +64,7 @@ export const EVENT_THEME_PRESETS = [
   "Personalizzato (digita a mano)",
 ];
 
-// PALETTE COLORI CON TESTO SCURO AD ALTO CONTRASTO GARANTITO (textColor)
+// PALETTE COLORI MATRIMONIALI ELEGANTI CON TESTI SCURI LEGGI BILI (textColor)
 export const DRESS_CODE_PALETTES: PaletteItem[] = [
   {
     id: "1",
@@ -124,37 +124,37 @@ export const DRESS_CODE_PALETTES: PaletteItem[] = [
   },
 ];
 
-// IMMAGINI UNSPLASH RIGOROSAMENTE COORDINATE AI COLORI DELLA PALETTE
+// IMMAGINI UNSPLASH RIGOROSAMENTE SELEZIONATE E COORDINATE PER CIASCUNA PALETTE (0-7)
 export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [ // Pastello Romantico
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
+  0: [ // 0: Pastello Romantico
+    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80",
   ],
-  1: [ // Oro & Champagne
+  1: [ // 1: Oro & Champagne
     "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
   ],
-  2: [ // Salvia & Smeraldo
+  2: [ // 2: Salvia & Smeraldo
     "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
-  3: [ // Rose Gold & Cipria
+  3: [ // 3: Rose Gold & Cipria
+    "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
+  ],
+  4: [ // 4: Blu Zaffiro & Polvere
+    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+  ],
+  5: [ // 5: Sabbia & Terracotta
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
   ],
-  4: [ // Blu Zaffiro & Polvere
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
+  6: [ // 6: Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA ELEGANTI)
+    "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80",
   ],
-  5: [ // Sabbia & Terracotta
-    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80",
-  ],
-  6: [ // LAVANDA & LILLÀ RIGOROSA (ESCLUSIVAMENTE VIOLA/LILLA)
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
-  ],
-  7: [ // Bianco & Minimal
+  7: [ // 7: Bianco & Minimal
     "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
   ],
