@@ -69,37 +69,52 @@ export default function AgencyPreview({
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
 }: AgencyPreviewProps) {
-  // GESTIONE ROBUSTA E DINAMICA DELLE PALETTE
+  // GESTIONE ROBUSTA E DIFENSIVA DELLE PALETTE
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : Object.values(DRESS_CODE_PALETTES || {});
+    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
+    ? Object.values(DRESS_CODE_PALETTES)
+    : [];
 
   const fallbackPalette = {
     id: "1",
     name: "Lavanda & Lillà",
-    colors: ["#FFFFFF", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    colors: ["#FAF7F2", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
     textColor: "#1E293B",
     accentColor: "#8B6508",
   };
 
-  const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, (palettesList.length || 1) - 1));
-  const activePalette = palettesList[safeIdx] || fallbackPalette;
-  
-  const textColor = (activePalette as any).textColor || "#1E293B";
-  const accentColor = (activePalette as any).accentColor || "#8B6508";
+  const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, Math.max(0, (palettesList.length || 1) - 1)));
+  const activePalette = (palettesList && palettesList[safeIdx]) || fallbackPalette;
 
-  // SELEZIONE FOTO STRICTLY COORDINATA ALLA PALETTE ATTIVA
+  // SICUREZZA TOTALE SU ARRAY COLORI
+  const colors = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
+    ? activePalette.colors
+    : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
+
+  const bgMain = colors[0] || "#FAF7F2";
+  const bgCard = colors[1] || "#FFFFFF";
+  const borderCard = colors[2] || "#E6C687";
+
+  const textColor = (activePalette as any)?.textColor || "#1E293B";
+  const accentColor = (activePalette as any)?.accentColor || "#8B6508";
+
+  // SELEZIONE FOTO RIGOROSA E SICURA
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
-    ((activePalette as any).images && (activePalette as any).images.length > 0)
+    Array.isArray((activePalette as any)?.images) && (activePalette as any).images.length > 0
       ? (activePalette as any).images
-      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [];
+      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [
+          "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80"
+        ];
 
+  const presetsArray = Array.isArray(WELCOME_PHRASE_PRESETS) ? WELCOME_PHRASE_PRESETS : [];
   const computedWelcomePhrase =
     welcomePhrase ||
     (selectedPhrasePreset === "9"
       ? customWelcomePhrase
-      : WELCOME_PHRASE_PRESETS[Number(selectedPhrasePreset) || 0]) ||
+      : presetsArray[Number(selectedPhrasePreset) || 0]) ||
     "Benvenuti al nostro matrimonio";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
@@ -133,15 +148,15 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI ED AD ALTO CONTRASTO */}
+      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6"
-        style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
+        style={{ backgroundColor: bgMain, color: textColor }}
       >
         {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* MARQUEE CON NOME SPOSI SCORREVOLE */}
+        {/* MARQUEE NOMI SPOSI */}
         {modules.dedicheMarquee && (
           <div className="py-1">
             <Marquee text={marqueeText} coupleNames={coupleNames} />
@@ -191,7 +206,7 @@ export default function AgencyPreview({
 
         {/* MODULO DATA */}
         {dateDisplayMode === "countdown" && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
@@ -279,7 +294,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* LOCATION CON MAPPA INTEGRATA */}
+        {/* LOCATION CON MAPPA */}
         {modules.locationMappa && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
@@ -311,7 +326,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COERENTE AI COLORI DELLA PALETTE */}
+        {/* DRESS CODE CON GALLERIA OUTFIT COORDINATA */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
@@ -319,20 +334,20 @@ export default function AgencyPreview({
             </span>
             <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
 
-            {/* PALLINI COLORI PALETTE */}
+            {/* PALLINI COLORI */}
             <div className="flex justify-center gap-1.5 py-1">
-              {(activePalette?.colors || []).map((c, i) => (
+              {colors.map((c, i) => (
                 <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT COORDINATI */}
+            {/* GALLERIA OUTFIT */}
             <div className="pt-1">
               <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
               </span>
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
-                {(outfitPhotos || []).map((imgUrl, idx) => (
+                {outfitPhotos.map((imgUrl, idx) => (
                   <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                     <img
                       src={imgUrl}
@@ -370,7 +385,7 @@ export default function AgencyPreview({
           <div className="p-3">
             <RsvpForm
               coupleNames={coupleNames}
-              paletteColors={activePalette?.colors || []}
+              paletteColors={colors}
               rsvpStyle={rsvpStyle}
             />
           </div>
