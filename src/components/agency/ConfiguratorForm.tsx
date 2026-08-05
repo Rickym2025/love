@@ -78,7 +78,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPaletteIdx = 0,
     customIban = "IT60 X 05428 11101 000000123456",
-    heroBgImage = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
+    heroBgImage = "palette",
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
     scheduleItems = [
       { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
@@ -102,6 +102,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       dedicheMarquee: true,
       hubGiochiFesta: true,
       confermaRsvp: true,
+      fregiStelle: true,
     },
     onUpdate,
   } = props;
@@ -206,8 +207,65 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* ✦ 1. MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/30 shadow-md space-y-3">
+      {/* ✦ SCHEDA 1: DATI SPOSI & FRASE BENVENUTO (PRIMO MODULO) ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/40 shadow-md space-y-4">
+        <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+            <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
+          </h3>
+          <button
+            type="button"
+            onClick={() => toggleModule("dedicheMarquee")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.dedicheMarquee
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
+            }`}
+          >
+            {modules?.dedicheMarquee ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Nomi degli Sposi</label>
+          <input
+            type="text"
+            value={coupleNames}
+            onChange={(e) => handleUpdate("coupleNames", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold text-[#1E293B]"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
+          <select
+            value={selectedPhrasePreset}
+            onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
+          >
+            {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
+              <option key={idx} value={String(idx)}>
+                {idx === 9 ? "✍️ Personalizzato (digita la tua frase)" : `"${phrase}"`}
+              </option>
+            ))}
+          </select>
+
+          {selectedPhrasePreset === "9" && (
+            <textarea
+              rows={2}
+              placeholder="Scrivi la tua frase speciale d'accoglienza..."
+              value={customWelcomePhrase}
+              onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
+              className="mt-2 w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-serif font-bold"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 2: MODELLI PREIMPOSTATI A / B ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
         </h3>
@@ -243,14 +301,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ 2. NUOVA SEZIONE: SFONDO DELL'INVITO & TEXTURES (10 PRESET + UPLOAD) ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ SCHEDA 3: SFONDO DELL'INVITO & TEXTURES ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset)
+          <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures
         </h3>
 
         <div>
-          <label className="block text-[11px] font-bold mb-2">Scegli una Texture d&apos;Autore per lo Sfondo</label>
+          <label className="block text-[11px] font-bold mb-2">Scegli la Texture di Sfondo dell&apos;Invito</label>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {(BACKGROUND_PRESETS || []).map((preset) => {
               const isSelected = heroBgImage === preset.url;
@@ -276,7 +334,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Oppure Incolla URL Sfondo Personalizzato / Upload</label>
+          <label className="block text-[11px] font-bold mb-1">Incolla URL Sfondo Personalizzato / Upload</label>
           <input
             type="text"
             placeholder="https://images.unsplash.com/photo-..."
@@ -289,8 +347,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ 3. EFFETTO START & IMMAGINI HERO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ SCHEDA 4: EFFETTO START INIZIALE ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start Iniziale
@@ -365,63 +423,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             onChange={(e) => handleUpdate("heroMediaImage", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
           />
-        </div>
-      </div>
-
-      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
-
-      {/* ✦ SCHEDA 4: NOMI SPOSI & FRASE BENVENUTO ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
-          </h3>
-          <button
-            type="button"
-            onClick={() => toggleModule("dedicheMarquee")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.dedicheMarquee
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
-                : "bg-slate-100 text-slate-500 border-slate-200"
-            }`}
-          >
-            {modules?.dedicheMarquee ? "✓ Attivo" : "✕ Disattivo"}
-          </button>
-        </div>
-
-        <div>
-          <label className="block text-[11px] font-bold mb-1">Nomi degli Sposi</label>
-          <input
-            type="text"
-            value={coupleNames}
-            onChange={(e) => handleUpdate("coupleNames", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
-          <select
-            value={selectedPhrasePreset}
-            onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
-          >
-            {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
-              <option key={idx} value={String(idx)}>
-                {idx === 9 ? "✍️ Personalizzato (digita la tua frase)" : `"${phrase}"`}
-              </option>
-            ))}
-          </select>
-
-          {selectedPhrasePreset === "9" && (
-            <textarea
-              rows={2}
-              placeholder="Scrivi la tua frase speciale d'accoglienza..."
-              value={customWelcomePhrase}
-              onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
-              className="mt-2 w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-serif font-bold"
-            />
-          )}
         </div>
       </div>
 
@@ -701,7 +702,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 10: LISTA NOZZE, IBAN, AMAZON AFFILIATO & NEGOZI LOCALI ✦ */}
+      {/* ✦ SCHEDA 10: LISTA NOZZE & IBAN ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -793,11 +794,11 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 11: CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
+      {/* ✦ SCHEDA 11: CONFERMA PARTECIPAZIONE (RSVP) & FESTA & FREGI ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
+            <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Opzioni
           </h3>
           <button
             type="button"
@@ -825,6 +826,21 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-xs font-bold">Stelle e Fregi Divisori (✦ ✦ ✦)</span>
+          <button
+            type="button"
+            onClick={() => toggleModule("fregiStelle")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.fregiStelle !== false
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
+            }`}
+          >
+            {modules?.fregiStelle !== false ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
