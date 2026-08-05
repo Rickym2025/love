@@ -8,7 +8,7 @@ export interface DressCodePalette {
   images: string[];
 }
 
-// 1. PALETTE UFFICIALI COORDINATE (NON TOCCATE)
+// 1. PALETTE CROMATICHE UFFICIALI COORDINATE
 const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   {
     id: "lavanda_lilla",
@@ -126,13 +126,9 @@ BASE_PALETTES_ARRAY.forEach((p, idx) => {
 
 export const DRESS_CODE_PALETTES: any = new Proxy(BASE_PALETTES_ARRAY, {
   get(target, prop) {
-    if (prop in target) {
-      return (target as any)[prop];
-    }
+    if (prop in target) return (target as any)[prop];
     if (typeof prop === "string" || typeof prop === "number") {
-      if (PALETTES_BY_KEY[prop]) {
-        return PALETTES_BY_KEY[prop];
-      }
+      if (PALETTES_BY_KEY[prop]) return PALETTES_BY_KEY[prop];
     }
     return BASE_PALETTES_ARRAY[0];
   }
@@ -149,42 +145,41 @@ BASE_PALETTES_ARRAY.forEach((p, idx) => {
 export const DRESS_CODE_PHOTOS: Record<string | number, string[]> = new Proxy(PHOTOS_BY_KEY, {
   get(target, prop) {
     if (typeof prop === "string" || typeof prop === "number") {
-      if (target[prop]) {
-        return target[prop];
-      }
+      if (target[prop]) return target[prop];
     }
     return BASE_PALETTES_ARRAY[0].images;
   }
 });
 
-// 2. MODALITÀ DI VISUALIZZAZIONE DATA (RIPRISTINATO SENZA "ITALIANO")
+// 2. MODALITÀ VISUALIZZAZIONE DATA
 export const DATE_DISPLAY_MODES = [
-  { id: "countdown", label: "Conto alla Rovescia Dinamico" },
-  { id: "scratch", label: "Gratta col Dito per Scoprire la Data" },
-  { id: "text", label: "Data Semplice in Testo Elegante" }
+  { id: "countdown", label: "Conto alla Rovescia Dinamico", value: "countdown", title: "Conto alla Rovescia Dinamico" },
+  { id: "scratch", label: "Gratta col Dito per Scoprire la Data", value: "scratch", title: "Gratta col Dito per Scoprire la Data" },
+  { id: "text", label: "Data Semplice in Testo Elegante", value: "text", title: "Data Semplice in Testo Elegante" }
 ];
 
-// 3. SCHEMI PROGRAMMA ORARI (RIPRISTINATO SENZA "ITALIANO")
+// 3. SCHEMI PROGRAMMA ORARI (SENZA "ITALIANO")
 export const SCHEDULE_SCHEMAS = [
-  { id: "classico", label: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
-  { id: "timeline", label: "Timeline Verticale", description: "Linea temporale con orari in sequenza" },
-  { id: "schede", label: "Schede a Griglia", description: "Riquadri orari affiancati" },
-  { id: "minimal", label: "Minimal essenziale", description: "Testo pulito e lineare" }
+  { id: "classico", label: "Classico Elegante", value: "classico", title: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
+  { id: "timeline", label: "Timeline Verticale", value: "timeline", title: "Timeline Verticale", description: "Linea temporale con orari in sequenza" },
+  { id: "schede", label: "Schede a Griglia", value: "schede", title: "Schede a Griglia", description: "Riquadri orari affiancati" },
+  { id: "minimal", label: "Minimal essenziale", value: "minimal", title: "Minimal essenziale", description: "Testo pulito e lineare" }
 ];
 
 // 4. EFFETTI DI APERTURA INIZIALE
 export const INTRO_START_OPTIONS = [
-  { id: "busta", label: "Busta Luxury con Ceralacca 3D" },
-  { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D" },
-  { id: "expand", label: "Scroll Expand Media a Tutto Schermo" },
-  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL" }
+  { id: "busta", label: "Busta Luxury con Ceralacca 3D", value: "busta", title: "Busta Luxury con Ceralacca 3D" },
+  { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D", value: "nuvole", title: "Apertura Nuvole Volumetriche 3D" },
+  { id: "expand", label: "Scroll Expand Media a Tutto Schermo", value: "expand", title: "Scroll Expand Media a Tutto Schermo" },
+  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL", value: "lago", title: "Specchio d'Acqua con Effetto Onde WebGL" }
 ];
+export const START_EFFECTS = INTRO_START_OPTIONS;
 
-// 5. STILI CONFERSIONE PARTECIPAZIONE (RSVP)
+// 5. STILI CONFERMA PARTECIPAZIONE (RSVP)
 export const RSVP_STYLES = [
-  { id: "classico", label: "Classico con Intolleranze e Menu" },
-  { id: "moderno", label: "Moderno Interattivo" },
-  { id: "minimal", label: "Minimal Diretto" }
+  { id: "classico", label: "Classico con Intolleranze e Menu", value: "classico", title: "Classico con Intolleranze e Menu" },
+  { id: "moderno", label: "Moderno Interattivo", value: "moderno", title: "Moderno Interattivo" },
+  { id: "minimal", label: "Minimal Diretto", value: "minimal", title: "Minimal Diretto" }
 ];
 
 // 6. TEMI DELL'EVENTO PRESET
@@ -196,6 +191,7 @@ export const EVENT_THEMES = [
   "Modern Minimal & Antracite",
   "Personalizzato (digita a mano)"
 ];
+export const EVENT_THEME_PRESETS = EVENT_THEMES;
 
 // 7. PRESET FRASI BENVENUTO
 export const WELCOME_PHRASE_PRESETS: string[] = [
@@ -208,19 +204,24 @@ export const WELCOME_PHRASE_PRESETS: string[] = [
   "Oggi inizia il nostro 'per sempre'.",
   "Festeggiate con noi l'inizio di questa nuova avventura.",
   "Benvenuti al nostro matrimonio.",
-  ""
+  "Personalizzato (digita la tua frase)"
 ];
 
-// 8. DEMO BRANI AUDIO FF EDIZIONI
+// 8. BRANI AUDIO EDIZIONI FF
 export const AUDIO_DEMOS = [
   {
     id: "A",
     title: "Elena & Davide: La Nostra Melodia A",
-    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
+    label: "Elena & Davide: La Nostra Melodia A",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+    value: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
   },
   {
     id: "B",
     title: "Francesca & Luca: Quella Fotografia B",
-    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
+    label: "Francesca & Luca: Quella Fotografia B",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3",
+    value: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
   }
 ];
+export const SOUNDTRACKS = AUDIO_DEMOS;
