@@ -3,13 +3,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export interface ScheduleItem {
+interface ScheduleItem {
   id: string;
   time: string;
   title: string;
 }
 
-export interface TimelineHowItWorksProps {
+interface TimelineHowItWorksProps {
   items?: ScheduleItem[];
   accentColor?: string;
   className?: string;
@@ -51,7 +51,7 @@ export default function TimelineHowItWorks({
   return (
     <div className={`py-6 px-2 relative ${className}`}>
       <div className="max-w-xl mx-auto space-y-6">
-        {items.map((item, index) => {
+        {(items || []).map((item, index) => {
           const position = DEFAULT_CARD_POSITIONS[index % DEFAULT_CARD_POSITIONS.length];
           const numStr = index < 9 ? `0${index + 1}` : `${index + 1}`;
 
