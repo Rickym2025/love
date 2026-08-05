@@ -86,7 +86,7 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
-  heroBgImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+  heroBgImage = "palette",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
@@ -120,6 +120,15 @@ export default function AgencyPreview({
   const textColor = (activePalette as any)?.textColor || "#1E293B";
   const accentColor = (activePalette as any)?.accentColor || "#8B6508";
 
+  // LOGICA SFONDO INVITO (BIANCO, PALETTE SYNC O TEXTURE)
+  const isWhiteBg = heroBgImage === "#FFFFFF";
+  const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
+  const containerBgStyle = isWhiteBg
+    ? { backgroundColor: "#FFFFFF", color: textColor }
+    : isPaletteSync
+    ? { backgroundColor: bgMain, color: textColor }
+    : { backgroundImage: `url(${heroBgImage})`, backgroundSize: "cover", color: textColor };
+
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
     Array.isArray((activePalette as any)?.images) && (activePalette as any).images.length > 0
@@ -138,6 +147,8 @@ export default function AgencyPreview({
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
   const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? (customEventTheme || "Tema Personalizzato") : eventThemePreset;
 
+  const showFregi = modules.fregiStelle !== false;
+
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
   }?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&rsvpStyle=${rsvpStyle}&day=${encodeURIComponent(
@@ -148,11 +159,10 @@ export default function AgencyPreview({
     locationName
   )}&phrase=${encodeURIComponent(computedWelcomePhrase)}&audio=${encodeURIComponent(
     audioUrl
-  )}&palette=${safeIdx}`;
+  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}`;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
-      {/* TESTATA ANTEPRIMA */}
       <div className="flex justify-between items-center w-full max-w-[340px] mb-2 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" /> Live Preview Sincronizzata
@@ -166,22 +176,18 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative"
-        style={{ backgroundColor: bgMain, color: textColor }}
+        style={containerBgStyle}
       >
-        {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* MARQUEE NOMI SPOSI */}
         {modules.dedicheMarquee && (
           <div className="py-1">
             <Marquee text={marqueeText} coupleNames={coupleNames} />
           </div>
         )}
 
-        {/* EFFETTI START */}
         {introStart === "busta" && modules.busta3d && (
           <div className="p-2">
             <EnvelopeWax coupleNames={coupleNames} inline={true} />
@@ -196,7 +202,7 @@ export default function AgencyPreview({
 
         {introStart === "lago" && !startClosed && (
           <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
-            <WaterRippleImage src={heroBgImage} onClick={() => setStartClosed(true)} />
+            <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : heroBgImage} onClick={() => setStartClosed(true)} />
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
               <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                 <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
@@ -211,7 +217,7 @@ export default function AgencyPreview({
         {introStart === "expand" && (
           <div className="py-1 px-2">
             <ScrollExpandMedia
-              bgImageSrc={heroBgImage}
+              bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : heroBgImage}
               mediaSrc={heroMediaImage}
               title={coupleNames}
               date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -252,6 +258,8 @@ export default function AgencyPreview({
           <p className="text-xs font-bold uppercase pt-1" style={{ color: accentColor }}>{locationName}</p>
         </div>
 
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
         {/* MODULO DATA */}
         {dateDisplayMode === "countdown" && (
           <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
@@ -286,7 +294,9 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA - TUTTI I 5 SCHEMI VISIBILI */}
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+        {/* PROGRAMMA GIORNATA */}
         {scheduleSchema === "howitworks" && (
           <div className="mx-3 my-3 p-2 rounded-2xl border text-center shadow-sm bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-1" style={{ color: accentColor }}>
@@ -346,6 +356,8 @@ export default function AgencyPreview({
           </div>
         )}
 
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
         {/* LOCATION CON MAPPA */}
         {modules.locationMappa && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
@@ -378,6 +390,8 @@ export default function AgencyPreview({
           </div>
         )}
 
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
         {/* DRESS CODE CON GALLERIA OUTFIT */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
@@ -386,14 +400,12 @@ export default function AgencyPreview({
             </span>
             <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
 
-            {/* PALLINI COLORI */}
             <div className="flex justify-center gap-1.5 py-1">
               {colors.map((c, i) => (
                 <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
 
-            {/* GALLERIA OUTFIT */}
             <div className="pt-1">
               <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
@@ -420,6 +432,8 @@ export default function AgencyPreview({
           </div>
         )}
 
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
         {/* LISTA NOZZE IBAN */}
         {modules.listaNozzeAmazon && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center space-y-2 bg-white border-slate-200">
@@ -431,6 +445,8 @@ export default function AgencyPreview({
             </div>
           </div>
         )}
+
+        {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
 
         {/* MODULO RSVP */}
         {modules.confermaRsvp && (
