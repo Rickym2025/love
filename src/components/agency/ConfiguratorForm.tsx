@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon, Save, CheckCircle2 } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon, Save, CheckCircle2, Layers } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -10,7 +10,8 @@ import {
   EVENT_THEMES,
   INTRO_START_OPTIONS,
   RSVP_STYLES,
-  AUDIO_DEMOS
+  AUDIO_DEMOS,
+  BACKGROUND_PRESETS,
 } from "./constants";
 
 export interface ScheduleItem {
@@ -77,7 +78,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPaletteIdx = 0,
     customIban = "IT60 X 05428 11101 000000123456",
-    heroBgImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+    heroBgImage = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
     scheduleItems = [
       { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
@@ -110,13 +111,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
   const handleUpdate = (field: string, value: any) => {
     if (typeof onUpdate === "function") {
       onUpdate(field, value);
-    }
-    // SALVATAGGIO AUTOMATICO SU LOCALSTORAGE
-    if (typeof window !== "undefined") {
-      try {
-        const savedData = { ...props, [field]: value };
-        localStorage.setItem(`love_invitation_${coupleNames.toLowerCase().replace(/[^a-z0-9]/g, "-")}`, JSON.stringify(savedData));
-      } catch {}
     }
   };
 
@@ -194,7 +188,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* BARRA STATO SALVATAGGIO AUTOMATICO CON PULSANTE MANUAL SAVE */}
+      {/* BARRA STATO SALVATAGGIO AUTOMATICO */}
       <div className="p-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl border border-[#D4AF37] flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-pulse" />
@@ -212,7 +206,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* ✦ SCHEDA 1: MODELLI PREIMPOSTATI A / B ✦ */}
+      {/* ✦ 1. MODELLI PREIMPOSTATI A / B ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/30 shadow-md space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
@@ -249,11 +243,57 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 2: EFFETTO APERTURA & IMMAGINI HERO ✦ */}
+      {/* ✦ 2. NUOVA SEZIONE: SFONDO DELL'INVITO & TEXTURES (10 PRESET + UPLOAD) ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset)
+        </h3>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-2">Scegli una Texture d&apos;Autore per lo Sfondo</label>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {(BACKGROUND_PRESETS || []).map((preset) => {
+              const isSelected = heroBgImage === preset.url;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => handleUpdate("heroBgImage", preset.url)}
+                  className={`p-1.5 rounded-xl border text-center transition-all cursor-pointer overflow-hidden ${
+                    isSelected
+                      ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                      : "border-slate-200 bg-white hover:border-slate-300"
+                  }`}
+                >
+                  <div className="w-full h-12 rounded-lg overflow-hidden relative mb-1 border border-black/10">
+                    <img src={preset.thumbnail} alt={preset.name} className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-[9px] font-bold block leading-tight truncate text-[#1E293B]">{preset.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Oppure Incolla URL Sfondo Personalizzato / Upload</label>
+          <input
+            type="text"
+            placeholder="https://images.unsplash.com/photo-..."
+            value={heroBgImage}
+            onChange={(e) => handleUpdate("heroBgImage", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-mono"
+          />
+        </div>
+      </div>
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ 3. EFFETTO START & IMMAGINI HERO ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start &amp; Immagini Hero
+            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start Iniziale
           </h3>
           <button
             type="button"
@@ -316,41 +356,22 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           </div>
         )}
 
-        <div className="pt-2 border-t border-slate-100 space-y-3">
-          <span className="text-xs font-bold text-[#8B6508] flex items-center gap-1.5">
-            <ImageIcon className="w-4 h-4 text-[#D4AF37]" /> Personalizzazione Foto Hero Sposi:
-          </span>
-
-          <div className="space-y-2">
-            <div>
-              <label className="block text-[10px] font-bold mb-1">URL Sfondo Hero Personalizzato</label>
-              <input
-                type="text"
-                placeholder="https://images.unsplash.com/photo-..."
-                value={heroBgImage}
-                onChange={(e) => handleUpdate("heroBgImage", e.target.value)}
-                className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Hero)</label>
-              <input
-                type="text"
-                placeholder="https://images.unsplash.com/photo-..."
-                value={heroMediaImage}
-                onChange={(e) => handleUpdate("heroMediaImage", e.target.value)}
-                className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
-              />
-            </div>
-          </div>
+        <div>
+          <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Hero)</label>
+          <input
+            type="text"
+            placeholder="https://images.unsplash.com/photo-..."
+            value={heroMediaImage}
+            onChange={(e) => handleUpdate("heroMediaImage", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
+          />
         </div>
       </div>
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 3: NOMI SPOSI & FRASE BENVENUTO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ SCHEDA 4: NOMI SPOSI & FRASE BENVENUTO ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
@@ -406,8 +427,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 4: DATA DEL MATRIMONIO ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ SCHEDA 5: DATA DEL MATRIMONIO ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
@@ -473,8 +494,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 5: PROGRAMMA GIORNATA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ SCHEDA 6: PROGRAMMA GIORNATA ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari Modificabili
@@ -536,8 +557,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 6: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ SCHEDA 7: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
         </h3>
@@ -573,8 +594,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 7: LOCATION & MAPPA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ SCHEDA 8: LOCATION & MAPPA ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
@@ -616,8 +637,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 8: DRESS CODE & PALETTE ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ SCHEDA 9: DRESS CODE & PALETTE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
@@ -680,8 +701,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 9: LISTA NOZZE & IBAN ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ SCHEDA 10: LISTA NOZZE, IBAN, AMAZON AFFILIATO & NEGOZI LOCALI ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
@@ -772,8 +793,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 10: CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ SCHEDA 11: CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
