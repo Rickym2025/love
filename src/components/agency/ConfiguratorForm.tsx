@@ -15,13 +15,9 @@ import {
 
 export interface ConfiguratorFormProps {
   selectedTemplate?: "A" | "B";
-  template?: "A" | "B";
   introStart?: string;
-  start?: string;
   dateDisplayMode?: string;
-  dateMode?: string;
   scheduleSchema?: string;
-  schedule?: string;
   rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
@@ -37,114 +33,73 @@ export interface ConfiguratorFormProps {
   customWelcomePhrase?: string;
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
-  palette?: number;
   customIban?: string;
   marqueeText?: string;
   modules?: Record<string, boolean>;
   onUpdate: (field: string, value: any) => void;
 }
 
-// PULSANTE SWITCH MODERNO (PILL TOGGLE)
-function Switch({ checked, onChange }: { checked: boolean; onChange: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onChange}
-      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${
-        checked ? "bg-[#D4AF37]" : "bg-slate-300"
-      }`}
-    >
-      <span
-        className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out ${
-          checked ? "translate-x-4" : "translate-x-1"
-        }`}
-      />
-    </button>
-  );
-}
+export default function ConfiguratorForm({
+  selectedTemplate = "A",
+  introStart = "busta",
+  dateDisplayMode = "countdown",
+  scheduleSchema = "classico",
+  rsvpStyle = "classico",
+  eventThemePreset = "Luxury Gold & Total White",
+  customEventTheme = "",
+  coupleNames = "Elena & Davide",
+  weddingDateDay = "15",
+  weddingDateMonth = "Settembre",
+  weddingDateYear = "2026",
+  locationName = "Villa Rosa",
+  locationAddress = "Via Roma 1, Roma",
+  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+  welcomePhrase = "Benvenuti al nostro matrimonio",
+  selectedPhrasePreset = "0",
+  customWelcomePhrase = "",
+  dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
+  selectedPaletteIdx = 0,
+  customIban = "IT60 X 05428 11101 000000123456",
+  modules = {
+    busta3d: true,
+    grattaData: true,
+    nuvole3d: true,
+    locationMappa: true,
+    codiceAbbigliamento: true,
+    negoziConvenzionati: true,
+    listaNozzeAmazon: true,
+    dedicheMarquee: true,
+    hubGiochiFesta: true,
+    confermaRsvp: true,
+  },
+  onUpdate,
+}: ConfiguratorFormProps) {
 
-export default function ConfiguratorForm(props: ConfiguratorFormProps) {
-  const {
-    selectedTemplate = "A",
-    template,
-    introStart = "busta",
-    start,
-    dateDisplayMode = "countdown",
-    dateMode,
-    scheduleSchema = "classico",
-    schedule,
-    rsvpStyle = "classico",
-    eventThemePreset = "Luxury Gold & Total White",
-    customEventTheme = "",
-    coupleNames = "Elena & Davide",
-    weddingDateDay = "15",
-    weddingDateMonth = "Settembre",
-    weddingDateYear = "2026",
-    locationName = "Villa Rosa",
-    locationAddress = "Via Roma 1, Roma",
-    audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-    welcomePhrase = "Benvenuti al nostro matrimonio",
-    selectedPhrasePreset = "0",
-    customWelcomePhrase = "",
-    dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
-    selectedPaletteIdx = 0,
-    palette,
-    customIban = "IT60 X 05428 11101 000000123456",
-    modules = {
-      busta3d: true,
-      grattaData: true,
-      nuvole3d: true,
-      locationMappa: true,
-      codiceAbbigliamento: true,
-      negoziConvenzionati: true,
-      listaNozzeAmazon: true,
-      dedicheMarquee: true,
-      hubGiochiFesta: true,
-      confermaRsvp: true,
-    },
-    onUpdate,
-  } = props;
+  // ATTIVAZIONE / DISATTIVAZIONE SINGOLO MODULO
+  const toggleModule = (key: string) => {
+    onUpdate("modules", { ...modules, [key]: !modules?.[key] });
+  };
 
-  const activeTemplate = selectedTemplate || template || "A";
-  const activeStart = introStart || start || "busta";
-  const activeDateMode = dateDisplayMode || dateMode || "countdown";
-  const activeSchedule = scheduleSchema || schedule || "classico";
-  const activePaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
-
-  // APPLICAZIONE PRESET TEMPLATE A
+  // APPLICAZIONE PRESET MODELLO A
   const applyTemplateA = () => {
     onUpdate("selectedTemplate", "A");
-    onUpdate("template", "A");
     onUpdate("coupleNames", "Elena & Davide");
     onUpdate("introStart", "busta");
-    onUpdate("start", "busta");
     onUpdate("dateDisplayMode", "countdown");
-    onUpdate("dateMode", "countdown");
     onUpdate("scheduleSchema", "classico");
-    onUpdate("schedule", "classico");
     onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
     onUpdate("selectedPaletteIdx", 0);
-    onUpdate("palette", 0);
   };
 
-  // APPLICAZIONE PRESET TEMPLATE B
+  // APPLICAZIONE PRESET MODELLO B
   const applyTemplateB = () => {
     onUpdate("selectedTemplate", "B");
-    onUpdate("template", "B");
     onUpdate("coupleNames", "Francesca & Luca");
     onUpdate("introStart", "nuvole");
-    onUpdate("start", "nuvole");
     onUpdate("dateDisplayMode", "scratch");
-    onUpdate("dateMode", "scratch");
     onUpdate("scheduleSchema", "timeline");
-    onUpdate("schedule", "timeline");
     onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
     onUpdate("selectedPaletteIdx", 1);
-    onUpdate("palette", 1);
-  };
-
-  const toggleModule = (key: string) => {
-    onUpdate("modules", { ...modules, [key]: !modules[key] });
   };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
@@ -153,13 +108,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* ✦ SELEZIONE TEMPLATE PREIMPOSTATO MODELLO A / B ✦ */}
+      {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Seleziona Modello Preimpostato
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
         </h3>
         <p className="text-[11px] text-slate-600">
-          Scegli uno dei due modelli d&apos;autore preconfigurati per caricare istantaneamente il layout coordinato:
+          Seleziona uno dei due modelli d&apos;autore per caricare il layout di esempio:
         </p>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
@@ -167,7 +122,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="button"
             onClick={applyTemplateA}
             className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              activeTemplate === "A"
+              selectedTemplate === "A"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -180,7 +135,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="button"
             onClick={applyTemplateB}
             className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              activeTemplate === "B"
+              selectedTemplate === "B"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -191,33 +146,34 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 1. MODELLO & EFFETTO APERTURA ✦ */}
+      {/* ✦ 1. EFFETTO DI APERTURA ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Animazione Start</span>
-            <Switch
-              checked={!!modules.busta3d || !!modules.nuvole3d}
-              onChange={() => {
-                toggleModule("busta3d");
-                toggleModule("nuvole3d");
-              }}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              toggleModule("busta3d");
+              toggleModule("nuvole3d");
+            }}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.busta3d || modules?.nuvole3d
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.busta3d || modules?.nuvole3d ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[11px] font-bold mb-1">Effetto Start Iniziale</label>
             <select
-              value={activeStart}
-              onChange={(e) => {
-                onUpdate("introStart", e.target.value);
-                onUpdate("start", e.target.value);
-              }}
+              value={introStart}
+              onChange={(e) => onUpdate("introStart", e.target.value)}
               className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
@@ -232,10 +188,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <label className="block text-[11px] font-bold mb-1">Tema dell&apos;Evento</label>
             <select
               value={eventThemePreset}
-              onChange={(e) => {
-                onUpdate("eventThemePreset", e.target.value);
-                onUpdate("eventTheme", e.target.value);
-              }}
+              onChange={(e) => onUpdate("eventThemePreset", e.target.value)}
               className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(EVENT_THEMES || []).map((t, idx) => (
@@ -264,13 +217,17 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Testo Scorrevole</span>
-            <Switch
-              checked={!!modules.dedicheMarquee}
-              onChange={() => toggleModule("dedicheMarquee")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("dedicheMarquee")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.dedicheMarquee
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.dedicheMarquee ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div>
@@ -287,10 +244,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
           <select
             value={selectedPhrasePreset}
-            onChange={(e) => {
-              onUpdate("selectedPhrasePreset", e.target.value);
-              onUpdate("phrasePreset", e.target.value);
-            }}
+            onChange={(e) => onUpdate("selectedPhrasePreset", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
@@ -318,13 +272,17 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Gratta Data</span>
-            <Switch
-              checked={!!modules.grattaData}
-              onChange={() => toggleModule("grattaData")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("grattaData")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.grattaData
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.grattaData ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -360,11 +318,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Modulo Visualizzazione Data</label>
           <select
-            value={activeDateMode}
-            onChange={(e) => {
-              onUpdate("dateDisplayMode", e.target.value);
-              onUpdate("dateMode", e.target.value);
-            }}
+            value={dateDisplayMode}
+            onChange={(e) => onUpdate("dateDisplayMode", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(DATE_DISPLAY_MODES || []).map((mode) => (
@@ -385,11 +340,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Schema Visualizzazione Orari</label>
           <select
-            value={activeSchedule}
-            onChange={(e) => {
-              onUpdate("scheduleSchema", e.target.value);
-              onUpdate("schedule", e.target.value);
-            }}
+            value={scheduleSchema}
+            onChange={(e) => onUpdate("scheduleSchema", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(SCHEDULE_SCHEMAS || []).map((item) => (
@@ -411,10 +363,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <label className="block text-[11px] font-bold mb-1">Brano Inedito per gli Sposi</label>
           <select
             value={audioUrl}
-            onChange={(e) => {
-              onUpdate("audioUrl", e.target.value);
-              onUpdate("audio", e.target.value);
-            }}
+            onChange={(e) => onUpdate("audioUrl", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(AUDIO_DEMOS || []).map((track) => (
@@ -432,13 +381,17 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Mappa Interattiva</span>
-            <Switch
-              checked={!!modules.locationMappa}
-              onChange={() => toggleModule("locationMappa")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("locationMappa")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.locationMappa
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.locationMappa ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div className="space-y-3">
@@ -469,28 +422,29 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Galleria Outfit</span>
-            <Switch
-              checked={!!modules.codiceAbbigliamento}
-              onChange={() => toggleModule("codiceAbbigliamento")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("codiceAbbigliamento")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.codiceAbbigliamento
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.codiceAbbigliamento ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div>
           <label className="block text-[11px] font-bold mb-2">Seleziona Palette (8 Opzioni Coordinate)</label>
           <div className="grid grid-cols-2 gap-2">
             {palettesList.map((p: any, idx: number) => {
-              const isSelected = activePaletteIdx === idx;
+              const isSelected = selectedPaletteIdx === idx;
               return (
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => {
-                    onUpdate("selectedPaletteIdx", idx);
-                    onUpdate("palette", idx);
-                  }}
+                  onClick={() => onUpdate("selectedPaletteIdx", idx)}
                   className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
@@ -530,13 +484,17 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Box Lista Nozze</span>
-            <Switch
-              checked={!!modules.listaNozzeAmazon}
-              onChange={() => toggleModule("listaNozzeAmazon")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("listaNozzeAmazon")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.listaNozzeAmazon
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.listaNozzeAmazon ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div>
@@ -550,19 +508,23 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 9. CONFERSIONE PARTECIPAZIONE (RSVP) & FESTA ✦ */}
+      {/* ✦ 9. CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Giochi Festa
+            <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
           </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-600">Modulo RSVP</span>
-            <Switch
-              checked={!!modules.confermaRsvp}
-              onChange={() => toggleModule("confermaRsvp")}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleModule("confermaRsvp")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.confermaRsvp
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.confermaRsvp ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
 
         <div>
@@ -581,11 +543,18 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-          <span className="text-xs font-bold">Attiva Hub Giochi della Festa per Invitati</span>
-          <Switch
-            checked={!!modules.hubGiochiFesta}
-            onChange={() => toggleModule("hubGiochiFesta")}
-          />
+          <span className="text-xs font-bold">Giochi della Festa per Invitati</span>
+          <button
+            type="button"
+            onClick={() => toggleModule("hubGiochiFesta")}
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              modules?.hubGiochiFesta
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
+                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            {modules?.hubGiochiFesta ? "✓ Attivo" : "✕ Disattivo"}
+          </button>
         </div>
       </div>
     </div>
