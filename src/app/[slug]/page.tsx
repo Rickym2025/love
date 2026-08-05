@@ -125,7 +125,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: bgMain, color: textColor }}
     >
-      {/* PLAYER AUDIO PERSISTENTE */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -134,7 +133,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {start === "nuvole" && showNuvole && <PartingClouds onOpen={playWeddingAudio} />}
 
-      {/* HERO: ZOOM MULTIMEDIALE */}
       {start === "expand" && (
         <ScrollExpandMedia
           bgImageSrc="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
@@ -146,7 +144,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         />
       )}
 
-      {/* HERO: SPECCHIO D'ACQUA CAUSTICO FULL SCREEN */}
       {start === "lago" && !apertoAcqua && (
         <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
           <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" />
@@ -167,7 +164,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         </div>
       )}
 
-      {/* HERO: ORIZZONTE COSMICO 3D */}
       {start === "cosmos" && !apertoCosmos && (
         <CosmosHero
           coupleNames={coupleNames}
@@ -179,7 +175,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         />
       )}
 
-      <main className="max-w-md mx-auto px-4 py-8 space-y-8 relative z-10">
+      <main className="max-w-md mx-auto px-4 py-8 space-y-6 relative z-10">
         {start === "busta" && showBusta && (
           <EnvelopeWax coupleNames={coupleNames} onOpen={playWeddingAudio} />
         )}
@@ -197,8 +193,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </blockquote>
         </div>
 
+        <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>
+
         {dateMode === "countdown" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-2" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
@@ -215,7 +213,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {dateMode === "scratch" && showGrattaData && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               🎰 Gratta col dito per scoprire la data
             </span>
@@ -223,9 +221,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA - TUTTI I 5 SCHEMI SUPPORTATI IN FULL SCREEN */}
+        <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>
+
+        {/* PROGRAMMA GIORNATA CON SCHEDE ALTERNATE */}
         {schedule === "howitworks" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               📍 Programma della Giornata
             </span>
@@ -234,7 +234,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {schedule === "classico" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
@@ -248,43 +248,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {schedule === "timeline" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
-              📍 Timeline Verticale Orari
-            </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: accentColor, color: textColor }}>
-              {scheduleItems.map((item) => (
-                <div key={item.id}>
-                  <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {schedule === "schede" && (
-          <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            {scheduleItems.map((item) => (
-              <div key={item.id} className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
-                <span className="block text-xs" style={{ color: accentColor }}>{item.time}</span> {item.title}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {schedule === "minimal" && (
-          <div className="p-4 text-center space-y-2 font-serif text-sm bg-white/60 rounded-3xl border border-slate-200" style={{ color: textColor }}>
-            {scheduleItems.map((item) => (
-              <p key={item.id}>
-                <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> • {item.title}
-              </p>
-            ))}
-          </div>
-        )}
+        <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>
 
         {showMappa && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <MapPin className="w-4 h-4" style={{ color: accentColor }} /> Location del Matrimonio
             </span>
@@ -315,8 +282,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>
+
         {showDressCode && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-4" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
@@ -354,7 +323,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         {showNegozi && <PartnerStores stores={[]} showAmazonAffiliate={true} />}
 
         {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
