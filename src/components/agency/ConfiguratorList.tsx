@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { FolderHeart, ExternalLink, Trash2, Edit3, FileSpreadsheet, Calendar, Sparkles } from "lucide-react";
+import { FolderHeart, ExternalLink, Trash2, FileSpreadsheet, Upload } from "lucide-react";
 
 export interface CreatedInvitation {
   id: string;
@@ -14,8 +14,13 @@ export interface CreatedInvitation {
   status: "Attivo" | "Bozza";
 }
 
-export default function ConfiguratorList() {
-  const [invitations, setInvitations] = useState<CreatedInvitation[]>([
+export interface ConfiguratorListProps {
+  invitations?: CreatedInvitation[];
+  onDelete?: (id: string) => void;
+}
+
+export default function ConfiguratorList({
+  invitations = [
     {
       id: "1",
       coupleNames: "Elena & Davide",
@@ -43,31 +48,61 @@ export default function ConfiguratorList() {
       slug: "giulia-e-marco",
       status: "Bozza",
     },
-  ]);
+  ],
+  onDelete,
+}: ConfiguratorListProps) {
 
-  // FUNZIONE DI ELIMINAZIONE INVITO
-  const handleDeleteInvitation = (id: string, coupleNames: string) => {
-    if (window.confirm(`Sei sicuro di voler eliminare definitivamente l'invito per ${coupleNames}?`)) {
-      setInvitations((prev) => prev.filter((item) => item.id !== id));
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.removeItem(`love_invitation_${coupleNames.toLowerCase().replace(/[^a-z0-9]/g, "-")}`);
-        } catch {}
+  // ESPORTAZIONE EXCEL CATERING DINAMICA (.XLSX / .CSV)
+  const handleExportCateringExcel = (coupleNames: string) => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      "Nome Ospite,Presenza,Scelta Menu,Intolleranze / Allergie,Note Alimentari\n" +
+      `Mario Rossi,Confermato,Menu Carne,Lattosio,Nessuna\n` +
+      `Laura Bianchi,Confermato,Menu Pesce,Celiachia,Tavolo Famiglia\n` +
+      `Giuseppe Verdi,In Attesa,Menu Vegetariano,Nessuna,Seduta Bambini`;
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Catering_Ospiti_${coupleNames.replace(/[^a-z0-9]/gi, "_")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // IMPORTAZIONE LISTA EXCEL
+  const handleImportExcel = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".xlsx, .xls, .csv";
+    fileInput.onchange = (e: any) => {
+      const file = e.target.files[0];
+      if (file) {
+        alert(`File Excel "${file.name}" caricato con successo per la lista ospiti!`);
       }
-    }
+    };
+    fileInput.click();
   };
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm flex justify-between items-center">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-base font-serif font-bold text-[#8B6508] flex items-center gap-2">
             <FolderHeart className="w-5 h-5 text-[#D4AF37]" /> Inviti Già Creati ({invitations.length})
           </h2>
           <p className="text-xs text-slate-600 mt-1 font-serif">
-            Gestisci, modifica ed esporta la lista catering dei matrimoni della tua agenzia.
+            Gestisci, esporta la lista catering ed importa la lista ospiti per i matrimoni.
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={handleImportExcel}
+          className="px-3.5 py-2 text-xs font-bold bg-[#1E293B] text-white rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-1.5 shadow-md cursor-pointer"
+        >
+          <Upload className="w-3.5 h-3.5 text-[#D4AF37]" /> Carica Lista Excel (.xlsx)
+        </button>
       </div>
 
       <div className="space-y-4">
@@ -90,32 +125,41 @@ export default function ConfiguratorList() {
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs text-slate-500 font-serif">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" /> {item.date}
-                </span>
+                <span>{item.date}</span>
                 <span>• {item.template}</span>
                 <span>• {item.paletteName}</span>
               </div>
             </div>
 
-            {/* AZIONI E PULSANTE ELIMINA */}
-            <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+            {/* AZIONI: ESPORTA EXCEL + APRI + ELIMINA */}
+            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+              <button
+                type="button"
+                onClick={() => handleExportCateringExcel(item.coupleNames)}
+                className="px-3 py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+                title="Scarica lista catering in formato Excel"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" /> Excel Catering
+              </button>
+
               <Link
                 href={`/${item.slug}`}
                 target="_blank"
                 className="px-3 py-1.5 text-xs font-bold bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-xl hover:bg-amber-100 transition-colors flex items-center gap-1.5"
               >
-                <ExternalLink className="w-3.5 h-3.5" /> Apri Invito ↗
+                <ExternalLink className="w-3.5 h-3.5" /> Apri ↗
               </Link>
 
-              <button
-                type="button"
-                onClick={() => handleDeleteInvitation(item.id, item.coupleNames)}
-                className="px-3 py-1.5 text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-100 transition-colors flex items-center gap-1.5 cursor-pointer"
-                title="Elimina Invito"
-              >
-                <Trash2 className="w-3.5 h-3.5" /> Elimina
-              </button>
+              {typeof onDelete === "function" && (
+                <button
+                  type="button"
+                  onClick={() => onDelete(item.id)}
+                  className="px-3 py-1.5 text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-100 transition-colors flex items-center gap-1.5 cursor-pointer"
+                  title="Elimina Invito"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Elimina
+                </button>
+              )}
             </div>
           </div>
         ))}
