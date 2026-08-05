@@ -1,93 +1,121 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import ConfiguratorForm from "./ConfiguratorForm";
-import AgencyPreview from "./AgencyPreview";
+import ConfiguratorList from "./ConfiguratorList";
+import ConfiguratorBrand from "./ConfiguratorBrand";
 
-export default function AgencyConfigurator({ activeTab = "configurator" }: { activeTab?: string }) {
-  // STATO UNIFICATO, REATTIVO E PERMANENTE
-  const [formData, setFormData] = useState({
-    selectedTemplate: "A",
-    template: "A",
-    introStart: "busta",
-    start: "busta",
-    dateDisplayMode: "countdown",
-    dateMode: "countdown",
-    scheduleSchema: "classico",
-    schedule: "classico",
-    rsvpStyle: "classico",
-    eventThemePreset: "Luxury Gold & Total White",
-    customEventTheme: "",
-    coupleNames: "Elena & Davide",
-    weddingDateDay: "15",
-    weddingDateMonth: "Settembre",
-    weddingDateYear: "2026",
-    locationName: "Villa Rosa",
-    locationAddress: "Via Roma 1, Roma",
-    audioUrl: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-    audio: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-    welcomePhrase: "Benvenuti al nostro matrimonio",
-    selectedPhrasePreset: "0",
-    phrasePreset: "0",
-    customWelcomePhrase: "",
-    dressCodeNotes: "Abiti eleganti nei toni cromatici della palette",
-    selectedPaletteIdx: 0,
-    palette: 0,
-    customIban: "IT60 X 05428 11101 000000123456",
-    marqueeText: "",
-    modules: {
-      busta3d: true,
-      grattaData: true,
-      nuvole3d: true,
-      locationMappa: true,
-      codiceAbbigliamento: true,
-      negoziConvenzionati: true,
-      listaNozzeAmazon: true,
-      dedicheMarquee: true,
-      hubGiochiFesta: true,
-      confermaRsvp: true,
-    }
-  });
+export interface AgencyConfiguratorProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  selectedTemplate: "A" | "B";
+  setSelectedTemplate: (val: "A" | "B") => void;
+  introStart: string;
+  setIntroStart: (val: string) => void;
+  dateDisplayMode: string;
+  setDateDisplayMode: (val: string) => void;
+  scheduleSchema: string;
+  setScheduleSchema: (val: string) => void;
+  rsvpStyle: string;
+  setRsvpStyle: (val: string) => void;
+  eventThemePreset: string;
+  setEventThemePreset: (val: string) => void;
+  customEventTheme: string;
+  setCustomEventTheme: (val: string) => void;
+  selectedColorScheme: string;
+  setSelectedColorScheme: (val: string) => void;
+  coupleNames: string;
+  setCoupleNames: (val: string) => void;
+  weddingDateDay: string;
+  setWeddingDateDay: (val: string) => void;
+  weddingDateMonth: string;
+  setWeddingDateMonth: (val: string) => void;
+  weddingDateYear: string;
+  setWeddingDateYear: (val: string) => void;
+  locationName: string;
+  setLocationName: (val: string) => void;
+  locationAddress: string;
+  setLocationAddress: (val: string) => void;
+  audioUrl: string;
+  setAudioUrl: (val: string) => void;
+  waterImageUrl: string;
+  setWaterImageUrl: (val: string) => void;
+  selectedPhrasePreset: string;
+  setSelectedPhrasePreset: (val: string) => void;
+  customWelcomePhrase: string;
+  setCustomWelcomePhrase: (val: string) => void;
+  dressCodeNotes: string;
+  setDressCodeNotes: (val: string) => void;
+  selectedPaletteIdx: number;
+  setSelectedPaletteIdx: (val: number) => void;
+  scheduleItems?: any[];
+  setScheduleItems?: (items: any[]) => void;
+  localStoreName?: string;
+  setLocalStoreName?: (val: string) => void;
+  localStoreUrl?: string;
+  setLocalStoreUrl?: (val: string) => void;
+  partnerStores?: any[];
+  setPartnerStores?: (stores: any[]) => void;
+  marqueeText: string;
+  setMarqueeText: (val: string) => void;
+  customIban: string;
+  setCustomIban: (val: string) => void;
+  modules: Record<string, boolean>;
+  toggleModule: (key: string) => void;
+}
 
-  // AGGIORNAMENTO FUNZIONALE E REATTIVO PERMUTABILE
+export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
+  const { activeTab } = props;
+
+  // GESTORE GENERICO DI AGGIORNAMENTO STATO
   const handleUpdate = (field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-      ...(field === "selectedTemplate" ? { template: value } : {}),
-      ...(field === "template" ? { selectedTemplate: value } : {}),
-      ...(field === "introStart" ? { start: value } : {}),
-      ...(field === "start" ? { introStart: value } : {}),
-      ...(field === "dateDisplayMode" ? { dateMode: value } : {}),
-      ...(field === "dateMode" ? { dateDisplayMode: value } : {}),
-      ...(field === "scheduleSchema" ? { schedule: value } : {}),
-      ...(field === "schedule" ? { scheduleSchema: value } : {}),
-      ...(field === "selectedPaletteIdx" ? { palette: value } : {}),
-      ...(field === "palette" ? { selectedPaletteIdx: value } : {}),
-      ...(field === "selectedPhrasePreset" ? { phrasePreset: value } : {}),
-      ...(field === "phrasePreset" ? { selectedPhrasePreset: value } : {}),
-      ...(field === "audioUrl" ? { audio: value } : {}),
-      ...(field === "audio" ? { audioUrl: value } : {}),
-    }));
+    if (field === "selectedTemplate") props.setSelectedTemplate(value);
+    if (field === "introStart") props.setIntroStart(value);
+    if (field === "dateDisplayMode") props.setDateDisplayMode(value);
+    if (field === "scheduleSchema") props.setScheduleSchema(value);
+    if (field === "rsvpStyle") props.setRsvpStyle(value);
+    if (field === "eventThemePreset") props.setEventThemePreset(value);
+    if (field === "customEventTheme") props.setCustomEventTheme(value);
+    if (field === "coupleNames") props.setCoupleNames(value);
+    if (field === "weddingDateDay") props.setWeddingDateDay(value);
+    if (field === "weddingDateMonth") props.setWeddingDateMonth(value);
+    if (field === "weddingDateYear") props.setWeddingDateYear(value);
+    if (field === "locationName") props.setLocationName(value);
+    if (field === "locationAddress") props.setLocationAddress(value);
+    if (field === "audioUrl") props.setAudioUrl(value);
+    if (field === "selectedPhrasePreset") props.setSelectedPhrasePreset(value);
+    if (field === "customWelcomePhrase") props.setCustomWelcomePhrase(value);
+    if (field === "dressCodeNotes") props.setDressCodeNotes(value);
+    if (field === "selectedPaletteIdx") props.setSelectedPaletteIdx(value);
+    if (field === "customIban") props.setCustomIban(value);
+    if (field === "marqueeText") props.setMarqueeText(value);
+    if (field === "localStoreName" && props.setLocalStoreName) props.setLocalStoreName(value);
+    if (field === "localStoreUrl" && props.setLocalStoreUrl) props.setLocalStoreUrl(value);
+    if (field === "scheduleItems" && props.setScheduleItems) props.setScheduleItems(value);
+    if (field === "modules") {
+      Object.keys(value).forEach((k) => {
+        if (value[k] !== props.modules[k]) {
+          props.toggleModule(k);
+        }
+      });
+    }
   };
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row gap-6 p-4 overflow-y-auto pointer-events-auto relative z-10 select-text">
-      {/* COLONNA FORM CONFIGURATORE */}
-      <div className="flex-1 min-w-[340px] max-w-2xl bg-white/90 backdrop-blur-md p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl overflow-y-auto relative z-20 pointer-events-auto select-text">
+    <div className="p-6 w-full max-w-3xl mx-auto">
+      {activeTab === "create" && (
         <ConfiguratorForm
-          {...formData}
+          {...props}
+          scheduleItems={props.scheduleItems}
+          localStoreName={props.localStoreName}
+          localStoreUrl={props.localStoreUrl}
           onUpdate={handleUpdate}
-          onChange={handleUpdate}
         />
-      </div>
+      )}
 
-      {/* COLONNA ANTEPRIMA LIVE */}
-      <div className="w-[360px] shrink-0 sticky top-4 self-start bg-slate-900/90 p-4 rounded-3xl border border-[#D4AF37]/40 shadow-2xl relative z-20 pointer-events-auto">
-        <AgencyPreview
-          {...formData}
-        />
-      </div>
+      {activeTab === "list" && <ConfiguratorList />}
+
+      {activeTab === "brand" && <ConfiguratorBrand />}
     </div>
   );
 }
