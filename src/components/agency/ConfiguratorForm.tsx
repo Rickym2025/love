@@ -53,17 +53,19 @@ export default function ConfiguratorForm(props: any) {
     setDressCodeNotes,
     selectedPaletteIdx,
     setSelectedPaletteIdx,
-    partnerStores,
+    partnerStores = [],
     setPartnerStores,
     customIban,
     setCustomIban,
-    modules,
+    modules = {},
     toggleModule,
   } = props;
 
+  const safePartnerStores = Array.isArray(partnerStores) ? partnerStores : [];
+
   function addStore() {
     setPartnerStores([
-      ...partnerStores,
+      ...safePartnerStores,
       {
         id: Date.now().toString(),
         name: "Nuovo Negozio Convenzionato",
@@ -74,17 +76,17 @@ export default function ConfiguratorForm(props: any) {
   }
 
   function removeStore(id: string) {
-    setPartnerStores(partnerStores.filter((s: any) => s.id !== id));
+    setPartnerStores(safePartnerStores.filter((s: any) => s.id !== id));
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <h2 className="text-2xl font-serif font-bold text-[#1E293B]">Crea &amp; Configura Invito</h2>
 
-      {/* SEZIONE 1: TEMPLATE & EFFETTO START */}
-      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
-          1. Template Grafico Layout &amp; Effetto Iniziale (Start)
+      {/* 1. SELEZIONE TEMPLATE & EFFETTO START */}
+      <div className="space-y-4">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+          1. Selezione Template &amp; Effetto Start (Mutuamente Esclusivo)
         </label>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -93,18 +95,18 @@ export default function ConfiguratorForm(props: any) {
             onClick={() => {
               setSelectedTemplate("A");
               setCoupleNames("Elena & Davide");
-              setIntroStart("busta");
+              setIntroStart("arco");
               setDateDisplayMode("countdown");
             }}
             className={`p-4 rounded-2xl border-2 text-left transition-all ${
               selectedTemplate === "A"
                 ? "border-[#D4AF37] bg-amber-50 shadow-md"
-                : "border-slate-200 bg-white hover:border-[#D4AF37]"
+                : "border-slate-300 bg-white hover:border-[#D4AF37]"
             }`}
           >
             <span className="text-[10px] font-bold uppercase text-[#8B6508] block mb-1">Template A</span>
             <h4 className="font-serif font-bold text-sm text-[#1E293B]">Classico Romantico d&apos;Autore</h4>
-            <p className="text-[10px] text-slate-600 mt-1">Busta Ceralacca Bordeaux, Countdown Timer, Mappa Google &amp; RSVP.</p>
+            <p className="text-[10px] text-slate-600 mt-1">Arco Romano, Countdown Timer, Mappa Google &amp; RSVP.</p>
           </button>
 
           <button
@@ -118,7 +120,7 @@ export default function ConfiguratorForm(props: any) {
             className={`p-4 rounded-2xl border-2 text-left transition-all ${
               selectedTemplate === "B"
                 ? "border-sky-500 bg-sky-50 shadow-md"
-                : "border-slate-200 bg-white hover:border-sky-500"
+                : "border-slate-300 bg-white hover:border-sky-500"
             }`}
           >
             <span className="text-[10px] font-bold uppercase text-sky-800 block mb-1">Template B</span>
@@ -127,14 +129,14 @@ export default function ConfiguratorForm(props: any) {
           </button>
         </div>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Scegli l&apos;Unico Effetto Start Attivo</label>
           <select
             value={introStart}
             onChange={(e) => setIntroStart(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs focus:ring-2 focus:ring-[#D4AF37]"
           >
-            {INTRO_START_PRESETS.map((item) => (
+            {(INTRO_START_PRESETS || []).map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
               </option>
@@ -142,7 +144,7 @@ export default function ConfiguratorForm(props: any) {
           </select>
 
           {introStart === "lago" && (
-            <div className="pt-2 border-t border-slate-200 mt-2">
+            <div className="pt-2 border-t border-slate-100 mt-2">
               <label className="block text-[10px] font-bold text-slate-600 mb-1">Sfondo Lago / Acqua (Link o File Immagine)</label>
               <input
                 type="text"
@@ -154,14 +156,11 @@ export default function ConfiguratorForm(props: any) {
             </div>
           )}
         </div>
-      </section>
+      </div>
 
-      {/* LINEA DIVISORIA ELEGANTE */}
-      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
-
-      {/* SEZIONE 2: DATI SPOSI & FRASE PERSONALIZZATA */}
-      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+      {/* 2. DATI SPOSI & FRASE PERSONALIZZATA */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
           2. Dati Sposi &amp; Frase Personalizzata di Benvenuto
         </label>
 
@@ -182,7 +181,7 @@ export default function ConfiguratorForm(props: any) {
             onChange={(e) => setSelectedPhrasePreset(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs mb-2"
           >
-            {WELCOME_PHRASE_PRESETS.map((phrase, idx) => (
+            {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
               <option key={idx} value={idx.toString()}>
                 {idx + 1}. {phrase.length > 55 ? phrase.substring(0, 55) + "..." : phrase}
               </option>
@@ -200,18 +199,15 @@ export default function ConfiguratorForm(props: any) {
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] text-xs font-bold resize-none"
           />
         </div>
-      </section>
+      </div>
 
-      {/* LINEA DIVISORIA ELEGANTE */}
-      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
-
-      {/* SEZIONE 3: COLONNA SONORA & BRANO INEDITO */}
-      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+      {/* 3. COLONNA SONORA & BRANO INEDITO FF EDIZIONI */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
           3. Brano Inedito / Colonna Sonora (FF Edizioni)
         </label>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-3">
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-xs font-bold text-[#8B6508]">
             <Music className="w-4 h-4 text-[#D4AF37]" />
             <span>Colonna Sonora Inedita FF Edizioni (SIAE - Maestro Fausto Fusetti)</span>
@@ -223,7 +219,7 @@ export default function ConfiguratorForm(props: any) {
               onChange={(e) => setAudioUrl(e.target.value)}
               className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs mb-2"
             >
-              {AUDIO_TRACK_PRESETS.map((track, idx) => (
+              {(AUDIO_TRACK_PRESETS || []).map((track, idx) => (
                 <option key={idx} value={track.url}>{track.name}</option>
               ))}
             </select>
@@ -240,15 +236,12 @@ export default function ConfiguratorForm(props: any) {
             />
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* LINEA DIVISORIA ELEGANTE */}
-      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
-
-      {/* SEZIONE 4: PALETTE CROMATICHE & TEMA EVENTO */}
-      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
-          4. Palette Cromatiche &amp; Tema dell&apos;Evento
+      {/* 4. PALETTE CROMATICHE & TEMA DELL'EVENTO */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+          4. Palette Cromatiche &amp; Tema dell&apos;Evento (Con Digitazione Manuale)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -258,7 +251,7 @@ export default function ConfiguratorForm(props: any) {
             onChange={(e) => setEventThemePreset(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
           >
-            {EVENT_THEME_PRESETS.map((t, idx) => (
+            {(EVENT_THEME_PRESETS || []).map((t, idx) => (
               <option key={idx} value={t}>{t}</option>
             ))}
           </select>
@@ -285,7 +278,7 @@ export default function ConfiguratorForm(props: any) {
             <div className="space-y-2 pt-2 border-t border-slate-100">
               <input type="text" value={dressCodeNotes} onChange={(e) => setDressCodeNotes(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#1E293B]" />
               <div className="grid grid-cols-2 gap-2">
-                {DRESS_CODE_PALETTES.map((pal, idx) => (
+                {(DRESS_CODE_PALETTES || []).map((pal, idx) => (
                   <button
                     key={pal.id}
                     type="button"
@@ -294,7 +287,7 @@ export default function ConfiguratorForm(props: any) {
                   >
                     <span className="text-[10px] font-bold text-[#1E293B]">{pal.name}</span>
                     <div className="flex gap-1">
-                      {pal.colors.map((c, i) => (
+                      {(pal.colors || []).map((c, i) => (
                         <div key={i} className="w-3.5 h-3.5 rounded-full border border-slate-300" style={{ backgroundColor: c }} />
                       ))}
                     </div>
@@ -304,25 +297,22 @@ export default function ConfiguratorForm(props: any) {
             </div>
           )}
         </div>
-      </section>
+      </div>
 
-      {/* LINEA DIVISORIA ELEGANTE */}
-      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
-
-      {/* SEZIONE 5: VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
-      <section className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
+      {/* 5. VISUALIZZAZIONE DATA & PROGRAMMA ORARI */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
           5. Visualizzazione Data &amp; Programma Orari (Italiano)
         </label>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Modulo Visualizzazione Data</label>
           <select
             value={dateDisplayMode}
             onChange={(e) => setDateDisplayMode(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
           >
-            {DATE_DISPLAY_MODES.map((d) => (
+            {(DATE_DISPLAY_MODES || []).map((d) => (
               <option key={d.id} value={d.id}>{d.name}</option>
             ))}
           </select>
@@ -343,27 +333,24 @@ export default function ConfiguratorForm(props: any) {
           </div>
         </div>
 
-        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-2">
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
           <label className="block text-xs font-bold text-[#1E293B]">Schema Programma Orari (Scaletta della Giornata)</label>
           <select
             value={scheduleSchema}
             onChange={(e) => setScheduleSchema(e.target.value)}
             className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
           >
-            {SCHEDULE_SCHEMAS.map((s) => (
+            {(SCHEDULE_SCHEMAS || []).map((s) => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
         </div>
-      </section>
+      </div>
 
-      {/* LINEA DIVISORIA ELEGANTE */}
-      <div className="text-center text-[#D4AF37] text-xs font-bold tracking-widest my-2 select-none">✦ ✦ ✦</div>
-
-      {/* SEZIONE 6: NEGOZI, IBAN, CONFERMA PARTECIPAZIONE & FESTA */}
-      <section className="p-6 bg-[#FAF7F2] rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
-        <label className="block text-xs font-bold uppercase text-[#8B6508] tracking-wider font-serif">
-          6. Negozi, Coordinate IBAN, Conferma Partecipazione &amp; Festa
+      {/* 6. NEGOZI, IBAN & PAGINA FESTA */}
+      <div className="space-y-4 pt-4 border-t border-slate-200">
+        <label className="block text-xs font-bold uppercase text-[#1E293B] tracking-wider">
+          6. Negozi, IBAN &amp; Personalizzazione Pagina della Festa (/festa)
         </label>
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
@@ -375,7 +362,7 @@ export default function ConfiguratorForm(props: any) {
           </div>
           {modules.negoziConvenzionati && (
             <div className="space-y-2 pt-2 border-t border-slate-100">
-              {partnerStores.map((store: any) => (
+              {safePartnerStores.map((store: any) => (
                 <div key={store.id} className="p-2.5 bg-[#FAF7F2] rounded-xl border border-slate-200 flex justify-between items-center text-xs">
                   <div>
                     <p className="font-bold text-[#1E293B]">{store.name}</p>
@@ -423,14 +410,14 @@ export default function ConfiguratorForm(props: any) {
               onChange={(e) => setRsvpStyle(e.target.value)}
               className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-[#1E293B] font-bold text-xs"
             >
-              {RSVP_STYLES.map((r) => (
+              {(RSVP_STYLES || []).map((r) => (
                 <option key={r.id} value={r.id}>{r.name}</option>
               ))}
             </select>
           )}
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-[#D4AF37]/30 space-y-3">
+        <div className="p-4 bg-[#FAF7F2] rounded-2xl border border-[#D4AF37]/30 space-y-3">
           <span className="text-xs font-bold text-[#8B6508] block font-serif">🎉 Pagina della Festa &amp; Maxischermo (/festa)</span>
           <div className="flex justify-between items-center">
             <span className="text-xs font-bold text-[#1E293B]">Hub Giochi della Festa (Quiz, Puzzle, Scratch)</span>
@@ -445,7 +432,7 @@ export default function ConfiguratorForm(props: any) {
             </button>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
