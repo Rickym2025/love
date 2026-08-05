@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sparkles, MapPin, Gift } from "lucide-react";
@@ -13,7 +13,9 @@ import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
+import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
+import CosmosHero from "@/components/ui/CosmosHero";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface ScheduleItem {
@@ -88,6 +90,8 @@ export default function AgencyPreview({
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
 }: AgencyPreviewProps) {
+  const [startClosed, setStartClosed] = useState(false);
+
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
     : Object.values(DRESS_CODE_PALETTES || {});
@@ -162,7 +166,7 @@ export default function AgencyPreview({
 
       {/* FRAME SMARTPHONE MOCKUP */}
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6"
+        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative"
         style={{ backgroundColor: bgMain, color: textColor }}
       >
         {/* PLAYER AUDIO PERSISTENTE */}
@@ -175,34 +179,63 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* EFFETTI START */}
+        {/* EFFETTO 1: BUSTA 3D */}
         {introStart === "busta" && modules.busta3d && (
           <div className="p-2">
             <EnvelopeWax coupleNames={coupleNames} inline={true} />
           </div>
         )}
 
+        {/* EFFETTO 2: NUVOLE 3D */}
         {introStart === "nuvole" && modules.nuvole3d && (
           <div className="relative py-1">
             <PartingClouds inline={true} />
           </div>
         )}
 
-        {introStart === "lago" && (
-          <div className="relative w-full h-36 overflow-hidden border-b border-sky-300">
-            <WaterRippleImage src={heroBgImage} />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="relative w-12 h-12 drop-shadow-lg">
+        {/* EFFETTO 3: SPECCHIO D'ACQUA CAUSTICO */}
+        {introStart === "lago" && !startClosed && (
+          <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
+            <WaterRippleImage src={heroBgImage} onClick={() => setStartClosed(true)} />
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
+              <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                 <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
               </div>
+              <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest mt-1 drop-shadow">
+                Tocca per Aprire
+              </span>
             </div>
           </div>
         )}
 
-        {/* HERO SPOSI CON FOTO PERSONALIZZATA */}
+        {/* EFFETTO 4: ZOOM MULTIMEDIALE ALLO SCROLL */}
+        {introStart === "expand" && (
+          <div className="py-1 px-2">
+            <ScrollExpandMedia
+              bgImageSrc={heroBgImage}
+              mediaSrc={heroMediaImage}
+              title={coupleNames}
+              date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            />
+          </div>
+        )}
+
+        {/* EFFETTO 5: ORIZZONTE COSMICO 3D */}
+        {introStart === "cosmos" && !startClosed && (
+          <div className="relative w-full h-[300px]">
+            <CosmosHero
+              coupleNames={coupleNames}
+              weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+              inline={true}
+              onEnter={() => setStartClosed(true)}
+            />
+          </div>
+        )}
+
+        {/* HERO SPOSI */}
         <div className="text-center pt-3 px-4 space-y-2">
           {heroMediaImage && (
-            <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-md relative">
+            <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-md relative">
               <img src={heroMediaImage} alt={coupleNames} className="w-full h-full object-cover" />
             </div>
           )}
@@ -255,7 +288,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA CON NUOVA TIMELINE 21st.dev */}
+        {/* PROGRAMMA GIORNATA CON TIMELINE 21st.dev */}
         {scheduleSchema === "howitworks" && (
           <div className="mx-3 my-3 p-2 rounded-2xl border text-center shadow-sm bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-1" style={{ color: accentColor }}>
@@ -277,39 +310,6 @@ export default function AgencyPreview({
                 </p>
               ))}
             </div>
-          </div>
-        )}
-
-        {scheduleSchema === "timeline" && (
-          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
-            <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-2" style={{ color: accentColor }}>
-              📍 Timeline Verticale Orari
-            </span>
-            <div className="relative pl-6 space-y-2 text-left border-l-2 text-xs" style={{ borderColor: accentColor, color: textColor }}>
-              {scheduleItems.map((item) => (
-                <div key={item.id}>
-                  <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {scheduleSchema === "schede" && (
-          <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
-            {scheduleItems.map((item) => (
-              <div key={item.id} className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
-                <span className="block text-[10px]" style={{ color: accentColor }}>{item.time}</span> {item.title}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {scheduleSchema === "minimal" && (
-          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs" style={{ color: textColor }}>
-            {scheduleItems.map((item) => (
-              <p key={item.id}>{item.time} • {item.title}</p>
-            ))}
           </div>
         )}
 
@@ -347,7 +347,7 @@ export default function AgencyPreview({
 
         {/* DRESS CODE CON GALLERIA OUTFIT */}
         {modules.codiceAbbigliamento && (
-          <div className="mx-[#FAF7F2] my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
+          <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
