@@ -15,9 +15,13 @@ import {
 
 export interface ConfiguratorFormProps {
   selectedTemplate?: "A" | "B";
+  template?: "A" | "B";
   introStart?: string;
+  start?: string;
   dateDisplayMode?: string;
+  dateMode?: string;
   scheduleSchema?: string;
+  schedule?: string;
   rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
@@ -33,73 +37,109 @@ export interface ConfiguratorFormProps {
   customWelcomePhrase?: string;
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
+  palette?: number;
   customIban?: string;
   marqueeText?: string;
   modules?: Record<string, boolean>;
-  onUpdate: (field: string, value: any) => void;
+  onUpdate?: (field: string, value: any) => void;
+  onChange?: (field: string, value: any) => void;
+  updateField?: (field: string, value: any) => void;
 }
 
-export default function ConfiguratorForm({
-  selectedTemplate = "A",
-  introStart = "busta",
-  dateDisplayMode = "countdown",
-  scheduleSchema = "classico",
-  rsvpStyle = "classico",
-  eventThemePreset = "Luxury Gold & Total White",
-  customEventTheme = "",
-  coupleNames = "Elena & Davide",
-  weddingDateDay = "15",
-  weddingDateMonth = "Settembre",
-  weddingDateYear = "2026",
-  locationName = "Villa Rosa",
-  locationAddress = "Via Roma 1, Roma",
-  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-  welcomePhrase = "Benvenuti al nostro matrimonio",
-  selectedPhrasePreset = "0",
-  customWelcomePhrase = "",
-  dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
-  selectedPaletteIdx = 0,
-  customIban = "IT60 X 05428 11101 000000123456",
-  modules = {
-    busta3d: true,
-    grattaData: true,
-    nuvole3d: true,
-    locationMappa: true,
-    codiceAbbigliamento: true,
-    negoziConvenzionati: true,
-    listaNozzeAmazon: true,
-    dedicheMarquee: true,
-    hubGiochiFesta: true,
-    confermaRsvp: true,
-  },
-  onUpdate,
-}: ConfiguratorFormProps) {
+export default function ConfiguratorForm(props: ConfiguratorFormProps) {
+  const {
+    selectedTemplate = "A",
+    template,
+    introStart = "busta",
+    start,
+    dateDisplayMode = "countdown",
+    dateMode,
+    scheduleSchema = "classico",
+    schedule,
+    rsvpStyle = "classico",
+    eventThemePreset = "Luxury Gold & Total White",
+    customEventTheme = "",
+    coupleNames = "Elena & Davide",
+    weddingDateDay = "15",
+    weddingDateMonth = "Settembre",
+    weddingDateYear = "2026",
+    locationName = "Villa Rosa",
+    locationAddress = "Via Roma 1, Roma",
+    audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+    welcomePhrase = "Benvenuti al nostro matrimonio",
+    selectedPhrasePreset = "0",
+    customWelcomePhrase = "",
+    dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
+    selectedPaletteIdx = 0,
+    palette,
+    customIban = "IT60 X 05428 11101 000000123456",
+    modules = {
+      busta3d: true,
+      grattaData: true,
+      nuvole3d: true,
+      locationMappa: true,
+      codiceAbbigliamento: true,
+      negoziConvenzionati: true,
+      listaNozzeAmazon: true,
+      dedicheMarquee: true,
+      hubGiochiFesta: true,
+      confermaRsvp: true,
+    },
+    onUpdate,
+    onChange,
+    updateField,
+  } = props;
 
-  // ATTIVAZIONE / DISATTIVAZIONE SINGOLO MODULO
+  // FUNZIONE WRAPPER SICURA CONTRO L'ERRORE "B is not a function"
+  const handleUpdate = (field: string, value: any) => {
+    const fn =
+      typeof onUpdate === "function"
+        ? onUpdate
+        : typeof onChange === "function"
+        ? onChange
+        : typeof updateField === "function"
+        ? updateField
+        : typeof (props as any).handleChange === "function"
+        ? (props as any).handleChange
+        : null;
+
+    if (fn) {
+      fn(field, value);
+    }
+  };
+
+  const activeTemplate = selectedTemplate || template || "A";
+  const activeStart = introStart || start || "busta";
+  const activeDateMode = dateDisplayMode || dateMode || "countdown";
+  const activeSchedule = scheduleSchema || schedule || "classico";
+  const activePaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
+
+  // ATTIVAZIONE / DISATTIVAZIONE MODULI
   const toggleModule = (key: string) => {
-    onUpdate("modules", { ...modules, [key]: !modules?.[key] });
+    const currentModules = modules || {};
+    handleUpdate("modules", { ...currentModules, [key]: !currentModules[key] });
   };
 
   // APPLICAZIONE PRESET MODELLO A
   const applyTemplateA = () => {
-    onUpdate("selectedTemplate", "A");
-    onUpdate("coupleNames", "Elena & Davide");
-    onUpdate("introStart", "busta");
-    onUpdate("dateDisplayMode", "countdown");
-    onUpdate("scheduleSchema", "classico");
-    onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
-    onUpdate("selectedPaletteIdx", 0);
+    handleUpdate("selectedTemplate", "A");
+    handleUpdate("coupleNames", "Elena & Davide");
+    handleUpdate("introStart", "busta");
+    handleUpdate("dateDisplayMode", "countdown");
+    handleUpdate("scheduleSchema", "classico");
+    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
+    handleUpdate("selectedPaletteIdx", 0);
   };
 
   // APPLICAZIONE PRESET MODELLO B
   const applyTemplateB = () => {
-    onUpdate("selectedTemplate", "B");
-    onUpdate("coupleNames", "Francesca & Luca");
-    onUpdate("introStart", "nuvole");
-    onUpdate("dateDisplayMode", "scratch");
-    onUpdate("scheduleSchema", "timeline");
-    onUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
-    onUpdate("selectedPaletteIdx", 1);
+    handleUpdate("selectedTemplate", "B");
+    handleUpdate("coupleNames", "Francesca & Luca");
+    handleUpdate("introStart", "nuvole");
+    handleUpdate("dateDisplayMode", "scratch");
+    handleUpdate("scheduleSchema", "timeline");
+    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
+    handleUpdate("selectedPaletteIdx", 1);
   };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
@@ -122,7 +162,7 @@ export default function ConfiguratorForm({
             type="button"
             onClick={applyTemplateA}
             className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "A"
+              activeTemplate === "A"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -135,7 +175,7 @@ export default function ConfiguratorForm({
             type="button"
             onClick={applyTemplateB}
             className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "B"
+              activeTemplate === "B"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -172,8 +212,8 @@ export default function ConfiguratorForm({
           <div>
             <label className="block text-[11px] font-bold mb-1">Effetto Start Iniziale</label>
             <select
-              value={introStart}
-              onChange={(e) => onUpdate("introStart", e.target.value)}
+              value={activeStart}
+              onChange={(e) => handleUpdate("introStart", e.target.value)}
               className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
@@ -188,7 +228,7 @@ export default function ConfiguratorForm({
             <label className="block text-[11px] font-bold mb-1">Tema dell&apos;Evento</label>
             <select
               value={eventThemePreset}
-              onChange={(e) => onUpdate("eventThemePreset", e.target.value)}
+              onChange={(e) => handleUpdate("eventThemePreset", e.target.value)}
               className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(EVENT_THEMES || []).map((t, idx) => (
@@ -205,7 +245,7 @@ export default function ConfiguratorForm({
             type="text"
             placeholder="Es. Country Chic Vintage..."
             value={customEventTheme}
-            onChange={(e) => onUpdate("customEventTheme", e.target.value)}
+            onChange={(e) => handleUpdate("customEventTheme", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
           />
         )}
@@ -235,7 +275,7 @@ export default function ConfiguratorForm({
           <input
             type="text"
             value={coupleNames}
-            onChange={(e) => onUpdate("coupleNames", e.target.value)}
+            onChange={(e) => handleUpdate("coupleNames", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
           />
         </div>
@@ -244,7 +284,7 @@ export default function ConfiguratorForm({
           <label className="block text-[11px] font-bold mb-1">Frase d&apos;Accoglienza Preset</label>
           <select
             value={selectedPhrasePreset}
-            onChange={(e) => onUpdate("selectedPhrasePreset", e.target.value)}
+            onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
@@ -259,7 +299,7 @@ export default function ConfiguratorForm({
               rows={2}
               placeholder="Scrivi la tua frase speciale d'accoglienza..."
               value={customWelcomePhrase}
-              onChange={(e) => onUpdate("customWelcomePhrase", e.target.value)}
+              onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
               className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif"
             />
           )}
@@ -291,7 +331,7 @@ export default function ConfiguratorForm({
             <input
               type="text"
               value={weddingDateDay}
-              onChange={(e) => onUpdate("weddingDateDay", e.target.value)}
+              onChange={(e) => handleUpdate("weddingDateDay", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -300,7 +340,7 @@ export default function ConfiguratorForm({
             <input
               type="text"
               value={weddingDateMonth}
-              onChange={(e) => onUpdate("weddingDateMonth", e.target.value)}
+              onChange={(e) => handleUpdate("weddingDateMonth", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -309,7 +349,7 @@ export default function ConfiguratorForm({
             <input
               type="text"
               value={weddingDateYear}
-              onChange={(e) => onUpdate("weddingDateYear", e.target.value)}
+              onChange={(e) => handleUpdate("weddingDateYear", e.target.value)}
               className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
@@ -318,8 +358,8 @@ export default function ConfiguratorForm({
         <div>
           <label className="block text-[11px] font-bold mb-1">Modulo Visualizzazione Data</label>
           <select
-            value={dateDisplayMode}
-            onChange={(e) => onUpdate("dateDisplayMode", e.target.value)}
+            value={activeDateMode}
+            onChange={(e) => handleUpdate("dateDisplayMode", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(DATE_DISPLAY_MODES || []).map((mode) => (
@@ -340,8 +380,8 @@ export default function ConfiguratorForm({
         <div>
           <label className="block text-[11px] font-bold mb-1">Schema Visualizzazione Orari</label>
           <select
-            value={scheduleSchema}
-            onChange={(e) => onUpdate("scheduleSchema", e.target.value)}
+            value={activeSchedule}
+            onChange={(e) => handleUpdate("scheduleSchema", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(SCHEDULE_SCHEMAS || []).map((item) => (
@@ -363,7 +403,7 @@ export default function ConfiguratorForm({
           <label className="block text-[11px] font-bold mb-1">Brano Inedito per gli Sposi</label>
           <select
             value={audioUrl}
-            onChange={(e) => onUpdate("audioUrl", e.target.value)}
+            onChange={(e) => handleUpdate("audioUrl", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(AUDIO_DEMOS || []).map((track) => (
@@ -400,7 +440,7 @@ export default function ConfiguratorForm({
             <input
               type="text"
               value={locationName}
-              onChange={(e) => onUpdate("locationName", e.target.value)}
+              onChange={(e) => handleUpdate("locationName", e.target.value)}
               className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
@@ -409,7 +449,7 @@ export default function ConfiguratorForm({
             <input
               type="text"
               value={locationAddress}
-              onChange={(e) => onUpdate("locationAddress", e.target.value)}
+              onChange={(e) => handleUpdate("locationAddress", e.target.value)}
               className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
@@ -439,12 +479,12 @@ export default function ConfiguratorForm({
           <label className="block text-[11px] font-bold mb-2">Seleziona Palette (8 Opzioni Coordinate)</label>
           <div className="grid grid-cols-2 gap-2">
             {palettesList.map((p: any, idx: number) => {
-              const isSelected = selectedPaletteIdx === idx;
+              const isSelected = activePaletteIdx === idx;
               return (
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => onUpdate("selectedPaletteIdx", idx)}
+                  onClick={() => handleUpdate("selectedPaletteIdx", idx)}
                   className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
@@ -472,7 +512,7 @@ export default function ConfiguratorForm({
           <input
             type="text"
             value={dressCodeNotes}
-            onChange={(e) => onUpdate("dressCodeNotes", e.target.value)}
+            onChange={(e) => handleUpdate("dressCodeNotes", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
           />
         </div>
@@ -502,7 +542,7 @@ export default function ConfiguratorForm({
           <input
             type="text"
             value={customIban}
-            onChange={(e) => onUpdate("customIban", e.target.value)}
+            onChange={(e) => handleUpdate("customIban", e.target.value)}
             className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold"
           />
         </div>
@@ -531,7 +571,7 @@ export default function ConfiguratorForm({
           <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP</label>
           <select
             value={rsvpStyle}
-            onChange={(e) => onUpdate("rsvpStyle", e.target.value)}
+            onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(RSVP_STYLES || []).map((style) => (
