@@ -9,7 +9,7 @@ export interface ScheduleItem {
   title: string;
 }
 
-interface TimelineHowItWorksProps {
+export interface TimelineHowItWorksProps {
   items?: ScheduleItem[];
   accentColor?: string;
   className?: string;
