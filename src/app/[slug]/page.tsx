@@ -37,6 +37,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   
+  // Assegnazione Automatica dei 2 Brani Ufficiali dell'Ecosistema in base allo Slug
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -49,9 +50,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [suonaMusica, setSuonaMusica] = useState(false);
 
   const palettes = DRESS_CODE_PALETTES || [
-    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"] },
+    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"], textColor: "#3A1C24", accentColor: "#C97082" },
   ];
   const activePalette = palettes[paletteIdx] || palettes[0];
+  const textColor = activePalette.textColor || "#1E293B";
+  const accentColor = activePalette.accentColor || "#8B6508";
 
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos = (photosMap[paletteIdx % 8] || photosMap[0] || []);
@@ -76,8 +79,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   return (
     <div
       className="min-h-screen w-full overflow-x-hidden transition-colors"
-      style={{ backgroundColor: (activePalette?.colors && activePalette.colors[0]) || "#FAF7F2", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}
+      style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
     >
+      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -113,38 +117,38 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         <div className="text-center space-y-3 pt-2">
-          <span className="text-xs uppercase tracking-widest font-bold" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <span className="text-xs uppercase tracking-widest font-bold" style={{ color: accentColor }}>
             Il Matrimonio di {coupleNames}
           </span>
-          <h1 className="text-4xl font-serif font-bold drop-shadow-xs" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>{coupleNames}</h1>
+          <h1 className="text-4xl font-serif font-bold drop-shadow-xs" style={{ color: textColor }}>{coupleNames}</h1>
           <p className="text-sm font-bold text-slate-700">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <blockquote className="text-sm italic font-serif opacity-90 px-4 mt-2 font-medium" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
+          <blockquote className="text-sm italic font-serif opacity-90 px-4 mt-2 font-medium" style={{ color: textColor }}>
             &quot;{welcomePhrase}&quot;
           </blockquote>
         </div>
 
         {dateMode === "countdown" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
-            <div className="flex justify-center gap-4 font-serif font-bold text-xl" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <div><span className="block text-2xl" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
+            <div className="flex justify-center gap-4 font-serif font-bold text-xl" style={{ color: textColor }}>
+              <div><span className="block text-2xl" style={{ color: accentColor }}>129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
+              <div><span className="block text-2xl" style={{ color: accentColor }}>14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
+              <div><span className="block text-2xl" style={{ color: accentColor }}>23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
               <span>:</span>
-              <div><span className="block text-2xl" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
+              <div><span className="block text-2xl" style={{ color: accentColor }}>17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
             </div>
           </div>
         )}
 
         {dateMode === "scratch" && showGrattaData && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               🎰 Gratta col dito per scoprire la data
             </span>
             <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
@@ -153,53 +157,53 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
-            <div className="space-y-2 text-sm font-serif pt-1" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <p><strong className="font-sans" style={{ color: activePalette?.colors?.[3] }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="font-sans" style={{ color: activePalette?.colors?.[3] }}>17:00</strong> — Cerimonia di Nozze</p>
-              <p><strong className="font-sans" style={{ color: activePalette?.colors?.[3] }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-              <p><strong className="font-sans" style={{ color: activePalette?.colors?.[3] }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-              <p><strong className="font-sans" style={{ color: activePalette?.colors?.[3] }}>22:00</strong> — Festa &amp; Open Bar</p>
+            <div className="space-y-2 text-sm font-serif pt-1" style={{ color: textColor }}>
+              <p><strong className="font-sans" style={{ color: accentColor }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>17:00</strong> — Cerimonia di Nozze</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
+              <p><strong className="font-sans" style={{ color: accentColor }}>22:00</strong> — Festa &amp; Open Bar</p>
             </div>
           </div>
         )}
 
         {schedule === "timeline" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               📍 Timeline Verticale Orari
             </span>
-            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: (activePalette?.colors && activePalette.colors[3]) || "#D4AF37", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <div><span className="font-bold" style={{ color: activePalette?.colors?.[3] }}>16:30</span> — Accoglienza Ospiti</div>
-              <div><span className="font-bold" style={{ color: activePalette?.colors?.[3] }}>17:00</span> — Cerimonia Solenne</div>
-              <div><span className="font-bold" style={{ color: activePalette?.colors?.[3] }}>18:30</span> — Aperitivo in Giardino</div>
-              <div><span className="font-bold" style={{ color: activePalette?.colors?.[3] }}>20:00</span> — Cena &amp; Torta</div>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: accentColor, color: textColor }}>
+              <div><span className="font-bold" style={{ color: accentColor }}>16:30</span> — Accoglienza Ospiti</div>
+              <div><span className="font-bold" style={{ color: accentColor }}>17:00</span> — Cerimonia Solenne</div>
+              <div><span className="font-bold" style={{ color: accentColor }}>18:30</span> — Aperitivo in Giardino</div>
+              <div><span className="font-bold" style={{ color: accentColor }}>20:00</span> — Cena &amp; Torta</div>
             </div>
           </div>
         )}
 
         {schedule === "schede" && (
           <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <span className="block text-xs" style={{ color: activePalette?.colors?.[3] }}>16:30</span> Accoglienza
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+              <span className="block text-xs" style={{ color: accentColor }}>16:30</span> Accoglienza
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <span className="block text-xs" style={{ color: activePalette?.colors?.[3] }}>17:00</span> Cerimonia
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+              <span className="block text-xs" style={{ color: accentColor }}>17:00</span> Cerimonia
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <span className="block text-xs" style={{ color: activePalette?.colors?.[3] }}>18:30</span> Aperitivo
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+              <span className="block text-xs" style={{ color: accentColor }}>18:30</span> Aperitivo
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687", color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
-              <span className="block text-xs" style={{ color: activePalette?.colors?.[3] }}>20:00</span> Cena &amp; Torta
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+              <span className="block text-xs" style={{ color: accentColor }}>20:00</span> Cena &amp; Torta
             </div>
           </div>
         )}
 
         {schedule === "minimal" && (
-          <div className="p-4 text-center space-y-2 font-serif text-sm" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>
+          <div className="p-4 text-center space-y-2 font-serif text-sm" style={{ color: textColor }}>
             <p>16:30 • Accoglienza Ospiti</p>
             <p>17:00 • Cerimonia di Nozze</p>
             <p>18:30 • Aperitivo</p>
@@ -208,11 +212,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showMappa && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
-              <MapPin className="w-4 h-4" style={{ color: activePalette?.colors?.[3] }} /> Location del Matrimonio
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
+              <MapPin className="w-4 h-4" style={{ color: accentColor }} /> Location del Matrimonio
             </span>
-            <h3 className="font-serif font-bold text-xl" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>{locationName}</h3>
+            <h3 className="font-serif font-bold text-xl" style={{ color: textColor }}>{locationName}</h3>
             <p className="text-xs text-slate-600">{locationAddress}</p>
 
             <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
@@ -232,7 +236,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-bold text-white px-4 py-2.5 rounded-xl transition-colors shadow-md"
-              style={{ backgroundColor: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}
+              style={{ backgroundColor: textColor }}
             >
               <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
             </a>
@@ -240,11 +244,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showDressCode && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#D4AF37" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
-            <p className="text-xs font-serif leading-relaxed" style={{ color: (activePalette?.colors && activePalette.colors[4]) || "#1E293B" }}>{dressCodeNotes}</p>
+            <p className="text-xs font-serif leading-relaxed" style={{ color: textColor }}>{dressCodeNotes}</p>
 
             <div className="flex justify-center gap-2">
               {(activePalette?.colors || []).map((color, i) => (
@@ -276,9 +280,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: (activePalette?.colors && activePalette.colors[1]) || "#FFFFFF", borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: (activePalette?.colors && activePalette.colors[3]) || "#8B6508" }}>
-              <Gift className="w-4 h-4" style={{ color: activePalette?.colors?.[3] }} /> Lista Nozze &amp; Coordinate IBAN
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
+              <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
             <p className="text-xs text-slate-600 font-serif">
               Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
