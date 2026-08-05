@@ -47,6 +47,7 @@ export interface AgencyPreviewProps {
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
   partnerStores?: any[];
+  showAmazonAffiliate?: boolean;
   scheduleItems?: ScheduleItem[];
   heroBgImage?: string;
   heroMediaImage?: string;
@@ -77,6 +78,7 @@ export default function AgencyPreview({
   dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
   selectedPaletteIdx = 0,
   partnerStores = [],
+  showAmazonAffiliate = true,
   scheduleItems = [
     { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
     { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
@@ -179,21 +181,19 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* EFFETTO 1: BUSTA 3D */}
+        {/* EFFETTI START */}
         {introStart === "busta" && modules.busta3d && (
           <div className="p-2">
             <EnvelopeWax coupleNames={coupleNames} inline={true} />
           </div>
         )}
 
-        {/* EFFETTO 2: NUVOLE 3D */}
         {introStart === "nuvole" && modules.nuvole3d && (
           <div className="relative py-1">
             <PartingClouds inline={true} />
           </div>
         )}
 
-        {/* EFFETTO 3: SPECCHIO D'ACQUA CAUSTICO */}
         {introStart === "lago" && !startClosed && (
           <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
             <WaterRippleImage src={heroBgImage} onClick={() => setStartClosed(true)} />
@@ -208,7 +208,6 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* EFFETTO 4: ZOOM MULTIMEDIALE ALLO SCROLL */}
         {introStart === "expand" && (
           <div className="py-1 px-2">
             <ScrollExpandMedia
@@ -220,7 +219,6 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* EFFETTO 5: ORIZZONTE COSMICO 3D */}
         {introStart === "cosmos" && !startClosed && (
           <div className="relative w-full h-[300px]">
             <CosmosHero
@@ -288,7 +286,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA CON TIMELINE 21st.dev */}
+        {/* PROGRAMMA GIORNATA - TUTTI I 5 SCHEMI VISIBILI */}
         {scheduleSchema === "howitworks" && (
           <div className="mx-3 my-3 p-2 rounded-2xl border text-center shadow-sm bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-1" style={{ color: accentColor }}>
@@ -310,6 +308,41 @@ export default function AgencyPreview({
                 </p>
               ))}
             </div>
+          </div>
+        )}
+
+        {scheduleSchema === "timeline" && (
+          <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-2" style={{ color: accentColor }}>
+              📍 Timeline Verticale Orari
+            </span>
+            <div className="relative pl-6 space-y-2 text-left border-l-2 text-xs" style={{ borderColor: accentColor, color: textColor }}>
+              {scheduleItems.map((item) => (
+                <div key={item.id}>
+                  <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {scheduleSchema === "schede" && (
+          <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
+            {scheduleItems.map((item) => (
+              <div key={item.id} className="p-2.5 rounded-xl border font-bold bg-white border-slate-200 shadow-sm" style={{ color: textColor }}>
+                <span className="block text-[10px]" style={{ color: accentColor }}>{item.time}</span> {item.title}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {scheduleSchema === "minimal" && (
+          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs bg-white/60 rounded-2xl border border-slate-200 shadow-sm" style={{ color: textColor }}>
+            {scheduleItems.map((item) => (
+              <p key={item.id}>
+                <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> • {item.title}
+              </p>
+            ))}
           </div>
         )}
 
@@ -383,7 +416,7 @@ export default function AgencyPreview({
         {/* NEGOZI CONVENZIONATI */}
         {modules.negoziConvenzionati && (
           <div className="p-2">
-            <PartnerStores stores={partnerStores} />
+            <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />
           </div>
         )}
 
