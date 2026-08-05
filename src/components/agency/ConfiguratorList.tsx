@@ -1,104 +1,130 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Plus, ExternalLink, Download, Edit3 } from "lucide-react";
+import { FolderHeart, ExternalLink, Trash2, Edit3, FileSpreadsheet, Calendar, Sparkles } from "lucide-react";
 
-export default function ConfiguratorList(props: any) {
-  const { setCoupleNames, setActiveTab } = props;
+export interface CreatedInvitation {
+  id: string;
+  coupleNames: string;
+  date: string;
+  template: string;
+  paletteName: string;
+  slug: string;
+  status: "Attivo" | "Bozza";
+}
 
-  const sampleCreatedInvitations = [
+export default function ConfiguratorList() {
+  const [invitations, setInvitations] = useState<CreatedInvitation[]>([
     {
       id: "1",
-      couple: "Elena & Davide",
+      coupleNames: "Elena & Davide",
       date: "15 Settembre 2026",
-      location: "Villa Rosa (Roma)",
-      template: "Template A (Classico)",
+      template: "Modello A",
+      paletteName: "Oro Bruciato & Champagne",
       slug: "elena-e-davide",
       status: "Attivo",
-      rsvpCount: 84,
     },
     {
       id: "2",
-      couple: "Francesca & Luca",
-      date: "28 Ottobre 2026",
-      location: "Castello Sforzesco (Milano)",
-      template: "Template B (Cielo 3D)",
+      coupleNames: "Francesca & Luca",
+      date: "20 Giugno 2026",
+      template: "Modello B",
+      paletteName: "Rosa Cipria & Seta",
       slug: "francesca-e-luca",
       status: "Attivo",
-      rsvpCount: 112,
     },
     {
       id: "3",
-      couple: "Marco & Sofia",
-      date: "10 Maggio 2027",
-      location: "Tenuta Borgo Antico (Firenze)",
-      template: "Template A (Smeraldo)",
-      slug: "marco-e-giulia",
+      coupleNames: "Giulia & Marco",
+      date: "10 Ottobre 2026",
+      template: "Modello A",
+      paletteName: "Lavanda & Lillà",
+      slug: "giulia-e-marco",
       status: "Bozza",
-      rsvpCount: 45,
     },
-  ];
+  ]);
+
+  // FUNZIONE DI ELIMINAZIONE INVITO
+  const handleDeleteInvitation = (id: string, coupleNames: string) => {
+    if (window.confirm(`Sei sicuro di voler eliminare definitivamente l'invito per ${coupleNames}?`)) {
+      setInvitations((prev) => prev.filter((item) => item.id !== id));
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(`love_invitation_${coupleNames.toLowerCase().replace(/[^a-z0-9]/g, "-")}`);
+        } catch {}
+      }
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="w-full space-y-6 text-[#1E293B]">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-[#1E293B]">I Tuoi Inviti Creati</h2>
-          <p className="text-xs text-slate-500">Gestisci i matrimoni attivi della tua agenzia (3 di 10 sbloccati)</p>
+          <h2 className="text-base font-serif font-bold text-[#8B6508] flex items-center gap-2">
+            <FolderHeart className="w-5 h-5 text-[#D4AF37]" /> Inviti Già Creati ({invitations.length})
+          </h2>
+          <p className="text-xs text-slate-600 mt-1 font-serif">
+            Gestisci, modifica ed esporta la lista catering dei matrimoni della tua agenzia.
+          </p>
         </div>
-        {setActiveTab && (
-          <button
-            type="button"
-            onClick={() => setActiveTab("create")}
-            className="px-4 py-2 bg-[#D4AF37] text-slate-900 text-xs font-bold rounded-xl hover:bg-amber-400 transition-all flex items-center gap-1.5 shadow-sm"
-          >
-            <Plus className="w-4 h-4" /> Crea Nuovo Invito
-          </button>
-        )}
       </div>
 
-      <div className="space-y-3">
-        {sampleCreatedInvitations.map((item) => (
-          <div key={item.id} className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div className="space-y-4">
+        {invitations.map((item) => (
+          <div
+            key={item.id}
+            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md hover:border-[#D4AF37] transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+          >
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <h4 className="font-serif font-bold text-base text-[#1E293B]">{item.couple}</h4>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                  item.status === "Attivo" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
-                }`}>
+                <span className="text-sm font-serif font-bold text-[#1E293B]">{item.coupleNames}</span>
+                <span
+                  className={`px-2 py-0.5 text-[9px] font-bold rounded-full ${
+                    item.status === "Attivo"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : "bg-amber-100 text-amber-800"
+                  }`}
+                >
                   {item.status}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">📅 {item.date} • 📍 {item.location}</p>
-              <p className="text-[10px] text-slate-400 font-bold">🎨 {item.template} • ✉️ {item.rsvpCount} Conferme RSVP</p>
+              <div className="flex items-center gap-3 text-xs text-slate-500 font-serif">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" /> {item.date}
+                </span>
+                <span>• {item.template}</span>
+                <span>• {item.paletteName}</span>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-              <Link href={`/${item.slug}`} target="_blank" className="p-2 bg-[#FAF7F2] text-[#1E293B] hover:text-[#B8860B] rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1">
-                <ExternalLink className="w-3.5 h-3.5" /> Live
+            {/* AZIONI E PULSANTE ELIMINA */}
+            <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+              <Link
+                href={`/${item.slug}`}
+                target="_blank"
+                className="px-3 py-1.5 text-xs font-bold bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-xl hover:bg-amber-100 transition-colors flex items-center gap-1.5"
+              >
+                <ExternalLink className="w-3.5 h-3.5" /> Apri Invito ↗
               </Link>
+
               <button
                 type="button"
-                onClick={() => {
-                  if (setCoupleNames) setCoupleNames(item.couple);
-                  if (setActiveTab) setActiveTab("create");
-                }}
-                className="p-2 bg-[#FAF7F2] text-[#1E293B] hover:text-[#B8860B] rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1"
+                onClick={() => handleDeleteInvitation(item.id, item.coupleNames)}
+                className="px-3 py-1.5 text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-100 transition-colors flex items-center gap-1.5 cursor-pointer"
+                title="Elimina Invito"
               >
-                <Edit3 className="w-3.5 h-3.5" /> Modifica
-              </button>
-              <button
-                type="button"
-                onClick={() => alert(`Download File Excel Catering per ${item.couple} avviato!`)}
-                className="p-2 bg-[#1E293B] text-white hover:bg-slate-800 rounded-xl text-xs font-bold flex items-center gap-1"
-                title="Export Excel Catering"
-              >
-                <Download className="w-3.5 h-3.5 text-[#D4AF37]" /> Excel Catering
+                <Trash2 className="w-3.5 h-3.5" /> Elimina
               </button>
             </div>
           </div>
         ))}
+
+        {invitations.length === 0 && (
+          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-serif text-sm">
+            Nessun invito salvato nell&apos;archivio agenzia.
+          </div>
+        )}
       </div>
     </div>
   );
