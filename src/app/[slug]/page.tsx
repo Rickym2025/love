@@ -28,6 +28,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
   const dateMode = searchParams?.get("dateMode") || "countdown";
   const schedule = searchParams?.get("schedule") || "classico";
+  const rsvpStyle = searchParams?.get("rsvpStyle") || "classico";
 
   const coupleNames = searchParams?.get("couple") || (isTemplateB ? "Francesca & Luca" : "Elena & Davide");
   const weddingDateDay = searchParams?.get("day") || "15";
@@ -37,7 +38,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   
-  // Assegnazione Automatica dei 2 Brani Ufficiali dell'Ecosistema in base allo Slug
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -81,7 +81,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
     >
-      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -155,7 +154,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -293,10 +291,14 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP DINAMICO SULLE PALETTE COLORI */}
+        {/* MODULO RSVP PASSA ORA ESPLICITAMENTE rsvpStyle PER RENDERIZZARE I 3 MODELLI */}
         {showRsvp && (
           <div className="pt-2">
-            <RsvpForm coupleNames={coupleNames} paletteColors={activePalette?.colors} />
+            <RsvpForm
+              coupleNames={coupleNames}
+              paletteColors={activePalette?.colors}
+              rsvpStyle={rsvpStyle}
+            />
           </div>
         )}
 
