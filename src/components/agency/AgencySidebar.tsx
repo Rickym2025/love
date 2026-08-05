@@ -8,6 +8,7 @@ export interface AgencySidebarProps {
   agencyId?: string;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  createdCount?: number;
   style?: React.CSSProperties;
 }
 
@@ -15,6 +16,7 @@ export default function AgencySidebar({
   agencyId = "sposi-in-love",
   activeTab,
   setActiveTab,
+  createdCount = 3,
   style,
 }: AgencySidebarProps) {
   const [richiestaAperta, setRichiestaAperta] = useState(false);
@@ -38,7 +40,7 @@ export default function AgencySidebar({
         {/* LOGO AGENZIA */}
         <div className="flex items-center gap-3 border-b border-slate-700/60 pb-4">
           <div className="relative w-10 h-10 flex-shrink-0 drop-shadow">
-            <Image src="/logo.png" alt="Logo Agenzia" fill className="object-contain" priority />
+            <Image src="/logo.png" alt="Logo Agenzia" fill className="object-contain" priority unoptimized />
           </div>
           <div className="overflow-hidden">
             <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1">
@@ -73,7 +75,7 @@ export default function AgencySidebar({
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
             }`}
           >
-            <FolderHeart className="w-4 h-4 text-[#D4AF37]" /> Inviti Già Creati (3)
+            <FolderHeart className="w-4 h-4 text-[#D4AF37]" /> Inviti Già Creati ({createdCount})
           </button>
 
           <button
@@ -90,7 +92,7 @@ export default function AgencySidebar({
         </nav>
       </div>
 
-      {/* MODULO RICHIESTA WEB3FORMS CON EVIDENTE EFFETTO GLOW DORATO */}
+      {/* MODULO RICHIESTA WEB3FORMS */}
       <div className="pt-6 border-t border-slate-700/60 text-[10px] space-y-3">
         {!richiestaAperta ? (
           <button
@@ -133,7 +135,7 @@ export default function AgencySidebar({
 
         <div className="text-slate-400">
           <p className="font-bold text-[#D4AF37]">Piano Agency Hub Attivo</p>
-          <p className="mt-0.5">3 di 10 Matrimoni Utilizzati</p>
+          <p className="mt-0.5">{createdCount} di 10 Matrimoni Utilizzati</p>
         </div>
       </div>
     </aside>
