@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2 } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -13,15 +13,17 @@ import {
   AUDIO_DEMOS
 } from "./constants";
 
+export interface ScheduleItem {
+  id: string;
+  time: string;
+  title: string;
+}
+
 export interface ConfiguratorFormProps {
   selectedTemplate?: "A" | "B";
-  template?: "A" | "B";
   introStart?: string;
-  start?: string;
   dateDisplayMode?: string;
-  dateMode?: string;
   scheduleSchema?: string;
-  schedule?: string;
   rsvpStyle?: string;
   eventThemePreset?: string;
   customEventTheme?: string;
@@ -37,25 +39,20 @@ export interface ConfiguratorFormProps {
   customWelcomePhrase?: string;
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
-  palette?: number;
   customIban?: string;
-  marqueeText?: string;
+  scheduleItems?: ScheduleItem[];
+  localStoreName?: string;
+  localStoreUrl?: string;
   modules?: Record<string, boolean>;
   onUpdate?: (field: string, value: any) => void;
-  onChange?: (field: string, value: any) => void;
-  updateField?: (field: string, value: any) => void;
 }
 
 export default function ConfiguratorForm(props: ConfiguratorFormProps) {
   const {
     selectedTemplate = "A",
-    template,
     introStart = "busta",
-    start,
     dateDisplayMode = "countdown",
-    dateMode,
     scheduleSchema = "classico",
-    schedule,
     rsvpStyle = "classico",
     eventThemePreset = "Luxury Gold & Total White",
     customEventTheme = "",
@@ -66,13 +63,20 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     locationName = "Villa Rosa",
     locationAddress = "Via Roma 1, Roma",
     audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-    welcomePhrase = "Benvenuti al nostro matrimonio",
     selectedPhrasePreset = "0",
     customWelcomePhrase = "",
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPaletteIdx = 0,
-    palette,
     customIban = "IT60 X 05428 11101 000000123456",
+    scheduleItems = [
+      { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+      { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+      { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+      { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+      { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+    ],
+    localStoreName = "Gioielleria & Lista Nozze Locale",
+    localStoreUrl = "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
     modules = {
       busta3d: true,
       grattaData: true,
@@ -86,39 +90,20 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       confermaRsvp: true,
     },
     onUpdate,
-    onChange,
-    updateField,
   } = props;
 
-  // FUNZIONE DI UPDATE GARANTITA E CLICCABILE
   const handleUpdate = (field: string, value: any) => {
-    const fn =
-      typeof onUpdate === "function"
-        ? onUpdate
-        : typeof onChange === "function"
-        ? onChange
-        : typeof updateField === "function"
-        ? updateField
-        : typeof (props as any).handleChange === "function"
-        ? (props as any).handleChange
-        : null;
-
-    if (fn) {
-      fn(field, value);
+    if (typeof onUpdate === "function") {
+      onUpdate(field, value);
     }
   };
-
-  const activeTemplate = selectedTemplate || template || "A";
-  const activeStart = introStart || start || "busta";
-  const activeDateMode = dateDisplayMode || dateMode || "countdown";
-  const activeSchedule = scheduleSchema || schedule || "classico";
-  const activePaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
 
   const toggleModule = (key: string) => {
     const currentModules = modules || {};
     handleUpdate("modules", { ...currentModules, [key]: !currentModules[key] });
   };
 
+  // APPLICAZIONE PRESET MODELLO A
   const applyTemplateA = () => {
     handleUpdate("selectedTemplate", "A");
     handleUpdate("coupleNames", "Elena & Davide");
@@ -129,6 +114,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("selectedPaletteIdx", 0);
   };
 
+  // APPLICAZIONE PRESET MODELLO B
   const applyTemplateB = () => {
     handleUpdate("selectedTemplate", "B");
     handleUpdate("coupleNames", "Francesca & Luca");
@@ -139,27 +125,44 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("selectedPaletteIdx", 1);
   };
 
+  // FUNZIONI DEDICATE AL PROGRAMMA ORARI DINAMICO
+  const addScheduleItem = () => {
+    const newItem: ScheduleItem = {
+      id: Date.now().toString(),
+      time: "23:00",
+      title: "Nuovo Momento della Festa",
+    };
+    handleUpdate("scheduleItems", [...scheduleItems, newItem]);
+  };
+
+  const updateScheduleItem = (id: string, field: "time" | "title", value: string) => {
+    const updated = scheduleItems.map((item) => (item.id === id ? { ...item, [field]: value } : item));
+    handleUpdate("scheduleItems", updated);
+  };
+
+  const removeScheduleItem = (id: string) => {
+    const updated = scheduleItems.filter((item) => item.id !== id);
+    handleUpdate("scheduleItems", updated);
+  };
+
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
     : Object.values(DRESS_CODE_PALETTES || {});
 
   return (
-    <div className="w-full space-y-6 text-[#1E293B] pointer-events-auto select-text relative z-20">
+    <div className="w-full space-y-6 text-[#1E293B]">
       {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
         </h3>
-        <p className="text-[11px] text-slate-600">
-          Seleziona uno dei due modelli d&apos;autore per caricare il layout di esempio:
-        </p>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
           <button
             type="button"
             onClick={applyTemplateA}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer pointer-events-auto ${
-              activeTemplate === "A"
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "A"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -171,8 +174,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={applyTemplateB}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer pointer-events-auto ${
-              activeTemplate === "B"
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "B"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
@@ -184,10 +187,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       </div>
 
       {/* ✦ 1. EFFETTO DI APERTURA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura
+            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura &amp; Tema Evento
           </h3>
           <button
             type="button"
@@ -195,10 +198,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               toggleModule("busta3d");
               toggleModule("nuvole3d");
             }}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.busta3d || modules?.nuvole3d
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.busta3d || modules?.nuvole3d ? "✓ Attivo" : "✕ Disattivo"}
@@ -209,9 +212,9 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <div>
             <label className="block text-[11px] font-bold mb-1">Effetto Start Iniziale</label>
             <select
-              value={activeStart}
+              value={introStart}
               onChange={(e) => handleUpdate("introStart", e.target.value)}
-              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
@@ -226,7 +229,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <select
               value={eventThemePreset}
               onChange={(e) => handleUpdate("eventThemePreset", e.target.value)}
-              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
             >
               {(EVENT_THEMES || []).map((t, idx) => (
                 <option key={idx} value={t}>
@@ -238,18 +241,21 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         {eventThemePreset === "Personalizzato (digita a mano)" && (
-          <input
-            type="text"
-            placeholder="Es. Country Chic Vintage..."
-            value={customEventTheme}
-            onChange={(e) => handleUpdate("customEventTheme", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto"
-          />
+          <div>
+            <label className="block text-[11px] font-bold mb-1 text-[#8B6508]">Scrivi il tuo Tema Personalizzato</label>
+            <input
+              type="text"
+              placeholder="Es. Country Chic Vintage, Mare & Coralli..."
+              value={customEventTheme}
+              onChange={(e) => handleUpdate("customEventTheme", e.target.value)}
+              className="w-full text-xs p-2.5 rounded-xl border border-[#D4AF37] bg-white font-bold"
+            />
+          </div>
         )}
       </div>
 
       {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
@@ -257,10 +263,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("dedicheMarquee")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.dedicheMarquee
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.dedicheMarquee ? "✓ Attivo" : "✕ Disattivo"}
@@ -273,7 +279,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={coupleNames}
             onChange={(e) => handleUpdate("coupleNames", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold pointer-events-auto select-text"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
           />
         </div>
 
@@ -282,7 +288,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={selectedPhrasePreset}
             onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer pointer-events-auto"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
               <option key={idx} value={String(idx)}>
@@ -297,14 +303,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               placeholder="Scrivi la tua frase speciale d'accoglienza..."
               value={customWelcomePhrase}
               onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
-              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif pointer-events-auto select-text"
+              className="mt-2 w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-serif font-bold"
             />
           )}
         </div>
       </div>
 
       {/* ✦ 3. DATA E CONTO ALLA ROVESCIA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
@@ -312,10 +318,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("grattaData")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.grattaData
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.grattaData ? "✓ Attivo" : "✕ Disattivo"}
@@ -329,7 +335,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateDay}
               onChange={(e) => handleUpdate("weddingDateDay", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
           <div>
@@ -338,7 +344,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateMonth}
               onChange={(e) => handleUpdate("weddingDateMonth", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
           <div>
@@ -347,7 +353,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateYear}
               onChange={(e) => handleUpdate("weddingDateYear", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
             />
           </div>
         </div>
@@ -355,9 +361,9 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         <div>
           <label className="block text-[11px] font-bold mb-1">Modulo Visualizzazione Data</label>
           <select
-            value={activeDateMode}
+            value={dateDisplayMode}
             onChange={(e) => handleUpdate("dateDisplayMode", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(DATE_DISPLAY_MODES || []).map((mode) => (
               <option key={mode.id} value={mode.id}>
@@ -368,18 +374,27 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 4. PROGRAMMA DELLA GIORNATA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari
-        </h3>
+      {/* ✦ 4. PROGRAMMA DELLA GIORNATA E ORARI DINAMICI ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+        <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+            <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari Modificabili
+          </h3>
+          <button
+            type="button"
+            onClick={addScheduleItem}
+            className="px-2.5 py-1 text-[10px] font-bold bg-[#D4AF37] text-slate-900 rounded-lg flex items-center gap-1 hover:bg-amber-400 cursor-pointer shadow-xs"
+          >
+            <Plus className="w-3 h-3" /> Aggiungi Orario
+          </button>
+        </div>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Schema Visualizzazione Orari</label>
+          <label className="block text-[11px] font-bold mb-2">Schema Grafico Visualizzazione Orari</label>
           <select
-            value={activeSchedule}
+            value={scheduleSchema}
             onChange={(e) => handleUpdate("scheduleSchema", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer mb-3"
           >
             {(SCHEDULE_SCHEMAS || []).map((item) => (
               <option key={item.id} value={item.id}>
@@ -387,33 +402,77 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               </option>
             ))}
           </select>
+
+          {/* LISTA DEGLI EVENTI E ORARI EDITABILI */}
+          <div className="space-y-2">
+            <label className="block text-[11px] font-bold text-slate-700">Modifica Momenti ed Orari della Giornata:</label>
+            {scheduleItems.map((item) => (
+              <div key={item.id} className="flex gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
+                <input
+                  type="text"
+                  value={item.time}
+                  onChange={(e) => updateScheduleItem(item.id, "time", e.target.value)}
+                  className="w-20 text-xs p-1.5 font-bold text-center border border-slate-300 rounded-lg text-[#8B6508]"
+                  placeholder="16:30"
+                />
+                <input
+                  type="text"
+                  value={item.title}
+                  onChange={(e) => updateScheduleItem(item.id, "title", e.target.value)}
+                  className="flex-1 text-xs p-1.5 font-medium border border-slate-300 rounded-lg"
+                  placeholder="Descrizione momento..."
+                />
+                <button
+                  type="button"
+                  onClick={() => removeScheduleItem(item.id)}
+                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                  title="Elimina orario"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ✦ 5. COLONNA SONORA D'AUTORE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      {/* ✦ 5. COLONNA SONORA D'AUTORE / MP3 PERSONALIZZATO ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore FF Edizioni
+          <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
         </h3>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Brano Inedito per gli Sposi</label>
+          <label className="block text-[11px] font-bold mb-1">Seleziona Brano o Carica MP3</label>
           <select
             value={audioUrl}
             onChange={(e) => handleUpdate("audioUrl", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(AUDIO_DEMOS || []).map((track) => (
               <option key={track.id} value={track.url}>
                 {track.title}
               </option>
             ))}
+            <option value="custom">Incolla Link MP3 Personalizzato / Cloud</option>
           </select>
+
+          {audioUrl === "custom" && (
+            <div className="mt-2 space-y-1">
+              <label className="block text-[10px] font-bold text-[#8B6508]">URL File MP3 Personalizzato (Dropbox, R2, Drive...)</label>
+              <input
+                type="text"
+                placeholder="https://mio-server.com/musica-sposi.mp3"
+                onChange={(e) => handleUpdate("audioUrl", e.target.value)}
+                className="w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-mono"
+              />
+            </div>
+          )}
         </div>
       </div>
 
       {/* ✦ 6. LOCATION & MAPPA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
@@ -421,10 +480,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("locationMappa")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.locationMappa
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.locationMappa ? "✓ Attivo" : "✕ Disattivo"}
@@ -438,7 +497,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={locationName}
               onChange={(e) => handleUpdate("locationName", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
           <div>
@@ -447,14 +506,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={locationAddress}
               onChange={(e) => handleUpdate("locationAddress", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
             />
           </div>
         </div>
       </div>
 
       {/* ✦ 7. DRESS CODE & PALETTE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
@@ -462,10 +521,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("codiceAbbigliamento")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.codiceAbbigliamento
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.codiceAbbigliamento ? "✓ Attivo" : "✕ Disattivo"}
@@ -476,13 +535,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <label className="block text-[11px] font-bold mb-2">Seleziona Palette (8 Opzioni Coordinate)</label>
           <div className="grid grid-cols-2 gap-2">
             {palettesList.map((p: any, idx: number) => {
-              const isSelected = activePaletteIdx === idx;
+              const isSelected = selectedPaletteIdx === idx;
               return (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => handleUpdate("selectedPaletteIdx", idx)}
-                  className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer pointer-events-auto ${
+                  className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                       : "border-slate-200 bg-white hover:border-slate-300"
@@ -510,13 +569,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={dressCodeNotes}
             onChange={(e) => handleUpdate("dressCodeNotes", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
           />
         </div>
       </div>
 
-      {/* ✦ 8. LISTA NOZZE & IBAN ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      {/* ✦ 8. LISTA NOZZE, IBAN & NEGOZIO LOCALE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
@@ -524,10 +583,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("listaNozzeAmazon")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.listaNozzeAmazon
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.listaNozzeAmazon ? "✓ Attivo" : "✕ Disattivo"}
@@ -540,13 +599,33 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={customIban}
             onChange={(e) => handleUpdate("customIban", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold pointer-events-auto select-text"
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold"
           />
+        </div>
+
+        <div className="pt-2 border-t border-slate-100 space-y-2">
+          <span className="text-xs font-bold text-[#8B6508] block">Aggiungi Negozio Locale di Fiducia:</span>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="text"
+              placeholder="Es. Gioielleria Rossi..."
+              value={localStoreName}
+              onChange={(e) => handleUpdate("localStoreName", e.target.value)}
+              className="text-xs p-2 rounded-xl border border-slate-300 bg-white font-bold"
+            />
+            <input
+              type="text"
+              placeholder="https://gioielleriarossi.it"
+              value={localStoreUrl}
+              onChange={(e) => handleUpdate("localStoreUrl", e.target.value)}
+              className="text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
+            />
+          </div>
         </div>
       </div>
 
       {/* ✦ 9. CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
@@ -554,10 +633,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("confermaRsvp")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.confermaRsvp
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.confermaRsvp ? "✓ Attivo" : "✕ Disattivo"}
@@ -569,7 +648,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={rsvpStyle}
             onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
             {(RSVP_STYLES || []).map((style) => (
               <option key={style.id} value={style.id}>
@@ -584,10 +663,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("hubGiochiFesta")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.hubGiochiFesta
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
-                : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.hubGiochiFesta ? "✓ Attivo" : "✕ Disattivo"}
