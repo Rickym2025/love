@@ -5,11 +5,17 @@ import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
 
+export interface ScheduleItem {
+  id: string;
+  time: string;
+  title: string;
+}
+
 export default function AgencyStudioPage({ params }: { params?: { agencyId?: string } }) {
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
-  // Larghezze Ridimensionabili (Sidebar 250px, Preview 400px, Configuratore FLEX-1 CENTRALE)
+  // Larghezze Ridimensionabili
   const [sidebarWidth, setSidebarWidth] = useState(250);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
@@ -31,25 +37,50 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [weddingDateYear, setWeddingDateYear] = useState("2026");
   const [locationName, setLocationName] = useState("Villa Rosa");
   const [locationAddress, setLocationAddress] = useState("Via Roma 1, Roma");
-  const [audioUrl, setAudioUrl] = useState("");
+  const [audioUrl, setAudioUrl] = useState(
+    "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
+  );
   const [waterImageUrl, setWaterImageUrl] = useState("");
   const [selectedPhrasePreset, setSelectedPhrasePreset] = useState("0");
   const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
 
-  // Negozi Convenzionati con Link Affiliato Amazon Ufficiale Tag zero100store-21 e /logo.png
-  const [partnerStores, setPartnerStores] = useState<any[]>([
+  // Programma Orari Dinamico (Modificabile e Allungabile)
+  const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([
+    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+  ]);
+
+  // Negozio Locale Personalizzato
+  const [localStoreName, setLocalStoreName] = useState("Gioielleria & Lista Nozze Locale");
+  const [localStoreUrl, setLocalStoreUrl] = useState("https://www.amazon.it/baby-reg/homepage?tag=zero100store-21");
+
+  // Negozi Convenzionati (Amazon Affiliato + Negozio Locale)
+  const partnerStores = [
     {
       id: "amazon-default",
       name: "Lista Nozze Ufficiale Amazon",
       url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
       logoUrl: "/logo.png",
     },
-  ]);
+    ...(localStoreName
+      ? [
+          {
+            id: "local-store",
+            name: localStoreName,
+            url: localStoreUrl || "#",
+            logoUrl: "/logo.png",
+          },
+        ]
+      : []),
+  ];
 
   const [marqueeText, setMarqueeText] = useState(
-    "✦ Viva gli Sposi! ✦ Auguri di cuore da tutti gli invitati ✦ Un giorno di festa e amore ✦"
+    "✦ VIVA GLI SPOSI! ✦ AUGURI DI CUORE DALLA NOSTRA AGENZIA ✦ UN GIORNO DI FESTA E AMORE ✦"
   );
   const [customIban, setCustomIban] = useState("IT60 X 05428 11101 000000123456");
 
@@ -121,7 +152,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. COLONNA CENTRALE: CONFIGURATORE / LISTA INVITI (Spazio CENTRALE Flex-1) */}
+      {/* 2. COLONNA CENTRALE: CONFIGURATORE (Spazio FLEX-1 CENTRALE) */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         <AgencyConfigurator
           activeTab={activeTab}
@@ -166,8 +197,12 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           setDressCodeNotes={setDressCodeNotes}
           selectedPaletteIdx={selectedPaletteIdx}
           setSelectedPaletteIdx={setSelectedPaletteIdx}
-          partnerStores={partnerStores}
-          setPartnerStores={setPartnerStores}
+          scheduleItems={scheduleItems}
+          setScheduleItems={setScheduleItems}
+          localStoreName={localStoreName}
+          setLocalStoreName={setLocalStoreName}
+          localStoreUrl={localStoreUrl}
+          setLocalStoreUrl={setLocalStoreUrl}
           marqueeText={marqueeText}
           setMarqueeText={setMarqueeText}
           customIban={customIban}
@@ -187,7 +222,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. COLONNA DESTRE: PREVIEW LIVE SMARTPHONE */}
+      {/* 3. COLONNA DESTRA: UNICA E SOLA PREVIEW LIVE SMARTPHONE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
@@ -214,6 +249,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           dressCodeNotes={dressCodeNotes}
           selectedPaletteIdx={selectedPaletteIdx}
           partnerStores={partnerStores}
+          scheduleItems={scheduleItems}
           marqueeText={marqueeText}
           customIban={customIban}
           modules={modules}
