@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2 } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -17,6 +17,13 @@ export interface ScheduleItem {
   id: string;
   time: string;
   title: string;
+}
+
+export interface PartnerStoreItem {
+  id: string;
+  name: string;
+  url: string;
+  logoUrl?: string;
 }
 
 export interface ConfiguratorFormProps {
@@ -41,8 +48,8 @@ export interface ConfiguratorFormProps {
   selectedPaletteIdx?: number;
   customIban?: string;
   scheduleItems?: ScheduleItem[];
-  localStoreName?: string;
-  localStoreUrl?: string;
+  showAmazonAffiliate?: boolean;
+  customStores?: PartnerStoreItem[];
   modules?: Record<string, boolean>;
   onUpdate?: (field: string, value: any) => void;
 }
@@ -75,8 +82,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
       { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
     ],
-    localStoreName = "Gioielleria & Lista Nozze Locale",
-    localStoreUrl = "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
+    showAmazonAffiliate = true,
+    customStores = [
+      { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it" }
+    ],
     modules = {
       busta3d: true,
       grattaData: true,
@@ -103,29 +112,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("modules", { ...currentModules, [key]: !currentModules[key] });
   };
 
-  // APPLICAZIONE PRESET MODELLO A
-  const applyTemplateA = () => {
-    handleUpdate("selectedTemplate", "A");
-    handleUpdate("coupleNames", "Elena & Davide");
-    handleUpdate("introStart", "busta");
-    handleUpdate("dateDisplayMode", "countdown");
-    handleUpdate("scheduleSchema", "classico");
-    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
-    handleUpdate("selectedPaletteIdx", 0);
-  };
-
-  // APPLICAZIONE PRESET MODELLO B
-  const applyTemplateB = () => {
-    handleUpdate("selectedTemplate", "B");
-    handleUpdate("coupleNames", "Francesca & Luca");
-    handleUpdate("introStart", "nuvole");
-    handleUpdate("dateDisplayMode", "scratch");
-    handleUpdate("scheduleSchema", "timeline");
-    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
-    handleUpdate("selectedPaletteIdx", 1);
-  };
-
-  // FUNZIONI DEDICATE AL PROGRAMMA ORARI DINAMICO
+  // PROGRAMMA GIORNATA DINAMICO
   const addScheduleItem = () => {
     const newItem: ScheduleItem = {
       id: Date.now().toString(),
@@ -145,48 +132,33 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("scheduleItems", updated);
   };
 
+  // NEGOZI LOCALI MULTIPLI
+  const addCustomStore = () => {
+    const newStore: PartnerStoreItem = {
+      id: Date.now().toString(),
+      name: "Nuovo Negozio Locale",
+      url: "https://",
+    };
+    handleUpdate("customStores", [...customStores, newStore]);
+  };
+
+  const updateCustomStore = (id: string, field: "name" | "url", value: string) => {
+    const updated = customStores.map((s) => (s.id === id ? { ...s, [field]: value } : s));
+    handleUpdate("customStores", updated);
+  };
+
+  const removeCustomStore = (id: string) => {
+    const updated = customStores.filter((s) => s.id !== id);
+    handleUpdate("customStores", updated);
+  };
+
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
     : Object.values(DRESS_CODE_PALETTES || {});
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
-        </h3>
-
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <button
-            type="button"
-            onClick={applyTemplateA}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "A"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello A — Elena &amp; Davide</span>
-            <span className="text-[10px] text-slate-500 mt-1 block">Luxury Gold • Busta 3D • Countdown</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={applyTemplateB}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "B"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello B — Francesca &amp; Luca</span>
-            <span className="text-[10px] text-slate-500 mt-1 block">Boho Chic • Nuvole 3D • Gratta Data</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ✦ 1. EFFETTO DI APERTURA ✦ */}
+      {/* ✦ 1. MODELLO & EFFETTO APERTURA ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -218,7 +190,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
-                  {opt.label}
+                  {opt.label === "Scroll Expand Media a Tutto Schermo" ? "Zoom Multimediale allo Scroll" : opt.label}
                 </option>
               ))}
             </select>
@@ -403,9 +375,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             ))}
           </select>
 
-          {/* LISTA DEGLI EVENTI E ORARI EDITABILI */}
           <div className="space-y-2">
-            <label className="block text-[11px] font-bold text-slate-700">Modifica Momenti ed Orari della Giornata:</label>
+            <label className="block text-[11px] font-bold text-slate-700">Modifica Orari e Momenti:</label>
             {scheduleItems.map((item) => (
               <div key={item.id} className="flex gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
                 <input
@@ -436,14 +407,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 5. COLONNA SONORA D'AUTORE / MP3 PERSONALIZZATO ✦ */}
+      {/* ✦ 5. COLONNA SONORA / UPLOAD MP3 ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
         </h3>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Seleziona Brano o Carica MP3</label>
+          <label className="block text-[11px] font-bold mb-1">Seleziona Brano o Incolla MP3</label>
           <select
             value={audioUrl}
             onChange={(e) => handleUpdate("audioUrl", e.target.value)}
@@ -459,7 +430,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
           {audioUrl === "custom" && (
             <div className="mt-2 space-y-1">
-              <label className="block text-[10px] font-bold text-[#8B6508]">URL File MP3 Personalizzato (Dropbox, R2, Drive...)</label>
+              <label className="block text-[10px] font-bold text-[#8B6508]">URL File MP3 Personalizzato</label>
               <input
                 type="text"
                 placeholder="https://mio-server.com/musica-sposi.mp3"
@@ -574,7 +545,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 8. LISTA NOZZE, IBAN & NEGOZIO LOCALE ✦ */}
+      {/* ✦ 8. LISTA NOZZE, IBAN, AMAZON AFFILIATO & NEGOZI LOCALI ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -603,23 +574,65 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           />
         </div>
 
-        <div className="pt-2 border-t border-slate-100 space-y-2">
-          <span className="text-xs font-bold text-[#8B6508] block">Aggiungi Negozio Locale di Fiducia:</span>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="text"
-              placeholder="Es. Gioielleria Rossi..."
-              value={localStoreName}
-              onChange={(e) => handleUpdate("localStoreName", e.target.value)}
-              className="text-xs p-2 rounded-xl border border-slate-300 bg-white font-bold"
-            />
-            <input
-              type="text"
-              placeholder="https://gioielleriarossi.it"
-              value={localStoreUrl}
-              onChange={(e) => handleUpdate("localStoreUrl", e.target.value)}
-              className="text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
-            />
+        {/* CANCELLAZIONE / ATTIVAZIONE LINK AMAZON AFFILIATO */}
+        <div className="p-3 bg-amber-50/60 rounded-xl border border-[#D4AF37]/40 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="w-4 h-4 text-[#8B6508]" />
+            <span className="text-xs font-bold text-[#1E293B]">Pulsante Lista Nozze Amazon Affiliato</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleUpdate("showAmazonAffiliate", !showAmazonAffiliate)}
+            className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+              showAmazonAffiliate
+                ? "bg-rose-500 text-white border-rose-600 shadow-xs"
+                : "bg-emerald-600 text-white border-emerald-700"
+            }`}
+          >
+            {showAmazonAffiliate ? "✕ Rimuovi Link Amazon" : "＋ Ripristina Link Amazon"}
+          </button>
+        </div>
+
+        {/* NEGOZI LOCALI MULTIPLI */}
+        <div className="pt-2 border-t border-slate-100 space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-[#8B6508]">Negozi Locali Convenzionati (Aggiungi Multipli):</span>
+            <button
+              type="button"
+              onClick={addCustomStore}
+              className="px-2.5 py-1 text-[10px] font-bold bg-[#D4AF37] text-slate-900 rounded-lg flex items-center gap-1 hover:bg-amber-400 cursor-pointer shadow-xs"
+            >
+              <Plus className="w-3 h-3" /> Aggiungi Negozio
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {customStores.map((store) => (
+              <div key={store.id} className="flex gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
+                <input
+                  type="text"
+                  placeholder="Es. Gioielleria Rossi..."
+                  value={store.name}
+                  onChange={(e) => updateCustomStore(store.id, "name", e.target.value)}
+                  className="w-1/2 text-xs p-1.5 font-bold border border-slate-300 rounded-lg"
+                />
+                <input
+                  type="text"
+                  placeholder="https://gioielleriarossi.it"
+                  value={store.url}
+                  onChange={(e) => updateCustomStore(store.id, "url", e.target.value)}
+                  className="w-1/2 text-xs p-1.5 font-mono border border-slate-300 rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeCustomStore(store.id)}
+                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                  title="Elimina negozio"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
