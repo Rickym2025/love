@@ -20,7 +20,7 @@ interface ScrollExpandMediaProps {
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
-  onExpand?: () => void; // CALLBACK PER FAR PARTIRE LA MUSICA ALLO SCROLL
+  onExpand?: () => void;
   children?: ReactNode;
 }
 
@@ -51,7 +51,6 @@ const ScrollExpandMedia = ({
     setMediaFullyExpanded(false);
   }, [mediaType]);
 
-  // AVVIA LA MUSICA NON APPENA INIZIA LO SCROLL
   const triggerAudio = () => {
     if (!musicStartedRef.current && typeof onExpand === 'function') {
       musicStartedRef.current = true;
@@ -84,6 +83,7 @@ const ScrollExpandMedia = ({
     };
 
     const handleTouchStart = (e: TouchEvent) => {
+      triggerAudio();
       setTouchStartY(e.touches[0].clientY);
     };
 
@@ -123,6 +123,7 @@ const ScrollExpandMedia = ({
     };
 
     const handleScroll = (): void => {
+      triggerAudio();
       if (!mediaFullyExpanded) {
         window.scrollTo(0, 0);
       }
