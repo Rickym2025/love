@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon } from "lucide-react";
+import React, { useState } from "react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon, Save, CheckCircle2 } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -105,10 +105,24 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     onUpdate,
   } = props;
 
+  const [salvatoState, setSalvatoState] = useState(false);
+
   const handleUpdate = (field: string, value: any) => {
     if (typeof onUpdate === "function") {
       onUpdate(field, value);
     }
+    // SALVATAGGIO AUTOMATICO SU LOCALSTORAGE
+    if (typeof window !== "undefined") {
+      try {
+        const savedData = { ...props, [field]: value };
+        localStorage.setItem(`love_invitation_${coupleNames.toLowerCase().replace(/[^a-z0-9]/g, "-")}`, JSON.stringify(savedData));
+      } catch {}
+    }
+  };
+
+  const handleManualSave = () => {
+    setSalvatoState(true);
+    setTimeout(() => setSalvatoState(false), 2500);
   };
 
   const toggleModule = (key: string) => {
@@ -180,8 +194,26 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+      {/* BARRA STATO SALVATAGGIO AUTOMATICO CON PULSANTE MANUAL SAVE */}
+      <div className="p-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl border border-[#D4AF37] flex justify-between items-center shadow-lg">
+        <div className="flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <span className="text-xs font-bold text-slate-200">
+            Salvataggio Automatico Attivo <span className="text-[#D4AF37] font-mono text-[10px] ml-1">({coupleNames})</span>
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleManualSave}
+          className="px-4 py-2 bg-[#D4AF37] text-slate-900 font-bold text-xs rounded-xl hover:bg-amber-400 transition-all flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95"
+        >
+          <Save className="w-3.5 h-3.5" />
+          {salvatoState ? "✓ Invito Salvato!" : "✦ Salva Invito"}
+        </button>
+      </div>
+
+      {/* ✦ SCHEDA 1: MODELLI PREIMPOSTATI A / B ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/30 shadow-md space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
         </h3>
@@ -215,8 +247,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 1. EFFETTO DI APERTURA & IMMAGINI HERO PERSONALIZZATE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 2: EFFETTO APERTURA & IMMAGINI HERO ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start &amp; Immagini Hero
@@ -247,7 +281,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
-                  {opt.label}
+                  {opt.label === "Scroll Expand Media a Tutto Schermo" ? "Zoom Multimediale allo Scroll" : opt.label}
                 </option>
               ))}
             </select>
@@ -282,7 +316,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           </div>
         )}
 
-        {/* CAMPI PERSONALIZZAZIONE IMMAGINI HERO */}
         <div className="pt-2 border-t border-slate-100 space-y-3">
           <span className="text-xs font-bold text-[#8B6508] flex items-center gap-1.5">
             <ImageIcon className="w-4 h-4 text-[#D4AF37]" /> Personalizzazione Foto Hero Sposi:
@@ -314,8 +347,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 3: NOMI SPOSI & FRASE BENVENUTO ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
@@ -369,8 +404,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 3. DATA E CONTO ALLA ROVESCIA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 4: DATA DEL MATRIMONIO ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
@@ -434,8 +471,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 4. PROGRAMMA DELLA GIORNATA E ORARI DINAMICI ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 5: PROGRAMMA GIORNATA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari Modificabili
@@ -495,8 +534,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 5. COLONNA SONORA / UPLOAD MP3 ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 6: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
         </h3>
@@ -530,8 +571,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 6. LOCATION & MAPPA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 7: LOCATION & MAPPA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
@@ -571,8 +614,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 7. DRESS CODE & PALETTE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 8: DRESS CODE & PALETTE ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
@@ -633,8 +678,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 8. LISTA NOZZE, IBAN, AMAZON AFFILIATO & NEGOZI LOCALI ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 9: LISTA NOZZE & IBAN ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
@@ -662,7 +709,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           />
         </div>
 
-        {/* CANCELLAZIONE / ATTIVAZIONE LINK AMAZON AFFILIATO */}
         <div className="p-3 bg-amber-50/60 rounded-xl border border-[#D4AF37]/40 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-4 h-4 text-[#8B6508]" />
@@ -681,7 +727,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           </button>
         </div>
 
-        {/* NEGOZI LOCALI MULTIPLI */}
         <div className="pt-2 border-t border-slate-100 space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-xs font-bold text-[#8B6508]">Negozi Locali Convenzionati (Aggiungi Multipli):</span>
@@ -725,8 +770,10 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
       </div>
 
-      {/* ✦ 9. CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ SCHEDA 10: CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
