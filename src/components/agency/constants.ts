@@ -116,7 +116,6 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   }
 ];
 
-// PROXY SICURO DRESS_CODE_PALETTES
 const PALETTES_BY_KEY: Record<string | number, DressCodePalette> = {};
 BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PALETTES_BY_KEY[idx] = p;
@@ -134,7 +133,6 @@ export const DRESS_CODE_PALETTES: any = new Proxy(BASE_PALETTES_ARRAY, {
   }
 });
 
-// PROXY SICURO DRESS_CODE_PHOTOS
 const PHOTOS_BY_KEY: Record<string | number, string[]> = {};
 BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PHOTOS_BY_KEY[idx] = p.images;
@@ -158,9 +156,10 @@ export const DATE_DISPLAY_MODES = [
   { id: "text", label: "Data Semplice in Testo Elegante", value: "text", title: "Data Semplice in Testo Elegante" }
 ];
 
-// 3. SCHEMI PROGRAMMA ORARI (SENZA "ITALIANO")
+// 3. SCHEMI PROGRAMMA ORARI (CON NUOVA TIMELINE A CARTE 21st.dev)
 export const SCHEDULE_SCHEMAS = [
   { id: "classico", label: "Classico Elegante", value: "classico", title: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
+  { id: "howitworks", label: "Timeline a Carte con Spillo 3D", value: "howitworks", title: "Timeline a Carte con Spillo 3D", description: "Design moderno con schede orientate" },
   { id: "timeline", label: "Timeline Verticale", value: "timeline", title: "Timeline Verticale", description: "Linea temporale con orari in sequenza" },
   { id: "schede", label: "Schede a Griglia", value: "schede", title: "Schede a Griglia", description: "Riquadri orari affiancati" },
   { id: "minimal", label: "Minimal essenziale", value: "minimal", title: "Minimal essenziale", description: "Testo pulito e lineare" }
@@ -170,8 +169,9 @@ export const SCHEDULE_SCHEMAS = [
 export const INTRO_START_OPTIONS = [
   { id: "busta", label: "Busta Luxury con Ceralacca 3D", value: "busta", title: "Busta Luxury con Ceralacca 3D" },
   { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D", value: "nuvole", title: "Apertura Nuvole Volumetriche 3D" },
-  { id: "expand", label: "Scroll Expand Media a Tutto Schermo", value: "expand", title: "Scroll Expand Media a Tutto Schermo" },
-  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL", value: "lago", title: "Specchio d'Acqua con Effetto Onde WebGL" }
+  { id: "expand", label: "Zoom Multimediale allo Scroll", value: "expand", title: "Zoom Multimediale allo Scroll" },
+  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL", value: "lago", title: "Specchio d'Acqua con Effetto Onde WebGL" },
+  { id: "cosmos", label: "Orizzonte Cosmico 3D (Stars & Nebula)", value: "cosmos", title: "Orizzonte Cosmico 3D (Stars & Nebula)" }
 ];
 export const START_EFFECTS = INTRO_START_OPTIONS;
 
