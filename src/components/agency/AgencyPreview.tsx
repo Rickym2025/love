@@ -15,6 +15,12 @@ import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
+export interface ScheduleItem {
+  id: string;
+  time: string;
+  title: string;
+}
+
 export interface AgencyPreviewProps {
   selectedTemplate?: "A" | "B";
   introStart?: string;
@@ -38,6 +44,7 @@ export interface AgencyPreviewProps {
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
   partnerStores?: any[];
+  scheduleItems?: ScheduleItem[];
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -45,7 +52,7 @@ export interface AgencyPreviewProps {
 
 export default function AgencyPreview({
   selectedTemplate = "A",
-  introStart = "arco",
+  introStart = "busta",
   dateDisplayMode = "countdown",
   scheduleSchema = "classico",
   rsvpStyle = "classico",
@@ -65,16 +72,20 @@ export default function AgencyPreview({
   dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
   selectedPaletteIdx = 0,
   partnerStores = [],
+  scheduleItems = [
+    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+  ],
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
 }: AgencyPreviewProps) {
-  // GESTIONE ROBUSTA E DIFENSIVA DELLE PALETTE
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
-    ? Object.values(DRESS_CODE_PALETTES)
-    : [];
+    : Object.values(DRESS_CODE_PALETTES || {});
 
   const fallbackPalette = {
     id: "1",
@@ -87,7 +98,6 @@ export default function AgencyPreview({
   const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, Math.max(0, (palettesList.length || 1) - 1)));
   const activePalette = (palettesList && palettesList[safeIdx]) || fallbackPalette;
 
-  // SICUREZZA TOTALE SU ARRAY COLORI
   const colors = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
     ? activePalette.colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
@@ -99,26 +109,26 @@ export default function AgencyPreview({
   const textColor = (activePalette as any)?.textColor || "#1E293B";
   const accentColor = (activePalette as any)?.accentColor || "#8B6508";
 
-  // SELEZIONE FOTO RIGOROSA E SICURA
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
     Array.isArray((activePalette as any)?.images) && (activePalette as any).images.length > 0
       ? (activePalette as any).images
-      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [
-          "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
-          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80"
-        ];
+      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [];
 
   const presetsArray = Array.isArray(WELCOME_PHRASE_PRESETS) ? WELCOME_PHRASE_PRESETS : [];
+  
+  // SINCRONIZZAZIONE LIVE DELLA FRASE BENVENUTO
   const computedWelcomePhrase =
     welcomePhrase ||
     (selectedPhrasePreset === "9"
-      ? customWelcomePhrase
+      ? customWelcomePhrase || "Insieme è il nostro posto preferito."
       : presetsArray[Number(selectedPhrasePreset) || 0]) ||
     "Benvenuti al nostro matrimonio";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-  const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? customEventTheme : eventThemePreset;
+  
+  // SINCRONIZZAZIONE LIVE DEL TEMA EVENTO
+  const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? (customEventTheme || "Tema Personalizzato") : eventThemePreset;
 
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : "francesca-e-luca"
@@ -238,18 +248,18 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA */}
+        {/* PROGRAMMA DELLA GIORNATA DINAMICO (STAMPATO DAI CAMPI EDITABILI) */}
         {scheduleSchema === "classico" && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
             <div className="space-y-1.5 text-xs pt-1 font-serif" style={{ color: textColor }}>
-              <p><strong className="font-sans" style={{ color: accentColor }}>16:30</strong> — Arrivo ed Accoglienza Ospiti</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>17:00</strong> — Cerimonia di Nozze</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>18:30</strong> — Aperitivo &amp; Cocktail Hour</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>20:00</strong> — Cena di Gala &amp; Taglio Torta</p>
-              <p><strong className="font-sans" style={{ color: accentColor }}>22:00</strong> — Festa &amp; Open Bar</p>
+              {scheduleItems.map((item) => (
+                <p key={item.id}>
+                  <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> — {item.title}
+                </p>
+              ))}
             </div>
           </div>
         )}
@@ -260,37 +270,30 @@ export default function AgencyPreview({
               📍 Timeline Verticale Orari
             </span>
             <div className="relative pl-6 space-y-2 text-left border-l-2 text-xs" style={{ borderColor: accentColor, color: textColor }}>
-              <div><span className="font-bold" style={{ color: accentColor }}>16:30</span> — Accoglienza Ospiti</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>17:00</span> — Cerimonia Solenne</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>18:30</span> — Aperitivo in Giardino</div>
-              <div><span className="font-bold" style={{ color: accentColor }}>20:00</span> — Cena &amp; Torta</div>
+              {scheduleItems.map((item) => (
+                <div key={item.id}>
+                  <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
+                </div>
+              ))}
             </div>
           </div>
         )}
 
         {scheduleSchema === "schede" && (
           <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
-            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
-              <span className="block text-[10px]" style={{ color: accentColor }}>16:30</span> Accoglienza
-            </div>
-            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
-              <span className="block text-[10px]" style={{ color: accentColor }}>17:00</span> Cerimonia
-            </div>
-            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
-              <span className="block text-[10px]" style={{ color: accentColor }}>18:30</span> Aperitivo
-            </div>
-            <div className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
-              <span className="block text-[10px]" style={{ color: accentColor }}>20:00</span> Cena &amp; Torta
-            </div>
+            {scheduleItems.map((item) => (
+              <div key={item.id} className="p-2.5 rounded-xl border font-bold bg-white border-slate-200" style={{ color: textColor }}>
+                <span className="block text-[10px]" style={{ color: accentColor }}>{item.time}</span> {item.title}
+              </div>
+            ))}
           </div>
         )}
 
         {scheduleSchema === "minimal" && (
           <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs" style={{ color: textColor }}>
-            <p>16:30 • Accoglienza Ospiti</p>
-            <p>17:00 • Cerimonia di Nozze</p>
-            <p>18:30 • Aperitivo</p>
-            <p>20:00 • Cena &amp; Torta</p>
+            {scheduleItems.map((item) => (
+              <p key={item.id}>{item.time} • {item.title}</p>
+            ))}
           </div>
         )}
 
@@ -326,7 +329,7 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT COORDINATA */}
+        {/* DRESS CODE CON GALLERIA OUTFIT */}
         {modules.codiceAbbigliamento && (
           <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
