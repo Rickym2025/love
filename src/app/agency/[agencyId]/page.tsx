@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
+import ConfiguratorList, { CreatedInvitation } from "@/components/agency/ConfiguratorList";
 
 export interface ScheduleItem {
   id: string;
@@ -15,13 +16,47 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
 
-  // Larghezze Ridimensionabili
   const [sidebarWidth, setSidebarWidth] = useState(250);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
 
-  // Stati Configurazione Invito
+  // ELENCO DINAMICO DEGLI INVITI CREATI
+  const [createdInvitations, setCreatedInvitations] = useState<CreatedInvitation[]>([
+    {
+      id: "1",
+      coupleNames: "Elena & Davide",
+      date: "15 Settembre 2026",
+      template: "Modello A",
+      paletteName: "Oro Bruciato & Champagne",
+      slug: "elena-e-davide",
+      status: "Attivo",
+    },
+    {
+      id: "2",
+      coupleNames: "Francesca & Luca",
+      date: "20 Giugno 2026",
+      template: "Modello B",
+      paletteName: "Rosa Cipria & Seta",
+      slug: "francesca-e-luca",
+      status: "Attivo",
+    },
+    {
+      id: "3",
+      coupleNames: "Giulia & Marco",
+      date: "10 Ottobre 2026",
+      template: "Modello A",
+      paletteName: "Lavanda & Lillà",
+      slug: "giulia-e-marco",
+      status: "Bozza",
+    },
+  ]);
+
+  const handleDeleteInvitationFromState = (id: string) => {
+    setCreatedInvitations((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // STATI CONFIGURATORE
   const [activeTab, setActiveTab] = useState("create");
   const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
   const [introStart, setIntroStart] = useState("busta");
@@ -45,8 +80,13 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
+  const [heroBgImage, setHeroBgImage] = useState(
+    "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80"
+  );
+  const [heroMediaImage, setHeroMediaImage] = useState(
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+  );
 
-  // Programma Orari Dinamico (Modificabile e Allungabile)
   const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([
     { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
     { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
@@ -55,28 +95,23 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ]);
 
-  // Negozio Locale Personalizzato
-  const [localStoreName, setLocalStoreName] = useState("Gioielleria & Lista Nozze Locale");
-  const [localStoreUrl, setLocalStoreUrl] = useState("https://www.amazon.it/baby-reg/homepage?tag=zero100store-21");
+  const [showAmazonAffiliate, setShowAmazonAffiliate] = useState(true);
+  const [customStores, setCustomStores] = useState([
+    { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it" }
+  ]);
 
-  // Negozi Convenzionati (Amazon Affiliato + Negozio Locale)
   const partnerStores = [
-    {
-      id: "amazon-default",
-      name: "Lista Nozze Ufficiale Amazon",
-      url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
-      logoUrl: "/logo.png",
-    },
-    ...(localStoreName
+    ...(showAmazonAffiliate
       ? [
           {
-            id: "local-store",
-            name: localStoreName,
-            url: localStoreUrl || "#",
+            id: "amazon-default",
+            name: "Lista Nozze Ufficiale Amazon",
+            url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
             logoUrl: "/logo.png",
           },
         ]
       : []),
+    ...customStores.map((s) => ({ ...s, logoUrl: "/logo.png" })),
   ];
 
   const [marqueeText, setMarqueeText] = useState(
@@ -103,7 +138,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setModules((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
-  // Gestore Ridimensionamento Mouse
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
@@ -133,16 +167,16 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. COLONNA SINISTRA: SIDEBAR AGENZIA */}
+      {/* 1. SIDEBAR AGENZIA CON CONTEGGIO DINAMICO */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          createdCount={createdInvitations.length}
         />
       </div>
 
-      {/* SEPARATORE TRASCINABILE 1 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -152,67 +186,80 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. COLONNA CENTRALE: CONFIGURATORE (Spazio FLEX-1 CENTRALE) */}
+      {/* 2. CONFIGURATORE CENTRALE */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
-        <AgencyConfigurator
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          selectedTemplate={selectedTemplate}
-          setSelectedTemplate={setSelectedTemplate}
-          introStart={introStart}
-          setIntroStart={setIntroStart}
-          dateDisplayMode={dateDisplayMode}
-          setDateDisplayMode={setDateDisplayMode}
-          scheduleSchema={scheduleSchema}
-          setScheduleSchema={setScheduleSchema}
-          rsvpStyle={rsvpStyle}
-          setRsvpStyle={setRsvpStyle}
-          eventThemePreset={eventThemePreset}
-          setEventThemePreset={setEventThemePreset}
-          customEventTheme={customEventTheme}
-          setCustomEventTheme={setCustomEventTheme}
-          selectedColorScheme={selectedColorScheme}
-          setSelectedColorScheme={setSelectedColorScheme}
-          coupleNames={coupleNames}
-          setCoupleNames={setCoupleNames}
-          weddingDateDay={weddingDateDay}
-          setWeddingDateDay={setWeddingDateDay}
-          weddingDateMonth={weddingDateMonth}
-          setWeddingDateMonth={setWeddingDateMonth}
-          weddingDateYear={weddingDateYear}
-          setWeddingDateYear={setWeddingDateYear}
-          locationName={locationName}
-          setLocationName={setLocationName}
-          locationAddress={locationAddress}
-          setLocationAddress={setLocationAddress}
-          audioUrl={audioUrl}
-          setAudioUrl={setAudioUrl}
-          waterImageUrl={waterImageUrl}
-          setWaterImageUrl={setWaterImageUrl}
-          selectedPhrasePreset={selectedPhrasePreset}
-          setSelectedPhrasePreset={setSelectedPhrasePreset}
-          customWelcomePhrase={customWelcomePhrase}
-          setCustomWelcomePhrase={setCustomWelcomePhrase}
-          dressCodeNotes={dressCodeNotes}
-          setDressCodeNotes={setDressCodeNotes}
-          selectedPaletteIdx={selectedPaletteIdx}
-          setSelectedPaletteIdx={setSelectedPaletteIdx}
-          scheduleItems={scheduleItems}
-          setScheduleItems={setScheduleItems}
-          localStoreName={localStoreName}
-          setLocalStoreName={setLocalStoreName}
-          localStoreUrl={localStoreUrl}
-          setLocalStoreUrl={setLocalStoreUrl}
-          marqueeText={marqueeText}
-          setMarqueeText={setMarqueeText}
-          customIban={customIban}
-          setCustomIban={setCustomIban}
-          modules={modules}
-          toggleModule={toggleModule}
-        />
+        {activeTab === "list" ? (
+          <div className="p-6">
+            <ConfiguratorList
+              invitations={createdInvitations}
+              onDelete={handleDeleteInvitationFromState}
+            />
+          </div>
+        ) : (
+          <AgencyConfigurator
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            selectedTemplate={selectedTemplate}
+            setSelectedTemplate={setSelectedTemplate}
+            introStart={introStart}
+            setIntroStart={setIntroStart}
+            dateDisplayMode={dateDisplayMode}
+            setDateDisplayMode={setDateDisplayMode}
+            scheduleSchema={scheduleSchema}
+            setScheduleSchema={setScheduleSchema}
+            rsvpStyle={rsvpStyle}
+            setRsvpStyle={setRsvpStyle}
+            eventThemePreset={eventThemePreset}
+            setEventThemePreset={setEventThemePreset}
+            customEventTheme={customEventTheme}
+            setCustomEventTheme={setCustomEventTheme}
+            selectedColorScheme={selectedColorScheme}
+            setSelectedColorScheme={setSelectedColorScheme}
+            coupleNames={coupleNames}
+            setCoupleNames={setCoupleNames}
+            weddingDateDay={weddingDateDay}
+            setWeddingDateDay={setWeddingDateDay}
+            weddingDateMonth={weddingDateMonth}
+            setWeddingDateMonth={setWeddingDateMonth}
+            weddingDateYear={weddingDateYear}
+            setWeddingDateYear={setWeddingDateYear}
+            locationName={locationName}
+            setLocationName={setLocationName}
+            locationAddress={locationAddress}
+            setLocationAddress={setLocationAddress}
+            audioUrl={audioUrl}
+            setAudioUrl={setAudioUrl}
+            waterImageUrl={waterImageUrl}
+            setWaterImageUrl={setWaterImageUrl}
+            selectedPhrasePreset={selectedPhrasePreset}
+            setSelectedPhrasePreset={setSelectedPhrasePreset}
+            customWelcomePhrase={customWelcomePhrase}
+            setCustomWelcomePhrase={setCustomWelcomePhrase}
+            dressCodeNotes={dressCodeNotes}
+            setDressCodeNotes={setDressCodeNotes}
+            selectedPaletteIdx={selectedPaletteIdx}
+            setSelectedPaletteIdx={setSelectedPaletteIdx}
+            heroBgImage={heroBgImage}
+            setHeroBgImage={setHeroBgImage}
+            heroMediaImage={heroMediaImage}
+            setHeroMediaImage={setHeroMediaImage}
+            scheduleItems={scheduleItems}
+            setScheduleItems={setScheduleItems}
+            showAmazonAffiliate={showAmazonAffiliate}
+            setShowAmazonAffiliate={setShowAmazonAffiliate}
+            customStores={customStores}
+            setCustomStores={setCustomStores}
+            partnerStores={partnerStores}
+            marqueeText={marqueeText}
+            setMarqueeText={setMarqueeText}
+            customIban={customIban}
+            setCustomIban={setCustomIban}
+            modules={modules}
+            toggleModule={toggleModule}
+          />
+        )}
       </div>
 
-      {/* SEPARATORE TRASCINABILE 2 */}
       <div
         onMouseDown={(e) => {
           e.preventDefault();
@@ -222,7 +269,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. COLONNA DESTRA: UNICA E SOLA PREVIEW LIVE SMARTPHONE */}
+      {/* 3. PREVIEW LIVE SMARTPHONE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
@@ -248,7 +295,10 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           customWelcomePhrase={customWelcomePhrase}
           dressCodeNotes={dressCodeNotes}
           selectedPaletteIdx={selectedPaletteIdx}
+          heroBgImage={heroBgImage}
+          heroMediaImage={heroMediaImage}
           partnerStores={partnerStores}
+          showAmazonAffiliate={showAmazonAffiliate}
           scheduleItems={scheduleItems}
           marqueeText={marqueeText}
           customIban={customIban}
