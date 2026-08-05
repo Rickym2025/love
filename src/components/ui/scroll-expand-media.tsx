@@ -20,6 +20,7 @@ interface ScrollExpandMediaProps {
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
+  onExpand?: () => void; // CALLBACK PER FAR PARTIRE LA MUSICA ALLO SCROLL
   children?: ReactNode;
 }
 
@@ -30,8 +31,9 @@ const ScrollExpandMedia = ({
   bgImageSrc,
   title,
   date,
-  scrollToExpand,
+  scrollToExpand = "Scorri per Ingrandire",
   textBlend,
+  onExpand,
   children,
 }: ScrollExpandMediaProps) => {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
@@ -39,6 +41,7 @@ const ScrollExpandMedia = ({
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
   const [touchStartY, setTouchStartY] = useState<number>(0);
   const [isMobileState, setIsMobileState] = useState<boolean>(false);
+  const musicStartedRef = useRef<boolean>(false);
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -48,8 +51,17 @@ const ScrollExpandMedia = ({
     setMediaFullyExpanded(false);
   }, [mediaType]);
 
+  // AVVIA LA MUSICA NON APPENA INIZIA LO SCROLL
+  const triggerAudio = () => {
+    if (!musicStartedRef.current && typeof onExpand === 'function') {
+      musicStartedRef.current = true;
+      onExpand();
+    }
+  };
+
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
+      triggerAudio();
       if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
         setMediaFullyExpanded(false);
         e.preventDefault();
@@ -76,6 +88,7 @@ const ScrollExpandMedia = ({
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      triggerAudio();
       if (!touchStartY) return;
 
       const touchY = e.touches[0].clientY;
@@ -170,7 +183,7 @@ const ScrollExpandMedia = ({
   return (
     <div
       ref={sectionRef}
-      className='transition-colors duration-700 ease-in-out overflow-x-hidden'
+      className='transition-colors duration-700 ease-in-out overflow-x-hidden select-none'
     >
       <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
@@ -182,7 +195,7 @@ const ScrollExpandMedia = ({
           >
             <Image
               src={bgImageSrc}
-              alt='Sfondo'
+              alt='Sfondo Matrimonio'
               width={1920}
               height={1080}
               className='w-screen h-screen'
@@ -192,19 +205,19 @@ const ScrollExpandMedia = ({
               }}
               priority
             />
-            <div className='absolute inset-0 bg-black/10' />
+            <div className='absolute inset-0 bg-black/20' />
           </motion.div>
 
           <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
             <div className='flex flex-col items-center justify-center w-full h-[100dvh] relative'>
               <div
-                className='absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-none rounded-2xl'
+                className='absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-none rounded-2xl overflow-hidden'
                 style={{
                   width: `${mediaWidth}px`,
                   height: `${mediaHeight}px`,
                   maxWidth: '95vw',
                   maxHeight: '85vh',
-                  boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
+                  boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.4)',
                 }}
               >
                 {mediaType === 'video' ? (
@@ -235,7 +248,7 @@ const ScrollExpandMedia = ({
                 <div className='flex flex-col items-center text-center relative z-10 mt-4 transition-none'>
                   {date && (
                     <p
-                      className='text-2xl text-[#D4AF37] font-serif font-bold'
+                      className='text-2xl text-[#D4AF37] font-serif font-bold drop-shadow'
                       style={{ transform: `translateX(-${textTranslateX}vw)` }}
                     >
                       {date}
@@ -243,7 +256,7 @@ const ScrollExpandMedia = ({
                   )}
                   {scrollToExpand && (
                     <p
-                      className='text-[#D4AF37] font-medium text-center text-xs uppercase tracking-widest'
+                      className='text-[#D4AF37] font-bold text-center text-xs uppercase tracking-widest drop-shadow'
                       style={{ transform: `translateX(${textTranslateX}vw)` }}
                     >
                       {scrollToExpand}
@@ -258,13 +271,13 @@ const ScrollExpandMedia = ({
                 }`}
               >
                 <motion.h2
-                  className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#1E293B]'
+                  className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white drop-shadow-lg'
                   style={{ transform: `translateX(-${textTranslateX}vw)` }}
                 >
                   {firstWord}
                 </motion.h2>
                 <motion.h2
-                  className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-center text-[#1E293B]'
+                  className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-center text-white drop-shadow-lg'
                   style={{ transform: `translateX(${textTranslateX}vw)` }}
                 >
                   {restOfTitle}
@@ -273,7 +286,7 @@ const ScrollExpandMedia = ({
             </div>
 
             <motion.section
-              className='flex flex-col w-full px-8 py-10 md:px-16 lg:py-20'
+              className='flex flex-col w-full px-4 py-8 md:px-12'
               initial={{ opacity: 0 }}
               animate={{ opacity: showContent ? 1 : 0 }}
               transition={{ duration: 0.7 }}
