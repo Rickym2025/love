@@ -49,15 +49,31 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
   const [suonaMusica, setSuonaMusica] = useState(false);
 
-  const palettes = DRESS_CODE_PALETTES || [
-    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#D87093", "#3A1C24"], textColor: "#3A1C24", accentColor: "#C97082" },
-  ];
-  const activePalette = palettes[paletteIdx] || palettes[0];
-  const textColor = activePalette?.textColor || "#1E293B";
-  const accentColor = activePalette?.accentColor || "#8B6508";
+  // GESTIONE ROBUSTA E DINAMICA DELLE PALETTE
+  const palettesList = Array.isArray(DRESS_CODE_PALETTES)
+    ? DRESS_CODE_PALETTES
+    : Object.values(DRESS_CODE_PALETTES || {});
 
+  const fallbackPalette = {
+    id: "1",
+    name: "Lavanda & Lillà",
+    colors: ["#FAF7F2", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    textColor: "#1E293B",
+    accentColor: "#8B6508",
+  };
+
+  const safeIdx = Math.max(0, Math.min(paletteIdx, (palettesList.length || 1) - 1));
+  const activePalette = palettesList[safeIdx] || fallbackPalette;
+
+  const textColor = (activePalette as any).textColor || "#1E293B";
+  const accentColor = (activePalette as any).accentColor || "#8B6508";
+
+  // SELEZIONE FOTO STRICTLY COORDINATA ALLA PALETTE ATTIVA
   const photosMap = DRESS_CODE_PHOTOS || {};
-  const outfitPhotos = (photosMap[paletteIdx % 8] || photosMap[0] || []);
+  const outfitPhotos: string[] =
+    ((activePalette as any).images && (activePalette as any).images.length > 0)
+      ? (activePalette as any).images
+      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [];
 
   const marqueeText = searchParams?.get("marquee") || `✦ IL MATRIMONIO DI ${coupleNames.toUpperCase()} ✦ BENVENUTI AL NOSTRO GIORNO SPECIALE ✦`;
   const customIban = searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
@@ -110,7 +126,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" />
             <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={() => setSuonaMusica(true)}>
               <div className="relative w-20 h-20 drop-shadow-2xl animate-pulse">
-                <Image src="/wax-seal.png" alt="Sigillo Ceralacca Acqua" fill className="object-contain" priority />
+                <Image src="/wax-seal.png" alt="Sigillo Ceralacca Acqua" fill className="object-contain" priority unoptimized />
               </div>
             </div>
           </div>
@@ -243,6 +259,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COORDINATA */}
         {showDressCode && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -250,6 +267,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <p className="text-xs font-serif leading-relaxed" style={{ color: textColor }}>{dressCodeNotes}</p>
 
+            {/* PALLINI COLORI PALETTE */}
             <div className="flex justify-center gap-2">
               {(activePalette?.colors || []).map((color, i) => (
                 <div
@@ -260,6 +278,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               ))}
             </div>
 
+            {/* GALLERIA OUTFIT COORDINATI */}
             <div className="pt-2">
               <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
@@ -267,7 +286,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
                 {(outfitPhotos || []).map((imgUrl, idx) => (
                   <div key={idx} className="w-32 h-44 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
-                    <Image src={imgUrl} alt={`Outfit Dress Code ${idx}`} fill className="object-cover" />
+                    <img
+                      src={imgUrl}
+                      alt={`Outfit Dress Code ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 ))}
               </div>
@@ -293,7 +316,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP DINAMICO PASSA ESPLICITAMENTE rsvpStyle E paletteColors */}
+        {/* MODULO RSVP DINAMICO */}
         {showRsvp && (
           <div className="pt-2">
             <RsvpForm
