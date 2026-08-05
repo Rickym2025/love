@@ -50,11 +50,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [suonaMusica, setSuonaMusica] = useState(false);
 
   const palettes = DRESS_CODE_PALETTES || [
-    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#E2F0CB", "#B5E2FA"], textColor: "#3A1C24", accentColor: "#C97082" },
+    { id: "1", name: "Pastello Romantico", colors: ["#FAF7F2", "#FFF0F5", "#FDE2E4", "#D87093", "#3A1C24"], textColor: "#3A1C24", accentColor: "#C97082" },
   ];
   const activePalette = palettes[paletteIdx] || palettes[0];
-  const textColor = activePalette.textColor || "#1E293B";
-  const accentColor = activePalette.accentColor || "#8B6508";
+  const textColor = activePalette?.textColor || "#1E293B";
+  const accentColor = activePalette?.accentColor || "#8B6508";
 
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos = (photosMap[paletteIdx % 8] || photosMap[0] || []);
@@ -81,6 +81,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors"
       style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
     >
+      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -154,6 +155,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
+        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
         {schedule === "classico" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -252,92 +254,4 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               {(activePalette?.colors || []).map((color, i) => (
                 <div
                   key={i}
-                  className="w-7 h-7 rounded-full border border-slate-300 shadow-sm"
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
-
-            <div className="pt-2">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
-                Esempi di Abbigliamento Consigliati (Scorri ➔)
-              </span>
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
-                {(outfitPhotos || []).map((imgUrl, idx) => (
-                  <div key={idx} className="w-32 h-44 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
-                    <Image src={imgUrl} alt={`Outfit Dress Code ${idx}`} fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showNegozi && (
-          <PartnerStores stores={[]} />
-        )}
-
-        {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
-              <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
-            </span>
-            <p className="text-xs text-slate-600 font-serif">
-              Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:
-            </p>
-            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">
-              {customIban}
-            </div>
-          </div>
-        )}
-
-        {/* MODULO RSVP PASSA ORA ESPLICITAMENTE rsvpStyle PER RENDERIZZARE I 3 MODELLI */}
-        {showRsvp && (
-          <div className="pt-2">
-            <RsvpForm
-              coupleNames={coupleNames}
-              paletteColors={activePalette?.colors}
-              rsvpStyle={rsvpStyle}
-            />
-          </div>
-        )}
-
-        {showHubGiochi && (
-          <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
-              <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
-            </span>
-            <p className="text-xs text-slate-300">
-              Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
-            </p>
-            <Link
-              href={`/${cleanSlug}/festa`}
-              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
-            >
-              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
-            </Link>
-          </div>
-        )}
-
-        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
-          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
-          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
-        </footer>
-      </main>
-    </div>
-  );
-}
-
-export default function InvitationPage({ params }: { params?: { slug?: string } }) {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
-          Caricamento Invito in corso...
-        </div>
-      }
-    >
-      <InvitationContent params={params} />
-    </Suspense>
-  );
-}
+                  className="w-7 h-7 rounded-fu
