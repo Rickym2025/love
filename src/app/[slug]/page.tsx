@@ -53,7 +53,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [apertoAcqua, setApertoAcqua] = useState(false);
   const [apertoCosmos, setApertoCosmos] = useState(false);
 
-  // AVVIA LA MUSICA TRAMITE GESTO UTENTE
   const playWeddingAudio = () => {
     setSuonaMusica(true);
     if (typeof window !== "undefined") {
@@ -113,7 +112,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const rawAddress = locationAddress || locationName || "Villa Rosa";
   const mapQuery = encodeURIComponent(rawAddress.trim());
 
-  // SCHEDULE ITEMS PER LA TIMELINE
   const scheduleItems = [
     { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
     { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
@@ -136,7 +134,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {start === "nuvole" && showNuvole && <PartingClouds onOpen={playWeddingAudio} />}
 
-      {/* HERO: ZOOM MULTIMEDIALE ALLO SCROLL */}
+      {/* HERO: ZOOM MULTIMEDIALE */}
       {start === "expand" && (
         <ScrollExpandMedia
           bgImageSrc="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
@@ -148,7 +146,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         />
       )}
 
-      {/* HERO: SPECCHIO D'ACQUA WEBGL FULL SCREEN */}
+      {/* HERO: SPECCHIO D'ACQUA CAUSTICO FULL SCREEN */}
       {start === "lago" && !apertoAcqua && (
         <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
           <WaterRippleImage src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" />
@@ -225,7 +223,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA GIORNATA CON NUOVA TIMELINE A CARTE 3D */}
+        {/* PROGRAMMA GIORNATA - TUTTI I 5 SCHEMI SUPPORTATI IN FULL SCREEN */}
         {schedule === "howitworks" && (
           <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -247,6 +245,41 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                 </p>
               ))}
             </div>
+          </div>
+        )}
+
+        {schedule === "timeline" && (
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
+              📍 Timeline Verticale Orari
+            </span>
+            <div className="relative pl-6 space-y-3 text-left border-l-2 text-sm" style={{ borderColor: accentColor, color: textColor }}>
+              {scheduleItems.map((item) => (
+                <div key={item.id}>
+                  <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {schedule === "schede" && (
+          <div className="grid grid-cols-2 gap-3 text-center text-xs">
+            {scheduleItems.map((item) => (
+              <div key={item.id} className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
+                <span className="block text-xs" style={{ color: accentColor }}>{item.time}</span> {item.title}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {schedule === "minimal" && (
+          <div className="p-4 text-center space-y-2 font-serif text-sm bg-white/60 rounded-3xl border border-slate-200" style={{ color: textColor }}>
+            {scheduleItems.map((item) => (
+              <p key={item.id}>
+                <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> • {item.title}
+              </p>
+            ))}
           </div>
         )}
 
@@ -351,35 +384,3 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <p className="text-xs text-slate-300">
               Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
-            </p>
-            <Link
-              href={`/${cleanSlug}/festa`}
-              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
-            >
-              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
-            </Link>
-          </div>
-        )}
-
-        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
-          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
-          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
-        </footer>
-      </main>
-    </div>
-  );
-}
-
-export default function InvitationPage({ params }: { params?: { slug?: string } }) {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
-          Caricamento Invito in corso...
-        </div>
-      }
-    >
-      <InvitationContent params={params} />
-    </Suspense>
-  );
-}
