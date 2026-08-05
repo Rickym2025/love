@@ -13,7 +13,7 @@ import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
-import TimelineHowItWorks from "@/components/ui/TimelineHowItWorksCard";
+import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface ScheduleItem {
@@ -347,7 +347,7 @@ export default function AgencyPreview({
 
         {/* DRESS CODE CON GALLERIA OUTFIT */}
         {modules.codiceAbbigliamento && (
-          <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
+          <div className="mx-[#FAF7F2] my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
