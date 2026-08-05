@@ -8,7 +8,7 @@ export interface DressCodePalette {
   images: string[];
 }
 
-// 1. PALETTE UFFICIALI COORDINATE
+// 1. PALETTE UFFICIALI COORDINATE (NON TOCCATE)
 const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   {
     id: "lavanda_lilla",
@@ -116,16 +116,14 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   }
 ];
 
-// Dictionarizziamo le palette sia per ID stringa che per indice numerico
+// PROXY SICURO DRESS_CODE_PALETTES
 const PALETTES_BY_KEY: Record<string | number, DressCodePalette> = {};
-
 BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PALETTES_BY_KEY[idx] = p;
   PALETTES_BY_KEY[String(idx)] = p;
   PALETTES_BY_KEY[p.id] = p;
 });
 
-// PROXY PER DRESS_CODE_PALETTES: Risponde SEMPRE a qualsiasi chiave/indice senza mai restituire undefined
 export const DRESS_CODE_PALETTES: any = new Proxy(BASE_PALETTES_ARRAY, {
   get(target, prop) {
     if (prop in target) {
@@ -136,11 +134,11 @@ export const DRESS_CODE_PALETTES: any = new Proxy(BASE_PALETTES_ARRAY, {
         return PALETTES_BY_KEY[prop];
       }
     }
-    return BASE_PALETTES_ARRAY[0]; // Fallback sicuro alla prima palette
+    return BASE_PALETTES_ARRAY[0];
   }
 });
 
-// MAPPA FOTO PER PALETTE
+// PROXY SICURO DRESS_CODE_PHOTOS
 const PHOTOS_BY_KEY: Record<string | number, string[]> = {};
 BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PHOTOS_BY_KEY[idx] = p.images;
@@ -148,7 +146,6 @@ BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PHOTOS_BY_KEY[p.id] = p.images;
 });
 
-// PROXY PER DRESS_CODE_PHOTOS: Risponde SEMPRE con un array di foto valido
 export const DRESS_CODE_PHOTOS: Record<string | number, string[]> = new Proxy(PHOTOS_BY_KEY, {
   get(target, prop) {
     if (typeof prop === "string" || typeof prop === "number") {
@@ -156,11 +153,51 @@ export const DRESS_CODE_PHOTOS: Record<string | number, string[]> = new Proxy(PH
         return target[prop];
       }
     }
-    return BASE_PALETTES_ARRAY[0].images; // Fallback sicuro
+    return BASE_PALETTES_ARRAY[0].images;
   }
 });
 
-// PRESET FRASI BENVENUTO
+// 2. MODALITÀ DI VISUALIZZAZIONE DATA (RIPRISTINATO SENZA "ITALIANO")
+export const DATE_DISPLAY_MODES = [
+  { id: "countdown", label: "Conto alla Rovescia Dinamico" },
+  { id: "scratch", label: "Gratta col Dito per Scoprire la Data" },
+  { id: "text", label: "Data Semplice in Testo Elegante" }
+];
+
+// 3. SCHEMI PROGRAMMA ORARI (RIPRISTINATO SENZA "ITALIANO")
+export const SCHEDULE_SCHEMAS = [
+  { id: "classico", label: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
+  { id: "timeline", label: "Timeline Verticale", description: "Linea temporale con orari in sequenza" },
+  { id: "schede", label: "Schede a Griglia", description: "Riquadri orari affiancati" },
+  { id: "minimal", label: "Minimal essenziale", description: "Testo pulito e lineare" }
+];
+
+// 4. EFFETTI DI APERTURA INIZIALE
+export const INTRO_START_OPTIONS = [
+  { id: "busta", label: "Busta Luxury con Ceralacca 3D" },
+  { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D" },
+  { id: "expand", label: "Scroll Expand Media a Tutto Schermo" },
+  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL" }
+];
+
+// 5. STILI CONFERSIONE PARTECIPAZIONE (RSVP)
+export const RSVP_STYLES = [
+  { id: "classico", label: "Classico con Intolleranze e Menu" },
+  { id: "moderno", label: "Moderno Interattivo" },
+  { id: "minimal", label: "Minimal Diretto" }
+];
+
+// 6. TEMI DELL'EVENTO PRESET
+export const EVENT_THEMES = [
+  "Luxury Gold & Total White",
+  "Boho Chic & Naturale",
+  "Romantico & Pastello",
+  "Shabby Chic & Provenzale",
+  "Modern Minimal & Antracite",
+  "Personalizzato (digita a mano)"
+];
+
+// 7. PRESET FRASI BENVENUTO
 export const WELCOME_PHRASE_PRESETS: string[] = [
   "Due anime, un solo destino. Una storia scritta nel cuore.",
   "Il nostro amore è un viaggio che inizia oggi.",
@@ -172,4 +209,18 @@ export const WELCOME_PHRASE_PRESETS: string[] = [
   "Festeggiate con noi l'inizio di questa nuova avventura.",
   "Benvenuti al nostro matrimonio.",
   ""
+];
+
+// 8. DEMO BRANI AUDIO FF EDIZIONI
+export const AUDIO_DEMOS = [
+  {
+    id: "A",
+    title: "Elena & Davide: La Nostra Melodia A",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
+  },
+  {
+    id: "B",
+    title: "Francesca & Luca: Quella Fotografia B",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
+  }
 ];
