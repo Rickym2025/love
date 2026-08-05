@@ -90,7 +90,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     updateField,
   } = props;
 
-  // FUNZIONE WRAPPER SICURA CONTRO L'ERRORE "B is not a function"
+  // FUNZIONE DI UPDATE GARANTITA E CLICCABILE
   const handleUpdate = (field: string, value: any) => {
     const fn =
       typeof onUpdate === "function"
@@ -114,13 +114,11 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
   const activeSchedule = scheduleSchema || schedule || "classico";
   const activePaletteIdx = selectedPaletteIdx !== undefined ? selectedPaletteIdx : (palette !== undefined ? palette : 0);
 
-  // ATTIVAZIONE / DISATTIVAZIONE MODULI
   const toggleModule = (key: string) => {
     const currentModules = modules || {};
     handleUpdate("modules", { ...currentModules, [key]: !currentModules[key] });
   };
 
-  // APPLICAZIONE PRESET MODELLO A
   const applyTemplateA = () => {
     handleUpdate("selectedTemplate", "A");
     handleUpdate("coupleNames", "Elena & Davide");
@@ -131,7 +129,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("selectedPaletteIdx", 0);
   };
 
-  // APPLICAZIONE PRESET MODELLO B
   const applyTemplateB = () => {
     handleUpdate("selectedTemplate", "B");
     handleUpdate("coupleNames", "Francesca & Luca");
@@ -147,9 +144,9 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     : Object.values(DRESS_CODE_PALETTES || {});
 
   return (
-    <div className="w-full space-y-6 text-[#1E293B]">
+    <div className="w-full space-y-6 text-[#1E293B] pointer-events-auto select-text relative z-20">
       {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3 pointer-events-auto">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
         </h3>
@@ -161,7 +158,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={applyTemplateA}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer pointer-events-auto ${
               activeTemplate === "A"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
@@ -174,7 +171,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={applyTemplateB}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer pointer-events-auto ${
               activeTemplate === "B"
                 ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                 : "border-slate-200 bg-white hover:border-slate-300"
@@ -187,7 +184,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       </div>
 
       {/* ✦ 1. EFFETTO DI APERTURA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura
@@ -198,7 +195,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               toggleModule("busta3d");
               toggleModule("nuvole3d");
             }}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.busta3d || modules?.nuvole3d
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -214,7 +211,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <select
               value={activeStart}
               onChange={(e) => handleUpdate("introStart", e.target.value)}
-              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
@@ -229,7 +226,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             <select
               value={eventThemePreset}
               onChange={(e) => handleUpdate("eventThemePreset", e.target.value)}
-              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
             >
               {(EVENT_THEMES || []).map((t, idx) => (
                 <option key={idx} value={t}>
@@ -246,13 +243,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             placeholder="Es. Country Chic Vintage..."
             value={customEventTheme}
             onChange={(e) => handleUpdate("customEventTheme", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto"
           />
         )}
       </div>
 
       {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Heart className="w-4 h-4 text-[#D4AF37]" /> Dati Sposi &amp; Frase d&apos;Accoglienza
@@ -260,7 +257,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("dedicheMarquee")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.dedicheMarquee
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -276,7 +273,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={coupleNames}
             onChange={(e) => handleUpdate("coupleNames", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif font-bold pointer-events-auto select-text"
           />
         </div>
 
@@ -285,7 +282,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={selectedPhrasePreset}
             onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer pointer-events-auto"
           >
             {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
               <option key={idx} value={String(idx)}>
@@ -300,14 +297,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               placeholder="Scrivi la tua frase speciale d'accoglienza..."
               value={customWelcomePhrase}
               onChange={(e) => handleUpdate("customWelcomePhrase", e.target.value)}
-              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif"
+              className="mt-2 w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-serif pointer-events-auto select-text"
             />
           )}
         </div>
       </div>
 
       {/* ✦ 3. DATA E CONTO ALLA ROVESCIA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
@@ -315,7 +312,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("grattaData")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.grattaData
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -332,7 +329,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateDay}
               onChange={(e) => handleUpdate("weddingDateDay", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
             />
           </div>
           <div>
@@ -341,7 +338,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateMonth}
               onChange={(e) => handleUpdate("weddingDateMonth", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
             />
           </div>
           <div>
@@ -350,7 +347,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={weddingDateYear}
               onChange={(e) => handleUpdate("weddingDateYear", e.target.value)}
-              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold"
+              className="w-full text-xs p-2 text-center rounded-xl border border-slate-300 bg-white font-bold pointer-events-auto select-text"
             />
           </div>
         </div>
@@ -360,7 +357,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={activeDateMode}
             onChange={(e) => handleUpdate("dateDisplayMode", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
           >
             {(DATE_DISPLAY_MODES || []).map((mode) => (
               <option key={mode.id} value={mode.id}>
@@ -372,7 +369,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       </div>
 
       {/* ✦ 4. PROGRAMMA DELLA GIORNATA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari
         </h3>
@@ -382,7 +379,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={activeSchedule}
             onChange={(e) => handleUpdate("scheduleSchema", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
           >
             {(SCHEDULE_SCHEMAS || []).map((item) => (
               <option key={item.id} value={item.id}>
@@ -394,7 +391,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       </div>
 
       {/* ✦ 5. COLONNA SONORA D'AUTORE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore FF Edizioni
         </h3>
@@ -404,7 +401,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={audioUrl}
             onChange={(e) => handleUpdate("audioUrl", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
           >
             {(AUDIO_DEMOS || []).map((track) => (
               <option key={track.id} value={track.url}>
@@ -416,7 +413,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       </div>
 
       {/* ✦ 6. LOCATION & MAPPA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
@@ -424,7 +421,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("locationMappa")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.locationMappa
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -441,7 +438,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={locationName}
               onChange={(e) => handleUpdate("locationName", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
             />
           </div>
           <div>
@@ -450,14 +447,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
               type="text"
               value={locationAddress}
               onChange={(e) => handleUpdate("locationAddress", e.target.value)}
-              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
             />
           </div>
         </div>
       </div>
 
       {/* ✦ 7. DRESS CODE & PALETTE ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Palette className="w-4 h-4 text-[#D4AF37]" /> Dress Code &amp; Palette CROMATICA
@@ -465,7 +462,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("codiceAbbigliamento")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.codiceAbbigliamento
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -485,7 +482,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
                   key={idx}
                   type="button"
                   onClick={() => handleUpdate("selectedPaletteIdx", idx)}
-                  className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
+                  className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer pointer-events-auto ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
                       : "border-slate-200 bg-white hover:border-slate-300"
@@ -513,13 +510,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={dressCodeNotes}
             onChange={(e) => handleUpdate("dressCodeNotes", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white"
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white pointer-events-auto select-text"
           />
         </div>
       </div>
 
       {/* ✦ 8. LISTA NOZZE & IBAN ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Gift className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze &amp; Coordinate IBAN
@@ -527,7 +524,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("listaNozzeAmazon")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.listaNozzeAmazon
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -543,13 +540,13 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             type="text"
             value={customIban}
             onChange={(e) => handleUpdate("customIban", e.target.value)}
-            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold"
+            className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono font-bold pointer-events-auto select-text"
           />
         </div>
       </div>
 
       {/* ✦ 9. CONFERMA PARTECIPAZIONE (RSVP) & FESTA ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4 pointer-events-auto">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Conferma Partecipazione (RSVP) &amp; Festa
@@ -557,7 +554,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("confermaRsvp")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.confermaRsvp
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
@@ -572,7 +569,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <select
             value={rsvpStyle}
             onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer pointer-events-auto"
           >
             {(RSVP_STYLES || []).map((style) => (
               <option key={style.id} value={style.id}>
@@ -587,7 +584,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <button
             type="button"
             onClick={() => toggleModule("hubGiochiFesta")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer pointer-events-auto ${
               modules?.hubGiochiFesta
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-xs"
                 : "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200"
