@@ -2,61 +2,69 @@
 
 import React from "react";
 import Image from "next/image";
-import { Store, ExternalLink } from "lucide-react";
-import { PartnerStore } from "./agency/constants";
+import { ShoppingBag, ExternalLink } from "lucide-react";
 
-export interface PartnerStoresProps {
-  stores?: PartnerStore[];
+export interface PartnerStoreItem {
+  id: string;
+  name: string;
+  url: string;
+  logoUrl?: string;
 }
 
-export default function PartnerStores({ stores = [] }: PartnerStoresProps) {
-  // Garanzia totale che stores sia sempre un array valido
-  const safeStores = stores && Array.isArray(stores) ? stores : [];
+export interface PartnerStoresProps {
+  stores?: PartnerStoreItem[];
+  showAmazonAffiliate?: boolean;
+}
 
-  if (safeStores.length === 0) {
-    return (
-      <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-center shadow-sm space-y-2">
-        <span className="text-[10px] font-bold text-[#8B6508] uppercase block font-serif text-xs">
-          🏪 Negozi Convenzionati
-        </span>
-        <a
-          href="https://www.amazon.it/baby-reg/homepage?tag=zero100store-21"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-2.5 bg-[#FAF7F2] rounded-xl text-xs font-bold text-[#1E293B] flex items-center justify-between border border-slate-200 hover:border-[#D4AF37] transition-all"
-        >
-          <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6 flex-shrink-0">
-              <Image src="/logo.png" alt="Amazon Logo" fill className="object-contain" />
-            </div>
-            <span>Lista Nozze Ufficiale Amazon ↗</span>
-          </div>
-          <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
-        </a>
-      </div>
-    );
-  }
+export default function PartnerStores({
+  stores = [],
+  showAmazonAffiliate = true,
+}: PartnerStoresProps) {
+  const defaultAmazonStore: PartnerStoreItem = {
+    id: "amazon-default",
+    name: "Lista Nozze Ufficiale Amazon",
+    url: "https://www.amazon.it/baby-reg/homepage?tag=zero100store-21",
+    logoUrl: "/logo.png",
+  };
+
+  const storeList = [
+    ...(showAmazonAffiliate ? [defaultAmazonStore] : []),
+    ...(stores || []),
+  ];
+
+  if (storeList.length === 0) return null;
 
   return (
-    <div className="mx-3 my-3 p-4 bg-white rounded-2xl border border-slate-200 text-xs shadow-sm space-y-2">
-      <span className="text-[10px] font-bold text-[#8B6508] uppercase block mb-1 font-serif text-xs">
-        🏪 Negozi Convenzionati
+    <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-3 bg-white border-slate-200">
+      <span className="text-[10px] font-bold uppercase block font-serif text-[#8B6508] flex items-center justify-center gap-1">
+        <ShoppingBag className="w-3.5 h-3.5 text-[#D4AF37]" /> Negozi Convenzionati &amp; Lista Nozze
       </span>
-      {safeStores.map((s, idx) => (
-        <a
-          key={s.id || idx}
-          href={s.url || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-2.5 bg-[#FAF7F2] rounded-xl text-xs font-bold text-[#1E293B] flex items-center justify-between border border-slate-200 hover:border-[#D4AF37] transition-all"
-        >
-          <div className="flex items-center gap-2">
-            <Store className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
-            <span className="truncate">{s.name || "Negozio Partner"} ↗</span>
-          </div>
-          <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
-        </a>
-      ))}
+
+      <div className="space-y-2">
+        {storeList.map((store, idx) => (
+          <a
+            key={store.id || idx}
+            href={store.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-[#FAF7F2] hover:border-[#D4AF37] transition-all group"
+          >
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <div className="relative w-6 h-6 shrink-0">
+                <Image
+                  src={store.logoUrl || "/logo.png"}
+                  alt={store.name}
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+              <span className="text-xs font-bold text-[#1E293B] truncate">{store.name}</span>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-[#8B6508] group-hover:scale-110 transition-transform" />
+          </a>
+        ))}
+      </div>
     </div>
   );
 }
