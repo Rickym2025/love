@@ -4,22 +4,19 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export interface WaterRippleImageProps {
   src?: string;
-  blueish?: number;
-  scale?: number;
-  illumination?: number;
-  surfaceDistortion?: number;
-  waterDistortion?: number;
   className?: string;
   onClick?: () => void;
 }
 
 export function WaterRippleImage({
-  src = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+  src = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
   className = '',
   onClick,
 }: WaterRippleImageProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [webGlSupported, setWebGlSupported] = useState(true);
+
+  const imgSrc = src || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -41,12 +38,10 @@ export function WaterRippleImage({
       onClick={onClick}
       className={`relative overflow-hidden w-full h-full min-h-[300px] shadow-2xl cursor-pointer ${className}`}
     >
-      {webGlSupported ? (
-        <canvas ref={canvasRef} className="w-full h-full block cursor-pointer" />
-      ) : (
-        <div className="relative w-full h-full">
-          <img src={src} alt="Specchio d'Acqua" className="w-full h-full object-cover" />
-        </div>
+      <img src={imgSrc} alt="Specchio d'Acqua Sfondo" className="absolute inset-0 w-full h-full object-cover" />
+
+      {webGlSupported && (
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block cursor-pointer opacity-80" />
       )}
     </div>
   );
