@@ -1,0 +1,92 @@
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export interface ScheduleItem {
+  id: string;
+  time: string;
+  title: string;
+}
+
+interface TimelineHowItWorksProps {
+  items?: ScheduleItem[];
+  accentColor?: string;
+  className?: string;
+}
+
+const Pin = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M16 3a1 1 0 0 1 .117 1.993l-.117 .007v4.764l1.894 3.789a1 1 0 0 1 .1 .331l.006 .116v2a1 1 0 0 1 -.883 .993l-.117 .007h-4v4a1 1 0 0 1 -1.993 .117l-.007 -.117v-4h-4a1 1 0 0 1 -.993 -.883l-.007 -.117v-2a1 1 0 0 1 .06 -.34l.046 -.107l1.894 -3.791v-4.762a1 1 0 0 1 -.117 -1.993l.117 -.007h8z" />
+  </svg>
+);
+
+const DEFAULT_CARD_POSITIONS = [
+  { className: "md:relative md:top-0 md:left-0", rotate: "rotate-2" },
+  { className: "md:relative md:top-0 md:right-0", rotate: "-rotate-2" },
+  { className: "md:relative md:top-0 md:left-0", rotate: "rotate-3" },
+  { className: "md:relative md:top-0 md:right-0", rotate: "-rotate-3" },
+  { className: "md:relative md:top-0 md:left-0", rotate: "rotate-2" },
+];
+
+export default function TimelineHowItWorks({
+  items = [
+    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+  ],
+  accentColor = "#D4AF37",
+  className = "",
+}: TimelineHowItWorksProps) {
+  return (
+    <div className={`py-6 px-2 relative ${className}`}>
+      <div className="max-w-xl mx-auto space-y-6">
+        {items.map((item, index) => {
+          const position = DEFAULT_CARD_POSITIONS[index % DEFAULT_CARD_POSITIONS.length];
+          const numStr = index < 9 ? `0${index + 1}` : `${index + 1}`;
+
+          return (
+            <motion.div
+              key={item.id || index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className={`relative w-full transition-transform duration-300 hover:scale-105 ${position.rotate}`}
+            >
+              <div className="bg-white p-3 rounded-[24px] shadow-[0px_8px_20px_rgba(0,0,0,0.08)] border border-slate-200/80">
+                <Pin className="w-6 h-6 text-[#D4AF37] mb-2 mx-auto drop-shadow-sm" />
+                <div className="bg-[#FAF7F2] border border-[#D4AF37]/30 rounded-[18px] p-4 flex flex-col relative overflow-hidden text-center">
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className="text-2xl font-serif font-bold text-[#8B6508]"
+                      style={{ color: accentColor }}
+                    >
+                      {numStr}
+                    </span>
+                    <span className="px-3 py-1 bg-white border border-[#D4AF37]/40 rounded-full font-sans font-bold text-xs text-[#1E293B] shadow-xs">
+                      ⏰ {item.time}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-serif font-bold text-[#1E293B] leading-snug">
+                    {item.title}
+                  </h4>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
