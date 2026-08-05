@@ -13,6 +13,7 @@ import LoveQuiz from "@/components/LoveQuiz";
 import AudioPlayer from "@/components/AudioPlayer";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
+import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
 
 export interface ScheduleItem {
@@ -45,6 +46,8 @@ export interface AgencyPreviewProps {
   selectedPaletteIdx?: number;
   partnerStores?: any[];
   scheduleItems?: ScheduleItem[];
+  heroBgImage?: string;
+  heroMediaImage?: string;
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -79,6 +82,8 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
+  heroBgImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
@@ -117,7 +122,6 @@ export default function AgencyPreview({
 
   const presetsArray = Array.isArray(WELCOME_PHRASE_PRESETS) ? WELCOME_PHRASE_PRESETS : [];
   
-  // SINCRONIZZAZIONE LIVE DELLA FRASE BENVENUTO
   const computedWelcomePhrase =
     welcomePhrase ||
     (selectedPhrasePreset === "9"
@@ -126,8 +130,6 @@ export default function AgencyPreview({
     "Benvenuti al nostro matrimonio";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-  
-  // SINCRONIZZAZIONE LIVE DEL TEMA EVENTO
   const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? (customEventTheme || "Tema Personalizzato") : eventThemePreset;
 
   const fullscreenDynamicUrl = `/${
@@ -188,7 +190,7 @@ export default function AgencyPreview({
 
         {introStart === "lago" && (
           <div className="relative w-full h-36 overflow-hidden border-b border-sky-300">
-            <WaterRippleImage src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"} />
+            <WaterRippleImage src={heroBgImage} />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="relative w-12 h-12 drop-shadow-lg">
                 <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
@@ -197,9 +199,14 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* HERO SPOSI */}
-        <div className="text-center pt-3 px-4 space-y-1">
-          <span className="text-[10px] tracking-widest uppercase font-bold" style={{ color: accentColor }}>
+        {/* HERO SPOSI CON FOTO PERSONALIZZATA */}
+        <div className="text-center pt-3 px-4 space-y-2">
+          {heroMediaImage && (
+            <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-md relative">
+              <img src={heroMediaImage} alt={coupleNames} className="w-full h-full object-cover" />
+            </div>
+          )}
+          <span className="text-[10px] tracking-widest uppercase font-bold block" style={{ color: accentColor }}>
             Il Matrimonio di {coupleNames} • {activeTheme}
           </span>
           <p className="text-xs font-bold" style={{ color: textColor }}>
@@ -248,7 +255,16 @@ export default function AgencyPreview({
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA DINAMICO (STAMPATO DAI CAMPI EDITABILI) */}
+        {/* PROGRAMMA GIORNATA CON NUOVA TIMELINE 21st.dev */}
+        {scheduleSchema === "howitworks" && (
+          <div className="mx-3 my-3 p-2 rounded-2xl border text-center shadow-sm bg-white border-slate-200">
+            <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-1" style={{ color: accentColor }}>
+              📍 Programma a Carte 3D
+            </span>
+            <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
+          </div>
+        )}
+
         {scheduleSchema === "classico" && (
           <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white border-slate-200">
             <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
