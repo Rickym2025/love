@@ -76,8 +76,9 @@ export default function AgencyPreview({
   const textColor = activePalette?.textColor || "#1E293B";
   const accentColor = activePalette?.accentColor || "#8B6508";
 
+  // SELEZIONE FOTO STRICTLY COORDINATA ALLA PALETTE (0-7)
   const photosMap = DRESS_CODE_PHOTOS || {};
-  const outfitPhotos = (photosMap[selectedPaletteIdx % 8] || photosMap[0] || []);
+  const outfitPhotos = photosMap[selectedPaletteIdx] || photosMap[selectedPaletteIdx % 8] || photosMap[0] || [];
 
   const computedWelcomePhrase =
     welcomePhrase ||
@@ -117,10 +118,10 @@ export default function AgencyPreview({
         </Link>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI */}
+      {/* FRAME SMARTPHONE MOCKUP CON COLORI COORDINATI ED AD ALTO CONTRASTO */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6"
-        style={{ backgroundColor: (activePalette?.colors && activePalette.colors[0]) || "#FAF7F2", color: textColor }}
+        style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
       >
         {/* PLAYER AUDIO PERSISTENTE */}
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
@@ -175,7 +176,7 @@ export default function AgencyPreview({
 
         {/* MODULO DATA (3 OPZIONI) */}
         {dateDisplayMode === "countdown" && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white" style={{ borderColor: (activePalette?.colors && activePalette.colors[2]) || "#E6C687" }}>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
             <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
