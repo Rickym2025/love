@@ -1,3 +1,73 @@
+export interface BackgroundPreset {
+  id: string;
+  name: string;
+  url: string;
+  thumbnail: string;
+}
+
+export const BACKGROUND_PRESETS: BackgroundPreset[] = [
+  {
+    id: "panna_avorio",
+    name: "Seta Avorio & Panna",
+    url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "pergamena_epoca",
+    name: "Carta Pergamena d'Epoca",
+    url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "marmo_carrara",
+    name: "Marmo Bianco Carrara",
+    url: "https://images.unsplash.com/photo-1533158307587-828f0a76ef46?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1533158307587-828f0a76ef46?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "bokeh_dorato",
+    name: "Bokeh & Luci Dorate",
+    url: "https://images.unsplash.com/photo-1519751138061-ce96946ae097?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1519751138061-ce96946ae097?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "seta_rosa",
+    name: "Seta Rosa Cipria",
+    url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "salvia_botanico",
+    name: "Foglia Salvia & Botanico",
+    url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "blu_zaffiro",
+    name: "Blu Notte Zaffiro",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "terracotta_rame",
+    name: "Terracotta & Rame",
+    url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "linen_minimal",
+    name: "Lino Naturale Minimal",
+    url: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "black_tuxedo",
+    name: "Nero Tuxedo & Glitter",
+    url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=200&q=80",
+  },
+];
+
 export interface DressCodePalette {
   id: string;
   name: string;
@@ -8,7 +78,6 @@ export interface DressCodePalette {
   images: string[];
 }
 
-// 1. PALETTE CROMATICHE UFFICIALI COORDINATE
 const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   {
     id: "lavanda_lilla",
@@ -149,14 +218,12 @@ export const DRESS_CODE_PHOTOS: Record<string | number, string[]> = new Proxy(PH
   }
 });
 
-// 2. MODALITÀ VISUALIZZAZIONE DATA
 export const DATE_DISPLAY_MODES = [
   { id: "countdown", label: "Conto alla Rovescia Dinamico", value: "countdown", title: "Conto alla Rovescia Dinamico" },
   { id: "scratch", label: "Gratta col Dito per Scoprire la Data", value: "scratch", title: "Gratta col Dito per Scoprire la Data" },
   { id: "text", label: "Data Semplice in Testo Elegante", value: "text", title: "Data Semplice in Testo Elegante" }
 ];
 
-// 3. SCHEMI PROGRAMMA ORARI (CON NUOVA TIMELINE A CARTE 21st.dev)
 export const SCHEDULE_SCHEMAS = [
   { id: "classico", label: "Classico Elegante", value: "classico", title: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
   { id: "howitworks", label: "Timeline a Carte con Spillo 3D", value: "howitworks", title: "Timeline a Carte con Spillo 3D", description: "Design moderno con schede orientate" },
@@ -165,7 +232,6 @@ export const SCHEDULE_SCHEMAS = [
   { id: "minimal", label: "Minimal essenziale", value: "minimal", title: "Minimal essenziale", description: "Testo pulito e lineare" }
 ];
 
-// 4. EFFETTI DI APERTURA INIZIALE
 export const INTRO_START_OPTIONS = [
   { id: "busta", label: "Busta Luxury con Ceralacca 3D", value: "busta", title: "Busta Luxury con Ceralacca 3D" },
   { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D", value: "nuvole", title: "Apertura Nuvole Volumetriche 3D" },
@@ -175,14 +241,12 @@ export const INTRO_START_OPTIONS = [
 ];
 export const START_EFFECTS = INTRO_START_OPTIONS;
 
-// 5. STILI CONFERMA PARTECIPAZIONE (RSVP)
 export const RSVP_STYLES = [
   { id: "classico", label: "Classico con Intolleranze e Menu", value: "classico", title: "Classico con Intolleranze e Menu" },
   { id: "moderno", label: "Moderno Interattivo", value: "moderno", title: "Moderno Interattivo" },
   { id: "minimal", label: "Minimal Diretto", value: "minimal", title: "Minimal Diretto" }
 ];
 
-// 6. TEMI DELL'EVENTO PRESET
 export const EVENT_THEMES = [
   "Luxury Gold & Total White",
   "Boho Chic & Naturale",
@@ -193,7 +257,6 @@ export const EVENT_THEMES = [
 ];
 export const EVENT_THEME_PRESETS = EVENT_THEMES;
 
-// 7. PRESET FRASI BENVENUTO
 export const WELCOME_PHRASE_PRESETS: string[] = [
   "Due anime, un solo destino. Una storia scritta nel cuore.",
   "Il nostro amore è un viaggio che inizia oggi.",
@@ -207,7 +270,6 @@ export const WELCOME_PHRASE_PRESETS: string[] = [
   "Personalizzato (digita la tua frase)"
 ];
 
-// 8. BRANI AUDIO EDIZIONI FF
 export const AUDIO_DEMOS = [
   {
     id: "A",
