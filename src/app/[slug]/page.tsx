@@ -384,3 +384,35 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             </span>
             <p className="text-xs text-slate-300">
               Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
+            </p>
+            <Link
+              href={`/${cleanSlug}/festa`}
+              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
+            >
+              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+            </Link>
+          </div>
+        )}
+
+        <footer className="text-center pt-8 pb-4 text-[11px] text-slate-400 border-t border-slate-200/60">
+          <p>© {new Date().getFullYear()} {coupleNames} — Tutti i diritti riservati.</p>
+          <p className="mt-1 text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+export default function InvitationPage({ params }: { params?: { slug?: string } }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B6508] font-serif font-bold text-sm">
+          Caricamento Invito in corso...
+        </div>
+      }
+    >
+      <InvitationContent params={params} />
+    </Suspense>
+  );
+}
