@@ -49,10 +49,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
   const [suonaMusica, setSuonaMusica] = useState(false);
 
-  // GESTIONE ROBUSTA E DINAMICA DELLE PALETTE
+  // GESTIONE ROBUSTA E DIFENSIVA DELLE PALETTE
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : Object.values(DRESS_CODE_PALETTES || {});
+    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
+    ? Object.values(DRESS_CODE_PALETTES)
+    : [];
 
   const fallbackPalette = {
     id: "1",
@@ -62,18 +64,30 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
     accentColor: "#8B6508",
   };
 
-  const safeIdx = Math.max(0, Math.min(paletteIdx, (palettesList.length || 1) - 1));
-  const activePalette = palettesList[safeIdx] || fallbackPalette;
+  const safeIdx = Math.max(0, Math.min(paletteIdx, Math.max(0, (palettesList.length || 1) - 1)));
+  const activePalette = (palettesList && palettesList[safeIdx]) || fallbackPalette;
 
-  const textColor = (activePalette as any).textColor || "#1E293B";
-  const accentColor = (activePalette as any).accentColor || "#8B6508";
+  // SICUREZZA TOTALE SU ARRAY COLORI
+  const colors = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
+    ? activePalette.colors
+    : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
-  // SELEZIONE FOTO STRICTLY COORDINATA ALLA PALETTE ATTIVA
+  const bgMain = colors[0] || "#FAF7F2";
+  const bgCard = colors[1] || "#FFFFFF";
+  const borderCard = colors[2] || "#E6C687";
+
+  const textColor = (activePalette as any)?.textColor || "#1E293B";
+  const accentColor = (activePalette as any)?.accentColor || "#8B6508";
+
+  // SELEZIONE FOTO RIGOROSA E SICURA
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
-    ((activePalette as any).images && (activePalette as any).images.length > 0)
+    Array.isArray((activePalette as any)?.images) && (activePalette as any).images.length > 0
       ? (activePalette as any).images
-      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [];
+      : photosMap[safeIdx] || photosMap[safeIdx % 8] || photosMap[0] || [
+          "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80"
+        ];
 
   const marqueeText = searchParams?.get("marquee") || `✦ IL MATRIMONIO DI ${coupleNames.toUpperCase()} ✦ BENVENUTI AL NOSTRO GIORNO SPECIALE ✦`;
   const customIban = searchParams?.get("iban") || "IT60 X 05428 11101 000000123456";
@@ -95,9 +109,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   return (
     <div
       className="min-h-screen w-full overflow-x-hidden transition-colors"
-      style={{ backgroundColor: activePalette.colors[0] || "#FAF7F2", color: textColor }}
+      style={{ backgroundColor: bgMain, color: textColor }}
     >
-      {/* PLAYER AUDIO PERSISTENTE AZIONATO DALL'APERTURA */}
+      {/* PLAYER AUDIO PERSISTENTE */}
       {(audioUrl || suonaMusica) && (
         <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />
       )}
@@ -146,7 +160,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         </div>
 
         {dateMode === "countdown" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-2" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
@@ -163,7 +177,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {dateMode === "scratch" && showGrattaData && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               🎰 Gratta col dito per scoprire la data
             </span>
@@ -171,9 +185,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA SUI COLORI DELLA PALETTE */}
+        {/* PROGRAMMA DELLA GIORNATA */}
         {schedule === "classico" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
@@ -188,7 +202,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {schedule === "timeline" && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               📍 Timeline Verticale Orari
             </span>
@@ -203,16 +217,16 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
         {schedule === "schede" && (
           <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
               <span className="block text-xs" style={{ color: accentColor }}>16:30</span> Accoglienza
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
               <span className="block text-xs" style={{ color: accentColor }}>17:00</span> Cerimonia
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
               <span className="block text-xs" style={{ color: accentColor }}>18:30</span> Aperitivo
             </div>
-            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687", color: textColor }}>
+            <div className="p-4 rounded-2xl border font-bold shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}>
               <span className="block text-xs" style={{ color: accentColor }}>20:00</span> Cena &amp; Torta
             </div>
           </div>
@@ -228,7 +242,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showMappa && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <MapPin className="w-4 h-4" style={{ color: accentColor }} /> Location del Matrimonio
             </span>
@@ -259,9 +273,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* DRESS CODE CON GALLERIA OUTFIT RIGOROSAMENTE COORDINATA */}
+        {/* DRESS CODE CON GALLERIA OUTFIT COORDINATA */}
         {showDressCode && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#D4AF37" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-4" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
@@ -269,7 +283,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
             {/* PALLINI COLORI PALETTE */}
             <div className="flex justify-center gap-2">
-              {(activePalette?.colors || []).map((color, i) => (
+              {colors.map((color, i) => (
                 <div
                   key={i}
                   className="w-7 h-7 rounded-full border border-slate-300 shadow-sm"
@@ -284,7 +298,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
               </span>
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
-                {(outfitPhotos || []).map((imgUrl, idx) => (
+                {outfitPhotos.map((imgUrl, idx) => (
                   <div key={idx} className="w-32 h-44 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                     <img
                       src={imgUrl}
@@ -303,7 +317,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         )}
 
         {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: activePalette.colors[1] || "#FFFFFF", borderColor: activePalette.colors[2] || "#E6C687" }}>
+          <div className="p-6 rounded-3xl shadow-sm border text-center space-y-3" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
@@ -316,12 +330,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           </div>
         )}
 
-        {/* MODULO RSVP DINAMICO */}
+        {/* MODULO RSVP */}
         {showRsvp && (
           <div className="pt-2">
             <RsvpForm
               coupleNames={coupleNames}
-              paletteColors={activePalette?.colors}
+              paletteColors={colors}
               rsvpStyle={rsvpStyle}
             />
           </div>
