@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon } from "lucide-react";
 import {
   DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
@@ -47,6 +47,8 @@ export interface ConfiguratorFormProps {
   dressCodeNotes?: string;
   selectedPaletteIdx?: number;
   customIban?: string;
+  heroBgImage?: string;
+  heroMediaImage?: string;
   scheduleItems?: ScheduleItem[];
   showAmazonAffiliate?: boolean;
   customStores?: PartnerStoreItem[];
@@ -75,6 +77,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPaletteIdx = 0,
     customIban = "IT60 X 05428 11101 000000123456",
+    heroBgImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+    heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
     scheduleItems = [
       { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
       { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
@@ -112,7 +116,26 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("modules", { ...currentModules, [key]: !currentModules[key] });
   };
 
-  // PROGRAMMA GIORNATA DINAMICO
+  const applyTemplateA = () => {
+    handleUpdate("selectedTemplate", "A");
+    handleUpdate("coupleNames", "Elena & Davide");
+    handleUpdate("introStart", "busta");
+    handleUpdate("dateDisplayMode", "countdown");
+    handleUpdate("scheduleSchema", "classico");
+    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3");
+    handleUpdate("selectedPaletteIdx", 0);
+  };
+
+  const applyTemplateB = () => {
+    handleUpdate("selectedTemplate", "B");
+    handleUpdate("coupleNames", "Francesca & Luca");
+    handleUpdate("introStart", "nuvole");
+    handleUpdate("dateDisplayMode", "scratch");
+    handleUpdate("scheduleSchema", "howitworks");
+    handleUpdate("audioUrl", "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3");
+    handleUpdate("selectedPaletteIdx", 1);
+  };
+
   const addScheduleItem = () => {
     const newItem: ScheduleItem = {
       id: Date.now().toString(),
@@ -132,7 +155,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("scheduleItems", updated);
   };
 
-  // NEGOZI LOCALI MULTIPLI
   const addCustomStore = () => {
     const newStore: PartnerStoreItem = {
       id: Date.now().toString(),
@@ -158,11 +180,46 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* ✦ 1. MODELLO & EFFETTO APERTURA ✦ */}
+      {/* ✦ MODELLI PREIMPOSTATI A / B ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
+        </h3>
+
+        <div className="grid grid-cols-2 gap-3 pt-1">
+          <button
+            type="button"
+            onClick={applyTemplateA}
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "A"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello A — Elena &amp; Davide</span>
+            <span className="text-[10px] text-slate-500 mt-1 block">Luxury Gold • Busta 3D • Countdown</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateB}
+            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "B"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello B — Francesca &amp; Luca</span>
+            <span className="text-[10px] text-slate-500 mt-1 block">Boho Chic • Nuvole 3D • Timeline Spillo</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ✦ 1. EFFETTO DI APERTURA & IMMAGINI HERO PERSONALIZZATE ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto di Apertura &amp; Tema Evento
+            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start &amp; Immagini Hero
           </h3>
           <button
             type="button"
@@ -190,7 +247,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             >
               {(INTRO_START_OPTIONS || []).map((opt) => (
                 <option key={opt.id} value={opt.id}>
-                  {opt.label === "Scroll Expand Media a Tutto Schermo" ? "Zoom Multimediale allo Scroll" : opt.label}
+                  {opt.label}
                 </option>
               ))}
             </select>
@@ -224,6 +281,37 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             />
           </div>
         )}
+
+        {/* CAMPI PERSONALIZZAZIONE IMMAGINI HERO */}
+        <div className="pt-2 border-t border-slate-100 space-y-3">
+          <span className="text-xs font-bold text-[#8B6508] flex items-center gap-1.5">
+            <ImageIcon className="w-4 h-4 text-[#D4AF37]" /> Personalizzazione Foto Hero Sposi:
+          </span>
+
+          <div className="space-y-2">
+            <div>
+              <label className="block text-[10px] font-bold mb-1">URL Sfondo Hero Personalizzato</label>
+              <input
+                type="text"
+                placeholder="https://images.unsplash.com/photo-..."
+                value={heroBgImage}
+                onChange={(e) => handleUpdate("heroBgImage", e.target.value)}
+                className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Hero)</label>
+              <input
+                type="text"
+                placeholder="https://images.unsplash.com/photo-..."
+                value={heroMediaImage}
+                onChange={(e) => handleUpdate("heroMediaImage", e.target.value)}
+                className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ✦ 2. NOMI SPOSI & FRASE BENVENUTO ✦ */}
