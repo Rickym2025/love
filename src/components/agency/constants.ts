@@ -1,161 +1,98 @@
-export interface PartnerStore {
+export interface DressCodePalette {
   id: string;
   name: string;
-  url: string;
-  logoUrl: string;
+  colors: string[]; // Palette di 5 pallini
+  description: string;
+  images: string[]; // Foto di outfit rigorosamente dello stesso colore
 }
 
-export interface PaletteItem {
-  id: string;
-  name: string;
-  colors: string[];
-  textColor: string;
-  accentColor: string;
-}
-
-export const AUDIO_TRACK_PRESETS = [
-  { name: "🎵 Demo 1 — Elena & Davide ('La Nostra Melodia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3" },
-  { name: "🎵 Demo 2 — Francesca & Luca ('Quella Fotografia')", url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3" },
-  { name: "🔗 Personalizzata (Inserisci Link MP3 sotto)", url: "" },
-];
-
-export const WELCOME_PHRASE_PRESETS = [
-  "Due anime, un solo destino. Una storia scritta nel cuore.",
-  "L'amore non consiste nello guardarsi l'un l'altro, ma nel guardare insieme nella stessa direzione.",
-  "Niente è per caso, ogni passo ci ha condotti qui. Unisciti alla nostra gioia.",
-  "Oggi inizia il nostro 'per sempre'. Siete i benvenuti a celebrare con noi.",
-  "Due cuori, una sola melodia. Festeggia il nostro giorno speciale!",
-  "Con gioia e gratitudine vi invitiamo a condividere l'inizio della nostra vita insieme.",
-  "L'amore è la forza che muove l'universo. Benvenuti al nostro matrimonio.",
-  "Amore, risate e ricordi indimenticabili: grazie per essere con noi.",
-  "Un giorno di festa, una vita d'amore. Benvenuti al giorno più bello.",
-  "Personalizzata (scrivi la tua frase nel campo sottostante)",
-];
-
-export const INTRO_START_PRESETS = [
-  { id: "arco", name: "🏛️ Arco Romano & Cigni sul Lago" },
-  { id: "busta", name: "✉️ Busta d'Epoca 3D con Ceralacca" },
-  { id: "nuvole", name: "☁️ Nuvole 3D Volumetriche (Apertura allo Scroll)" },
-  { id: "lago", name: "🌊 Rifrazione Liquida Acqua del Lago" },
-];
-
-export const DATE_DISPLAY_MODES = [
-  { id: "countdown", name: "⏳ Countdown Timer in Tempo Reale" },
-  { id: "scratch", name: "🎰 Gratta la Data col Dito (HTML5 Canvas)" },
-  { id: "text", name: "📜 Data Fissa Elegant (Testo Grande Dorato)" },
-];
-
-export const SCHEDULE_SCHEMAS = [
-  { id: "classico", name: "🏛️ Classico Elegante" },
-  { id: "timeline", name: "📍 Timeline Verticale con Nodi Dorati" },
-  { id: "schede", name: "🎴 Schede Card Separati" },
-  { id: "minimal", name: "📜 Minimal Serif Pulito" },
-  { id: "orizzontale", name: "↔️ Timeline Orizzontale Scorrevole" },
-];
-
-export const EVENT_THEME_PRESETS = [
-  "Luxury Gold & Total White",
-  "Shabby Chic & Provenzale",
-  "Botanico & Greenery",
-  "Country Elegant",
-  "BOHO Chic & Terracotta",
-  "Minimal Modern",
-  "Tropical Romance",
-  "Personalizzato (digita a mano)",
-];
-
-// PALETTE COLORI MATRIMONIALI ELEGANTI CON TESTI SCURI LEGGI BILI (textColor)
-export const DRESS_CODE_PALETTES: PaletteItem[] = [
-  {
-    id: "1",
-    name: "Pastello Romantico",
-    colors: ["#FAF7F2", "#FFF0F5", "#FCE7F0", "#D87093", "#3A1C24"],
-    textColor: "#3A1C24",
-    accentColor: "#C97082",
+export const DRESS_CODE_PALETTES: Record<string, DressCodePalette> = {
+  lavanda_lilla: {
+    id: "lavanda_lilla",
+    name: "Lavanda & Lillà d'Autore",
+    colors: ["#FFFFFF", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    description: "Toni eleganti del viola, lilla e lavanda con dettagli scuri.",
+    images: [
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80", // Abito lungo viola/lilla d'alta moda
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80", // Abito lilla elegante da cerimonia
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80"  // Abito scuro con dettagli violetto
+    ]
   },
-  {
-    id: "2",
-    name: "Oro & Champagne",
-    colors: ["#FAF7F2", "#F3EDE2", "#E6C687", "#C5A059", "#2C261E"],
-    textColor: "#2C261E",
-    accentColor: "#C5A059",
+  rosa_cipria: {
+    id: "rosa_cipria",
+    name: "Rosa Cipria & Seta",
+    colors: ["#FFFFFF", "#FFF1F2", "#FCE7F3", "#EC4899", "#831843"],
+    description: "Sfumature delicate di rosa cipria, magentino e bordeaux elegante.",
+    images: [
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&auto=format&fit=crop&q=80", // Abito rosa cipria in seta
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80", // Vestito rosa elegante da sera
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80"  // Outfit rosa cipria sofisticato
+    ]
   },
-  {
-    id: "3",
-    name: "Salvia & Smeraldo Soft",
-    colors: ["#F0F7F4", "#E2ECE9", "#A3C9A8", "#52796F", "#19352D"],
-    textColor: "#19352D",
-    accentColor: "#52796F",
+  oro_champagne: {
+    id: "oro_champagne",
+    name: "Oro Bruciato & Champagne",
+    colors: ["#FFFFFF", "#FDFBF7", "#E6D5AC", "#B8860B", "#2A2415"],
+    description: "Palette calda nei toni dorati, avorio, champagne e rame scuro.",
+    images: [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80", // Abito champagne/oro elegante
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80", // Completo beige/dorato formale
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80"  // Vestito luxury tono su tono bronzo/oro
+    ]
   },
-  {
-    id: "4",
-    name: "Rose Gold & Cipria",
-    colors: ["#FFF5F5", "#FCE7F0", "#F4ACB7", "#C97082", "#4A1521"],
-    textColor: "#4A1521",
-    accentColor: "#C97082",
+  verde_smeraldo: {
+    id: "verde_smeraldo",
+    name: "Verde Smeraldo & Salvia",
+    colors: ["#FFFFFF", "#F0FDF4", "#A7F3D0", "#059669", "#064E3B"],
+    description: "Tonalità botaniche fresche e sofisticate dal salvia allo smeraldo profondo.",
+    images: [
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80", // Abito verde smeraldo elegante
+      "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop&q=80", // Completo abito salvia/smeraldo uomo
+      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"  // Abito verde bosco da cerimonia
+    ]
   },
-  {
-    id: "5",
-    name: "Blu Zaffiro & Polvere",
-    colors: ["#F0F4F8", "#D9E2EC", "#B0C4DE", "#334E68", "#102A43"],
-    textColor: "#102A43",
-    accentColor: "#334E68",
+  blu_notte: {
+    id: "blu_notte",
+    name: "Blu Notte & Azzurro Polvere",
+    colors: ["#FFFFFF", "#F0F9FF", "#BAE6FD", "#0284C7", "#0C4A6E"],
+    description: "Eleganza senza tempo con azzurro pastello e blu zaffiro profondo.",
+    images: [
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80", // Abito azzurro polvere da cerimonia
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80", // Smoking / Abito Blu Notte classico
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"  // Abito blu zaffiro brillante
+    ]
   },
-  {
-    id: "6",
-    name: "Sabbia & Terracotta Chiara",
-    colors: ["#FFF8F0", "#F7EBDF", "#E8D3C3", "#B26752", "#422018"],
-    textColor: "#422018",
-    accentColor: "#B26752",
+  bordeaux_marsala: {
+    id: "bordeaux_marsala",
+    name: "Bordeaux & Marsala Deep",
+    colors: ["#FFFFFF", "#FFF1F2", "#FECDD3", "#E11D48", "#4C0519"],
+    description: "Toni intensi del rosso rubino, marsala e bordeaux scuro d'epoca.",
+    images: [
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80", // Vestito da sera bordeaux/rosso scuro
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80", // Abito marsala sartoriale
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"  // Dettaglio bordeaux luxury
+    ]
   },
-  {
-    id: "7",
-    name: "Lavanda & Lillà Delicato",
-    colors: ["#F7F5FC", "#EDE7F6", "#D8B4F8", "#8A5CF5", "#2D1552"],
-    textColor: "#2D1552",
-    accentColor: "#8A5CF5",
+  monocromo_black: {
+    id: "monocromo_black",
+    name: "Black Tie & Monocromo",
+    colors: ["#FFFFFF", "#F3F4F6", "#9CA3AF", "#374151", "#111827"],
+    description: "Il classico formale per eccellenza: scala di grigi, bianco puro e nero smokey.",
+    images: [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80", // Smoking Nero d'autore
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80", // Abito nero sartoriale donna
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"  // Completo antracite/nero
+    ]
   },
-  {
-    id: "8",
-    name: "Bianco & Minimal Avorio",
-    colors: ["#FFFFFF", "#FAF7F2", "#E2E8F0", "#64748B", "#0F172A"],
-    textColor: "#0F172A",
-    accentColor: "#64748B",
-  },
-];
-
-// IMMAGINI UNSPLASH RIGOROSAMENTE SELEZIONATE E COORDINATE PER CIASCUNA PALETTE (0-7)
-export const DRESS_CODE_PHOTOS: Record<number, string[]> = {
-  0: [ // 0: Pastello Romantico
-    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80",
-  ],
-  1: [ // 1: Oro & Champagne
-    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
-  ],
-  2: [ // 2: Salvia & Smeraldo
-    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
-  ],
-  3: [ // 3: Rose Gold & Cipria
-    "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80",
-  ],
-  4: [ // 4: Blu Zaffiro & Polvere
-    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
-  ],
-  5: [ // 5: Sabbia & Terracotta
-    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=400&q=80",
-  ],
-  6: [ // 6: Lavanda & Lillà (RIGOROSAMENTE VIOLA/LILLA ELEGANTI)
-    "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80",
-  ],
-  7: [ // 7: Bianco & Minimal
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80",
-  ],
+  terracotta_rust: {
+    id: "terracotta_rust",
+    name: "Terracotta & Rame Caldo",
+    colors: ["#FFFFFF", "#FFF7ED", "#FFEDD5", "#EA580C", "#7C2D12"],
+    description: "Cromie mediterranee dal color ruggine alla terracotta bruciata.",
+    images: [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80", // Abito terracotta/arancio bruciato
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80", // Completo tono ruggine rame
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"  // Vestito satin terracotta
+    ]
+  }
 };
