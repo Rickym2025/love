@@ -20,6 +20,11 @@ export default function PartnerStores({
   stores = [],
   showAmazonAffiliate = true,
 }: PartnerStoresProps) {
+  // DEDUPLICAZIONE RIGOROSA DI AMAZON PER EVITARE DOPPI PULSANTI
+  const hasAmazonInStores = (stores || []).some(
+    (s) => s.id === "amazon-default" || (s.name && s.name.toLowerCase().includes("amazon"))
+  );
+
   const defaultAmazonStore: PartnerStoreItem = {
     id: "amazon-default",
     name: "Lista Nozze Ufficiale Amazon",
@@ -28,7 +33,7 @@ export default function PartnerStores({
   };
 
   const storeList = [
-    ...(showAmazonAffiliate ? [defaultAmazonStore] : []),
+    ...(showAmazonAffiliate && !hasAmazonInStores ? [defaultAmazonStore] : []),
     ...(stores || []),
   ];
 
@@ -44,10 +49,11 @@ export default function PartnerStores({
         {storeList.map((store, idx) => (
           <a
             key={store.id || idx}
-            href={store.url}
+            href={store.url || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-[#FAF7F2] hover:border-[#D4AF37] transition-all group"
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-[#FAF7F2] hover:border-[#D4AF37] transition-all group pointer-events-auto cursor-pointer"
           >
             <div className="flex items-center gap-2.5 overflow-hidden">
               <div className="relative w-6 h-6 shrink-0">
