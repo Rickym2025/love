@@ -7,6 +7,18 @@ export interface BackgroundPreset {
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
+    id: "bianco_puro",
+    name: "Bianco Puro",
+    url: "#FFFFFF",
+    thumbnail: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: "palette_sync",
+    name: "Coordinato alla Palette",
+    url: "palette",
+    thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
+  },
+  {
     id: "panna_avorio",
     name: "Seta Avorio & Panna",
     url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
@@ -27,8 +39,8 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "bokeh_dorato",
     name: "Bokeh & Luci Dorate",
-    url: "https://images.unsplash.com/photo-1519751138061-ce96946ae097?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1519751138061-ce96946ae097?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
   },
   {
     id: "seta_rosa",
@@ -51,20 +63,8 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "terracotta_rame",
     name: "Terracotta & Rame",
-    url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
-  },
-  {
-    id: "linen_minimal",
-    name: "Lino Naturale Minimal",
-    url: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=200&q=80",
-  },
-  {
-    id: "black_tuxedo",
-    name: "Nero Tuxedo & Glitter",
-    url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80",
   },
 ];
 
