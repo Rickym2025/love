@@ -87,22 +87,28 @@ export default function InvitationTemplateC({
 
   return (
     <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-      {/* 1. NAVBAR HEADER */}
-      <div className="flex justify-between items-center p-4 bg-white/95 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <Image src="/logo.png" alt="Logo" width={28} height={28} className="object-contain" unoptimized />
-          <span className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</span>
+      {/* 1. NAVBAR FIXED GLASSMORPHIC */}
+      <nav className="sticky top-2 z-40 flex justify-between items-center p-3.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-md">
+        <div className="flex items-center gap-2.5">
+          <Image src="/logo.png" alt="Logo Sposi" width={26} height={28} className="object-contain" unoptimized />
+          <span className="font-serif font-bold text-xs text-[#1E293B]">{coupleNames}</span>
         </div>
-        <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider">MENU ☰</span>
-      </div>
+        <div className="hidden sm:flex items-center gap-3 text-[10px] font-bold text-slate-600">
+          <a href="#programma" className="hover:text-[#8B6508]">Programma</a>
+          <a href="#location" className="hover:text-[#8B6508]">Location</a>
+          <a href="#rsvp" className="hover:text-[#8B6508]">RSVP</a>
+        </div>
+        <span className="text-[10px] font-bold text-[#8B6508] uppercase tracking-wider sm:hidden">MENU ☰</span>
+      </nav>
 
-      {/* 2. SLIDE INIZIALE HERO LANDING */}
-      <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
-        <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
-        <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
-        <div className="pt-3">
-          <a href="#rsvp" className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors">
+      {/* 2. SLIDE INIZIALE HERO LANDING BANNER */}
+      <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-4 shadow-lg">
+        <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508] block">✦ BENVENUTI NEL NOSTRO SITO DI NOZZE ✦</span>
+        <h1 className="text-3xl md:text-5xl font-serif font-bold text-[#1E293B] drop-shadow-xs">{coupleNames}</h1>
+        <p className="text-sm font-bold text-slate-700">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
+        <blockquote className="text-xs italic font-serif text-slate-600 max-w-sm mx-auto">&quot;{welcomePhrase}&quot;</blockquote>
+        <div className="pt-2 flex justify-center gap-3">
+          <a href="#rsvp" className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-all">
             CONFERMA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
           </a>
         </div>
@@ -110,19 +116,19 @@ export default function InvitationTemplateC({
 
       {/* 3. TESTIMONIALS / AUGURI INVITATI */}
       <div className="space-y-2 pt-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Messaggi degli Invitati</span>
         <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora di festeggiare!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Marco &amp; Sara</span>
           </div>
-          <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
             <p className="text-xs italic font-serif">&quot;Auguri immensi ragazzi!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Zii Rossi</span>
           </div>
-          <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
             <p className="text-xs italic font-serif">&quot;Ci saremo tutti a brindare!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Amici di Sempre</span>
@@ -130,26 +136,28 @@ export default function InvitationTemplateC({
         </div>
       </div>
 
-      {/* 4. SEZIONE ALTERNATA 1: CERIMONIA */}
+      {/* 4. SEZIONE ALTERNATA 1: CERIMONIA SOLENNE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
-        <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
+        <div className="w-full h-48 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
           <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
         </div>
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">La Cerimonia Solenne</span>
+          <h3 className="text-base font-serif font-bold text-[#1E293B]">Il Sacro Sì</h3>
           <p className="text-xs font-medium text-slate-600 leading-relaxed">
             {weddingDateDay} {weddingDateMonth} {weddingDateYear} • Presso {locationName}
           </p>
         </div>
       </div>
 
-      {/* 5. SEZIONE ALTERNATA 2: RICEVIMENTO */}
+      {/* 5. SEZIONE ALTERNATA 2: RICEVIMENTO & GRAN GALA */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
         <div className="space-y-2 order-2 md:order-1">
-          <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
+          <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Party</span>
+          <h3 className="text-base font-serif font-bold text-[#1E293B]">Cena di Gala e Festeggiamenti</h3>
           <p className="text-xs font-medium text-slate-600 leading-relaxed">{locationAddress}</p>
         </div>
-        <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2">
+        <div className="w-full h-48 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2">
           <img src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"} alt="Location" className="w-full h-full object-cover" />
         </div>
       </div>
@@ -182,33 +190,35 @@ export default function InvitationTemplateC({
       )}
 
       {/* 7. PROGRAMMA DELLA GIORNATA */}
-      {scheduleSchema === "howitworks" && (
-        <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
-            📍 Programma della Giornata
-          </span>
-          <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
-        </div>
-      )}
-
-      {scheduleSchema === "classico" && (
-        <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
-            Programma della Giornata
-          </span>
-          <div className="space-y-2 text-sm font-serif pt-1" style={{ color: textColor }}>
-            {scheduleItems.map((item) => (
-              <p key={item.id}>
-                <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> — {item.title}
-              </p>
-            ))}
+      <div id="programma">
+        {scheduleSchema === "howitworks" && (
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
+              📍 Programma della Giornata
+            </span>
+            <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
           </div>
-        </div>
-      )}
+        )}
+
+        {scheduleSchema === "classico" && (
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
+              Programma della Giornata
+            </span>
+            <div className="space-y-2 text-sm font-serif pt-1" style={{ color: textColor }}>
+              {scheduleItems.map((item) => (
+                <p key={item.id}>
+                  <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> — {item.title}
+                </p>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* 8. LOCATION CON MAPPA GOOGLE SEPARATA */}
       {showMappa && (
-        <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
+        <div id="location" className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
           <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
             <MapPin className="w-4 h-4" style={{ color: accentColor }} /> Location del Matrimonio
           </span>
@@ -243,7 +253,7 @@ export default function InvitationTemplateC({
 
       {/* 9. DRESS CODE & PALETTE */}
       {showDressCode && (
-        <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white border-slate-200">
+        <div id="dresscode" className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white border-slate-200">
           <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
             Dress Code &amp; Palette
           </span>
@@ -273,7 +283,7 @@ export default function InvitationTemplateC({
 
       {/* 11. LISTA NOZZE IBAN */}
       {showListaNozze && (
-        <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
+        <div id="listanozze" className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
           <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
             <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
           </span>
@@ -282,14 +292,14 @@ export default function InvitationTemplateC({
         </div>
       )}
 
-      {/* 12. RSVP */}
+      {/* 12. RSVP COMPLETO CON INTOLLERANZE */}
       <div id="rsvp" className="pt-2">
         <RsvpForm coupleNames={coupleNames} paletteColors={colors} rsvpStyle={rsvpStyle} />
       </div>
 
       {/* 13. FESTA */}
       {showHubGiochi && (
-        <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
+        <div id="festa" className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
           <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
             <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
           </span>
@@ -300,9 +310,9 @@ export default function InvitationTemplateC({
         </div>
       )}
 
-      {/* 14. FOOTER STRUTTURATO */}
+      {/* 14. FOOTER STRUTTURATO D'AUTORE */}
       <footer className="p-6 bg-slate-900 text-slate-400 rounded-3xl text-xs text-center space-y-2 shadow-lg">
-        <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames}</p>
+        <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames} — Sito Ufficiale del Matrimonio</p>
         <p className="text-[10px]">P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
         <p className="text-[#D4AF37] text-[10px]">Powered by LOVE White-Label Hub</p>
       </footer>
