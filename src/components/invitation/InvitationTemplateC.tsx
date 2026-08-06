@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
@@ -82,12 +81,10 @@ export default function InvitationTemplateC({
   showHubGiochi = true,
   cleanSlug = "elena-e-davide",
 }: InvitationTemplateCProps) {
-  // DICHIARAZIONE GARANTITA A MONTE DELLE VARIABILI DI COLORE
   const colorsList = Array.isArray(colors) && colors.length >= 3
     ? colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
-  const bgMain = colorsList[0] || "#FAF7F2";
   const bgCard = colorsList[1] || "#FFFFFF";
   const borderCard = colorsList[2] || "#E6C687";
   const accentColor = colorsList[3] || "#8B6508";
@@ -98,30 +95,23 @@ export default function InvitationTemplateC({
 
   return (
     <div className="relative w-full min-h-screen">
-      {/* ✦ SFONDO IMMAGINE TEXTURE ✦ */}
+      {/* 1. AGGIUNTO SFONDO IMMAGINE / TEXTURE PERSONALIZZATA CON PARALLAX SOFT */}
       {hasCustomBg && (
         <div
-          className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25"
+          className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
           style={{ backgroundImage: `url(${heroBgImage})` }}
         />
       )}
 
-      {/* ✦ SFONDO A PALLINI REATTIVI (KINETIC GRID) ✦ */}
+      {/* 2. AGGIUNTO EFFETTO A PALLINI REATTIVI (KINETIC GRID) IN BACKGROUND */}
       <div className="fixed inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
         <KineticGrid />
       </div>
 
       <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-        {/* 1. NAVBAR HEADER */}
-        <div className="flex justify-between items-center p-4 bg-white/95 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Logo" width={28} height={28} className="object-contain" unoptimized />
-            <span className="font-serif font-bold text-sm text-[#1E293B]">{coupleNames}</span>
-          </div>
-          <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider">MENU ☰</span>
-        </div>
+        {/* HEADER / NAVBAR ELIMINATO SU RICHIESTA */}
 
-        {/* 2. SLIDE INIZIALE HERO LANDING */}
+        {/* 1. SLIDE INIZIALE HERO LANDING */}
         <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
           <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
@@ -134,7 +124,7 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 3. AUGURI DEGLI INVITATI */}
+        {/* 2. AUGURI DEGLI INVITATI */}
         <div className="space-y-2 pt-2">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
           <div className="grid grid-cols-3 gap-2 text-center">
@@ -156,7 +146,7 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 4. SEZIONE ALTERNATA 1: CERIMONIA */}
+        {/* 3. SEZIONE ALTERNATA 1: CERIMONIA */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
           <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
             <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
@@ -169,7 +159,7 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 5. SEZIONE ALTERNATA 2: RICEVIMENTO */}
+        {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
           <div className="space-y-2 order-2 md:order-1">
             <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
@@ -180,7 +170,7 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 6. MODULO DATA & COUNTDOWN */}
+        {/* 5. MODULO DATA & COUNTDOWN */}
         {dateMode === "countdown" && (
           <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/95 backdrop-blur-xs" style={{ borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
@@ -207,7 +197,7 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 7. PROGRAMMA DELLA GIORNATA */}
+        {/* 6. PROGRAMMA DELLA GIORNATA */}
         {scheduleSchema === "howitworks" && (
           <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -232,7 +222,7 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 8. LOCATION CON MAPPA GOOGLE SEPARATA */}
+        {/* 7. LOCATION CON MAPPA GOOGLE SEPARATA */}
         {showMappa && (
           <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -267,7 +257,7 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 9. DRESS CODE & PALETTE */}
+        {/* 8. DRESS CODE & PALETTE */}
         {showDressCode && (
           <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -294,10 +284,10 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 10. NEGOZI CONVENZIONATI */}
+        {/* 9. NEGOZI CONVENZIONATI */}
         {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
 
-        {/* 11. LISTA NOZZE IBAN */}
+        {/* 10. LISTA NOZZE IBAN */}
         {showListaNozze && (
           <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -308,12 +298,12 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 12. RSVP */}
+        {/* 11. RSVP */}
         <div id="rsvp" className="pt-2">
           <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} />
         </div>
 
-        {/* 13. FESTA */}
+        {/* 12. FESTA */}
         {showHubGiochi && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -325,8 +315,6 @@ export default function InvitationTemplateC({
             </Link>
           </div>
         )}
-
-        {/* FOOTER ELIMINATO COME RICHIESTO */}
       </main>
     </div>
   );
