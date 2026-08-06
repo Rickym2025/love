@@ -5,32 +5,65 @@ export interface BackgroundPreset {
   thumbnail: string;
   unsplashPageUrl: string;
   isDark?: boolean;
+  isPremium?: boolean; // true = foto Unsplash+ (a pagamento), servita da plus.unsplash.com
 }
 
-// CONVERTITORE AUTOMATICO PER LINK WEBPAGE UNSPLASH
+/**
+ * NOTA IMPORTANTE SU QUESTA FUNZIONE:
+ * In passato questa funzione tentava di "convertire" il link della pagina Unsplash
+ * (es. https://unsplash.com/it/foto/nome-slug-KcsKWw77Ovw) in un URL CDN diretto,
+ * assumendo che l'ultimo blocco dello slug (KcsKWw77Ovw) fosse riusabile nell'URL
+ * images.unsplash.com/photo-<id>.
+ *
+ * Questo è SBAGLIATO: lo slug della pagina e l'id usato dalla CDN
+ * (es. 1516541196182-6bdb0516ed27) sono due identificativi indipendenti.
+ * Non esiste un modo per derivare l'uno dall'altro via regex/codice client-side.
+ * Da qui derivavano i mismatch tra il nome del preset e la foto mostrata.
+ *
+ * Questa funzione ora fa solo da guardia: se le passi già un URL CDN valido
+ * (images.unsplash.com o plus.unsplash.com) lo restituisce invariato.
+ * Se le passi un link di pagina Unsplash (unsplash.com/it/foto/...), NON prova
+ * a indovinare nulla e restituisce l'input as-is, così un URL sbagliato
+ * salta subito all'occhio invece di produrre un'immagine muta ma errata.
+ *
+ * COME AGGIUNGERE UNA NUOVA IMMAGINE IN FUTURO (unico modo affidabile):
+ * 1. Apri la pagina della foto su unsplash.com
+ * 2. Click destro sull'immagine principale > "Copia indirizzo immagine"
+ *    (oppure: tasto destro > Ispeziona > cerca il tag <meta property="og:image">)
+ * 3. Incolla quel link (inizia con https://images.unsplash.com/photo-...
+ *    oppure https://plus.unsplash.com/premium_photo-... se è Unsplash+)
+ *    direttamente nel campo `url` del preset qui sotto.
+ * 4. Se il dominio è plus.unsplash.com, marca isPremium: true.
+ */
 export function parseUnsplashImageUrl(urlOrId: string): string {
   if (!urlOrId || urlOrId === "#FFFFFF" || urlOrId === "palette") return urlOrId;
-  
-  // Se è già un link immagine diretto CDN, lo restituisce subito
-  if (urlOrId.includes("images.unsplash.com")) return urlOrId;
 
-  // Se l'utente incolla il link della pagina web Unsplash (es. https://unsplash.com/it/foto/...-KcsKWw77Ovw)
-  const match = urlOrId.match(/([a-zA-Z0-9_-]{10,})$/);
-  if (match && match[1]) {
-    return `https://images.unsplash.com/photo-${match[1]}?auto=format&fit=crop&w=1200&q=80`;
+  // Già un URL CDN diretto (gratuito o Unsplash+): usalo così com'è.
+  if (urlOrId.includes("images.unsplash.com") || urlOrId.includes("plus.unsplash.com")) {
+    return urlOrId;
+  }
+
+  // Link alla pagina Unsplash (non a un'immagine diretta): non è convertibile
+  // in modo affidabile, quindi lo lasciamo invariato e chi lo usa se ne accorge.
+  if (urlOrId.includes("unsplash.com/")) {
+    console.warn(
+      `[background-presets] "${urlOrId}" è un link pagina Unsplash, non un URL CDN diretto. ` +
+      `Sostituiscilo con l'og:image reale (vedi istruzioni sopra la funzione).`
+    );
+    return urlOrId;
   }
 
   return urlOrId;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE DAI TUOI LINK UNSPLASH UFFICIALI
+// 9 TEXTURE AD ALTA RISOLUZIONE — URL CDN risolti manualmente dalle pagine Unsplash ufficiali
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "sfondo_bianco",
     name: "Sfondo Bianco Intonaco",
     unsplashPageUrl: "https://unsplash.com/it/foto/superficie-murale-in-intonaco-a-texture-bianca-KcsKWw77Ovw",
-    url: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
@@ -45,64 +78,69 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
     id: "seta_avorio",
     name: "Seta Avorio",
     unsplashPageUrl: "https://unsplash.com/it/foto/un-primo-piano-di-un-lenzuolo-bianco-su-un-letto-GVvrdV-oj40",
-    url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
+    url: "https://plus.unsplash.com/premium_photo-1701191571962-020565a4f0c1?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://plus.unsplash.com/premium_photo-1701191571962-020565a4f0c1?auto=format&fit=crop&w=200&q=80",
     isDark: false,
+    isPremium: true,
   },
   {
     id: "marmo",
     name: "Marmo Naturale",
     unsplashPageUrl: "https://unsplash.com/it/foto/sfondo-astratto-a-motivo-bianco-di-marmo-naturale-Yrw8oyReyh8",
-    url: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=200&q=80",
+    url: "https://plus.unsplash.com/premium_photo-1764687797170-8139372a9005?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://plus.unsplash.com/premium_photo-1764687797170-8139372a9005?auto=format&fit=crop&w=200&q=80",
     isDark: false,
+    isPremium: true,
   },
   {
     id: "luci_dorate",
     name: "Luci Dorate Bokeh",
     unsplashPageUrl: "https://unsplash.com/it/foto/una-foto-sfocata-di-un-telefono-cellulare-su-un-tavolo-zcg3ge_-4CI",
-    url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
+    url: "https://plus.unsplash.com/premium_photo-1664274132563-58233267f8e8?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://plus.unsplash.com/premium_photo-1664274132563-58233267f8e8?auto=format&fit=crop&w=200&q=80",
     isDark: false,
+    isPremium: true,
   },
   {
     id: "seta_rosa",
     name: "Seta Rosa",
     unsplashPageUrl: "https://unsplash.com/it/foto/tessuto-verde-su-tavolo-di-legno-marrone-cQL1GrZIJ9s",
-    url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1613503350178-0854b98bdbe8?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1613503350178-0854b98bdbe8?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
     id: "blu_notte",
     name: "Blu Notte",
     unsplashPageUrl: "https://unsplash.com/it/foto/gemme-sfaccettate-di-un-blu-brillante-scintillano-intensamente-CEYBFW1gRjw",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1783771686998-0af6c0efec6e?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1783771686998-0af6c0efec6e?auto=format&fit=crop&w=200&q=80",
     isDark: true,
   },
   {
     id: "terracotta",
     name: "Terracotta",
     unsplashPageUrl: "https://unsplash.com/it/foto/un-giocatore-di-baseball-che-tiene-una-mazza-in-cima-a-un-campo-sohjKKHhguk",
-    url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80",
+    url: "https://plus.unsplash.com/premium_photo-1672152804608-1740ffa01da0?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://plus.unsplash.com/premium_photo-1672152804608-1740ffa01da0?auto=format&fit=crop&w=200&q=80",
     isDark: true,
+    isPremium: true,
   },
   {
     id: "fiori",
     name: "Fiori",
     unsplashPageUrl: "https://unsplash.com/it/foto/un-mazzo-di-fiori-seduto-sopra-un-tavolo-di-legno-ElxBX6bsAgQ",
-    url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
+    url: "https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?auto=format&fit=crop&w=200&q=80",
     isDark: false,
+    isPremium: true,
   },
   {
     id: "carta_pergamena",
     name: "Carta Pergamena",
     unsplashPageUrl: "https://unsplash.com/it/foto/texture-di-carta-pergamena-beige-invecchiata-_YgmNICHdss",
-    url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1686806372726-388d03ff49c8?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1686806372726-388d03ff49c8?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
 ];
