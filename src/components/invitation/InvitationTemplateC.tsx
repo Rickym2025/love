@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Calendar } from "lucide-react";
+import { Star, ChevronRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
@@ -87,7 +87,7 @@ export default function InvitationTemplateC({
 
   return (
     <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-      {/* 1. NAVBAR */}
+      {/* 1. NAVBAR HEADER */}
       <div className="flex justify-between items-center p-4 bg-white/95 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-md">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="Logo" width={28} height={28} className="object-contain" unoptimized />
@@ -108,23 +108,23 @@ export default function InvitationTemplateC({
         </div>
       </div>
 
-      {/* 3. TESTIMONIALS / AUGURI */}
+      {/* 3. TESTIMONIALS / AUGURI INVITATI */}
       <div className="space-y-2 pt-2">
         <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora di festeggiare!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Marco &amp; Sara</span>
           </div>
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Auguri immensi!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Auguri immensi ragazzi!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Zii Rossi</span>
           </div>
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Ci saremo tutti!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Ci saremo tutti a brindare!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Amici di Sempre</span>
           </div>
         </div>
