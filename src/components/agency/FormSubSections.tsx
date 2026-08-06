@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag, Image as ImageIcon } from "lucide-react";
 import {
   WELCOME_PHRASE_PRESETS,
   DATE_DISPLAY_MODES,
@@ -93,12 +93,15 @@ export function SectionDatiSposi({
   );
 }
 
-// 2. MODELLI PRESET
+// 2. MODELLI PRESET CON CAMPI IMMAGINE MODELLO C SUBITO SOTTO IL PULSANTE
 export function SectionModelliPreset({
   selectedTemplate,
   applyTemplateA,
   applyTemplateB,
   applyTemplateC,
+  heroMediaImage,
+  ricevimentoImage,
+  handleUpdate,
 }: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
@@ -146,6 +149,37 @@ export function SectionModelliPreset({
           <span className="text-[9px] text-slate-500 mt-1 block">Giulia &amp; Marco</span>
         </button>
       </div>
+
+      {/* CAMPI DEDICATI DI MODIFICA IMMAGINI SUBITO SOTTO IL PULSANTE MODELLO C */}
+      {selectedTemplate === "C" && (
+        <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#D4AF37]/50 space-y-2 mt-3 animate-fade-in">
+          <span className="text-xs font-bold text-[#8B6508] flex items-center gap-1">
+            <ImageIcon className="w-3.5 h-3.5 text-[#D4AF37]" /> Personalizza Immagini del Modello C:
+          </span>
+          <div className="space-y-2 pt-1">
+            <div>
+              <label className="block text-[10px] font-bold text-slate-700 mb-0.5">1. Foto Cerimonia / Principale</label>
+              <input
+                type="text"
+                placeholder="https://images.unsplash.com/photo-..."
+                value={heroMediaImage || ""}
+                onChange={(e) => handleUpdate("heroMediaImage", e.target.value)}
+                className="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-700 mb-0.5">2. Foto Ricevimento / Festa</label>
+              <input
+                type="text"
+                placeholder="https://images.unsplash.com/photo-..."
+                value={ricevimentoImage || ""}
+                onChange={(e) => handleUpdate("ricevimentoImage", e.target.value)}
+                className="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white font-mono"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -329,7 +363,7 @@ export function SectionEffettoStart({
       )}
 
       <div>
-        <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Hero)</label>
+        <label className="block text-[10px] font-bold mb-1 font-bold">URL Foto Principale Sposi (Zoom / Cerimonia)</label>
         <input
           type="text"
           placeholder="https://images.unsplash.com/photo-..."
