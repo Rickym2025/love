@@ -300,12 +300,6 @@ export default function InvitationTemplateC({
         </div>
       )}
 
-      {/* 14. FOOTER STRUTTURATO */}
-      <footer className="p-6 bg-slate-900 text-slate-400 rounded-3xl text-xs text-center space-y-2 shadow-lg">
-        <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames}</p>
-        <p className="text-[10px]">P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
-        <p className="text-[#D4AF37] text-[10px]">Powered by LOVE White-Label Hub</p>
-      </footer>
     </main>
   );
 }
