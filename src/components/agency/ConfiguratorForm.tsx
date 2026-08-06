@@ -275,7 +275,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 2: MODELLO PREIMPOSTATO (MODELLI A / B / C) ✦ */}
+      {/* ✦ MODULO 2: MODELLI PREIMPOSTATI A / B / C ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
@@ -619,23 +619,36 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 8: LOCATION & MAPPA GOOGLE CON TOGGLE DEDICATO ✦ */}
+      {/* ✦ MODULO 8: LOCATION & MAPPA GOOGLE CON PULSANTE DEDICATO NASCONDI SOLO MAPPA ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio &amp; Mappa Google
           </h3>
-          <button
-            type="button"
-            onClick={() => toggleModule("showOnlyMap")}
-            className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.showOnlyMap !== false
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
-                : "bg-slate-100 text-slate-500 border-slate-200"
-            }`}
-          >
-            {modules?.showOnlyMap !== false ? "✓ Mappa Google Visibile" : "✕ Nascondi Solo Mappa Google"}
-          </button>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => toggleModule("locationMappa")}
+              className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+                modules?.locationMappa !== false
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "bg-slate-100 text-slate-500 border-slate-200"
+              }`}
+            >
+              {modules?.locationMappa !== false ? "✓ Modulo Attivo" : "✕ Modulo Disattivo"}
+            </button>
+            <button
+              type="button"
+              onClick={() => toggleModule("showOnlyMap")}
+              className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+                modules?.showOnlyMap !== false
+                  ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                  : "bg-amber-100 text-amber-800 border-amber-300"
+              }`}
+            >
+              {modules?.showOnlyMap !== false ? "✓ Mappa Google Visibile" : "✕ Nascondi Solo Mappa"}
+            </button>
+          </div>
         </div>
 
         <div className="space-y-3">
