@@ -80,9 +80,9 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [customWelcomePhrase, setCustomWelcomePhrase] = useState("");
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
-  const [heroBgImage, setHeroBgImage] = useState(
-    "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80"
-  );
+  
+  // STATI SFONDI PERSONALIZZABILI
+  const [heroBgImage, setHeroBgImage] = useState("palette");
   const [heroMediaImage, setHeroMediaImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
   );
@@ -132,6 +132,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     hubGiochiFesta: true,
     guestPhotoWall: true,
     confermaRsvp: true,
+    fregiStelle: true,
   });
 
   function toggleModule(key: string) {
