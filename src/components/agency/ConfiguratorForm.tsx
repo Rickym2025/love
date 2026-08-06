@@ -41,6 +41,7 @@ export interface ConfiguratorFormProps {
   customIban?: string;
   heroBgImage?: string;
   heroMediaImage?: string;
+  waterImageUrl?: string;
   scheduleItems?: ScheduleItem[];
   showAmazonAffiliate?: boolean;
   customStores?: PartnerStoreItem[];
@@ -66,6 +67,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
     heroBgImage = "palette",
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+    waterImageUrl = "",
     selectedPaletteIdx = 0,
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPhrasePreset = "0",
@@ -228,6 +230,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         eventThemePreset={eventThemePreset}
         customEventTheme={customEventTheme}
         heroMediaImage={heroMediaImage}
+        waterImageUrl={waterImageUrl}
         handleUpdate={handleUpdate}
         toggleModule={toggleModule}
         modules={modules}
