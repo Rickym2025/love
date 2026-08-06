@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
+import { Star, ChevronRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
@@ -82,6 +82,7 @@ export default function InvitationTemplateC({
   showHubGiochi = true,
   cleanSlug = "elena-e-davide",
 }: InvitationTemplateCProps) {
+  // DICHIARAZIONE GARANTITA DELLE VARIABILI DI COLORE
   const colorsList = Array.isArray(colors) && colors.length >= 3
     ? colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
@@ -108,10 +109,11 @@ export default function InvitationTemplateC({
 
       {/* 2. SLIDE INIZIALE HERO LANDING CON SFONDO DINAMICO */}
       <div
-        className="p-6 rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md relative overflow-hidden bg-cover bg-center"
+        className="p-6 rounded-3xl border-2 text-center space-y-3 shadow-md relative overflow-hidden bg-cover bg-center"
         style={{
           backgroundImage: hasCustomBg ? `url(${heroBgImage})` : undefined,
           backgroundColor: bgCard,
+          borderColor: borderCard,
         }}
       >
         {hasCustomBg && <div className="absolute inset-0 bg-white/80 backdrop-blur-xs pointer-events-none" />}
