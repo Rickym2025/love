@@ -249,9 +249,13 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
               </div>
             )}
 
+            {/* EFFETTO 3: SPECCHIO D'ACQUA CAUSTICO (INDIPENDENTE DALLO SFONDO HERO) */}
             {introStart === "lago" && !startClosed && (
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
-                <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : currentPreset?.url || heroBgImage} onClick={() => setStartClosed(true)} />
+                <WaterRippleImage
+                  src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"}
+                  onClick={() => setStartClosed(true)}
+                />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                     <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
