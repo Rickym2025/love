@@ -96,6 +96,18 @@ export default function AgencyPreview({
   modules = {},
 }: AgencyPreviewProps) {
   const [startClosed, setStartClosed] = useState(false);
+  const [suonaMusica, setSuonaMusica] = useState(false);
+
+  const playWeddingAudio = () => {
+    setSuonaMusica(true);
+    if (typeof window !== "undefined") {
+      const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
+      if (audio) {
+        audio.muted = false;
+        audio.play().catch(() => {});
+      }
+    }
+  };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
@@ -112,11 +124,13 @@ export default function AgencyPreview({
   const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, Math.max(0, (palettesList.length || 1) - 1)));
   const activePalette = (palettesList && palettesList[safeIdx]) || fallbackPalette;
 
-  const colors = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
+  const colorsList = Array.isArray(activePalette?.colors) && activePalette.colors.length >= 3
     ? activePalette.colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
-  const bgMain = colors[0] || "#FAF7F2";
+  const bgMain = colorsList[0] || "#FAF7F2";
+  const bgCard = colorsList[1] || "#FFFFFF";
+  const borderCard = colorsList[2] || "#E6C687";
 
   const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
   const isDarkBg = currentPreset?.isDark;
@@ -192,8 +206,9 @@ export default function AgencyPreview({
           />
         )}
 
-        {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
+        {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
+        {/* MODELLO C (LANDING STORYBOARD) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -204,7 +219,7 @@ export default function AgencyPreview({
             locationName={locationName}
             locationAddress={locationAddress}
             outfitPhotos={outfitPhotos}
-            colors={colors}
+            colors={colorsList}
             rsvpStyle={rsvpStyle}
             heroMediaImage={heroMediaImage}
             ricevimentoImage={ricevimentoImage}
@@ -236,13 +251,13 @@ export default function AgencyPreview({
 
             {introStart === "busta" && modules.busta3d && (
               <div className="p-2">
-                <EnvelopeWax coupleNames={coupleNames} inline={true} />
+                <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={playWeddingAudio} />
               </div>
             )}
 
             {introStart === "nuvole" && modules.nuvole3d && (
               <div className="relative py-1">
-                <PartingClouds inline={true} />
+                <PartingClouds inline={true} onOpen={playWeddingAudio} />
               </div>
             )}
 
@@ -250,7 +265,10 @@ export default function AgencyPreview({
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
                 <WaterRippleImage
                   src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
-                  onClick={() => setStartClosed(true)}
+                  onClick={() => {
+                    playWeddingAudio();
+                    setStartClosed(true);
+                  }}
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
@@ -270,6 +288,7 @@ export default function AgencyPreview({
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                  onExpand={playWeddingAudio}
                 />
               </div>
             )}
@@ -280,7 +299,10 @@ export default function AgencyPreview({
                   coupleNames={coupleNames}
                   weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
                   inline={true}
-                  onEnter={() => setStartClosed(true)}
+                  onEnter={() => {
+                    playWeddingAudio();
+                    setStartClosed(true);
+                  }}
                 />
               </div>
             )}
@@ -452,7 +474,7 @@ export default function AgencyPreview({
                 <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
 
                 <div className="flex justify-center gap-1.5 py-1">
-                  {colors.map((c, i) => (
+                  {colorsList.map((c, i) => (
                     <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
                   ))}
                 </div>
@@ -504,7 +526,7 @@ export default function AgencyPreview({
               <div className="p-3">
                 <RsvpForm
                   coupleNames={coupleNames}
-                  paletteColors={colors}
+                  paletteColors={colorsList}
                   rsvpStyle={rsvpStyle}
                 />
               </div>
