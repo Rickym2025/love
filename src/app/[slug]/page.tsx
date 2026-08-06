@@ -193,9 +193,12 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             />
           )}
 
+          {/* HERO: SPECCHIO D'ACQUA CAUSTICO FULL SCREEN INDIPENDENTE */}
           {start === "lago" && !apertoAcqua && (
             <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
-              <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : currentPreset?.url || heroBgParam} />
+              <WaterRippleImage
+                src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"}
+              />
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
                 onClick={() => {
