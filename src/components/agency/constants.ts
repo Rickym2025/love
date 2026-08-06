@@ -90,7 +90,7 @@ export interface DressCodePalette {
   images: string[];
 }
 
-// 8 PALETTE UFFICIALI CON COLORI BRAND DINAMICI
+// PALETTE CROMATICHE UFFICIALI CON COLORI BRAND DINAMICI
 const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   {
     id: "lavanda_lilla",
