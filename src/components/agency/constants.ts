@@ -6,6 +6,7 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
+// 10 TEXTURE AD ALTA RISOLUZIONE
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "bianco_puro",
@@ -52,8 +53,8 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "seta_rosa",
     name: "Seta Rosa Cipria",
-    url: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
@@ -252,10 +253,14 @@ export const INTRO_START_OPTIONS = [
 ];
 export const START_EFFECTS = INTRO_START_OPTIONS;
 
+// 6 STILI RSVP COMPLETI E BEN DISTINTI
 export const RSVP_STYLES = [
-  { id: "classico", label: "Classico Elegante (Formale con Menu)", value: "classico", title: "Classico Elegante (Formale con Menu)" },
-  { id: "moderno", label: "Moderno Interattivo (Pulsanti Glow & Counter)", value: "moderno", title: "Moderno Interattivo (Pulsanti Glow & Counter)" },
-  { id: "minimal", label: "Minimal Diretto (Senza Riquadri)", value: "minimal", title: "Minimal Diretto (Senza Riquadri)" }
+  { id: "classico", label: "Classico Formale (Menu Carne/Pesce + Intolleranze)", value: "classico", title: "Classico Formale" },
+  { id: "moderno", label: "Moderno Interattivo (Pulsanti Glow & Counter)", value: "moderno", title: "Moderno Interattivo" },
+  { id: "minimal", label: "Minimal Diretto (Senza Riquadri)", value: "minimal", title: "Minimal Diretto" },
+  { id: "luxury_gold", label: "Luxury Gold d'Autore (Dettagliato)", value: "luxury_gold", title: "Luxury Gold d'Autore" },
+  { id: "bento_chic", label: "Bento Box Chic (Griglia Intolleranze)", value: "bento_chic", title: "Bento Box Chic" },
+  { id: "boheme_vintage", label: "Bohémien d'Epoca (Testo Calligrafico)", value: "boheme_vintage", title: "Bohémien d'Epoca" }
 ];
 
 export const EVENT_THEMES = [
