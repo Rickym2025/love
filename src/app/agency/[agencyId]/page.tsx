@@ -21,7 +21,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
 
-  // ELENCO DINAMICO DEGLI INVITI CREATI
   const [createdInvitations, setCreatedInvitations] = useState<CreatedInvitation[]>([
     {
       id: "1",
@@ -56,9 +55,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     setCreatedInvitations((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // STATI CONFIGURATORE
   const [activeTab, setActiveTab] = useState("create");
-  const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B">("A");
+  const [selectedTemplate, setSelectedTemplate] = useState<"A" | "B" | "C">("A");
   const [introStart, setIntroStart] = useState("busta");
   const [dateDisplayMode, setDateDisplayMode] = useState("countdown");
   const [scheduleSchema, setScheduleSchema] = useState("classico");
@@ -81,10 +79,12 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   
-  // STATI SFONDI PERSONALIZZABILI
   const [heroBgImage, setHeroBgImage] = useState("palette");
   const [heroMediaImage, setHeroMediaImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+  );
+  const [ricevimentoImage, setRicevimentoImage] = useState(
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
   );
 
   const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([
@@ -97,7 +97,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   const [showAmazonAffiliate, setShowAmazonAffiliate] = useState(true);
   const [customStores, setCustomStores] = useState([
-    { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it" }
+    { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it", logoUrl: "/logo.png" }
   ]);
 
   const partnerStores = [
@@ -111,7 +111,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           },
         ]
       : []),
-    ...customStores.map((s) => ({ ...s, logoUrl: "/logo.png" })),
+    ...customStores.map((s) => ({ ...s, logoUrl: s.logoUrl || "/logo.png" })),
   ];
 
   const [marqueeText, setMarqueeText] = useState(
@@ -125,6 +125,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     effettoAcqua: true,
     nuvole3d: true,
     locationMappa: true,
+    showOnlyMap: true,
     codiceAbbigliamento: true,
     negoziConvenzionati: true,
     listaNozzeAmazon: true,
@@ -168,7 +169,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. SIDEBAR AGENZIA CON CONTEGGIO DINAMICO */}
+      {/* 1. SIDEBAR */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -244,6 +245,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
             setHeroBgImage={setHeroBgImage}
             heroMediaImage={heroMediaImage}
             setHeroMediaImage={setHeroMediaImage}
+            ricevimentoImage={ricevimentoImage}
+            setRicevimentoImage={setRicevimentoImage}
             scheduleItems={scheduleItems}
             setScheduleItems={setScheduleItems}
             showAmazonAffiliate={showAmazonAffiliate}
@@ -298,6 +301,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           selectedPaletteIdx={selectedPaletteIdx}
           heroBgImage={heroBgImage}
           heroMediaImage={heroMediaImage}
+          ricevimentoImage={ricevimentoImage}
           partnerStores={partnerStores}
           showAmazonAffiliate={showAmazonAffiliate}
           scheduleItems={scheduleItems}
