@@ -57,52 +57,56 @@ export interface AgencyPreviewProps {
   modules?: Record<string, boolean>;
 }
 
-export default function AgencyPreview({
-  selectedTemplate = "A",
-  introStart = "busta",
-  dateDisplayMode = "countdown",
-  scheduleSchema = "classico",
-  rsvpStyle = "classico",
-  eventThemePreset = "Luxury Gold & Total White",
-  customEventTheme = "",
-  coupleNames = "Elena & Davide",
-  weddingDateDay = "15",
-  weddingDateMonth = "Settembre",
-  weddingDateYear = "2026",
-  locationName = "Villa Rosa",
-  locationAddress = "Via Roma 1, Roma",
-  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-  waterImageUrl = "",
-  welcomePhrase,
-  selectedPhrasePreset = "0",
-  customWelcomePhrase = "",
-  dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
-  selectedPaletteIdx = 0,
-  partnerStores = [],
-  showAmazonAffiliate = true,
-  scheduleItems = [
-    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
-    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
-    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
-    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
-    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
-  ],
-  heroBgImage = "palette",
-  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
-  marqueeText,
-  customIban = "IT60 X 05428 11101 000000123456",
-  modules = {},
-}: AgencyPreviewProps) {
+export default function AgencyPreview(props: AgencyPreviewProps) {
+  const {
+    selectedTemplate = "A",
+    introStart = "busta",
+    dateDisplayMode = "countdown",
+    scheduleSchema = "classico",
+    rsvpStyle = "classico",
+    eventThemePreset = "Luxury Gold & Total White",
+    customEventTheme = "",
+    coupleNames = "Elena & Davide",
+    weddingDateDay = "15",
+    weddingDateMonth = "Settembre",
+    weddingDateYear = "2026",
+    locationName = "Villa Rosa",
+    locationAddress = "Via Roma 1, Roma",
+    audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+    welcomePhrase,
+    selectedPhrasePreset = "0",
+    customWelcomePhrase = "",
+    dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
+    selectedPaletteIdx = 0,
+    partnerStores = [],
+    showAmazonAffiliate = true,
+    scheduleItems = [
+      { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+      { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+      { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+      { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+      { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+    ],
+    heroBgImage = "palette",
+    heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+    marqueeText,
+    customIban = "IT60 X 05428 11101 000000123456",
+    modules = {},
+  } = props;
+
   const [startClosed, setStartClosed] = useState(false);
 
+  // ESTRAZIONE SICURA PALETTE SENZA POSSIBILITÀ DI CRASH
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : Object.values(DRESS_CODE_PALETTES || {});
+    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
+    ? Object.values(DRESS_CODE_PALETTES)
+    : [];
 
   const fallbackPalette = {
     id: "1",
     name: "Lavanda & Lillà",
-    colors: ["#FAF7F2", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    colors: ["#FAF7F2", "#FFFFFF", "#E9D5FF", "#8B5CF6", "#3B0764"],
     textColor: "#1E293B",
     accentColor: "#8B6508",
   };
@@ -118,7 +122,7 @@ export default function AgencyPreview({
   const bgCard = colors[1] || "#FFFFFF";
   const borderCard = colors[2] || "#E6C687";
 
-  const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
+  const currentPreset = (BACKGROUND_PRESETS || []).find((p: any) => p.url === heroBgImage || p.id === heroBgImage);
   const isDarkBg = currentPreset?.isDark;
 
   const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
@@ -126,7 +130,6 @@ export default function AgencyPreview({
 
   const isWhiteBg = heroBgImage === "#FFFFFF";
   const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
-  
   const containerBgStyle = isWhiteBg
     ? { backgroundColor: "#FFFFFF", color: textColor }
     : isPaletteSync
@@ -183,20 +186,18 @@ export default function AgencyPreview({
       </div>
 
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative"
+        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
         style={containerBgStyle}
       >
-        {/* OPACITÀ SFUMATA SFONDO TEXTURE PARALLAX */}
-        {!isWhiteBg && !isPaletteSync && (
+        {!isWhiteBg && !isPaletteSync && currentPreset?.url && (
           <div
             className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
-            style={{ backgroundImage: `url(${heroBgImage})` }}
+            style={{ backgroundImage: `url(${currentPreset.url})` }}
           />
         )}
 
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -227,7 +228,6 @@ export default function AgencyPreview({
             cleanSlug="giulia-e-marco"
           />
         ) : (
-          /* MODELLO A & B STANDARD */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
@@ -249,7 +249,7 @@ export default function AgencyPreview({
 
             {introStart === "lago" && !startClosed && (
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
-                <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : heroBgImage} onClick={() => setStartClosed(true)} />
+                <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : currentPreset?.url || heroBgImage} onClick={() => setStartClosed(true)} />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                     <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
@@ -264,7 +264,7 @@ export default function AgencyPreview({
             {introStart === "expand" && (
               <div className="py-1 px-2">
                 <ScrollExpandMedia
-                  bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : heroBgImage}
+                  bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : currentPreset?.url || heroBgImage}
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -455,19 +455,16 @@ export default function AgencyPreview({
                   ))}
                 </div>
 
-                const selectedPalette = DRESS_CODE_PALETTES[selectedPaletteKey] || DRESS_CODE_PALETTES.lavanda_lilla;
-                
                 <div className="pt-1">
                   <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                     Esempi di Abbigliamento Consigliati (Scorri ➔)
                   </span>
-                  // Rendering nell'anteprima
                   <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
-                    {selectedPalette.images.map((imgUrl, idx) => (
+                    {outfitPhotos.map((imgUrl, idx) => (
                       <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                         <img
                           src={imgUrl}
-                          alt={`Outfit ${selectedPalette.name} ${idx + 1}`}
+                          alt={`Outfit ${idx + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </div>
