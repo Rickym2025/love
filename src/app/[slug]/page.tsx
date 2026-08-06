@@ -42,6 +42,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
   const heroBgParam = searchParams?.get("heroBg") || "palette";
+  const waterImageUrl = searchParams?.get("water") || "";
 
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
@@ -73,7 +74,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const fallbackPalette = {
     id: "1",
     name: "Lavanda & Lillà",
-    colors: ["#FAF7F2", "#FFFFFF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    colors: ["#FAF7F2", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
     textColor: "#1E293B",
     accentColor: "#8B6508",
   };
@@ -89,7 +90,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const bgCard = colors[1] || "#FFFFFF";
   const borderCard = colors[2] || "#E6C687";
 
-  const currentPreset = (BACKGROUND_PRESETS || []).find((p: any) => p.url === heroBgParam || p.id === heroBgParam);
+  const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgParam);
   const isDarkBg = currentPreset?.isDark;
 
   const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
@@ -136,11 +137,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors relative"
       style={{ backgroundColor: isWhiteBg ? "#FFFFFF" : bgMain, color: textColor }}
     >
-      {/* LIVETTO SFONDO PARALLAX SOFT (25% OPACITY) */}
-      {!isWhiteBg && !isPaletteSync && currentPreset?.url && (
+      {/* CAPA PARALLAX SFONDO FISSATA SULLE SPALLE CON SFUMATURA SOFT opacity-25 */}
+      {!isWhiteBg && !isPaletteSync && (
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
-          style={{ backgroundImage: `url(${currentPreset.url})` }}
+          style={{ backgroundImage: `url(${heroBgParam})` }}
         />
       )}
 
@@ -164,6 +165,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           colors={colors}
           rsvpStyle={rsvpStyle}
           heroBgImage={heroBgParam}
+          waterImageUrl={waterImageUrl}
           dateMode={dateMode}
           scheduleSchema={schedule}
           scheduleItems={scheduleItems}
@@ -184,7 +186,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
           {start === "expand" && (
             <ScrollExpandMedia
-              bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : currentPreset?.url || heroBgParam}
+              bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : heroBgParam}
               mediaSrc="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
               title={coupleNames}
               date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -193,12 +195,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             />
           )}
 
-          {/* HERO: SPECCHIO D'ACQUA CAUSTICO FULL SCREEN INDIPENDENTE */}
+          {/* SPECCHIO D'ACQUA CAUSTICO: USA ESCLUSIVAMENTE waterImageUrl */}
           {start === "lago" && !apertoAcqua && (
             <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
-              <WaterRippleImage
-                src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"}
-              />
+              <WaterRippleImage src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam)} />
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
                 onClick={() => {
