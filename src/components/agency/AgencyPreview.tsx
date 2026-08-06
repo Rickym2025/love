@@ -150,6 +150,8 @@ export default function AgencyPreview({
   const activeTheme = eventThemePreset === "Personalizzato (digita a mano)" ? (customEventTheme || "Tema Personalizzato") : eventThemePreset;
 
   const showFregi = modules.fregiStelle !== false;
+  const showLocationModule = modules.locationMappa !== false;
+  const showGoogleMapIframe = modules.showOnlyMap !== false;
 
   const fullscreenDynamicUrl = `/${
     selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco"
@@ -184,10 +186,9 @@ export default function AgencyPreview({
       >
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* ✦ RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD) ✦ */}
+        {/* RENDERING MODELLO C (LANDING STORYBOARD) */}
         {selectedTemplate === "C" ? (
           <div className="space-y-4 text-left p-2">
-            {/* 1. HEADER NAVBAR */}
             <div className="flex justify-between items-center p-3 bg-white/90 rounded-2xl border border-slate-200 shadow-xs">
               <div className="flex items-center gap-2">
                 <Image src="/logo.png" alt="Logo" width={20} height={20} className="object-contain" unoptimized />
@@ -196,7 +197,6 @@ export default function AgencyPreview({
               <span className="text-[10px] font-bold text-[#8B6508] uppercase">MENU ☰</span>
             </div>
 
-            {/* 2. SLIDE INIZIALE HERO LANDING */}
             <div className="p-4 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37] text-center space-y-2 shadow-sm">
               <span className="text-[9px] uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
               <h2 className="text-xl font-serif font-bold text-[#1E293B]">{coupleNames}</h2>
@@ -208,7 +208,6 @@ export default function AgencyPreview({
               </div>
             </div>
 
-            {/* 3. RECENSIONI & AUGURI DEGLI INVITATI */}
             <div className="space-y-1">
               <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
               <div className="grid grid-cols-3 gap-1.5 text-center">
@@ -230,7 +229,6 @@ export default function AgencyPreview({
               </div>
             </div>
 
-            {/* 4. SEZIONE ALTERNATA 1: IMMAGINE + DESCRIZIONE */}
             <div className="grid grid-cols-2 gap-2 items-center p-3 bg-white rounded-2xl border border-slate-200">
               <div className="w-full h-24 rounded-xl overflow-hidden relative border border-slate-200">
                 <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
@@ -241,7 +239,6 @@ export default function AgencyPreview({
               </div>
             </div>
 
-            {/* 5. SEZIONE ALTERNATA 2: DESCRIZIONE + IMMAGINE */}
             <div className="grid grid-cols-2 gap-2 items-center p-3 bg-white rounded-2xl border border-slate-200">
               <div className="space-y-1">
                 <span className="text-[9px] font-bold uppercase text-[#8B6508]">Ricevimento &amp; Party</span>
@@ -252,12 +249,10 @@ export default function AgencyPreview({
               </div>
             </div>
 
-            {/* 6. MODULO RSVP */}
             <div id="rsvp">
               <RsvpForm coupleNames={coupleNames} paletteColors={colors} rsvpStyle={rsvpStyle} />
             </div>
 
-            {/* 7. FOOTER STRUTTURATO */}
             <div className="p-3 bg-slate-900 text-slate-400 rounded-2xl text-[8px] text-center space-y-1">
               <p className="font-bold text-white">© {new Date().getFullYear()} {coupleNames}</p>
               <p>P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
@@ -265,7 +260,7 @@ export default function AgencyPreview({
             </div>
           </div>
         ) : (
-          /* ✦ RENDERING MODELLO A & B ✦ */
+          /* MODELLO A & B */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
@@ -443,26 +438,30 @@ export default function AgencyPreview({
 
             {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
 
-            {/* LOCATION CON MAPPA E TOGGLE DEDICATO */}
-            {modules.locationMappa !== false && (
+            {/* LOCATION CON MAPPA GOOGLE SEPARATA */}
+            {showLocationModule && (
               <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
                 <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
                   📍 Location del Matrimonio
                 </span>
+                {/* NOME E INDIRIZZO SEMPRE VISIBILI */}
                 <p className="font-bold text-xs" style={{ color: textColor }}>{locationName}</p>
                 <p className="text-[10px] font-medium text-slate-600">{locationAddress}</p>
 
-                <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
-                  <iframe
-                    title="Mappa Location"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    allowFullScreen
-                    src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                  />
-                </div>
+                {/* SOLO IFRAME MAPPA GOOGLE CONDIZIONATO DAL PULSANTE */}
+                {showGoogleMapIframe && (
+                  <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
+                    <iframe
+                      title="Mappa Location"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    />
+                  </div>
+                )}
 
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
