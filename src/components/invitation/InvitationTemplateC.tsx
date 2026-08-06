@@ -3,11 +3,12 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
+import { ArrowRight, Star, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
+import Marquee from "@/components/Marquee";
 
 export interface ScheduleItem {
   id: string;
@@ -80,104 +81,118 @@ export default function InvitationTemplateC({
 }: InvitationTemplateCProps) {
   const accentColor = colors[3] || "#8B6508";
   const textColor = colors[4] || "#1E293B";
+  const bgCard = colors[1] || "#FFFFFF";
+  const borderCard = colors[2] || "#E6C687";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
+  const testimonials = [
+    {
+      name: 'Sofia & Lorenzo',
+      role: 'Invitati',
+      text: 'Un matrimonio unico da favola, emozionante al primo tocco!',
+      stars: 5,
+    },
+    {
+      name: 'Elena Valenti',
+      role: 'Wedding Staff',
+      text: 'Un\'organizzazione impeccabile con dettagli coordinati in ogni momento.',
+      stars: 5,
+    },
+    {
+      name: 'Marco & Giulia',
+      role: 'Amici di Sempre',
+      text: 'La festa ed il maxischermo sono stati spettacoli indimenticabili.',
+      stars: 5,
+    },
+  ];
+
   return (
-    <main className="w-full max-w-xl mx-auto space-y-8 text-left py-6 px-2">
-      {/* 1. HERO BANNER CONTINUO */}
-      <section className="p-8 bg-gradient-to-b from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border border-[#D4AF37]/40 text-center space-y-4 shadow-lg backdrop-blur-xs">
-        <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#8B6508] block">✦ IL NOSTRO GIORNO SPECIALE ✦</span>
-        <h1 className="text-3xl md:text-5xl font-serif font-bold text-[#1E293B] drop-shadow-xs">{coupleNames}</h1>
-        <p className="text-sm font-bold text-[#8B6508] tracking-widest uppercase">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
-        <blockquote className="text-xs italic font-serif text-slate-600 max-w-md mx-auto">&quot;{welcomePhrase}&quot;</blockquote>
-        <div className="pt-2">
-          <a href="#rsvp" className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-6 py-3 rounded-xl shadow-md hover:bg-amber-400 transition-colors uppercase tracking-wider">
-            CONFERMA LA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
+    <div className="w-full text-[#1E293B]">
+      {/* 1. HERO LANDING SECTION D'AUTORE */}
+      <section className="py-12 px-4 text-center max-w-4xl mx-auto flex flex-col items-center space-y-4">
+        <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">
+          Il Matrimonio Ufficiale di {coupleNames}
+        </span>
+
+        <h1 className="font-serif text-3xl sm:text-6xl font-bold text-[#1E293B] leading-tight">
+          Stupisci i tuoi invitati con un&apos;esperienza da favola.
+        </h1>
+
+        <p className="text-slate-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-light italic">
+          &quot;{welcomePhrase}&quot;
+        </p>
+
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+          <a
+            href="#rsvp"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition cursor-pointer"
+          >
+            <span>Conferma Partecipazione</span>
+            <ArrowRight className="w-4 h-4" />
           </a>
         </div>
       </section>
 
-      {/* 2. AUGURI DEGLI INVITATI */}
-      <section className="space-y-2 pt-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Messaggi e Dediche degli Invitati</span>
-        <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200/80 shadow-xs">
-            <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
-            <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Marco &amp; Sara</span>
-          </div>
-          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200/80 shadow-xs">
-            <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Auguri immensi ragazzi!&quot;</p>
-            <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Zii Rossi</span>
-          </div>
-          <div className="p-3 bg-white/95 backdrop-blur-xs rounded-2xl border border-slate-200/80 shadow-xs">
-            <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Ci saremo tutti a brindare!&quot;</p>
-            <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Amici di Sempre</span>
-          </div>
+      {/* 2. RECENSIONI & DEDICHE INVITATI */}
+      <section className="py-8 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 shadow-xs">
+        <div className="max-w-4xl mx-auto px-4 text-center mb-4">
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Auguri &amp; Messaggi degli Invitati</span>
         </div>
+        <Marquee items={testimonials} />
       </section>
 
-      {/* 3. SEZIONE ALTERNATA 1: LA CERIMONIA SOLENNE */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-6 bg-gradient-to-r from-white via-[#FAF7F2] to-white rounded-3xl border border-slate-200/80 shadow-sm">
-        <div className="w-full h-52 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
-          <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
+      {/* 3. SEZIONE ALTERNATA 1 (FOTO CERIMONIA A SINISTRA | TESTO A DESTRA) */}
+      <section className="py-12 px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <div className="h-64 sm:h-80 w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+          <img
+            src={heroMediaImage}
+            alt="Cerimonia Sposi"
+            className="w-full h-full object-cover"
+          />
         </div>
-        <div className="space-y-2">
-          <span className="text-xs font-bold uppercase text-[#8B6508] tracking-widest">La Cerimonia Solenne</span>
-          <h3 className="text-lg font-serif font-bold text-[#1E293B]">Il Sacro Sì</h3>
-          <p className="text-xs font-medium text-slate-600 leading-relaxed">
-            {weddingDateDay} {weddingDateMonth} {weddingDateYear} • Presso {locationName}
+        <div className="space-y-3">
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">La Cerimonia Solenne</span>
+          <h3 className="font-serif text-2xl sm:text-4xl text-[#1E293B]">Un'emozione al primo tocco</h3>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Vi aspettiamo il {weddingDateDay} {weddingDateMonth} {weddingDateYear} presso {locationName} per celebrare insieme il giorno più bello della nostra vita.
           </p>
         </div>
       </section>
 
-      {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO & GRAN GALA */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-6 bg-gradient-to-r from-[#FAF7F2] via-white to-[#FAF7F2] rounded-3xl border border-slate-200/80 shadow-sm">
-        <div className="space-y-2 order-2 md:order-1">
-          <span className="text-xs font-bold uppercase text-[#8B6508] tracking-widest">Ricevimento &amp; Party</span>
-          <h3 className="text-lg font-serif font-bold text-[#1E293B]">Cena di Gala e Festeggiamenti</h3>
-          <p className="text-xs font-medium text-slate-600 leading-relaxed">{locationAddress}</p>
+      {/* 4. SEZIONE ALTERNATA 2 (TESTO A SINISTRA | FOTO RICEVIMENTO A DESTRA) */}
+      <section className="py-12 px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-center border-t border-[#D4AF37]/20">
+        <div className="order-2 md:order-1 space-y-3">
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">Ricevimento &amp; Gran Gala</span>
+          <h3 className="font-serif text-2xl sm:text-4xl text-[#1E293B]">Cena di Gala e Festeggiamenti</h3>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            I festeggiamenti proseguiranno a {locationAddress} tra brindisi, musica dal vivo e taglio della torta.
+          </p>
         </div>
-        <div className="w-full h-52 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2">
-          <img src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"} alt="Location" className="w-full h-full object-cover" />
+        <div className="order-1 md:order-2 h-64 sm:h-80 w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+          <img
+            src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"}
+            alt="Ricevimento"
+            className="w-full h-full object-cover"
+          />
         </div>
       </section>
 
-      {/* 5. MODULO DATA & COUNTDOWN */}
-      {dateMode === "countdown" && (
-        <section className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-gradient-to-b from-white to-[#FAF7F2] border-[#D4AF37]/30">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
-            ⏳ Il nostro grande giorno inizia tra
-          </span>
-          <div className="flex justify-center gap-4 font-serif font-bold text-xl text-[#1E293B]">
-            <div><span className="block text-2xl text-[#8B6508]">129</span><span className="text-[10px] uppercase text-slate-600 font-sans">Giorni</span></div>
-            <span>:</span>
-            <div><span className="block text-2xl text-[#8B6508]">14</span><span className="text-[10px] uppercase text-slate-600 font-sans">Ore</span></div>
-            <span>:</span>
-            <div><span className="block text-2xl text-[#8B6508]">23</span><span className="text-[10px] uppercase text-slate-600 font-sans">Minuti</span></div>
-            <span>:</span>
-            <div><span className="block text-2xl text-[#8B6508]">17</span><span className="text-[10px] uppercase text-slate-600 font-sans">Secondi</span></div>
+      {/* 5. GAMIFICATION DEMO GRATTA LA DATA */}
+      {dateMode === "scratch" && (
+        <section className="py-10 px-4 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 text-center shadow-xs">
+          <div className="max-w-2xl mx-auto space-y-2">
+            <h3 className="font-serif text-xl text-[#1E293B]">Prova il "Gratta e Scopri" la data con il dito!</h3>
+            <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
           </div>
         </section>
       )}
 
-      {dateMode === "scratch" && (
-        <section className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
-            🎰 Gratta col dito per scoprire la data
-          </span>
-          <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
-        </section>
-      )}
-
       {/* 6. PROGRAMMA DELLA GIORNATA */}
-      <section id="programma">
+      <section id="programma" className="py-10 px-4 max-w-3xl mx-auto text-center space-y-4">
         {scheduleSchema === "howitworks" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base text-[#8B6508]">
+          <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] mb-2">
               📍 Programma della Giornata
             </span>
             <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
@@ -185,8 +200,8 @@ export default function InvitationTemplateC({
         )}
 
         {scheduleSchema === "classico" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base text-[#8B6508]">
+          <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
               Programma della Giornata
             </span>
             <div className="space-y-2 text-sm font-serif pt-1 text-[#1E293B]">
@@ -200,105 +215,119 @@ export default function InvitationTemplateC({
         )}
       </section>
 
-      {/* 7. LOCATION CON MAPPA GOOGLE SEPARATA */}
+      {/* 7. LOCATION CON MAPPA GOOGLE */}
       {showMappa && (
-        <section id="location" className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5 text-[#8B6508]">
-            <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
-          </span>
-          <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
-          <p className="text-xs text-slate-600">{locationAddress}</p>
+        <section id="location" className="py-10 px-4 max-w-3xl mx-auto text-center">
+          <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] flex items-center justify-center gap-1.5">
+              <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
+            </span>
+            <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
+            <p className="text-xs text-slate-600">{locationAddress}</p>
 
-          {showGoogleMapIframe && (
-            <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
-              <iframe
-                title="Mappa Location"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-              />
-            </div>
-          )}
+            {showGoogleMapIframe && (
+              <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
+                <iframe
+                  title="Mappa Location"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                />
+              </div>
+            )}
 
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-bold text-white px-5 py-2.5 rounded-xl transition-colors shadow-md bg-[#1E293B]"
-          >
-            <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
-          </a>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs font-bold text-white px-5 py-2.5 rounded-xl transition-colors shadow-md bg-[#1E293B]"
+            >
+              <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
+            </a>
+          </div>
         </section>
       )}
 
       {/* 8. DRESS CODE & PALETTE */}
       {showDressCode && (
-        <section id="dresscode" className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base text-[#8B6508]">
-            Dress Code &amp; Palette
-          </span>
-          <p className="text-xs font-serif leading-relaxed text-[#1E293B]">{dressCodeNotes}</p>
+        <section id="dresscode" className="py-10 px-4 max-w-3xl mx-auto text-center">
+          <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
+              Dress Code &amp; Palette
+            </span>
+            <p className="text-xs font-serif leading-relaxed text-[#1E293B]">{dressCodeNotes}</p>
 
-          <div className="flex justify-center gap-2">
-            {colors.map((color, i) => (
-              <div key={i} className="w-7 h-7 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: color }} />
-            ))}
-          </div>
-
-          <div className="pt-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">Esempi di Abbigliamento Consigliati (Scorri ➔)</span>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
-              {outfitPhotos.map((imgUrl, idx) => (
-                <div key={idx} className="w-32 h-44 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
-                  <img src={imgUrl} alt={`Outfit ${idx + 1}`} className="w-full h-full object-cover" />
-                </div>
+            <div className="flex justify-center gap-2">
+              {colors.map((color, i) => (
+                <div key={i} className="w-7 h-7 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: color }} />
               ))}
+            </div>
+
+            <div className="pt-2">
+              <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">Esempi di Abbigliamento Consigliati (Scorri ➔)</span>
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x justify-center">
+                {outfitPhotos.map((imgUrl, idx) => (
+                  <div key={idx} className="w-28 h-36 flex-shrink-0 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
+                    <img src={imgUrl} alt={`Outfit ${idx + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       )}
 
       {/* 9. NEGOZI CONVENZIONATI */}
-      {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
+      {showNegozi && (
+        <section className="py-6 px-4 max-w-3xl mx-auto">
+          <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />
+        </section>
+      )}
 
       {/* 10. LISTA NOZZE IBAN */}
       {showListaNozze && (
-        <section id="listanozze" className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white border-slate-200">
-          <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5 text-[#8B6508]">
-            <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
-          </span>
-          <p className="text-xs text-slate-600 font-serif">Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:</p>
-          <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">{customIban}</div>
+        <section id="listanozze" className="py-10 px-4 max-w-3xl mx-auto text-center">
+          <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] flex items-center justify-center gap-1.5">
+              <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
+            </span>
+            <p className="text-xs text-slate-600 font-serif">Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:</p>
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">{customIban}</div>
+          </div>
         </section>
       )}
 
-      {/* 11. RSVP COMPLETO CON INTOLLERANZE */}
-      <section id="rsvp" className="pt-2">
+      {/* 11. MODULO RSVP COMPLETO CON INTOLLERANZE */}
+      <section id="rsvp" className="py-10 px-4 max-w-2xl mx-auto">
         <RsvpForm coupleNames={coupleNames} paletteColors={colors} rsvpStyle={rsvpStyle} />
       </section>
 
-      {/* 12. FESTA */}
+      {/* 12. FESTA & MAXISCHERMO */}
       {showHubGiochi && (
-        <section id="festa" className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
-          <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
-            <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
-          </span>
-          <p className="text-xs text-slate-300">Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!</p>
-          <Link href={`/${cleanSlug}/festa`} className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg">
-            <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
-          </Link>
+        <section id="festa" className="py-10 px-4 max-w-3xl mx-auto text-center">
+          <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl space-y-3">
+            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
+              <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
+            </span>
+            <p className="text-xs text-slate-300">Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!</p>
+            <Link href={`/${cleanSlug}/festa`} className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg">
+              <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+            </Link>
+          </div>
         </section>
       )}
 
-      {/* 13. FOOTER STRUTTURATO D'AUTORE */}
-      <footer className="p-6 bg-slate-900 text-slate-400 rounded-3xl text-xs text-center space-y-2 shadow-lg">
-        <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames} — Sito Ufficiale del Matrimonio</p>
-        <p className="text-[10px]">P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
-        <p className="text-[#D4AF37] text-[10px]">Powered by LOVE White-Label Hub</p>
+      {/* 13. FOOTER */}
+      <footer className="py-8 bg-slate-900 text-slate-400 text-xs text-center border-t border-slate-800">
+        <div className="max-w-4xl mx-auto px-4 space-y-2">
+          <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames} — Sito Ufficiale del Matrimonio</p>
+          <p className="text-[10px]">P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
+          <p className="text-[#D4AF37] text-[10px]">Powered by LOVE White-Label Hub</p>
+        </div>
       </footer>
-    </main>
+    </div>
   );
 }
