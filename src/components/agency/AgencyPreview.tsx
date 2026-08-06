@@ -94,6 +94,18 @@ export default function AgencyPreview({
   modules = {},
 }: AgencyPreviewProps) {
   const [startClosed, setStartClosed] = useState(false);
+  const [suonaMusica, setSuonaMusica] = useState(false);
+
+  const playWeddingAudio = () => {
+    setSuonaMusica(true);
+    if (typeof window !== "undefined") {
+      const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
+      if (audio) {
+        audio.muted = false;
+        audio.play().catch(() => {});
+      }
+    }
+  };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
@@ -192,9 +204,9 @@ export default function AgencyPreview({
           />
         )}
 
-        {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
+        {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* MODELLO C (LANDING STORYBOARD COMPLETO) */}
+        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -236,22 +248,24 @@ export default function AgencyPreview({
 
             {introStart === "busta" && modules.busta3d && (
               <div className="p-2">
-                <EnvelopeWax coupleNames={coupleNames} inline={true} />
+                <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={playWeddingAudio} />
               </div>
             )}
 
             {introStart === "nuvole" && modules.nuvole3d && (
               <div className="relative py-1">
-                <PartingClouds inline={true} />
+                <PartingClouds inline={true} onOpen={playWeddingAudio} />
               </div>
             )}
 
-            {/* SPECCHIO D'ACQUA: USA waterImageUrl ESCLUSIVAMENTE */}
             {introStart === "lago" && !startClosed && (
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
                 <WaterRippleImage
                   src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
-                  onClick={() => setStartClosed(true)}
+                  onClick={() => {
+                    playWeddingAudio();
+                    setStartClosed(true);
+                  }}
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
@@ -271,6 +285,7 @@ export default function AgencyPreview({
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                  onExpand={playWeddingAudio}
                 />
               </div>
             )}
@@ -281,7 +296,10 @@ export default function AgencyPreview({
                   coupleNames={coupleNames}
                   weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
                   inline={true}
-                  onEnter={() => setStartClosed(true)}
+                  onEnter={() => {
+                    playWeddingAudio();
+                    setStartClosed(true);
+                  }}
                 />
               </div>
             )}
