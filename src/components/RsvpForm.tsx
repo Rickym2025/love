@@ -6,7 +6,7 @@ import { Check, X, Users, Utensils, Send, Heart, AlertCircle, Sparkles } from "l
 export interface RsvpFormProps {
   coupleNames?: string;
   paletteColors?: string[];
-  rsvpStyle?: string; // "classico" | "moderno" | "minimal"
+  rsvpStyle?: string;
 }
 
 export default function RsvpForm({
@@ -20,9 +20,6 @@ export default function RsvpForm({
   const [selectedMenu, setSelectedMenu] = useState("carne");
   const [allergies, setAllergies] = useState("");
   const [submitted, setInviato] = useState(false);
-
-  const primaryColor = paletteColors[3] || "#8B6508";
-  const accentColor = paletteColors[2] || "#D4AF37";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +38,7 @@ export default function RsvpForm({
     );
   }
 
-  // 1. STILE MODERNO INTERATTIVO (PULSANTI GLOW & COUNTER PARTICIPANTI)
+  // 1. STILE MODERNO INTERATTIVO (GLOW & COUNTER)
   if (rsvpStyle === "moderno") {
     return (
       <form onSubmit={handleSubmit} className="p-5 rounded-3xl bg-slate-900 text-white border-2 border-[#D4AF37] shadow-xl space-y-4 text-left">
@@ -119,33 +116,11 @@ export default function RsvpForm({
 
             <div>
               <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
-                <Utensils className="w-3.5 h-3.5 text-[#D4AF37]" /> Preferenza Menu
-              </label>
-              <div className="grid grid-cols-2 gap-1.5 text-[10px] font-bold">
-                {["Carne", "Pesce", "Vegetariano", "Bimbi"].map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => setSelectedMenu(m.toLowerCase())}
-                    className={`p-2 rounded-lg border text-center cursor-pointer ${
-                      selectedMenu === m.toLowerCase()
-                        ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
-                        : "bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500"
-                    }`}
-                  >
-                    Menu {m}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5 text-[#D4AF37]" /> Allergie o Intolleranze
+                <AlertCircle className="w-3.5 h-3.5 text-[#D4AF37]" /> Allergie o Intolleranze Alimentari
               </label>
               <textarea
                 rows={2}
-                placeholder="es. Celiachia, Lattosio..."
+                placeholder="es. Celiachia, Lattosio, Nichel..."
                 value={allergies}
                 onChange={(e) => setAllergies(e.target.value)}
                 className="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-medium focus:border-[#D4AF37] focus:outline-none resize-none"
@@ -158,13 +133,13 @@ export default function RsvpForm({
           type="submit"
           className="w-full py-3 bg-[#D4AF37] text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-amber-400 transition-all shadow-[0_0_15px_rgba(212,175,55,0.6)] cursor-pointer flex items-center justify-center gap-1.5"
         >
-          <Send className="w-4 h-4" /> Conferma Partecipazione
+          <Send className="w-4 h-4" /> INVIA RISPOSTA
         </button>
       </form>
     );
   }
 
-  // 2. STILE MINIMAL DIRETTO (SENZA RIQUADRI, FORM DIRETTISSIMO)
+  // 2. STILE MINIMAL DIRETTO
   if (rsvpStyle === "minimal") {
     return (
       <form onSubmit={handleSubmit} className="p-4 space-y-3 text-center border-t border-b border-[#D4AF37]/30 py-6">
@@ -203,6 +178,16 @@ export default function RsvpForm({
           </label>
         </div>
 
+        {attending === true && (
+          <textarea
+            rows={1}
+            placeholder="Eventuali allergie / intolleranze..."
+            value={allergies}
+            onChange={(e) => setAllergies(e.target.value)}
+            className="w-full p-2 bg-transparent border-b border-slate-300 text-xs text-center font-serif"
+          />
+        )}
+
         <button
           type="submit"
           className="px-6 py-2.5 bg-[#1E293B] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:bg-slate-800 transition-colors shadow-sm"
@@ -213,7 +198,7 @@ export default function RsvpForm({
     );
   }
 
-  // 3. STILE CLASSICO ELEGANTE (DEFAULT)
+  // 3. STILE CLASSICO FORMALE (DEFAULT)
   return (
     <form onSubmit={handleSubmit} className="p-5 rounded-3xl bg-white border border-slate-200 text-center space-y-4 shadow-sm">
       <div className="space-y-1">
@@ -284,7 +269,7 @@ export default function RsvpForm({
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1 font-serif">Allergie o Intolleranze</label>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1 font-serif">Allergie o Intolleranze Alimentari</label>
               <textarea
                 rows={2}
                 placeholder="es. Celiaco, Lattosio, Crostacei..."
