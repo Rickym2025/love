@@ -3,6 +3,7 @@ export interface BackgroundPreset {
   name: string;
   url: string;
   thumbnail: string;
+  isDark?: boolean;
 }
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
@@ -11,60 +12,70 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
     name: "Bianco Puro",
     url: "#FFFFFF",
     thumbnail: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "palette_sync",
     name: "Coordinato alla Palette",
     url: "palette",
     thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "panna_avorio",
     name: "Seta Avorio & Panna",
-    url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "pergamena_epoca",
     name: "Carta Pergamena d'Epoca",
     url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "marmo_carrara",
     name: "Marmo Bianco Carrara",
-    url: "https://images.unsplash.com/photo-1533158307587-828f0a76ef46?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1533158307587-828f0a76ef46?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "bokeh_dorato",
     name: "Bokeh & Luci Dorate",
     url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "seta_rosa",
     name: "Seta Rosa Cipria",
-    url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "salvia_botanico",
     name: "Foglia Salvia & Botanico",
     url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
   {
     id: "blu_zaffiro",
     name: "Blu Notte Zaffiro",
     url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
+    isDark: true,
   },
   {
     id: "terracotta_rame",
     name: "Terracotta & Rame",
     url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80",
+    isDark: true,
   },
 ];
 
@@ -242,9 +253,9 @@ export const INTRO_START_OPTIONS = [
 export const START_EFFECTS = INTRO_START_OPTIONS;
 
 export const RSVP_STYLES = [
-  { id: "classico", label: "Classico con Intolleranze e Menu", value: "classico", title: "Classico con Intolleranze e Menu" },
-  { id: "moderno", label: "Moderno Interattivo", value: "moderno", title: "Moderno Interattivo" },
-  { id: "minimal", label: "Minimal Diretto", value: "minimal", title: "Minimal Diretto" }
+  { id: "classico", label: "Classico Elegante (Formale con Menu)", value: "classico", title: "Classico Elegante (Formale con Menu)" },
+  { id: "moderno", label: "Moderno Interattivo (Pulsanti Glow & Counter)", value: "moderno", title: "Moderno Interattivo (Pulsanti Glow & Counter)" },
+  { id: "minimal", label: "Minimal Diretto (Senza Riquadri)", value: "minimal", title: "Minimal Diretto (Senza Riquadri)" }
 ];
 
 export const EVENT_THEMES = [
