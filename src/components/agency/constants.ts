@@ -6,6 +6,7 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
+// 10 TEXTURE AD ALTA RISOLUZIONE ESCLUSIVE
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "bianco_puro",
@@ -66,8 +67,8 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "blu_zaffiro",
     name: "Blu Notte Zaffiro",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
     isDark: true,
   },
   {
