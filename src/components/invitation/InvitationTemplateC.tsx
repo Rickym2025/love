@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
+import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
@@ -82,7 +82,6 @@ export default function InvitationTemplateC({
   showHubGiochi = true,
   cleanSlug = "elena-e-davide",
 }: InvitationTemplateCProps) {
-  // DICHIARAZIONE GARANTITA DELLE VARIABILI DI COLORE
   const colorsList = Array.isArray(colors) && colors.length >= 3
     ? colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
@@ -320,13 +319,6 @@ export default function InvitationTemplateC({
           </Link>
         </div>
       )}
-
-      {/* 14. FOOTER STRUTTURATO */}
-      <footer className="p-6 bg-slate-900 text-slate-400 rounded-3xl text-xs text-center space-y-2 shadow-lg">
-        <p className="font-bold text-white text-sm">© {new Date().getFullYear()} {coupleNames}</p>
-        <p className="text-[10px]">P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
-        <p className="text-[#D4AF37] text-[10px]">Powered by LOVE White-Label Hub</p>
-      </footer>
     </main>
   );
 }
