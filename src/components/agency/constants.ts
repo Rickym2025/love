@@ -90,8 +90,18 @@ export interface DressCodePalette {
   images: string[];
 }
 
-const BASE_PALETTES_ARRAY: DressCodePalette[] = [
-  {
+export interface DressCodePalette {
+  id: string;
+  name: string;
+  colors: string[]; // 5 toni cromatici
+  textColor: string;
+  accentColor: string;
+  description: string;
+  images: string[]; // Foto di outfit coordinate alla palette
+}
+
+export const DRESS_CODE_PALETTES: Record<string, DressCodePalette> = {
+  lavanda_lilla: {
     id: "lavanda_lilla",
     name: "Lavanda & Lillà d'Autore",
     colors: ["#FFFFFF", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
@@ -99,12 +109,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Toni eleganti del viola, lilla e lavanda con dettagli scuri.",
     images: [
-      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80", // Abito lilla/viola
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80", // Vestito viola elegante
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80"  // Abito scuro con dettagli violetto
     ]
   },
-  {
+  rosa_cipria: {
     id: "rosa_cipria",
     name: "Rosa Cipria & Seta",
     colors: ["#FFFFFF", "#FFF1F2", "#FCE7F3", "#EC4899", "#831843"],
@@ -112,12 +122,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Sfumature delicate di rosa cipria, magentino e bordeaux elegante.",
     images: [
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&auto=format&fit=crop&q=80", // Abito rosa seta
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80", // Vestito rosa cipria
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80"  // Outfit rosa elegante
     ]
   },
-  {
+  oro_champagne: {
     id: "oro_champagne",
     name: "Oro Bruciato & Champagne",
     colors: ["#FFFFFF", "#FDFBF7", "#E6D5AC", "#B8860B", "#2A2415"],
@@ -125,12 +135,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Palette calda nei toni dorati, avorio, champagne e rame scuro.",
     images: [
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80", // Abito champagne/oro
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80", // Abito avorio/dorato
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80"  // Vestito bronzo/oro
     ]
   },
-  {
+  verde_smeraldo: {
     id: "verde_smeraldo",
     name: "Verde Smeraldo & Salvia",
     colors: ["#FFFFFF", "#F0FDF4", "#A7F3D0", "#059669", "#064E3B"],
@@ -138,12 +148,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Tonalità botaniche fresche e sofisticate dal salvia allo smeraldo profondo.",
     images: [
-      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80", // Abito verde smeraldo
+      "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop&q=80", // Abito verde salvia
+      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"  // Abito bosco elegante
     ]
   },
-  {
+  blu_notte: {
     id: "blu_notte",
     name: "Blu Notte & Azzurro Polvere",
     colors: ["#FFFFFF", "#F0F9FF", "#BAE6FD", "#0284C7", "#0C4A6E"],
@@ -151,12 +161,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Eleganza senza tempo con azzurro pastello e blu zaffiro profondo.",
     images: [
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&auto=format&fit=crop&q=80", // Abito azzurro
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80", // Abito blu notte
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"  // Abito blu zaffiro
     ]
   },
-  {
+  bordeaux_marsala: {
     id: "bordeaux_marsala",
     name: "Bordeaux & Marsala Deep",
     colors: ["#FFFFFF", "#FFF1F2", "#FECDD3", "#E11D48", "#4C0519"],
@@ -164,12 +174,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Toni intensi del rosso rubino, marsala e bordeaux scuro d'epoca.",
     images: [
-      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80", // Abito bordeaux
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80", // Abito marsala
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"  // Dettaglio rosso scuro
     ]
   },
-  {
+  monocromo_black: {
     id: "monocromo_black",
     name: "Black Tie & Monocromo",
     colors: ["#FFFFFF", "#F3F4F6", "#9CA3AF", "#374151", "#111827"],
@@ -177,12 +187,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Il classico formale per eccellenza: scala di grigi, bianco puro e nero smokey.",
     images: [
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80", // Smoking nero
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80", // Abito nero elegante
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"  // Completo antracite
     ]
   },
-  {
+  terracotta_rust: {
     id: "terracotta_rust",
     name: "Terracotta & Rame Caldo",
     colors: ["#FFFFFF", "#FFF7ED", "#FFEDD5", "#EA580C", "#7C2D12"],
@@ -190,12 +200,12 @@ const BASE_PALETTES_ARRAY: DressCodePalette[] = [
     accentColor: "#8B6508",
     description: "Cromie mediterranee dal color ruggine alla terracotta bruciata.",
     images: [
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80", // Abito terracotta
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80", // Outfit rame
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80"  // Vestito ruggine
     ]
   }
-];
+};
 
 const PALETTES_BY_KEY: Record<string | number, DressCodePalette> = {};
 BASE_PALETTES_ARRAY.forEach((p, idx) => {
