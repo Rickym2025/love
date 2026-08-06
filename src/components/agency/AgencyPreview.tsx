@@ -455,16 +455,19 @@ export default function AgencyPreview({
                   ))}
                 </div>
 
+                const selectedPalette = DRESS_CODE_PALETTES[selectedPaletteKey] || DRESS_CODE_PALETTES.lavanda_lilla;
+                
                 <div className="pt-1">
                   <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                     Esempi di Abbigliamento Consigliati (Scorri ➔)
                   </span>
+                  // Rendering nell'anteprima
                   <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
-                    {outfitPhotos.map((imgUrl, idx) => (
+                    {selectedPalette.images.map((imgUrl, idx) => (
                       <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
                         <img
                           src={imgUrl}
-                          alt={`Outfit ${idx + 1}`}
+                          alt={`Outfit ${selectedPalette.name} ${idx + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </div>
