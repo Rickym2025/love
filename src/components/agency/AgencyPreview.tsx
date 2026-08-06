@@ -96,7 +96,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
 
   const [startClosed, setStartClosed] = useState(false);
 
-  // ESTRAZIONE SICURA PALETTE SENZA POSSIBILITÀ DI CRASH
+  // ESTRAZIONE REATTIVA PALETTE BRAND
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
     : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
@@ -106,9 +106,9 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
   const fallbackPalette = {
     id: "1",
     name: "Lavanda & Lillà",
-    colors: ["#FAF7F2", "#FFFFFF", "#E9D5FF", "#8B5CF6", "#3B0764"],
-    textColor: "#1E293B",
-    accentColor: "#8B6508",
+    colors: ["#FAF5FF", "#FFFFFF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    textColor: "#3B0764",
+    accentColor: "#8B5CF6",
   };
 
   const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, Math.max(0, (palettesList.length || 1) - 1)));
@@ -198,6 +198,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
 
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
+        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -228,6 +229,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
             cleanSlug="giulia-e-marco"
           />
         ) : (
+          /* MODELLO A & B STANDARD */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
