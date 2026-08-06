@@ -127,7 +127,6 @@ export default function AgencyPreview({
   const isWhiteBg = heroBgImage === "#FFFFFF";
   const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
   
-  // PARALLAX LAYER APPLICATO IN BACKGROUND CON OPERATORE DI OPACITÀ SOFT
   const containerBgStyle = isWhiteBg
     ? { backgroundColor: "#FFFFFF", color: textColor }
     : isPaletteSync
