@@ -6,7 +6,6 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "bianco_puro",
@@ -253,7 +252,6 @@ export const INTRO_START_OPTIONS = [
 ];
 export const START_EFFECTS = INTRO_START_OPTIONS;
 
-// 6 STILI RSVP COMPLETI E BEN DISTINTI
 export const RSVP_STYLES = [
   { id: "classico", label: "Classico Formale (Menu Carne/Pesce + Intolleranze)", value: "classico", title: "Classico Formale" },
   { id: "moderno", label: "Moderno Interattivo (Pulsanti Glow & Counter)", value: "moderno", title: "Moderno Interattivo" },
