@@ -48,12 +48,16 @@ export interface AgencyConfiguratorProps {
   setDressCodeNotes: (val: string) => void;
   selectedPaletteIdx: number;
   setSelectedPaletteIdx: (val: number) => void;
+  heroBgImage?: string;
+  setHeroBgImage?: (val: string) => void;
+  heroMediaImage?: string;
+  setHeroMediaImage?: (val: string) => void;
   scheduleItems?: any[];
   setScheduleItems?: (items: any[]) => void;
-  localStoreName?: string;
-  setLocalStoreName?: (val: string) => void;
-  localStoreUrl?: string;
-  setLocalStoreUrl?: (val: string) => void;
+  showAmazonAffiliate?: boolean;
+  setShowAmazonAffiliate?: (val: boolean) => void;
+  customStores?: any[];
+  setCustomStores?: (stores: any[]) => void;
   partnerStores?: any[];
   setPartnerStores?: (stores: any[]) => void;
   marqueeText: string;
@@ -67,8 +71,20 @@ export interface AgencyConfiguratorProps {
 export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
   const { activeTab } = props;
 
-  // GESTORE GENERICO DI AGGIORNAMENTO STATO
+  // GESTORE DINAMICO E UNIVERSALE DI AGGIORNAMENTO STATO
   const handleUpdate = (field: string, value: any) => {
+    // 1. Mappatura dinamica automatica: cerca setField (es. setHeroBgImage)
+    const setterName = `set${field.charAt(0).toUpperCase()}${field.slice(1)}`;
+    if (typeof (props as any)[setterName] === "function") {
+      (props as any)[setterName](value);
+    }
+
+    // 2. Mappature esplicite di sicurezza
+    if (field === "heroBgImage" && props.setHeroBgImage) props.setHeroBgImage(value);
+    if (field === "heroMediaImage" && props.setHeroMediaImage) props.setHeroMediaImage(value);
+    if (field === "showAmazonAffiliate" && props.setShowAmazonAffiliate) props.setShowAmazonAffiliate(value);
+    if (field === "customStores" && props.setCustomStores) props.setCustomStores(value);
+    if (field === "scheduleItems" && props.setScheduleItems) props.setScheduleItems(value);
     if (field === "selectedTemplate") props.setSelectedTemplate(value);
     if (field === "introStart") props.setIntroStart(value);
     if (field === "dateDisplayMode") props.setDateDisplayMode(value);
@@ -89,9 +105,7 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
     if (field === "selectedPaletteIdx") props.setSelectedPaletteIdx(value);
     if (field === "customIban") props.setCustomIban(value);
     if (field === "marqueeText") props.setMarqueeText(value);
-    if (field === "localStoreName" && props.setLocalStoreName) props.setLocalStoreName(value);
-    if (field === "localStoreUrl" && props.setLocalStoreUrl) props.setLocalStoreUrl(value);
-    if (field === "scheduleItems" && props.setScheduleItems) props.setScheduleItems(value);
+
     if (field === "modules") {
       Object.keys(value).forEach((k) => {
         if (value[k] !== props.modules[k]) {
@@ -106,9 +120,11 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
       {activeTab === "create" && (
         <ConfiguratorForm
           {...props}
+          heroBgImage={props.heroBgImage}
+          heroMediaImage={props.heroMediaImage}
           scheduleItems={props.scheduleItems}
-          localStoreName={props.localStoreName}
-          localStoreUrl={props.localStoreUrl}
+          showAmazonAffiliate={props.showAmazonAffiliate}
+          customStores={props.customStores}
           onUpdate={handleUpdate}
         />
       )}
