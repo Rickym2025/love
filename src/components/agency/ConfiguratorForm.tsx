@@ -96,6 +96,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       grattaData: true,
       nuvole3d: true,
       locationMappa: true,
+      showOnlyMap: true,
       codiceAbbigliamento: true,
       negoziConvenzionati: true,
       listaNozzeAmazon: true,
@@ -217,57 +218,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* ✦ 1. MODELLO PREIMPOSTATO (MODELLI A / B / C) ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
-        </h3>
-
-        <div className="grid grid-cols-3 gap-2 pt-1">
-          <button
-            type="button"
-            onClick={applyTemplateA}
-            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "A"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello A</span>
-            <span className="text-[9px] text-slate-500 mt-1 block">Elena &amp; Davide</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={applyTemplateB}
-            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "B"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello B</span>
-            <span className="text-[9px] text-slate-500 mt-1 block">Francesca &amp; Luca</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={applyTemplateC}
-            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "C"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#8B6508]">Modello C (Landing)</span>
-            <span className="text-[9px] text-slate-500 mt-1 block">Storyboard Wireframe</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
-
-      {/* ✦ 2. DATI SPOSI & FRASE BENVENUTO ✦ */}
+      {/* ✦ MODULO 1: DATI SPOSI & FRASE BENVENUTO (PRIMO MODULO) ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/40 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -324,7 +275,57 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ 3. COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
+      {/* ✦ MODULO 2: MODELLO PREIMPOSTATO (MODELLI A / B / C) ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
+        </h3>
+
+        <div className="grid grid-cols-3 gap-2 pt-1">
+          <button
+            type="button"
+            onClick={applyTemplateA}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "A"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello A</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Elena &amp; Davide</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateB}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "B"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello B</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Francesca &amp; Luca</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateC}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "C"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#8B6508]">Modello C (Landing)</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Giulia &amp; Marco</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ MODULO 3: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
@@ -361,7 +362,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ 4. SFONDO DELL'INVITO & TEXTURES ✦ */}
+      {/* ✦ MODULO 4: SFONDO DELL'INVITO & TEXTURES ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset + Palette)
@@ -407,7 +408,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ 5. EFFETTO START INIZIALE ✦ */}
+      {/* ✦ MODULO 5: EFFETTO START INIZIALE ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -626,20 +627,20 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           </h3>
           <button
             type="button"
-            onClick={() => toggleModule("locationMappa")}
+            onClick={() => toggleModule("showOnlyMap")}
             className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.locationMappa !== false
+              modules?.showOnlyMap !== false
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
                 : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
-            {modules?.locationMappa !== false ? "✓ Mappa Google Attiva" : "✕ Nascondi Solo Mappa Google"}
+            {modules?.showOnlyMap !== false ? "✓ Mappa Google Visibile" : "✕ Nascondi Solo Mappa Google"}
           </button>
         </div>
 
         <div className="space-y-3">
           <div>
-            <label className="block text-[11px] font-bold mb-1">Nome della Location / Villa</label>
+            <label className="block text-[11px] font-bold mb-1">Nome della Location / Villa (Sempre Visibile)</label>
             <input
               type="text"
               value={locationName}
@@ -648,7 +649,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             />
           </div>
           <div>
-            <label className="block text-[11px] font-bold mb-1">Indirizzo per Navigatore / Google Maps</label>
+            <label className="block text-[11px] font-bold mb-1">Indirizzo per Navigatore / Google Maps (Sempre Visibile)</label>
             <input
               type="text"
               value={locationAddress}
@@ -870,7 +871,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             onClick={() => toggleModule("fregiStelle")}
             className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.fregiStelle !== false
-                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                ? "bg-[#D4AF37] text-[#1E293B] border-[#D4AF37]"
                 : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
