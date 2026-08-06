@@ -6,7 +6,7 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE DAI LINK UNSPLASH UFFICIALI FORNITI
+// 1. 10 TEXTURE AD ALTA RISOLUZIONE DAI LINK UNSPLASH UFFICIALI FORNITI
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "sfondo_bianco",
@@ -90,6 +90,7 @@ export interface DressCodePalette {
   images: string[];
 }
 
+// 2. PALETTE CROMATICHE UFFICIALI
 const BASE_PALETTES_ARRAY: DressCodePalette[] = [
   {
     id: "lavanda_lilla",
@@ -204,6 +205,7 @@ BASE_PALETTES_ARRAY.forEach((p, idx) => {
   PALETTES_BY_KEY[p.id] = p;
 });
 
+// PROXY PER ACCESSATIBILITÀ DINAMICA
 export const DRESS_CODE_PALETTES: any = new Proxy(BASE_PALETTES_ARRAY, {
   get(target, prop) {
     if (prop in target) return (target as any)[prop];
@@ -230,11 +232,82 @@ export const DRESS_CODE_PHOTOS: Record<string | number, string[]> = new Proxy(PH
   }
 });
 
+// 3. MODALITÀ VISUALIZZAZIONE DATA
 export const DATE_DISPLAY_MODES = [
   { id: "countdown", label: "Conto alla Rovescia Dinamico", value: "countdown", title: "Conto alla Rovescia Dinamico" },
   { id: "scratch", label: "Gratta col Dito per Scoprire la Data", value: "scratch", title: "Gratta col Dito per Scoprire la Data" },
   { id: "text", label: "Data Semplice in Testo Elegante", value: "text", title: "Data Semplice in Testo Elegante" }
 ];
 
+// 4. SCHEMI PROGRAMMA ORARI
 export const SCHEDULE_SCHEMAS = [
-  { id: "classico", label: "Classico Elegante", value: "classico",
+  { id: "classico", label: "Classico Elegante", value: "classico", title: "Classico Elegante", description: "Elenco orario con testo descrittivo" },
+  { id: "howitworks", label: "Timeline a Carte con Spillo 3D", value: "howitworks", title: "Timeline a Carte con Spillo 3D", description: "Design moderno con schede orientate" },
+  { id: "timeline", label: "Timeline Verticale", value: "timeline", title: "Timeline Verticale", description: "Linea temporale con orari in sequenza" },
+  { id: "schede", label: "Schede a Griglia", value: "schede", title: "Schede a Griglia", description: "Riquadri orari affiancati" },
+  { id: "minimal", label: "Minimal essenziale", value: "minimal", title: "Minimal essenziale", description: "Testo pulito e lineare" }
+];
+
+// 5. EFFETTI START INIZIALI
+export const INTRO_START_OPTIONS = [
+  { id: "busta", label: "Busta Luxury con Ceralacca 3D", value: "busta", title: "Busta Luxury con Ceralacca 3D" },
+  { id: "nuvole", label: "Apertura Nuvole Volumetriche 3D", value: "nuvole", title: "Apertura Nuvole Volumetriche 3D" },
+  { id: "expand", label: "Zoom Multimediale allo Scroll", value: "expand", title: "Zoom Multimediale allo Scroll" },
+  { id: "lago", label: "Specchio d'Acqua con Effetto Onde WebGL", value: "lago", title: "Specchio d'Acqua con Effetto Onde WebGL" },
+  { id: "cosmos", label: "Orizzonte Cosmico 3D (Stars & Nebula)", value: "cosmos", title: "Orizzonte Cosmico 3D (Stars & Nebula)" }
+];
+export const START_EFFECTS = INTRO_START_OPTIONS;
+
+// 6. STILI MODULO RSVP
+export const RSVP_STYLES = [
+  { id: "classico", label: "Classico Formale (Menu Carne/Pesce + Intolleranze)", value: "classico", title: "Classico Formale" },
+  { id: "moderno", label: "Moderno Interattivo (Pulsanti Glow & Counter)", value: "moderno", title: "Moderno Interattivo" },
+  { id: "minimal", label: "Minimal Diretto (Senza Riquadri)", value: "minimal", title: "Minimal Diretto" },
+  { id: "luxury_gold", label: "Luxury Gold d'Autore (Dettagliato)", value: "luxury_gold", title: "Luxury Gold d'Autore" },
+  { id: "bento_chic", label: "Bento Box Chic (Griglia Intolleranze)", value: "bento_chic", title: "Bento Box Chic" },
+  { id: "boheme_vintage", label: "Bohémien d'Epoca (Testo Calligrafico)", value: "boheme_vintage", title: "Bohémien d'Epoca" }
+];
+
+// 7. PRESET TEMI EVENTO
+export const EVENT_THEMES = [
+  "Luxury Gold & Total White",
+  "Boho Chic & Naturale",
+  "Romantico & Pastello",
+  "Shabby Chic & Provenzale",
+  "Modern Minimal & Antracite",
+  "Personalizzato (digita a mano)"
+];
+export const EVENT_THEME_PRESETS = EVENT_THEMES;
+
+// 8. PRESET FRASI BENVENUTO
+export const WELCOME_PHRASE_PRESETS: string[] = [
+  "Due anime, un solo destino. Una storia scritta nel cuore.",
+  "Il nostro amore è un viaggio che inizia oggi.",
+  "Benvenuti al giorno più bello della nostra vita.",
+  "Insieme è il nostro posto preferito.",
+  "L'amore non guarda con gli occhi ma con l'anima.",
+  "Due cuori, una sola melodia.",
+  "Oggi inizia il nostro 'per sempre'.",
+  "Festeggiate con noi l'inizio di questa nuova avventura.",
+  "Benvenuti al nostro matrimonio.",
+  "Personalizzato (digita la tua frase)"
+];
+
+// 9. BRANI AUDIO EDIZIONI FF
+export const AUDIO_DEMOS = [
+  {
+    id: "A",
+    title: "Elena & Davide: La Nostra Melodia A",
+    label: "Elena & Davide: La Nostra Melodia A",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+    value: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
+  },
+  {
+    id: "B",
+    title: "Francesca & Luca: Quella Fotografia B",
+    label: "Francesca & Luca: Quella Fotografia B",
+    url: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3",
+    value: "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
+  }
+];
+export const SOUNDTRACKS = AUDIO_DEMOS;
