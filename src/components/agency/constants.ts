@@ -11,6 +11,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "sfondo_bianco",
     name: "Sfondo Bianco Intonaco",
+    // Ref: https://unsplash.com/it/foto/superficie-murale-in-intonaco-a-texture-bianca-KcsKWw77Ovw
     url: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=200&q=80",
     isDark: false,
@@ -25,6 +26,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "seta_avorio",
     name: "Seta Avorio",
+    // Ref: https://unsplash.com/it/foto/un-primo-piano-di-un-lenzuolo-bianco-su-un-letto-GVvrdV-oj40
     url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
     isDark: false,
@@ -32,6 +34,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "marmo",
     name: "Marmo Naturale",
+    // Ref: https://unsplash.com/it/foto/sfondo-astratto-a-motivo-bianco-di-marmo-naturale-Yrw8oyReyh8
     url: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=200&q=80",
     isDark: false,
@@ -39,6 +42,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "luci_dorate",
     name: "Luci Dorate Bokeh",
+    // Ref: https://unsplash.com/it/foto/una-foto-sfocata-di-un-telefono-cellulare-su-un-tavolo-zcg3ge_-4CI
     url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
     isDark: false,
@@ -46,27 +50,31 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "seta_rosa",
     name: "Seta Rosa",
+    // Ref: https://unsplash.com/it/foto/tessuto-verde-su-tavolo-di-legno-marrone-cQL1GrZIJ9s
     url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
     id: "blu_notte",
-    name: "Blu Notte Zaffiro",
+    name: "Blu Notte",
+    // Ref: https://unsplash.com/it/foto/gemme-sfaccettate-di-un-blu-brillante-scintillano-intensamente-CEYBFW1gRjw
     url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
     isDark: true,
   },
   {
     id: "terracotta",
-    name: "Terracotta & Rame",
+    name: "Terracotta",
+    // Ref: https://unsplash.com/it/foto/un-giocatore-di-baseball-che-tiene-una-mazza-in-cima-a-un-campo-sohjKKHhguk
     url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80",
     isDark: true,
   },
   {
     id: "fiori",
-    name: "Mazzo di Fiori",
+    name: "Fiori",
+    // Ref: https://unsplash.com/it/foto/un-mazzo-di-fiori-seduto-sopra-un-tavolo-di-legno-ElxBX6bsAgQ
     url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
     isDark: false,
@@ -74,6 +82,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "carta_pergamena",
     name: "Carta Pergamena",
+    // Ref: https://unsplash.com/it/foto/texture-di-carta-pergamena-beige-invecchiata-_YgmNICHdss
     url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
     isDark: false,
