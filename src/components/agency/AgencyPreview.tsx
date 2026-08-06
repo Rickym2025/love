@@ -52,6 +52,7 @@ export interface AgencyPreviewProps {
   scheduleItems?: ScheduleItem[];
   heroBgImage?: string;
   heroMediaImage?: string;
+  ricevimentoImage?: string;
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -89,23 +90,12 @@ export default function AgencyPreview({
   ],
   heroBgImage = "palette",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+  ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
 }: AgencyPreviewProps) {
   const [startClosed, setStartClosed] = useState(false);
-  const [suonaMusica, setSuonaMusica] = useState(false);
-
-  const playWeddingAudio = () => {
-    setSuonaMusica(true);
-    if (typeof window !== "undefined") {
-      const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
-      if (audio) {
-        audio.muted = false;
-        audio.play().catch(() => {});
-      }
-    }
-  };
 
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
@@ -127,8 +117,6 @@ export default function AgencyPreview({
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
   const bgMain = colors[0] || "#FAF7F2";
-  const bgCard = colors[1] || "#FFFFFF";
-  const borderCard = colors[2] || "#E6C687";
 
   const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
   const isDarkBg = currentPreset?.isDark;
@@ -204,9 +192,8 @@ export default function AgencyPreview({
           />
         )}
 
-        {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
+        {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -220,6 +207,7 @@ export default function AgencyPreview({
             colors={colors}
             rsvpStyle={rsvpStyle}
             heroMediaImage={heroMediaImage}
+            ricevimentoImage={ricevimentoImage}
             heroBgImage={heroBgImage}
             waterImageUrl={waterImageUrl}
             dateMode={dateDisplayMode}
@@ -248,13 +236,13 @@ export default function AgencyPreview({
 
             {introStart === "busta" && modules.busta3d && (
               <div className="p-2">
-                <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={playWeddingAudio} />
+                <EnvelopeWax coupleNames={coupleNames} inline={true} />
               </div>
             )}
 
             {introStart === "nuvole" && modules.nuvole3d && (
               <div className="relative py-1">
-                <PartingClouds inline={true} onOpen={playWeddingAudio} />
+                <PartingClouds inline={true} />
               </div>
             )}
 
@@ -262,10 +250,7 @@ export default function AgencyPreview({
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
                 <WaterRippleImage
                   src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
-                  onClick={() => {
-                    playWeddingAudio();
-                    setStartClosed(true);
-                  }}
+                  onClick={() => setStartClosed(true)}
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
@@ -285,7 +270,6 @@ export default function AgencyPreview({
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-                  onExpand={playWeddingAudio}
                 />
               </div>
             )}
@@ -296,10 +280,7 @@ export default function AgencyPreview({
                   coupleNames={coupleNames}
                   weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
                   inline={true}
-                  onEnter={() => {
-                    playWeddingAudio();
-                    setStartClosed(true);
-                  }}
+                  onEnter={() => setStartClosed(true)}
                 />
               </div>
             )}
