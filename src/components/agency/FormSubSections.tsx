@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Calendar, Music, MapPin, Palette, Gift, Heart, MessageSquare, Plus, Trash2, ShoppingBag, Layers } from "lucide-react";
+import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag } from "lucide-react";
 import {
-  DRESS_CODE_PALETTES,
   WELCOME_PHRASE_PRESETS,
   DATE_DISPLAY_MODES,
   SCHEDULE_SCHEMAS,
@@ -12,6 +11,7 @@ import {
   RSVP_STYLES,
   AUDIO_DEMOS,
   BACKGROUND_PRESETS,
+  DRESS_CODE_PALETTES,
 } from "./constants";
 
 export interface ScheduleItem {
@@ -27,8 +27,15 @@ export interface PartnerStoreItem {
   logoUrl?: string;
 }
 
-// 1. DATI SPOSI
-export function SectionDatiSposi({ coupleNames, selectedPhrasePreset, customWelcomePhrase, modules, toggleModule, handleUpdate }: any) {
+// 1. DATI SPOSI & FRASE
+export function SectionDatiSposi({
+  coupleNames,
+  selectedPhrasePreset,
+  customWelcomePhrase,
+  modules,
+  toggleModule,
+  handleUpdate,
+}: any) {
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/40 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -39,7 +46,9 @@ export function SectionDatiSposi({ coupleNames, selectedPhrasePreset, customWelc
           type="button"
           onClick={() => toggleModule("dedicheMarquee")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.dedicheMarquee ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.dedicheMarquee
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.dedicheMarquee ? "✓ Attivo" : "✕ Disattivo"}
@@ -63,7 +72,7 @@ export function SectionDatiSposi({ coupleNames, selectedPhrasePreset, customWelc
           onChange={(e) => handleUpdate("selectedPhrasePreset", e.target.value)}
           className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-serif cursor-pointer"
         >
-          {(WELCOME_PHRASE_PRESETS || []).map((phrase: string, idx: number) => (
+          {(WELCOME_PHRASE_PRESETS || []).map((phrase, idx) => (
             <option key={idx} value={String(idx)}>
               {idx === 9 ? "✍️ Personalizzato (digita la tua frase)" : `"${phrase}"`}
             </option>
@@ -84,8 +93,13 @@ export function SectionDatiSposi({ coupleNames, selectedPhrasePreset, customWelc
   );
 }
 
-// 2. MODELLI PREIMPOSTATI
-export function SectionModelliPreset({ selectedTemplate, applyTemplateA, applyTemplateB, applyTemplateC }: any) {
+// 2. MODELLI PRESET
+export function SectionModelliPreset({
+  selectedTemplate,
+  applyTemplateA,
+  applyTemplateB,
+  applyTemplateC,
+}: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
       <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -97,7 +111,9 @@ export function SectionModelliPreset({ selectedTemplate, applyTemplateA, applyTe
           type="button"
           onClick={applyTemplateA}
           className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-            selectedTemplate === "A" ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]" : "border-slate-200 bg-white hover:border-slate-300"
+            selectedTemplate === "A"
+              ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+              : "border-slate-200 bg-white hover:border-slate-300"
           }`}
         >
           <span className="text-xs font-bold block text-[#1E293B]">Modello A</span>
@@ -108,7 +124,9 @@ export function SectionModelliPreset({ selectedTemplate, applyTemplateA, applyTe
           type="button"
           onClick={applyTemplateB}
           className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-            selectedTemplate === "B" ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]" : "border-slate-200 bg-white hover:border-slate-300"
+            selectedTemplate === "B"
+              ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+              : "border-slate-200 bg-white hover:border-slate-300"
           }`}
         >
           <span className="text-xs font-bold block text-[#1E293B]">Modello B</span>
@@ -119,10 +137,12 @@ export function SectionModelliPreset({ selectedTemplate, applyTemplateA, applyTe
           type="button"
           onClick={applyTemplateC}
           className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-            selectedTemplate === "C" ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]" : "border-slate-200 bg-white hover:border-slate-300"
+            selectedTemplate === "C"
+              ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+              : "border-slate-200 bg-white hover:border-slate-300"
           }`}
         >
-          <span className="text-xs font-bold block text-[#8B6508]">Modello C</span>
+          <span className="text-xs font-bold block text-[#8B6508]">Modello C (Landing)</span>
           <span className="text-[9px] text-slate-500 mt-1 block">Giulia &amp; Marco</span>
         </button>
       </div>
@@ -145,7 +165,7 @@ export function SectionColonnaSonora({ audioUrl, handleUpdate }: any) {
           onChange={(e) => handleUpdate("audioUrl", e.target.value)}
           className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
         >
-          {(AUDIO_DEMOS || []).map((track: any) => (
+          {(AUDIO_DEMOS || []).map((track) => (
             <option key={track.id} value={track.url}>
               {track.title}
             </option>
@@ -169,7 +189,7 @@ export function SectionColonnaSonora({ audioUrl, handleUpdate }: any) {
   );
 }
 
-// 4. SFONDO TEXTURES (10 PRESET UNSPLASH DIRETTI)
+// 4. SFONDO & TEXTURES
 export function SectionSfondoTextures({ heroBgImage, handleUpdate }: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
@@ -180,15 +200,17 @@ export function SectionSfondoTextures({ heroBgImage, handleUpdate }: any) {
       <div>
         <label className="block text-[11px] font-bold mb-2">Scegli la Texture di Sfondo dell&apos;Invito</label>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          {(BACKGROUND_PRESETS || []).map((preset: any) => {
-            const isSelected = heroBgImage === preset.url || heroBgImage === preset.id;
+          {(BACKGROUND_PRESETS || []).map((preset) => {
+            const isSelected = heroBgImage === preset.url;
             return (
               <button
                 key={preset.id}
                 type="button"
                 onClick={() => handleUpdate("heroBgImage", preset.url)}
                 className={`p-1.5 rounded-xl border text-center transition-all cursor-pointer overflow-hidden ${
-                  isSelected ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]" : "border-slate-200 bg-white hover:border-slate-300"
+                  isSelected
+                    ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                    : "border-slate-200 bg-white hover:border-slate-300"
                 }`}
               >
                 <div className="w-full h-12 rounded-lg overflow-hidden relative mb-1 border border-black/10">
@@ -215,8 +237,17 @@ export function SectionSfondoTextures({ heroBgImage, handleUpdate }: any) {
   );
 }
 
-// 5. EFFETTO START INIZIALE
-export function SectionEffettoStart({ introStart, eventThemePreset, customEventTheme, heroMediaImage, handleUpdate, toggleModule, modules }: any) {
+// 5. EFFETTO START & FOTO SPOSI
+export function SectionEffettoStart({
+  introStart,
+  eventThemePreset,
+  customEventTheme,
+  heroMediaImage,
+  waterImageUrl,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -230,7 +261,9 @@ export function SectionEffettoStart({ introStart, eventThemePreset, customEventT
             toggleModule("nuvole3d");
           }}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.busta3d || modules?.nuvole3d ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.busta3d || modules?.nuvole3d
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.busta3d || modules?.nuvole3d ? "✓ Attivo" : "✕ Disattivo"}
@@ -245,7 +278,7 @@ export function SectionEffettoStart({ introStart, eventThemePreset, customEventT
             onChange={(e) => handleUpdate("introStart", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
-            {(INTRO_START_OPTIONS || []).map((opt: any) => (
+            {(INTRO_START_OPTIONS || []).map((opt) => (
               <option key={opt.id} value={opt.id}>
                 {opt.label === "Scroll Expand Media a Tutto Schermo" ? "Zoom Multimediale allo Scroll" : opt.label}
               </option>
@@ -260,7 +293,7 @@ export function SectionEffettoStart({ introStart, eventThemePreset, customEventT
             onChange={(e) => handleUpdate("eventThemePreset", e.target.value)}
             className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
           >
-            {(EVENT_THEMES || []).map((t: string, idx: number) => (
+            {(EVENT_THEMES || []).map((t, idx) => (
               <option key={idx} value={t}>
                 {t}
               </option>
@@ -282,6 +315,19 @@ export function SectionEffettoStart({ introStart, eventThemePreset, customEventT
         </div>
       )}
 
+      {introStart === "lago" && (
+        <div className="mt-2 space-y-1">
+          <label className="block text-[10px] font-bold text-[#8B6508]">URL Immagine Specchio d&apos;Acqua (Lago)</label>
+          <input
+            type="text"
+            placeholder="https://images.unsplash.com/photo-..."
+            value={waterImageUrl}
+            onChange={(e) => handleUpdate("waterImageUrl", e.target.value)}
+            className="w-full text-xs p-2 rounded-xl border border-sky-300 bg-white font-mono"
+          />
+        </div>
+      )}
+
       <div>
         <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Hero)</label>
         <input
@@ -296,8 +342,16 @@ export function SectionEffettoStart({ introStart, eventThemePreset, customEventT
   );
 }
 
-// 6. DATA DEL MATRIMONIO
-export function SectionDataMatrimonio({ weddingDateDay, weddingDateMonth, weddingDateYear, dateDisplayMode, handleUpdate, toggleModule, modules }: any) {
+// 6. DATA MATRIMONIO
+export function SectionDataMatrimonio({
+  weddingDateDay,
+  weddingDateMonth,
+  weddingDateYear,
+  dateDisplayMode,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -308,7 +362,9 @@ export function SectionDataMatrimonio({ weddingDateDay, weddingDateMonth, weddin
           type="button"
           onClick={() => toggleModule("grattaData")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.grattaData ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.grattaData
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.grattaData ? "✓ Attivo" : "✕ Disattivo"}
@@ -352,7 +408,7 @@ export function SectionDataMatrimonio({ weddingDateDay, weddingDateMonth, weddin
           onChange={(e) => handleUpdate("dateDisplayMode", e.target.value)}
           className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
         >
-          {(DATE_DISPLAY_MODES || []).map((mode: any) => (
+          {(DATE_DISPLAY_MODES || []).map((mode) => (
             <option key={mode.id} value={mode.id}>
               {mode.label}
             </option>
@@ -364,7 +420,14 @@ export function SectionDataMatrimonio({ weddingDateDay, weddingDateMonth, weddin
 }
 
 // 7. PROGRAMMA GIORNATA
-export function SectionProgrammaGiornata({ scheduleSchema, scheduleItems, addScheduleItem, updateScheduleItem, removeScheduleItem, handleUpdate }: any) {
+export function SectionProgrammaGiornata({
+  scheduleSchema,
+  scheduleItems,
+  addScheduleItem,
+  updateScheduleItem,
+  removeScheduleItem,
+  handleUpdate,
+}: any) {
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -387,7 +450,7 @@ export function SectionProgrammaGiornata({ scheduleSchema, scheduleItems, addSch
           onChange={(e) => handleUpdate("scheduleSchema", e.target.value)}
           className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer mb-3"
         >
-          {(SCHEDULE_SCHEMAS || []).map((item: any) => (
+          {(SCHEDULE_SCHEMAS || []).map((item) => (
             <option key={item.id} value={item.id}>
               {item.label} — {item.description}
             </option>
@@ -396,7 +459,7 @@ export function SectionProgrammaGiornata({ scheduleSchema, scheduleItems, addSch
 
         <div className="space-y-2">
           <label className="block text-[11px] font-bold text-slate-700">Modifica Orari e Momenti:</label>
-          {(scheduleItems || []).map((item: ScheduleItem) => (
+          {(scheduleItems || []).map((item: any) => (
             <div key={item.id} className="flex gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
               <input
                 type="text"
@@ -429,7 +492,13 @@ export function SectionProgrammaGiornata({ scheduleSchema, scheduleItems, addSch
 }
 
 // 8. LOCATION & MAPPA GOOGLE
-export function SectionLocationMappa({ locationName, locationAddress, handleUpdate, toggleModule, modules }: any) {
+export function SectionLocationMappa({
+  locationName,
+  locationAddress,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -441,7 +510,9 @@ export function SectionLocationMappa({ locationName, locationAddress, handleUpda
             type="button"
             onClick={() => toggleModule("locationMappa")}
             className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.locationMappa !== false ? "bg-slate-900 text-white border-slate-900" : "bg-slate-100 text-slate-500 border-slate-200"
+              modules?.locationMappa !== false
+                ? "bg-slate-900 text-white border-slate-900"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
             {modules?.locationMappa !== false ? "✓ Modulo Attivo" : "✕ Modulo Disattivo"}
@@ -450,7 +521,9 @@ export function SectionLocationMappa({ locationName, locationAddress, handleUpda
             type="button"
             onClick={() => toggleModule("showOnlyMap")}
             className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.showOnlyMap !== false ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-amber-100 text-amber-800 border-amber-300"
+              modules?.showOnlyMap !== false
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+                : "bg-amber-100 text-amber-800 border-amber-300"
             }`}
           >
             {modules?.showOnlyMap !== false ? "✓ Mappa Google Visibile" : "✕ Nascondi Solo Mappa"}
@@ -482,9 +555,17 @@ export function SectionLocationMappa({ locationName, locationAddress, handleUpda
   );
 }
 
-// 9. DRESS CODE & PALETTE
-export function SectionDressCode({ selectedPaletteIdx, dressCodeNotes, handleUpdate, toggleModule, modules }: any) {
-  const palettesList = Array.isArray(DRESS_CODE_PALETTES) ? DRESS_CODE_PALETTES : Object.values(DRESS_CODE_PALETTES || {});
+// 9. DRESS CODE
+export function SectionDressCode({
+  selectedPaletteIdx,
+  dressCodeNotes,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
+  const palettesList = Array.isArray(DRESS_CODE_PALETTES)
+    ? DRESS_CODE_PALETTES
+    : Object.values(DRESS_CODE_PALETTES || {});
 
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
@@ -496,7 +577,9 @@ export function SectionDressCode({ selectedPaletteIdx, dressCodeNotes, handleUpd
           type="button"
           onClick={() => toggleModule("codiceAbbigliamento")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.codiceAbbigliamento ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.codiceAbbigliamento
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.codiceAbbigliamento ? "✓ Attivo" : "✕ Disattivo"}
@@ -514,13 +597,19 @@ export function SectionDressCode({ selectedPaletteIdx, dressCodeNotes, handleUpd
                 type="button"
                 onClick={() => handleUpdate("selectedPaletteIdx", idx)}
                 className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
-                  isSelected ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]" : "border-slate-200 bg-white hover:border-slate-300"
+                  isSelected
+                    ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                    : "border-slate-200 bg-white hover:border-slate-300"
                 }`}
               >
                 <span className="text-[10px] font-bold block mb-1.5 truncate">{p.name}</span>
                 <div className="flex gap-1">
                   {(p.colors || []).map((c: string, cIdx: number) => (
-                    <span key={cIdx} className="w-3.5 h-3.5 rounded-full border border-black/10" style={{ backgroundColor: c }} />
+                    <span
+                      key={cIdx}
+                      className="w-3.5 h-3.5 rounded-full border border-black/10"
+                      style={{ backgroundColor: c }}
+                    />
                   ))}
                 </div>
               </button>
@@ -542,8 +631,18 @@ export function SectionDressCode({ selectedPaletteIdx, dressCodeNotes, handleUpd
   );
 }
 
-// 10. LISTA NOZZE, IBAN & NEGOZI LOCALI
-export function SectionListaNozze({ customIban, showAmazonAffiliate, customStores, addCustomStore, updateCustomStore, removeCustomStore, handleUpdate, toggleModule, modules }: any) {
+// 10. LISTA NOZZE
+export function SectionListaNozze({
+  customIban,
+  showAmazonAffiliate,
+  customStores,
+  addCustomStore,
+  updateCustomStore,
+  removeCustomStore,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
   return (
     <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -554,7 +653,9 @@ export function SectionListaNozze({ customIban, showAmazonAffiliate, customStore
           type="button"
           onClick={() => toggleModule("listaNozzeAmazon")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.listaNozzeAmazon ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.listaNozzeAmazon
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.listaNozzeAmazon ? "✓ Attivo" : "✕ Disattivo"}
@@ -580,7 +681,9 @@ export function SectionListaNozze({ customIban, showAmazonAffiliate, customStore
           type="button"
           onClick={() => handleUpdate("showAmazonAffiliate", !showAmazonAffiliate)}
           className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            showAmazonAffiliate ? "bg-rose-500 text-white border-rose-600 shadow-xs" : "bg-emerald-600 text-white border-emerald-700"
+            showAmazonAffiliate
+              ? "bg-rose-500 text-white border-rose-600 shadow-xs"
+              : "bg-emerald-600 text-white border-emerald-700"
           }`}
         >
           {showAmazonAffiliate ? "✕ Rimuovi Link Amazon" : "＋ Ripristina Link Amazon"}
@@ -600,7 +703,7 @@ export function SectionListaNozze({ customIban, showAmazonAffiliate, customStore
         </div>
 
         <div className="space-y-3">
-          {(customStores || []).map((store: PartnerStoreItem) => (
+          {(customStores || []).map((store: any) => (
             <div key={store.id} className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 space-y-2">
               <div className="flex gap-2 items-center">
                 <input
@@ -645,7 +748,12 @@ export function SectionListaNozze({ customIban, showAmazonAffiliate, customStore
 }
 
 // 11. RSVP & FESTA
-export function SectionRsvpFesta({ rsvpStyle, handleUpdate, toggleModule, modules }: any) {
+export function SectionRsvpFesta({
+  rsvpStyle,
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
       <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -656,7 +764,9 @@ export function SectionRsvpFesta({ rsvpStyle, handleUpdate, toggleModule, module
           type="button"
           onClick={() => toggleModule("confermaRsvp")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.confermaRsvp ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.confermaRsvp
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.confermaRsvp ? "✓ Attivo" : "✕ Disattivo"}
@@ -670,7 +780,7 @@ export function SectionRsvpFesta({ rsvpStyle, handleUpdate, toggleModule, module
           onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
           className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
         >
-          {(RSVP_STYLES || []).map((style: any) => (
+          {(RSVP_STYLES || []).map((style) => (
             <option key={style.id} value={style.id}>
               {style.label}
             </option>
@@ -684,7 +794,9 @@ export function SectionRsvpFesta({ rsvpStyle, handleUpdate, toggleModule, module
           type="button"
           onClick={() => toggleModule("fregiStelle")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.fregiStelle !== false ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.fregiStelle !== false
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.fregiStelle !== false ? "✓ Attivo" : "✕ Disattivo"}
@@ -697,7 +809,9 @@ export function SectionRsvpFesta({ rsvpStyle, handleUpdate, toggleModule, module
           type="button"
           onClick={() => toggleModule("hubGiochiFesta")}
           className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-            modules?.hubGiochiFesta ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]" : "bg-slate-100 text-slate-500 border-slate-200"
+            modules?.hubGiochiFesta
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
+              : "bg-slate-100 text-slate-500 border-slate-200"
           }`}
         >
           {modules?.hubGiochiFesta ? "✓ Attivo" : "✕ Disattivo"}
