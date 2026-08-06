@@ -16,7 +16,7 @@ import WaterRippleImage from "@/components/ui/water-ripple-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import CosmosHero from "@/components/ui/CosmosHero";
-import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS } from "./constants";
+import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS, BACKGROUND_PRESETS } from "./constants";
 
 export interface ScheduleItem {
   id: string;
@@ -117,10 +117,14 @@ export default function AgencyPreview({
   const bgCard = colors[1] || "#FFFFFF";
   const borderCard = colors[2] || "#E6C687";
 
-  const textColor = (activePalette as any)?.textColor || "#1E293B";
-  const accentColor = (activePalette as any)?.accentColor || "#8B6508";
+  // RILEVAMENTO TEMA SCURO / CHIARO DALLO SFONDO PER IL CONTRASTO
+  const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
+  const isDarkBg = currentPreset?.isDark || heroBgImage === "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80";
 
-  // LOGICA SFONDO INVITO (BIANCO, PALETTE SYNC O TEXTURE)
+  const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
+  const accentColor = isDarkBg ? "#D4AF37" : ((activePalette as any)?.accentColor || "#8B6508");
+
+  // SFONDO MORBIDO CON SFUMATURA
   const isWhiteBg = heroBgImage === "#FFFFFF";
   const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
   const containerBgStyle = isWhiteBg
@@ -177,7 +181,7 @@ export default function AgencyPreview({
       </div>
 
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative"
+        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
         style={containerBgStyle}
       >
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
@@ -249,7 +253,7 @@ export default function AgencyPreview({
           <p className="text-xs font-bold" style={{ color: textColor }}>
             {weddingDateDay} {weddingDateMonth} {weddingDateYear}
           </p>
-          <h3 className="text-2xl font-serif font-bold mt-1" style={{ color: textColor }}>
+          <h3 className="text-2xl font-serif font-bold mt-1 drop-shadow-xs" style={{ color: textColor }}>
             {coupleNames}
           </h3>
           <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: textColor }}>
@@ -262,7 +266,7 @@ export default function AgencyPreview({
 
         {/* MODULO DATA */}
         {dateDisplayMode === "countdown" && (
-          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm" style={{ backgroundColor: bgCard, borderColor: borderCard }}>
+          <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
             <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
@@ -347,7 +351,7 @@ export default function AgencyPreview({
         )}
 
         {scheduleSchema === "minimal" && (
-          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs bg-white/60 rounded-2xl border border-slate-200 shadow-sm" style={{ color: textColor }}>
+          <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs bg-white/80 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm" style={{ color: textColor }}>
             {scheduleItems.map((item) => (
               <p key={item.id}>
                 <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> • {item.title}
@@ -400,12 +404,14 @@ export default function AgencyPreview({
             </span>
             <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
 
+            {/* PALLINI COLORI */}
             <div className="flex justify-center gap-1.5 py-1">
               {colors.map((c, i) => (
                 <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
               ))}
             </div>
 
+            {/* GALLERIA OUTFIT */}
             <div className="pt-1">
               <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
                 Esempi di Abbigliamento Consigliati (Scorri ➔)
