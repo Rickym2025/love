@@ -6,7 +6,7 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE DAI LINK UNSPLASH UFFICIALI FORNITI
+// 10 TEXTURE UNSPLASH AD ALTA RISOLUZIONE DAI TUOI LINK UFFICIALI
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "sfondo_bianco",
@@ -66,7 +66,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   },
   {
     id: "fiori",
-    name: "Mazzo di Fiori",
+    name: "Mazzo di Fiori Botanico",
     url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
     isDark: false,
