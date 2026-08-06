@@ -16,6 +16,7 @@ export interface InvitationHeroProps {
   weddingDateYear: string;
   heroBgParam: string;
   heroMediaImage: string;
+  waterImageUrl?: string;
   showBusta: boolean;
   showNuvole: boolean;
   apertoAcqua: boolean;
@@ -33,6 +34,7 @@ export default function InvitationHero({
   weddingDateYear,
   heroBgParam,
   heroMediaImage,
+  waterImageUrl = "",
   showBusta,
   showNuvole,
   apertoAcqua,
@@ -61,7 +63,7 @@ export default function InvitationHero({
 
       {start === "lago" && !apertoAcqua && (
         <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
-          <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam} />
+          <WaterRippleImage src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam)} />
           <div
             className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
             onClick={() => {
