@@ -362,7 +362,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 4: SFONDO DELL'INVITO & TEXTURES ✦ */}
+      {/* ✦ MODULO 4: SFONDO DELL'INVITO & TEXTURES (10 PRESET UNSPLASH) ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset + Palette)
@@ -372,7 +372,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
           <label className="block text-[11px] font-bold mb-2">Scegli la Texture di Sfondo dell&apos;Invito</label>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {(BACKGROUND_PRESETS || []).map((preset) => {
-              const isSelected = heroBgImage === preset.url;
+              const isSelected = heroBgImage === preset.url || heroBgImage === preset.id;
               return (
                 <button
                   key={preset.id}
@@ -884,7 +884,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             onClick={() => toggleModule("fregiStelle")}
             className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
               modules?.fregiStelle !== false
-                ? "bg-[#D4AF37] text-[#1E293B] border-[#D4AF37]"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
                 : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
