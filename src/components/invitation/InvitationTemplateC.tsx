@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
+import { ArrowRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
@@ -80,8 +80,6 @@ export default function InvitationTemplateC({
   showHubGiochi = true,
   cleanSlug = "elena-e-davide",
 }: InvitationTemplateCProps) {
-  const [activeTab, setActiveTab] = useState<"sposi" | "agenzie">("sposi");
-
   const accentColor = colors[3] || "#8B6508";
   const textColor = colors[4] || "#1E293B";
   const bgCard = colors[1] || "#FFFFFF";
@@ -92,65 +90,52 @@ export default function InvitationTemplateC({
   const testimonials = [
     {
       name: "Sofia & Lorenzo",
-      role: "Invitati 2026",
-      text: "I nostri invitati sono impazziti per la bellezza di questo sito d'autore e per la musica!",
+      role: "Invitati",
+      text: "Un matrimonio unico da favola, emozionante al primo tocco!",
       stars: 5,
     },
     {
       name: "Elena Valenti",
-      role: "Wedding Planner",
+      role: "Wedding Staff",
       text: "Un'organizzazione impeccabile con dettagli coordinati in ogni momento.",
       stars: 5,
     },
     {
       name: "Marco & Giulia",
-      role: "Sposi",
+      role: "Amici di Sempre",
       text: "La festa ed il maxischermo sono stati spettacoli indimenticabili.",
       stars: 5,
     },
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B] text-left">
-      <KineticGrid className="relative z-10">
-        
-        {/* 1. HERO SECTION STRUTTURATA COME LA LANDING PAGE */}
-        <section className="py-16 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
-          <div className="inline-flex p-1 rounded-full bg-white border border-[#D4AF37]/30 mb-6 shadow-sm">
-            <button
-              onClick={() => setActiveTab("sposi")}
-              className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                activeTab === "sposi" ? "bg-[#D4AF37] text-slate-900 shadow-md" : "text-slate-600"
-              }`}
-            >
-              💍 Il Matrimonio
-            </button>
-            <button
-              onClick={() => setActiveTab("agenzie")}
-              className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                activeTab === "agenzie" ? "bg-[#D4AF37] text-slate-900 shadow-md" : "text-slate-600"
-              }`}
-            >
-              💼 Per gli Invitati
-            </button>
+    <div className="relative min-h-screen text-[#1E293B] select-none">
+      <KineticGrid className="relative z-10 space-y-12 pb-12">
+        {/* HERO SECTION DALLA LANDING PAGE LOVE */}
+        <section className="pt-16 pb-8 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 p-1.5 px-4 rounded-full bg-white border border-[#D4AF37]/40 mb-6 shadow-sm">
+            <Image src="/wax-seal.png" alt="LOVE Wax" width={20} height={20} className="object-contain" unoptimized />
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#8B6508]">
+              IL MATRIMONIO DI {coupleNames.toUpperCase()}
+            </span>
           </div>
 
-          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-3">
-            Il Sito Ufficiale di {coupleNames}
-          </span>
-          
-          <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl">
-            Stupisci i tuoi invitati con un&apos;esperienza da favola.
+          <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl drop-shadow-xs">
+            {coupleNames}
           </h1>
 
-          <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed font-light italic">
+          <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed font-serif italic">
             &quot;{welcomePhrase}&quot;
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md mb-6">
+          <p className="text-sm font-bold text-[#8B6508] tracking-widest uppercase mb-8">
+            {weddingDateDay} {weddingDateMonth} {weddingDateYear} • Presso {locationName}
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
             <a
               href="#rsvp"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-900 font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition cursor-pointer"
             >
               <span>Conferma Partecipazione</span>
               <ArrowRight className="w-4 h-4" />
@@ -158,20 +143,20 @@ export default function InvitationTemplateC({
           </div>
         </section>
 
-        {/* 2. RECENSIONI / MESSAGGI DEGLI INVITATI IN MARQUEE */}
-        <section className="py-10 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 overflow-hidden shadow-sm">
+        {/* RECENSIONI / STRISCIA MARQUEE INVITATI */}
+        <section className="py-8 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 overflow-hidden shadow-xs">
           <div className="max-w-6xl mx-auto px-6 text-center mb-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Auguri &amp; Dediche degli Invitati</span>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Auguri &amp; Messaggi degli Invitati</span>
           </div>
           <Marquee items={testimonials} />
         </section>
 
-        {/* 3. SEZIONE ALTERNATA 1 (IMMAGINE SINISTRA | DESCRIZIONE DESTRA) */}
-        <section className="py-16 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        {/* SEZIONE ALTERNATA 1 (IMMAGINE SINISTRA | DESCRIZIONE DESTRA) */}
+        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="h-80 sm:h-[380px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
               src={heroMediaImage}
-              alt="Cerimonia"
+              alt="Cerimonia Sposi"
               className="w-full h-full object-cover"
             />
           </div>
@@ -179,43 +164,43 @@ export default function InvitationTemplateC({
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">La Cerimonia Solenne</span>
             <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Un&apos;emozione al primo tocco</h3>
             <p className="text-sm text-slate-600 leading-relaxed font-serif">
-              Vi aspettiamo il {weddingDateDay} {weddingDateMonth} {weddingDateYear} per celebrare insieme la promessa d&apos;amore tra {coupleNames} presso {locationName}.
+              Vi aspettiamo il {weddingDateDay} {weddingDateMonth} {weddingDateYear} per celebrare insieme il nostro sì.
             </p>
           </div>
         </section>
 
-        {/* 4. SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE DESTRA) */}
-        <section className="py-16 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
+        {/* SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE DESTRA) */}
+        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
           <div className="order-2 md:order-1 space-y-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">La Festa &amp; Gran Gala</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">I ricordi scritti insieme</h3>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block font-serif">Ricevimento &amp; Gran Gala</span>
+            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">I ricordi più belli da condividere</h3>
             <p className="text-sm text-slate-600 leading-relaxed font-serif">
-              I festeggiamenti proseguiranno presso {locationAddress} tra cena di gala, musica d&apos;autore e taglio della torta.
+              I festeggiamenti proseguiranno presso {locationName} ({locationAddress}) tra cocktail hour, cena di gala e open bar.
             </p>
           </div>
           <div className="order-1 md:order-2 h-80 sm:h-[380px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
-              src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"}
+              src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"}
               alt="Ricevimento"
               className="w-full h-full object-cover"
             />
           </div>
         </section>
 
-        {/* 5. GAMIFICATION DEMO GRATTA LA DATA */}
+        {/* GAMIFICATION DEMO GRATTA LA DATA */}
         {dateMode === "scratch" && (
-          <section className="py-12 px-6 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 text-center shadow-sm">
-            <div className="max-w-4xl mx-auto space-y-2">
-              <h2 className="font-serif text-2xl text-[#1E293B]">Prova il &quot;Gratta e Scopri&quot; con il dito!</h2>
+          <section className="py-12 px-6 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 text-center shadow-xs">
+            <div className="max-w-3xl mx-auto space-y-2">
+              <h2 className="font-serif text-2xl text-[#1E293B]">Prova il "Gratta e Scopri" con il dito!</h2>
               <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
             </div>
           </section>
         )}
 
-        {/* 6. PROGRAMMA DELLA GIORNATA */}
-        <section id="programma" className="py-12 px-6 max-w-4xl mx-auto text-center space-y-4">
+        {/* PROGRAMMA DELLA GIORNATA */}
+        <section id="programma" className="py-10 px-6 max-w-4xl mx-auto text-center space-y-4">
           {scheduleSchema === "howitworks" && (
-            <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] mb-2">
                 📍 Programma della Giornata
               </span>
@@ -224,7 +209,7 @@ export default function InvitationTemplateC({
           )}
 
           {scheduleSchema === "classico" && (
-            <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-3">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
                 Programma della Giornata
               </span>
@@ -239,18 +224,18 @@ export default function InvitationTemplateC({
           )}
         </section>
 
-        {/* 7. LOCATION E MAPPA GOOGLE */}
+        {/* LOCATION CON MAPPA GOOGLE SEPARATA */}
         {showMappa && (
-          <section id="location" className="py-12 px-6 max-w-4xl mx-auto text-center">
-            <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
-              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] flex items-center justify-center gap-1.5">
+          <section id="location" className="py-10 px-6 max-w-4xl mx-auto text-center">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5 text-[#8B6508]">
                 <MapPin className="w-4 h-4 text-[#8B6508]" /> Location del Matrimonio
               </span>
-              <h3 className="font-serif font-bold text-2xl text-[#1E293B]">{locationName}</h3>
+              <h3 className="font-serif font-bold text-xl text-[#1E293B]">{locationName}</h3>
               <p className="text-xs text-slate-600">{locationAddress}</p>
 
               {showGoogleMapIframe && (
-                <div className="w-full h-64 rounded-2xl overflow-hidden border border-slate-200 my-4 shadow-inner relative">
+                <div className="w-full h-64 rounded-2xl overflow-hidden border border-slate-200 my-3 shadow-inner relative">
                   <iframe
                     title="Mappa Location"
                     width="100%"
@@ -267,19 +252,19 @@ export default function InvitationTemplateC({
                 href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-bold text-white px-5 py-2.5 rounded-xl transition-colors shadow-md bg-[#1E293B]"
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 px-6 py-3 rounded-xl transition-colors shadow-md bg-[#D4AF37] hover:bg-amber-400"
               >
-                <MapPin className="w-4 h-4 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
+                <MapPin className="w-4 h-4 text-slate-900" /> Apri Mappa &amp; Indicazioni ↗
               </a>
             </div>
           </section>
         )}
 
-        {/* 8. DRESS CODE & PALETTE */}
+        {/* DRESS CODE & PALETTE */}
         {showDressCode && (
-          <section id="dresscode" className="py-12 px-6 max-w-4xl mx-auto text-center">
-            <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508]">
+          <section id="dresscode" className="py-10 px-6 max-w-4xl mx-auto text-center">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
+              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base text-[#8B6508]">
                 Dress Code &amp; Palette
               </span>
               <p className="text-xs font-serif leading-relaxed text-[#1E293B]">{dressCodeNotes}</p>
@@ -304,18 +289,18 @@ export default function InvitationTemplateC({
           </section>
         )}
 
-        {/* 9. NEGOZI CONVENZIONATI */}
+        {/* NEGOZI CONVENZIONATI */}
         {showNegozi && (
           <section className="py-6 px-6 max-w-4xl mx-auto">
             <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />
           </section>
         )}
 
-        {/* 10. LISTA NOZZE IBAN */}
+        {/* LISTA NOZZE IBAN */}
         {showListaNozze && (
-          <section id="listanozze" className="py-12 px-6 max-w-4xl mx-auto text-center">
-            <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
-              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-[#8B6508] flex items-center justify-center gap-1.5">
+          <section id="listanozze" className="py-10 px-6 max-w-4xl mx-auto text-center">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-3">
+              <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5 text-[#8B6508]">
                 <Gift className="w-4 h-4 text-[#8B6508]" /> Lista Nozze &amp; Coordinate IBAN
               </span>
               <p className="text-xs text-slate-600 font-serif">Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:</p>
@@ -324,14 +309,14 @@ export default function InvitationTemplateC({
           </section>
         )}
 
-        {/* 11. MODULO RSVP COMPLETO CON INTOLLERANZE */}
-        <section id="rsvp" className="py-16 px-6 max-w-2xl mx-auto">
+        {/* MODULO RSVP COMPLETO CON INTOLLERANZE */}
+        <section id="rsvp" className="py-10 px-6 max-w-3xl mx-auto">
           <RsvpForm coupleNames={coupleNames} paletteColors={colors} rsvpStyle={rsvpStyle} />
         </section>
 
-        {/* 12. FESTA & MAXISCHERMO */}
+        {/* FESTA & MAXISCHERMO */}
         {showHubGiochi && (
-          <section id="festa" className="py-12 px-6 max-w-4xl mx-auto text-center">
+          <section id="festa" className="py-10 px-6 max-w-4xl mx-auto text-center">
             <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl space-y-3">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
                 <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
@@ -343,15 +328,6 @@ export default function InvitationTemplateC({
             </div>
           </section>
         )}
-
-        {/* 13. FOOTER SPOSI */}
-        <footer className="py-12 border-t border-[#D4AF37]/30 bg-white text-center text-xs text-slate-600">
-          <div className="max-w-4xl mx-auto px-6 space-y-2">
-            <p className="font-bold text-[#1E293B] text-sm font-serif">© {new Date().getFullYear()} {coupleNames} — Sito Ufficiale del Matrimonio</p>
-            <p className="text-[10px] text-slate-400">Powered by LOVE d&apos;Autore</p>
-          </div>
-        </footer>
-
       </KineticGrid>
     </div>
   );
