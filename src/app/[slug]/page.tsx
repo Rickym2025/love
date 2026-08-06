@@ -89,7 +89,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const bgCard = colors[1] || "#FFFFFF";
   const borderCard = colors[2] || "#E6C687";
 
-  const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgParam);
+  const currentPreset = (BACKGROUND_PRESETS || []).find((p: any) => p.url === heroBgParam || p.id === heroBgParam);
   const isDarkBg = currentPreset?.isDark;
 
   const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
@@ -136,11 +136,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors relative"
       style={{ backgroundColor: isWhiteBg ? "#FFFFFF" : bgMain, color: textColor }}
     >
-      {/* CAPA PARALLAX SFONDO FISSATA SULLE SPALE CON SFUMATURA SOFT opacity-25 */}
-      {!isWhiteBg && !isPaletteSync && (
+      {/* LIVETTO SFONDO PARALLAX SOFT (25% OPACITY) */}
+      {!isWhiteBg && !isPaletteSync && currentPreset?.url && (
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
-          style={{ backgroundImage: `url(${heroBgParam})` }}
+          style={{ backgroundImage: `url(${currentPreset.url})` }}
         />
       )}
 
@@ -184,7 +184,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
           {start === "expand" && (
             <ScrollExpandMedia
-              bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : heroBgParam}
+              bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : currentPreset?.url || heroBgParam}
               mediaSrc="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
               title={coupleNames}
               date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -195,7 +195,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
           {start === "lago" && !apertoAcqua && (
             <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
-              <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam} />
+              <WaterRippleImage src={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : currentPreset?.url || heroBgParam} />
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
                 onClick={() => {
