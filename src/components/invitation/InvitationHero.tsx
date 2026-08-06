@@ -48,8 +48,10 @@ export default function InvitationHero({
 
   return (
     <>
+      {/* 1. NUVOLE 3D CON AVVIO AUDIO */}
       {start === "nuvole" && showNuvole && <PartingClouds onOpen={playWeddingAudio} />}
 
+      {/* 2. ZOOM MULTIMEDIALE ALLO SCROLL CON AVVIO AUDIO */}
       {start === "expand" && (
         <ScrollExpandMedia
           bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : heroBgParam}
@@ -61,9 +63,16 @@ export default function InvitationHero({
         />
       )}
 
+      {/* 3. SPECCHIO D'ACQUA WEBGL CON AVVIO AUDIO AL TAP */}
       {start === "lago" && !apertoAcqua && (
         <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
-          <WaterRippleImage src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam)} />
+          <WaterRippleImage
+            src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam)}
+            onClick={() => {
+              playWeddingAudio();
+              setApertoAcqua(true);
+            }}
+          />
           <div
             className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
             onClick={() => {
@@ -81,6 +90,7 @@ export default function InvitationHero({
         </div>
       )}
 
+      {/* 4. ORIZZONTE COSMICO 3D CON AVVIO AUDIO AL TAP/SCROLL */}
       {start === "cosmos" && !apertoCosmos && (
         <CosmosHero
           coupleNames={coupleNames}
@@ -92,6 +102,7 @@ export default function InvitationHero({
         />
       )}
 
+      {/* 5. BUSTA LUXURY 3D CON AVVIO AUDIO */}
       {start === "busta" && showBusta && (
         <EnvelopeWax coupleNames={coupleNames} onOpen={playWeddingAudio} />
       )}
