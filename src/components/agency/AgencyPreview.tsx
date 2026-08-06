@@ -57,58 +57,54 @@ export interface AgencyPreviewProps {
   modules?: Record<string, boolean>;
 }
 
-export default function AgencyPreview(props: AgencyPreviewProps) {
-  const {
-    selectedTemplate = "A",
-    introStart = "busta",
-    dateDisplayMode = "countdown",
-    scheduleSchema = "classico",
-    rsvpStyle = "classico",
-    eventThemePreset = "Luxury Gold & Total White",
-    customEventTheme = "",
-    coupleNames = "Elena & Davide",
-    weddingDateDay = "15",
-    weddingDateMonth = "Settembre",
-    weddingDateYear = "2026",
-    locationName = "Villa Rosa",
-    locationAddress = "Via Roma 1, Roma",
-    audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
-    welcomePhrase,
-    selectedPhrasePreset = "0",
-    customWelcomePhrase = "",
-    dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
-    selectedPaletteIdx = 0,
-    partnerStores = [],
-    showAmazonAffiliate = true,
-    scheduleItems = [
-      { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
-      { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
-      { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
-      { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
-      { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
-    ],
-    heroBgImage = "palette",
-    heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
-    marqueeText,
-    customIban = "IT60 X 05428 11101 000000123456",
-    modules = {},
-  } = props;
-
+export default function AgencyPreview({
+  selectedTemplate = "A",
+  introStart = "busta",
+  dateDisplayMode = "countdown",
+  scheduleSchema = "classico",
+  rsvpStyle = "classico",
+  eventThemePreset = "Luxury Gold & Total White",
+  customEventTheme = "",
+  coupleNames = "Elena & Davide",
+  weddingDateDay = "15",
+  weddingDateMonth = "Settembre",
+  weddingDateYear = "2026",
+  locationName = "Villa Rosa",
+  locationAddress = "Via Roma 1, Roma",
+  audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
+  waterImageUrl = "",
+  welcomePhrase,
+  selectedPhrasePreset = "0",
+  customWelcomePhrase = "",
+  dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
+  selectedPaletteIdx = 0,
+  partnerStores = [],
+  showAmazonAffiliate = true,
+  scheduleItems = [
+    { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
+    { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
+    { id: "3", time: "18:30", title: "Aperitivo & Cocktail Hour in Giardino" },
+    { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
+    { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
+  ],
+  heroBgImage = "palette",
+  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+  marqueeText,
+  customIban = "IT60 X 05428 11101 000000123456",
+  modules = {},
+}: AgencyPreviewProps) {
   const [startClosed, setStartClosed] = useState(false);
 
-  // ESTRAZIONE REATTIVA PALETTE BRAND
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
-    : typeof DRESS_CODE_PALETTES === "object" && DRESS_CODE_PALETTES !== null
-    ? Object.values(DRESS_CODE_PALETTES)
-    : [];
+    : Object.values(DRESS_CODE_PALETTES || {});
 
   const fallbackPalette = {
     id: "1",
     name: "Lavanda & Lillà",
-    colors: ["#FAF5FF", "#FFFFFF", "#E9D5FF", "#8B5CF6", "#3B0764"],
-    textColor: "#3B0764",
-    accentColor: "#8B5CF6",
+    colors: ["#FAF7F2", "#F3E8FF", "#E9D5FF", "#8B5CF6", "#3B0764"],
+    textColor: "#1E293B",
+    accentColor: "#8B6508",
   };
 
   const safeIdx = Math.max(0, Math.min(selectedPaletteIdx || 0, Math.max(0, (palettesList.length || 1) - 1)));
@@ -119,10 +115,8 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
   const bgMain = colors[0] || "#FAF7F2";
-  const bgCard = colors[1] || "#FFFFFF";
-  const borderCard = colors[2] || "#E6C687";
 
-  const currentPreset = (BACKGROUND_PRESETS || []).find((p: any) => p.url === heroBgImage || p.id === heroBgImage);
+  const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
   const isDarkBg = currentPreset?.isDark;
 
   const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
@@ -168,7 +162,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
     locationName
   )}&phrase=${encodeURIComponent(computedWelcomePhrase)}&audio=${encodeURIComponent(
     audioUrl
-  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}`;
+  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}&water=${encodeURIComponent(waterImageUrl || "")}`;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
@@ -189,16 +183,15 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
         style={containerBgStyle}
       >
-        {!isWhiteBg && !isPaletteSync && currentPreset?.url && (
+        {!isWhiteBg && !isPaletteSync && (
           <div
             className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
-            style={{ backgroundImage: `url(${currentPreset.url})` }}
+            style={{ backgroundImage: `url(${heroBgImage})` }}
           />
         )}
 
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -213,6 +206,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
             rsvpStyle={rsvpStyle}
             heroMediaImage={heroMediaImage}
             heroBgImage={heroBgImage}
+            waterImageUrl={waterImageUrl}
             dateMode={dateDisplayMode}
             scheduleSchema={scheduleSchema}
             scheduleItems={scheduleItems}
@@ -229,7 +223,6 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
             cleanSlug="giulia-e-marco"
           />
         ) : (
-          /* MODELLO A & B STANDARD */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
@@ -249,13 +242,9 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
               </div>
             )}
 
-            {/* EFFETTO 3: SPECCHIO D'ACQUA CAUSTICO (INDIPENDENTE DALLO SFONDO HERO) */}
             {introStart === "lago" && !startClosed && (
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
-                <WaterRippleImage
-                  src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"}
-                  onClick={() => setStartClosed(true)}
-                />
+                <WaterRippleImage src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : heroBgImage)} onClick={() => setStartClosed(true)} />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                     <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
@@ -270,7 +259,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
             {introStart === "expand" && (
               <div className="py-1 px-2">
                 <ScrollExpandMedia
-                  bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : currentPreset?.url || heroBgImage}
+                  bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : heroBgImage}
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -315,7 +304,7 @@ export default function AgencyPreview(props: AgencyPreviewProps) {
 
             {/* MODULO DATA */}
             {dateDisplayMode === "countdown" && (
-              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
+              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/90 backdrop-blur-xs" style={{ borderColor: (activePalette as any)?.accentColor || "#D4AF37" }}>
                 <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
                   ⏳ Il nostro grande giorno inizia tra
                 </span>
