@@ -6,7 +6,7 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE DAI LINK UNSPLASH UFFICIALI
+// 10 TEXTURE UNSPLASH HD ESATTE
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
     id: "sfondo_bianco",
