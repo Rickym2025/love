@@ -58,7 +58,6 @@ export default function InvitationTemplateC({
   rsvpStyle,
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   heroBgImage = "palette",
-  waterImageUrl = "",
   dateMode = "countdown",
   scheduleSchema = "classico",
   scheduleItems = [
@@ -87,6 +86,8 @@ export default function InvitationTemplateC({
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
+  const hasCustomBg = heroBgImage && heroBgImage !== "palette" && heroBgImage !== "#FFFFFF";
+
   return (
     <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
       {/* 1. NAVBAR HEADER */}
@@ -98,15 +99,25 @@ export default function InvitationTemplateC({
         <span className="text-xs font-bold text-[#8B6508] uppercase tracking-wider">MENU ☰</span>
       </div>
 
-      {/* 2. SLIDE INIZIALE HERO LANDING */}
-      <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
-        <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
-        <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
-        <div className="pt-3">
-          <a href="#rsvp" className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors">
-            CONFERMA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
-          </a>
+      {/* 2. SLIDE INIZIALE HERO LANDING CON SFONDO DINAMICO */}
+      <div
+        className="p-6 rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md relative overflow-hidden bg-cover bg-center"
+        style={{
+          backgroundImage: hasCustomBg ? `url(${heroBgImage})` : undefined,
+          backgroundColor: bgCard,
+        }}
+      >
+        {hasCustomBg && <div className="absolute inset-0 bg-white/80 backdrop-blur-xs pointer-events-none" />}
+
+        <div className="relative z-10 space-y-3">
+          <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
+          <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
+          <div className="pt-3">
+            <a href="#rsvp" className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors">
+              CONFERMA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
 
@@ -116,7 +127,7 @@ export default function InvitationTemplateC({
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora di festeggiare!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Marco &amp; Sara</span>
           </div>
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
@@ -126,13 +137,13 @@ export default function InvitationTemplateC({
           </div>
           <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
-            <p className="text-xs italic font-serif">&quot;Ci saremo tutti a brindare!&quot;</p>
+            <p className="text-xs italic font-serif">&quot;Ci saremo tutti!&quot;</p>
             <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Amici di Sempre</span>
           </div>
         </div>
       </div>
 
-      {/* 4. SEZIONE ALTERNATA 1: CERIMONIA */}
+      {/* 4. SEZIONE ALTERNATA 1: CERIMONIA (USA FOTO PRINCIPALE SPOSI) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
         <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
           <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
@@ -145,14 +156,14 @@ export default function InvitationTemplateC({
         </div>
       </div>
 
-      {/* 5. SEZIONE ALTERNATA 2: RICEVIMENTO */}
+      {/* 5. SEZIONE ALTERNATA 2: RICEVIMENTO (USA PRIMA FOTO DRESS CODE O SFONDO) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/95 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
         <div className="space-y-2 order-2 md:order-1">
           <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
           <p className="text-xs font-medium text-slate-600 leading-relaxed">{locationAddress}</p>
         </div>
         <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2">
-          <img src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"} alt="Location" className="w-full h-full object-cover" />
+          <img src={outfitPhotos[0] || (hasCustomBg ? heroBgImage : "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80")} alt="Location" className="w-full h-full object-cover" />
         </div>
       </div>
 
