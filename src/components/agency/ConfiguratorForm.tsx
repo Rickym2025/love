@@ -89,7 +89,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     ],
     showAmazonAffiliate = true,
     customStores = [
-      { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it" }
+      { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it", logoUrl: "/logo.png" }
     ],
     modules = {
       busta3d: true,
@@ -169,11 +169,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       id: Date.now().toString(),
       name: "Nuovo Negozio Locale",
       url: "https://",
+      logoUrl: "/logo.png",
     };
     handleUpdate("customStores", [...customStores, newStore]);
   };
 
-  const updateCustomStore = (id: string, field: "name" | "url", value: string) => {
+  const updateCustomStore = (id: string, field: "name" | "url" | "logoUrl", value: string) => {
     const updated = customStores.map((s) => (s.id === id ? { ...s, [field]: value } : s));
     handleUpdate("customStores", updated);
   };
@@ -207,7 +208,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* ✦ SCHEDA 1: DATI SPOSI & FRASE BENVENUTO (PRIMO MODULO) ✦ */}
+      {/* ✦ MODULO 1: DATI SPOSI & FRASE BENVENUTO (PRIMISSIMO MODULO) ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/40 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -264,7 +265,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 2: MODELLI PREIMPOSTATI A / B ✦ */}
+      {/* ✦ MODULO 2: MODELLI PREIMPOSTATI A / B ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
@@ -301,10 +302,47 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 3: SFONDO DELL'INVITO & TEXTURES ✦ */}
+      {/* ✦ MODULO 3: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures
+          <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
+        </h3>
+
+        <div>
+          <label className="block text-[11px] font-bold mb-1">Seleziona Brano o Incolla MP3</label>
+          <select
+            value={audioUrl}
+            onChange={(e) => handleUpdate("audioUrl", e.target.value)}
+            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
+          >
+            {(AUDIO_DEMOS || []).map((track) => (
+              <option key={track.id} value={track.url}>
+                {track.title}
+              </option>
+            ))}
+            <option value="custom">Incolla Link MP3 Personalizzato / Cloud</option>
+          </select>
+
+          {audioUrl === "custom" && (
+            <div className="mt-2 space-y-1">
+              <label className="block text-[10px] font-bold text-[#8B6508]">URL File MP3 Personalizzato</label>
+              <input
+                type="text"
+                placeholder="https://mio-server.com/musica-sposi.mp3"
+                onChange={(e) => handleUpdate("audioUrl", e.target.value)}
+                className="w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-mono"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ MODULO 4: SFONDO DELL'INVITO & TEXTURES ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset + Palette)
         </h3>
 
         <div>
@@ -334,7 +372,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Incolla URL Sfondo Personalizzato / Upload</label>
+          <label className="block text-[11px] font-bold mb-1">Oppure Incolla URL Sfondo Personalizzato / Upload</label>
           <input
             type="text"
             placeholder="https://images.unsplash.com/photo-..."
@@ -347,8 +385,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 4: EFFETTO START INIZIALE ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ MODULO 5: EFFETTO START INIZIALE ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Effetto Start Iniziale
@@ -428,8 +466,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 5: DATA DEL MATRIMONIO ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
+      {/* ✦ MODULO 6: DATA DEL MATRIMONIO ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Data del Matrimonio
@@ -495,8 +533,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 6: PROGRAMMA GIORNATA ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
+      {/* ✦ MODULO 7: PROGRAMMA GIORNATA ✦ */}
+      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-[#D4AF37]" /> Programma della Giornata &amp; Orari Modificabili
@@ -558,44 +596,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 7: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
-      <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
-        </h3>
-
-        <div>
-          <label className="block text-[11px] font-bold mb-1">Seleziona Brano o Incolla MP3</label>
-          <select
-            value={audioUrl}
-            onChange={(e) => handleUpdate("audioUrl", e.target.value)}
-            className="w-full text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-medium cursor-pointer"
-          >
-            {(AUDIO_DEMOS || []).map((track) => (
-              <option key={track.id} value={track.url}>
-                {track.title}
-              </option>
-            ))}
-            <option value="custom">Incolla Link MP3 Personalizzato / Cloud</option>
-          </select>
-
-          {audioUrl === "custom" && (
-            <div className="mt-2 space-y-1">
-              <label className="block text-[10px] font-bold text-[#8B6508]">URL File MP3 Personalizzato</label>
-              <input
-                type="text"
-                placeholder="https://mio-server.com/musica-sposi.mp3"
-                onChange={(e) => handleUpdate("audioUrl", e.target.value)}
-                className="w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-mono"
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
-
-      {/* ✦ SCHEDA 8: LOCATION & MAPPA ✦ */}
+      {/* ✦ MODULO 8: LOCATION & MAPPA CON TOGGLE MOSTRA/NASCONDI ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -610,7 +611,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
                 : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
-            {modules?.locationMappa ? "✓ Attivo" : "✕ Disattivo"}
+            {modules?.locationMappa ? "✓ Mappa Attiva" : "✕ Mappa Disattiva"}
           </button>
         </div>
 
@@ -638,7 +639,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 9: DRESS CODE & PALETTE ✦ */}
+      {/* ✦ MODULO 9: DRESS CODE & PALETTE ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -702,7 +703,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 10: LISTA NOZZE & IBAN ✦ */}
+      {/* ✦ MODULO 10: LISTA NOZZE & NEGOZI LOCALI CON LOGO ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -761,31 +762,44 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             </button>
           </div>
 
-          <div className="space-y-2">
+          {/* LISTA NEGOZI LOCALI CON CAMPO LOGO PERSONALIZZATO */}
+          <div className="space-y-3">
             {customStores.map((store) => (
-              <div key={store.id} className="flex gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
-                <input
-                  type="text"
-                  placeholder="Es. Gioielleria Rossi..."
-                  value={store.name}
-                  onChange={(e) => updateCustomStore(store.id, "name", e.target.value)}
-                  className="w-1/2 text-xs p-1.5 font-bold border border-slate-300 rounded-lg"
-                />
-                <input
-                  type="text"
-                  placeholder="https://gioielleriarossi.it"
-                  value={store.url}
-                  onChange={(e) => updateCustomStore(store.id, "url", e.target.value)}
-                  className="w-1/2 text-xs p-1.5 font-mono border border-slate-300 rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeCustomStore(store.id)}
-                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
-                  title="Elimina negozio"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+              <div key={store.id} className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 space-y-2">
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    placeholder="Nome Negozio (es. Gioielleria Rossi)..."
+                    value={store.name}
+                    onChange={(e) => updateCustomStore(store.id, "name", e.target.value)}
+                    className="flex-1 text-xs p-1.5 font-bold border border-slate-300 rounded-lg bg-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeCustomStore(store.id)}
+                    className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                    title="Elimina negozio"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Link Sito / E-commerce..."
+                    value={store.url}
+                    onChange={(e) => updateCustomStore(store.id, "url", e.target.value)}
+                    className="text-xs p-1.5 font-mono border border-slate-300 rounded-lg bg-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="URL Logo (lascia vuoto per logo default)..."
+                    value={store.logoUrl || ""}
+                    onChange={(e) => updateCustomStore(store.id, "logoUrl", e.target.value)}
+                    className="text-xs p-1.5 font-mono border border-slate-300 rounded-lg bg-white"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -794,7 +808,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ SCHEDA 11: CONFERMA PARTECIPAZIONE (RSVP) & FESTA & FREGI ✦ */}
+      {/* ✦ MODULO 11: CONFERMA PARTECIPAZIONE (RSVP) & FESTA & FREGI ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -814,7 +828,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP</label>
+          <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP (3 Stili Distinti)</label>
           <select
             value={rsvpStyle}
             onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
