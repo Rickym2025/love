@@ -41,6 +41,7 @@ export interface ConfiguratorFormProps {
   customIban?: string;
   heroBgImage?: string;
   heroMediaImage?: string;
+  ricevimentoImage?: string;
   waterImageUrl?: string;
   scheduleItems?: ScheduleItem[];
   showAmazonAffiliate?: boolean;
@@ -67,6 +68,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     audioUrl = "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3",
     heroBgImage = "palette",
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+    ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
     waterImageUrl = "",
     selectedPaletteIdx = 0,
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
@@ -224,17 +226,33 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 5. EFFETTO START INIZIALE */}
-      <SectionEffettoStart
-        introStart={introStart}
-        eventThemePreset={eventThemePreset}
-        customEventTheme={customEventTheme}
-        heroMediaImage={heroMediaImage}
-        waterImageUrl={waterImageUrl}
-        handleUpdate={handleUpdate}
-        toggleModule={toggleModule}
-        modules={modules}
-      />
+      {/* 5. EFFETTO START INIZIALE & FOTO SPOSI / CERIMONIA / RICEVIMENTO */}
+      <div className="space-y-3">
+        <SectionEffettoStart
+          introStart={introStart}
+          eventThemePreset={eventThemePreset}
+          customEventTheme={customEventTheme}
+          heroMediaImage={heroMediaImage}
+          waterImageUrl={waterImageUrl}
+          handleUpdate={handleUpdate}
+          toggleModule={toggleModule}
+          modules={modules}
+        />
+
+        {/* CAMPO DEDICATO PER FOTO RICEVIMENTO MODELLO C */}
+        {selectedTemplate === "C" && (
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <label className="block text-[11px] font-bold text-[#8B6508]">URL Foto Ricevimento / Festa (Modello C)</label>
+            <input
+              type="text"
+              placeholder="https://images.unsplash.com/photo-..."
+              value={ricevimentoImage}
+              onChange={(e) => handleUpdate("ricevimentoImage", e.target.value)}
+              className="w-full text-xs p-2 rounded-xl border border-slate-300 bg-white font-mono"
+            />
+          </div>
+        )}
+      </div>
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
