@@ -6,12 +6,12 @@ export interface BackgroundPreset {
   isDark?: boolean;
 }
 
-// 10 TEXTURE AD ALTA RISOLUZIONE ESCLUSIVE
+// 10 TEXTURE AD ALTA RISOLUZIONE DAI LINK UNSPLASH UFFICIALI
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   {
-    id: "bianco_puro",
-    name: "Bianco Puro",
-    url: "#FFFFFF",
+    id: "sfondo_bianco",
+    name: "Sfondo Bianco Intonaco",
+    url: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
@@ -23,52 +23,38 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
     isDark: false,
   },
   {
-    id: "panna_avorio",
-    name: "Seta Avorio & Panna",
+    id: "seta_avorio",
+    name: "Seta Avorio",
     url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
-    id: "pergamena_epoca",
-    name: "Carta Pergamena d'Epoca",
-    url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
-    isDark: false,
-  },
-  {
     id: "marmo_carrara",
-    name: "Marmo Bianco Carrara",
+    name: "Marmo Naturale",
     url: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
-    id: "bokeh_dorato",
-    name: "Bokeh & Luci Dorate",
+    id: "luci_dorate",
+    name: "Luci Dorate Bokeh",
     url: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
     id: "seta_rosa",
-    name: "Seta Rosa Cipria",
-    url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80",
+    name: "Seta Rosa",
+    url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=200&q=80",
     isDark: false,
   },
   {
-    id: "salvia_botanico",
-    name: "Foglia Salvia & Botanico",
-    url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
-    isDark: false,
-  },
-  {
-    id: "blu_zaffiro",
+    id: "blu_notte",
     name: "Blu Notte Zaffiro",
-    url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=200&q=80",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200&q=80",
     isDark: true,
   },
   {
@@ -77,6 +63,20 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
     url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
     thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80",
     isDark: true,
+  },
+  {
+    id: "fiori_botanici",
+    name: "Mazzo di Fiori Botanico",
+    url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
+  },
+  {
+    id: "carta_pergamena",
+    name: "Carta Pergamena",
+    url: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1200&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80",
+    isDark: false,
   },
 ];
 
