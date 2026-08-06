@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, Gift, Sparkles, Calendar, Heart } from "lucide-react";
+import { ArrowRight, MapPin, Gift, Sparkles, Calendar, Heart, Star } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
@@ -82,103 +82,116 @@ export default function InvitationTemplateC({
 }: InvitationTemplateCProps) {
   const accentColor = colors[3] || "#8B6508";
   const textColor = colors[4] || "#1E293B";
-  const bgCard = colors[1] || "#FFFFFF";
-  const borderCard = colors[2] || "#E6C687";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
-  const testimonials = [
+  const wishes = [
     {
       name: "Sofia & Lorenzo",
       role: "Invitati",
-      text: "Un matrimonio unico da favola, emozionante al primo tocco!",
+      text: "Non vediamo l'ora di festeggiare insieme il vostro amore!",
       stars: 5,
     },
     {
-      name: "Elena Valenti",
-      role: "Wedding Staff",
-      text: "Un'organizzazione impeccabile con dettagli coordinati in ogni momento.",
+      name: "Famiglia Rossi",
+      role: "Zii",
+      text: "Un augurio immenso di tanta felicità per il vostro percorso.",
       stars: 5,
     },
     {
       name: "Marco & Giulia",
       role: "Amici di Sempre",
-      text: "La festa ed il maxischermo sono stati spettacoli indimenticabili.",
+      text: "Ci saremo tutti a brindare al giorno più bello!",
       stars: 5,
     },
   ];
 
   return (
     <div className="relative min-h-screen text-[#1E293B] select-none">
-      <KineticGrid className="relative z-10 space-y-12 pb-12">
-        {/* HERO SECTION DALLA LANDING PAGE LOVE */}
-        <section className="pt-16 pb-8 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 p-1.5 px-4 rounded-full bg-white border border-[#D4AF37]/40 mb-6 shadow-sm">
-            <Image src="/wax-seal.png" alt="LOVE Wax" width={20} height={20} className="object-contain" unoptimized />
-            <span className="text-[10px] uppercase font-bold tracking-widest text-[#8B6508]">
-              IL MATRIMONIO DI {coupleNames.toUpperCase()}
-            </span>
-          </div>
+      {/* SFONDO LANDING PAGE AVORIO CON OVERLAY */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+      />
 
-          <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl drop-shadow-xs">
-            {coupleNames}
-          </h1>
-
-          <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed font-serif italic">
-            &quot;{welcomePhrase}&quot;
-          </p>
-
-          <p className="text-sm font-bold text-[#8B6508] tracking-widest uppercase mb-8">
-            {weddingDateDay} {weddingDateMonth} {weddingDateYear} • Presso {locationName}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
+      <KineticGrid className="relative z-10 space-y-8 pb-12">
+        {/* HEADER NAVBAR LANDING */}
+        <header className="border-b border-[#D4AF37]/30 bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40 shadow-xs">
+          <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src="/wax-seal.png" alt="Sigillo" className="w-8 h-8 object-contain drop-shadow" unoptimized />
+              <span className="font-serif text-xl font-bold tracking-wider text-[#1E293B]">
+                {coupleNames}
+              </span>
+            </div>
             <a
               href="#rsvp"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition cursor-pointer"
+              className="px-5 py-2 rounded-full bg-[#D4AF37] text-slate-900 text-xs font-bold shadow-sm hover:bg-amber-400 transition"
             >
-              <span>Conferma Partecipazione</span>
-              <ArrowRight className="w-4 h-4" />
+              Conferma Partecipazione
             </a>
           </div>
+        </header>
+
+        {/* HERO SECTION LANDING SUI DATI DEGLI SPOSI */}
+        <section className="py-12 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">
+            Il Matrimonio di {coupleNames}
+          </span>
+          <h1 className="font-serif text-3xl sm:text-6xl font-normal text-[#1E293B] leading-tight mb-4">
+            {coupleNames}
+          </h1>
+          <p className="text-slate-600 font-serif text-base sm:text-lg italic max-w-xl mx-auto mb-6">
+            &quot;{welcomePhrase}&quot;
+          </p>
+          <p className="text-xs font-bold uppercase tracking-widest text-[#8B6508] mb-8">
+            {weddingDateDay} {weddingDateMonth} {weddingDateYear} • Presso {locationName}
+          </p>
+          <a
+            href="#rsvp"
+            className="px-8 py-3.5 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2 hover:bg-amber-400 transition"
+          >
+            <span>Conferma la Tua Presenza</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
         </section>
 
-        {/* RECENSIONI / STRISCIA MARQUEE INVITATI */}
-        <section className="py-8 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 overflow-hidden shadow-xs">
+        {/* MARQUEE AUGURI INVITATI */}
+        <section className="py-8 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 shadow-xs">
           <div className="max-w-6xl mx-auto px-6 text-center mb-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Auguri &amp; Messaggi degli Invitati</span>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Auguri &amp; Dediche degli Invitati</span>
           </div>
-          <Marquee items={testimonials} />
+          <Marquee items={wishes} />
         </section>
 
-        {/* SEZIONE ALTERNATA 1 (IMMAGINE SINISTRA | DESCRIZIONE DESTRA) */}
-        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="h-80 sm:h-[380px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+        {/* SEZIONE ALTERNATA 1 (FOTO A SINISTRA | TESTO A DESTRA) */}
+        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div className="h-72 sm:h-96 w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
               src={heroMediaImage}
-              alt="Cerimonia Sposi"
+              alt="Cerimonia"
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">La Cerimonia Solenne</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Un&apos;emozione al primo tocco</h3>
-            <p className="text-sm text-slate-600 leading-relaxed font-serif">
-              Vi aspettiamo il {weddingDateDay} {weddingDateMonth} {weddingDateYear} per celebrare insieme il nostro sì.
+            <h3 className="font-serif text-3xl text-[#1E293B]">Il Sacro Sì</h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-serif">
+              Vi aspettiamo il {weddingDateDay} {weddingDateMonth} {weddingDateYear} a {locationName} per celebrare con noi l'inizio di questa nuova avventura.
             </p>
           </div>
         </section>
 
-        {/* SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE DESTRA) */}
-        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
-          <div className="order-2 md:order-1 space-y-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block font-serif">Ricevimento &amp; Gran Gala</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">I ricordi più belli da condividere</h3>
-            <p className="text-sm text-slate-600 leading-relaxed font-serif">
-              I festeggiamenti proseguiranno presso {locationName} ({locationAddress}) tra cocktail hour, cena di gala e open bar.
+        {/* SEZIONE ALTERNATA 2 (TESTO A SINISTRA | FOTO A DESTRA) */}
+        <section className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center border-t border-[#D4AF37]/20">
+          <div className="order-2 md:order-1 space-y-3">
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">Ricevimento &amp; Party</span>
+            <h3 className="font-serif text-3xl text-[#1E293B]">Cena di Gala e Festeggiamenti</h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-serif">
+              I festeggiamenti proseguiranno presso {locationAddress} tra cocktail hour, cena di gala, musica dal vivo e taglio della torta.
             </p>
           </div>
-          <div className="order-1 md:order-2 h-80 sm:h-[380px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+          <div className="order-1 md:order-2 h-72 sm:h-96 w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
               src={outfitPhotos[0] || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"}
               alt="Ricevimento"
@@ -187,17 +200,17 @@ export default function InvitationTemplateC({
           </div>
         </section>
 
-        {/* GAMIFICATION DEMO GRATTA LA DATA */}
+        {/* DEMO GAMIFICATION GRATTA DATA */}
         {dateMode === "scratch" && (
           <section className="py-12 px-6 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 text-center shadow-xs">
             <div className="max-w-3xl mx-auto space-y-2">
-              <h2 className="font-serif text-2xl text-[#1E293B]">Prova il "Gratta e Scopri" con il dito!</h2>
+              <h2 className="font-serif text-2xl text-[#1E293B]">Gratta per scoprire la data ufficiale!</h2>
               <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
             </div>
           </section>
         )}
 
-        {/* PROGRAMMA DELLA GIORNATA */}
+        {/* PROGRAMMA GIORNATA */}
         <section id="programma" className="py-10 px-6 max-w-4xl mx-auto text-center space-y-4">
           {scheduleSchema === "howitworks" && (
             <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm">
@@ -224,7 +237,7 @@ export default function InvitationTemplateC({
           )}
         </section>
 
-        {/* LOCATION CON MAPPA GOOGLE SEPARATA */}
+        {/* LOCATION CON MAPPA GOOGLE */}
         {showMappa && (
           <section id="location" className="py-10 px-6 max-w-4xl mx-auto text-center">
             <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-3">
@@ -260,7 +273,7 @@ export default function InvitationTemplateC({
           </section>
         )}
 
-        {/* DRESS CODE & PALETTE */}
+        {/* DRESS CODE */}
         {showDressCode && (
           <section id="dresscode" className="py-10 px-6 max-w-4xl mx-auto text-center">
             <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-sm space-y-4">
