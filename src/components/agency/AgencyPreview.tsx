@@ -115,6 +115,8 @@ export default function AgencyPreview({
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
   const bgMain = colors[0] || "#FAF7F2";
+  const bgCard = colors[1] || "#FFFFFF";
+  const borderCard = colors[2] || "#E6C687";
 
   const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
   const isDarkBg = currentPreset?.isDark;
@@ -192,6 +194,7 @@ export default function AgencyPreview({
 
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
+        {/* MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -223,6 +226,7 @@ export default function AgencyPreview({
             cleanSlug="giulia-e-marco"
           />
         ) : (
+          /* MODELLO A & B */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
@@ -242,9 +246,13 @@ export default function AgencyPreview({
               </div>
             )}
 
+            {/* SPECCHIO D'ACQUA: USA waterImageUrl ESCLUSIVAMENTE */}
             {introStart === "lago" && !startClosed && (
               <div className="relative w-full h-44 overflow-hidden border-b border-sky-300">
-                <WaterRippleImage src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" : heroBgImage)} onClick={() => setStartClosed(true)} />
+                <WaterRippleImage
+                  src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
+                  onClick={() => setStartClosed(true)}
+                />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
                     <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
@@ -304,7 +312,7 @@ export default function AgencyPreview({
 
             {/* MODULO DATA */}
             {dateDisplayMode === "countdown" && (
-              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/90 backdrop-blur-xs" style={{ borderColor: (activePalette as any)?.accentColor || "#D4AF37" }}>
+              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
                 <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
                   ⏳ Il nostro grande giorno inizia tra
                 </span>
