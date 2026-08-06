@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Gift, Star, ChevronRight } from "lucide-react";
+import { Sparkles, MapPin, Gift } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
@@ -16,6 +16,7 @@ import WaterRippleImage from "@/components/ui/water-ripple-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import CosmosHero from "@/components/ui/CosmosHero";
+import InvitationTemplateC from "@/components/invitation/InvitationTemplateC";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS, BACKGROUND_PRESETS } from "./constants";
 
 export interface ScheduleItem {
@@ -125,11 +126,13 @@ export default function AgencyPreview({
 
   const isWhiteBg = heroBgImage === "#FFFFFF";
   const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
+  
+  // PARALLAX LAYER APPLICATO IN BACKGROUND CON OPERATORE DI OPACITÀ SOFT
   const containerBgStyle = isWhiteBg
     ? { backgroundColor: "#FFFFFF", color: textColor }
     : isPaletteSync
     ? { backgroundColor: bgMain, color: textColor }
-    : { backgroundImage: `url(${heroBgImage})`, backgroundSize: "cover", backgroundAttachment: "fixed", color: textColor };
+    : { backgroundColor: bgMain, color: textColor };
 
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
@@ -181,86 +184,51 @@ export default function AgencyPreview({
       </div>
 
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
+        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative"
         style={containerBgStyle}
       >
+        {/* OPACITÀ SFUMATA SFONDO TEXTURE PARALLAX */}
+        {!isWhiteBg && !isPaletteSync && (
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
+            style={{ backgroundImage: `url(${heroBgImage})` }}
+          />
+        )}
+
         {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* RENDERING MODELLO C (LANDING STORYBOARD) */}
+        {/* RENDERING SPECIFICO MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
-          <div className="space-y-4 text-left p-2">
-            <div className="flex justify-between items-center p-3 bg-white/90 rounded-2xl border border-slate-200 shadow-xs">
-              <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Logo" width={20} height={20} className="object-contain" unoptimized />
-                <span className="font-serif font-bold text-xs text-[#1E293B]">{coupleNames}</span>
-              </div>
-              <span className="text-[10px] font-bold text-[#8B6508] uppercase">MENU ☰</span>
-            </div>
-
-            <div className="p-4 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37] text-center space-y-2 shadow-sm">
-              <span className="text-[9px] uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
-              <h2 className="text-xl font-serif font-bold text-[#1E293B]">{coupleNames}</h2>
-              <p className="text-[10px] italic font-serif opacity-80">&quot;{computedWelcomePhrase}&quot;</p>
-              <div className="pt-2">
-                <a href="#rsvp" className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#D4AF37] text-slate-900 px-3 py-1.5 rounded-lg shadow-xs">
-                  CONFERMA PARTECIPAZIONE <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
-              <div className="grid grid-cols-3 gap-1.5 text-center">
-                <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-xs">
-                  <div className="flex justify-center text-amber-400 mb-1"><Star className="w-2.5 h-2.5 fill-amber-400" /></div>
-                  <p className="text-[8px] italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
-                  <span className="text-[7px] font-bold text-slate-600 block mt-1">- Marco &amp; Sara</span>
-                </div>
-                <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-xs">
-                  <div className="flex justify-center text-amber-400 mb-1"><Star className="w-2.5 h-2.5 fill-amber-400" /></div>
-                  <p className="text-[8px] italic font-serif">&quot;Auguri immensi!&quot;</p>
-                  <span className="text-[7px] font-bold text-slate-600 block mt-1">- Zii Rossi</span>
-                </div>
-                <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-xs">
-                  <div className="flex justify-center text-amber-400 mb-1"><Star className="w-2.5 h-2.5 fill-amber-400" /></div>
-                  <p className="text-[8px] italic font-serif">&quot;Ci saremo tutti!&quot;</p>
-                  <span className="text-[7px] font-bold text-slate-600 block mt-1">- Amici di Sempre</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 items-center p-3 bg-white rounded-2xl border border-slate-200">
-              <div className="w-full h-24 rounded-xl overflow-hidden relative border border-slate-200">
-                <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
-              </div>
-              <div className="space-y-1">
-                <span className="text-[9px] font-bold uppercase text-[#8B6508]">La Cerimonia</span>
-                <p className="text-[9px] font-medium text-slate-600 leading-tight">{weddingDateDay} {weddingDateMonth} {weddingDateYear} • {locationName}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 items-center p-3 bg-white rounded-2xl border border-slate-200">
-              <div className="space-y-1">
-                <span className="text-[9px] font-bold uppercase text-[#8B6508]">Ricevimento &amp; Party</span>
-                <p className="text-[9px] font-medium text-slate-600 leading-tight">{locationAddress}</p>
-              </div>
-              <div className="w-full h-24 rounded-xl overflow-hidden relative border border-slate-200">
-                <img src={outfitPhotos[0] || heroBgImage} alt="Location" className="w-full h-full object-cover" />
-              </div>
-            </div>
-
-            <div id="rsvp">
-              <RsvpForm coupleNames={coupleNames} paletteColors={colors} rsvpStyle={rsvpStyle} />
-            </div>
-
-            <div className="p-3 bg-slate-900 text-slate-400 rounded-2xl text-[8px] text-center space-y-1">
-              <p className="font-bold text-white">© {new Date().getFullYear()} {coupleNames}</p>
-              <p>P.IVA / C.F. 01234567890 • Privacy Policy • Cookie Policy</p>
-              <p className="text-[#D4AF37]">Powered by LOVE White-Label Hub</p>
-            </div>
-          </div>
+          <InvitationTemplateC
+            coupleNames={coupleNames}
+            welcomePhrase={computedWelcomePhrase}
+            weddingDateDay={weddingDateDay}
+            weddingDateMonth={weddingDateMonth}
+            weddingDateYear={weddingDateYear}
+            locationName={locationName}
+            locationAddress={locationAddress}
+            outfitPhotos={outfitPhotos}
+            colors={colors}
+            rsvpStyle={rsvpStyle}
+            heroMediaImage={heroMediaImage}
+            heroBgImage={heroBgImage}
+            dateMode={dateDisplayMode}
+            scheduleSchema={scheduleSchema}
+            scheduleItems={scheduleItems}
+            dressCodeNotes={dressCodeNotes}
+            customIban={customIban}
+            partnerStores={partnerStores}
+            showAmazonAffiliate={showAmazonAffiliate}
+            showGoogleMapIframe={showGoogleMapIframe}
+            showMappa={showLocationModule}
+            showDressCode={modules.codiceAbbigliamento !== false}
+            showNegozi={modules.negoziConvenzionati !== false}
+            showListaNozze={modules.listaNozzeAmazon !== false}
+            showHubGiochi={modules.hubGiochiFesta !== false}
+            cleanSlug="giulia-e-marco"
+          />
         ) : (
-          /* MODELLO A & B */
+          /* MODELLO A & B STANDARD */
           <>
             {modules.dedicheMarquee && (
               <div className="py-1">
@@ -444,11 +412,9 @@ export default function AgencyPreview({
                 <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
                   📍 Location del Matrimonio
                 </span>
-                {/* NOME E INDIRIZZO SEMPRE VISIBILI */}
                 <p className="font-bold text-xs" style={{ color: textColor }}>{locationName}</p>
                 <p className="text-[10px] font-medium text-slate-600">{locationAddress}</p>
 
-                {/* SOLO IFRAME MAPPA GOOGLE CONDIZIONATO DAL PULSANTE */}
                 {showGoogleMapIframe && (
                   <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
                     <iframe
