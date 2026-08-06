@@ -28,7 +28,7 @@ export interface PartnerStoreItem {
 }
 
 export interface ConfiguratorFormProps {
-  selectedTemplate?: "A" | "B";
+  selectedTemplate?: "A" | "B" | "C";
   introStart?: string;
   dateDisplayMode?: string;
   scheduleSchema?: string;
@@ -145,6 +145,15 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     handleUpdate("selectedPaletteIdx", 1);
   };
 
+  const applyTemplateC = () => {
+    handleUpdate("selectedTemplate", "C");
+    handleUpdate("coupleNames", "Giulia & Marco");
+    handleUpdate("introStart", "expand");
+    handleUpdate("dateDisplayMode", "countdown");
+    handleUpdate("scheduleSchema", "timeline");
+    handleUpdate("selectedPaletteIdx", 2);
+  };
+
   const addScheduleItem = () => {
     const newItem: ScheduleItem = {
       id: Date.now().toString(),
@@ -208,7 +217,57 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* ✦ MODULO 1: DATI SPOSI & FRASE BENVENUTO (PRIMISSIMO MODULO) ✦ */}
+      {/* ✦ 1. MODELLO PREIMPOSTATO (MODELLI A / B / C) ✦ */}
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
+        </h3>
+
+        <div className="grid grid-cols-3 gap-2 pt-1">
+          <button
+            type="button"
+            onClick={applyTemplateA}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "A"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello A</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Elena &amp; Davide</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateB}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "B"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#1E293B]">Modello B</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Francesca &amp; Luca</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={applyTemplateC}
+            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+              selectedTemplate === "C"
+                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
+                : "border-slate-200 bg-white hover:border-slate-300"
+            }`}
+          >
+            <span className="text-xs font-bold block text-[#8B6508]">Modello C (Landing)</span>
+            <span className="text-[9px] text-slate-500 mt-1 block">Storyboard Wireframe</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* ✦ 2. DATI SPOSI & FRASE BENVENUTO ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border-2 border-[#D4AF37]/40 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -265,44 +324,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 2: MODELLI PREIMPOSTATI A / B ✦ */}
-      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Modello Preimpostato
-        </h3>
-
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <button
-            type="button"
-            onClick={applyTemplateA}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "A"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello A — Elena &amp; Davide</span>
-            <span className="text-[10px] text-slate-500 mt-1 block">Luxury Gold • Busta 3D • Countdown</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={applyTemplateB}
-            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-              selectedTemplate === "B"
-                ? "border-[#D4AF37] bg-[#FAF7F2] shadow-md ring-2 ring-[#D4AF37]"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <span className="text-xs font-bold block text-[#1E293B]">Modello B — Francesca &amp; Luca</span>
-            <span className="text-[10px] text-slate-500 mt-1 block">Boho Chic • Nuvole 3D • Timeline Spillo</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
-
-      {/* ✦ MODULO 3: COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
+      {/* ✦ 3. COLONNA SONORA D'AUTORE / UPLOAD MP3 ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
@@ -339,7 +361,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 4: SFONDO DELL'INVITO & TEXTURES ✦ */}
+      {/* ✦ 4. SFONDO DELL'INVITO & TEXTURES ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
           <Layers className="w-4 h-4 text-[#D4AF37]" /> Sfondo dell&apos;Invito &amp; Textures (10 Preset + Palette)
@@ -385,7 +407,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 5: EFFETTO START INIZIALE ✦ */}
+      {/* ✦ 5. EFFETTO START INIZIALE ✦ */}
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
@@ -596,22 +618,22 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* ✦ MODULO 8: LOCATION & MAPPA CON TOGGLE MOSTRA/NASCONDI ✦ */}
+      {/* ✦ MODULO 8: LOCATION & MAPPA GOOGLE CON TOGGLE DEDICATO ✦ */}
       <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 pb-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-            <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio
+            <MapPin className="w-4 h-4 text-[#D4AF37]" /> Location del Matrimonio &amp; Mappa Google
           </h3>
           <button
             type="button"
             onClick={() => toggleModule("locationMappa")}
             className={`px-3 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
-              modules?.locationMappa
+              modules?.locationMappa !== false
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37]"
                 : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
-            {modules?.locationMappa ? "✓ Mappa Attiva" : "✕ Mappa Disattiva"}
+            {modules?.locationMappa !== false ? "✓ Mappa Google Attiva" : "✕ Nascondi Solo Mappa Google"}
           </button>
         </div>
 
@@ -762,7 +784,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
             </button>
           </div>
 
-          {/* LISTA NEGOZI LOCALI CON CAMPO LOGO PERSONALIZZATO */}
           <div className="space-y-3">
             {customStores.map((store) => (
               <div key={store.id} className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 space-y-2">
@@ -828,7 +849,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP (3 Stili Distinti)</label>
+          <label className="block text-[11px] font-bold mb-1">Stile Modulo RSVP (6 Stili Formali &amp; Interattivi)</label>
           <select
             value={rsvpStyle}
             onChange={(e) => handleUpdate("rsvpStyle", e.target.value)}
