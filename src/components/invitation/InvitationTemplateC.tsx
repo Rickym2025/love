@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
@@ -44,6 +45,7 @@ export interface InvitationTemplateCProps {
   showListaNozze?: boolean;
   showHubGiochi?: boolean;
   cleanSlug?: string;
+  playWeddingAudio?: () => void;
 }
 
 export default function InvitationTemplateC({
@@ -80,6 +82,7 @@ export default function InvitationTemplateC({
   showListaNozze = true,
   showHubGiochi = true,
   cleanSlug = "elena-e-davide",
+  playWeddingAudio,
 }: InvitationTemplateCProps) {
   const colorsList = Array.isArray(colors) && colors.length >= 3
     ? colors
@@ -93,9 +96,15 @@ export default function InvitationTemplateC({
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
   const hasCustomBg = heroBgImage && heroBgImage !== "palette" && heroBgImage !== "#FFFFFF";
 
+  const triggerAudioInteraction = () => {
+    if (typeof playWeddingAudio === "function") {
+      playWeddingAudio();
+    }
+  };
+
   return (
-    <div className="relative w-full min-h-screen">
-      {/* 1. AGGIUNTO SFONDO IMMAGINE / TEXTURE PERSONALIZZATA CON PARALLAX SOFT */}
+    <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
+      {/* ✦ 1. SFONDO TEXTURE PERSONALIZZATA CON PARALLAX SOFT ✦ */}
       {hasCustomBg && (
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
@@ -103,14 +112,12 @@ export default function InvitationTemplateC({
         />
       )}
 
-      {/* 2. AGGIUNTO EFFETTO A PALLINI REATTIVI (KINETIC GRID) IN BACKGROUND */}
-      <div className="fixed inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
+      {/* ✦ 2. SFONDO A PALLINI REATTIVI (KINETIC GRID) GARANTITO ✦ */}
+      <div className="fixed inset-0 z-0 opacity-50 pointer-events-none overflow-hidden">
         <KineticGrid />
       </div>
 
       <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-        {/* HEADER / NAVBAR ELIMINATO SU RICHIESTA */}
-
         {/* 1. SLIDE INIZIALE HERO LANDING */}
         <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
           <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
@@ -118,7 +125,11 @@ export default function InvitationTemplateC({
           <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
           <p className="text-xs font-bold text-[#8B6508] uppercase pt-1">{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
           <div className="pt-3">
-            <a href="#rsvp" className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors">
+            <a
+              href="#rsvp"
+              onClick={triggerAudioInteraction}
+              className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors"
+            >
               CONFERMA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
             </a>
           </div>
