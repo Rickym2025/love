@@ -1,100 +1,116 @@
-'use client';
+"use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
+
+export interface ScratchPhotoProps {
+  imageSrc?: string;
+  overlayText?: string;
+}
 
 export default function ScratchPhoto({
-  photoUrl = 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
-  onWin,
-}: {
-  photoUrl?: string;
-  onWin?: () => void;
-}) {
+  imageSrc = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+  overlayText = "🎰 Gratta col dito per scoprire la Foto della Coppia",
+}: ScratchPhotoProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
+  const [isScratching, setIsScratching] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Strato di copertura dorato da grattare
-    ctx.fillStyle = '#D4AF37';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const width = (canvas.width = canvas.parentElement?.clientWidth || 300);
+    const height = (canvas.height = 200);
 
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('✨ GRATTA PER SCOPRIRE LA FOTO ✨', canvas.width / 2, canvas.height / 2 + 4);
+    // SFONDO STRATO DORATO DA CANCELLARE
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, "#D4AF37");
+    gradient.addColorStop(0.5, "#F3E8FF");
+    gradient.addColorStop(1, "#B8860B");
 
-    let isDrawing = false;
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
 
-    const scratch = (x: number, y: number) => {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(x, y, 22, 0, Math.PI * 2);
-      ctx.fill();
-    };
+    ctx.font = "bold 12px serif";
+    ctx.fillStyle = "#1E293B";
+    ctx.textAlign = "center";
+    ctx.fillText(overlayText, width / 2, height / 2);
+  }, [overlayText]);
 
-    const getPos = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      let clientX = 0, clientY = 0;
-      if ('touches' in e && e.touches.length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else if ('clientX' in e) {
-        clientX = (e as MouseEvent).clientX;
-        clientY = (e as MouseEvent).clientY;
+  // CALCOLO SOGLIA EFFETTIVA CANCELLAZIONE (>75%)
+  const checkScratchPercentage = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || isRevealed) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    try {
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imgData.data;
+      let transparentPixels = 0;
+
+      for (let i = 3; i < pixels.length; i += 4) {
+        if (pixels[i] === 0) {
+          transparentPixels++;
+        }
       }
-      return { x: clientX - rect.left, y: clientY - rect.top };
-    };
 
-    const handleStart = (e: MouseEvent | TouchEvent) => {
-      isDrawing = true;
-      const { x, y } = getPos(e);
-      scratch(x, y);
-    };
+      const totalPixels = canvas.width * canvas.height;
+      const percentage = (transparentPixels / totalPixels) * 100;
 
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!isDrawing) return;
-      const { x, y } = getPos(e);
-      scratch(x, y);
-    };
-
-    const handleEnd = () => {
-      isDrawing = false;
-      if (!isRevealed) {
+      // SI RIVELA SOLO SE SUPERATA LA SOGLIA DEL 75%
+      if (percentage >= 75) {
         setIsRevealed(true);
-        if (onWin) onWin();
       }
-    };
+    } catch {}
+  };
 
-    canvas.addEventListener('mousedown', handleStart);
-    canvas.addEventListener('mousemove', handleMove);
-    canvas.addEventListener('mouseup', handleEnd);
-    canvas.addEventListener('touchstart', handleStart);
-    canvas.addEventListener('touchmove', handleMove);
-    canvas.addEventListener('touchend', handleEnd);
+  const scratch = (x: number, y: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas || isRevealed) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    return () => {
-      canvas.removeEventListener('mousedown', handleStart);
-      canvas.removeEventListener('mousemove', handleMove);
-      canvas.removeEventListener('mouseup', handleEnd);
-      canvas.removeEventListener('touchstart', handleStart);
-      canvas.removeEventListener('touchmove', handleMove);
-      canvas.removeEventListener('touchend', handleEnd);
-    };
-  }, [isRevealed, onWin]);
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
+    ctx.fill();
+
+    checkScratchPercentage();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isScratching) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    scratch(e.clientX - rect.left, e.clientY - rect.top);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touch = e.touches[0];
+    scratch(touch.clientX - rect.left, touch.clientY - rect.top);
+  };
 
   return (
-    <div className="relative w-full max-w-xs mx-auto aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-[#FAF7F2]">
-      <img src={photoUrl} alt="Foto Sposi Segreta" className="w-full h-full object-cover" />
-      <canvas
-        ref={canvasRef}
-        width={320}
-        height={420}
-        className="absolute inset-0 w-full h-full cursor-pointer z-10"
-      />
+    <div className="relative w-full max-w-sm mx-auto h-[200px] rounded-2xl overflow-hidden border-2 border-[#D4AF37] shadow-lg select-none">
+      <img src={imageSrc} alt="Foto Sposi Rivelata" className="w-full h-full object-cover" />
+
+      {!isRevealed && (
+        <canvas
+          ref={canvasRef}
+          onMouseDown={() => setIsScratching(true)}
+          onMouseUp={() => setIsScratching(false)}
+          onMouseLeave={() => setIsScratching(false)}
+          onMouseMove={handleMouseMove}
+          onTouchStart={() => setIsScratching(true)}
+          onTouchEnd={() => setIsScratching(false)}
+          onTouchMove={handleTouchMove}
+          className="absolute inset-0 w-full h-full cursor-pointer z-10 touch-none"
+        />
+      )}
     </div>
   );
 }
