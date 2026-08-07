@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag, PartyPopper, HelpCircle, Image as ImageIcon, Upload } from "lucide-react";
+import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag, PartyPopper, HelpCircle, Image as ImageIcon, Upload, CheckCircle2 } from "lucide-react";
 import {
   WELCOME_PHRASE_PRESETS,
   DATE_DISPLAY_MODES,
@@ -28,16 +28,46 @@ export interface PartnerStoreItem {
 }
 
 export const QUIZ_PRESET_QUESTIONS = [
-  "Dove ci siamo conosciuti per la prima volta?",
-  "Chi ha fatto il primo passo?",
-  "Qual è il nostro piatto preferito da mangiare insieme?",
-  "Dove andremo in viaggio di nozze?",
-  "Chi guida meglio tra i due?",
-  "Chi ha detto 'Ti Amo' per primo?",
-  "Qual è la canzone della nostra storia?",
-  "Chi dei due cucina meglio?",
-  "Qual è la data del nostro primo anniversario?",
-  "Chi è il più ritardatario tra gli sposi?",
+  {
+    question: "Dove ci siamo conosciuti per la prima volta?",
+    optionA: "In università",
+    optionB: "In discoteca",
+    optionC: "Al mare in vacanza",
+    optionD: "Tramite amici comuni",
+    correctOptionIdx: 0,
+  },
+  {
+    question: "Chi ha fatto la proposta di nozze?",
+    optionA: "Elena",
+    optionB: "Davide",
+    optionC: "Insieme a Parigi",
+    optionD: "I genitori",
+    correctOptionIdx: 1,
+  },
+  {
+    question: "Qual è il nostro piatto preferito da mangiare insieme?",
+    optionA: "Pizza Margherita",
+    optionB: "Sushi & Sashimi",
+    optionC: "Pasta alla Carbonara",
+    optionD: "Grigliata di Carne",
+    correctOptionIdx: 1,
+  },
+  {
+    question: "Dove andremo in viaggio di nozze?",
+    optionA: "Giappone e Polinesia",
+    optionB: "Stati Uniti & Caraibi",
+    optionC: "Safari in Africa",
+    optionD: "Tour delle capitali europee",
+    correctOptionIdx: 0,
+  },
+  {
+    question: "Chi guida meglio tra i due?",
+    optionA: "Sicuramente Lo Sposo",
+    optionB: "Sicuramente La Sposa",
+    optionC: "Nessuno dei due!",
+    optionD: "Dipende dal traffico",
+    correctOptionIdx: 1,
+  },
 ];
 
 export function SectionDatiSposi({
@@ -843,8 +873,22 @@ export function SectionRsvpFesta({
 
 export function SectionFestaGiochiMaxischermo({
   quizQuestions = [
-    { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
-    { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+    {
+      question: "Dove ci siamo conosciuti per la prima volta?",
+      optionA: "In università",
+      optionB: "In discoteca",
+      optionC: "Al mare in vacanza",
+      optionD: "Tramite amici comuni",
+      correctOptionIdx: 0,
+    },
+    {
+      question: "Chi ha fatto la proposta di nozze?",
+      optionA: "Elena",
+      optionB: "Davide",
+      optionC: "Insieme a Parigi",
+      optionD: "I genitori",
+      correctOptionIdx: 1,
+    },
   ],
   galleryStyle = "polaroid",
   puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
@@ -853,13 +897,19 @@ export function SectionFestaGiochiMaxischermo({
   toggleModule,
   modules,
 }: any) {
-  const addQuizQuestion = (presetText?: string) => {
+  const addQuizQuestion = (presetObj?: any) => {
     const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
-    const newQ = {
-      id: Date.now().toString(),
-      question: presetText || "Nuova Domanda del Quiz...",
-      answer: "Risposta corretta",
-    };
+    const newQ = presetObj
+      ? { ...presetObj, id: Date.now().toString() }
+      : {
+          id: Date.now().toString(),
+          question: "Nuova Domanda del Quiz...",
+          optionA: "Opzione A",
+          optionB: "Opzione B",
+          optionC: "Opzione C",
+          optionD: "Opzione D",
+          correctOptionIdx: 0,
+        };
     handleUpdate("quizQuestions", [...currentQ, newQ]);
   };
 
@@ -869,7 +919,7 @@ export function SectionFestaGiochiMaxischermo({
     handleUpdate("quizQuestions", updated);
   };
 
-  const updateQuizQuestion = (idx: number, field: "question" | "answer", val: string) => {
+  const updateQuizQuestionField = (idx: number, field: string, val: any) => {
     const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
     const updated = currentQ.map((q: any, i: number) => (i === idx ? { ...q, [field]: val } : q));
     handleUpdate("quizQuestions", updated);
@@ -987,18 +1037,18 @@ export function SectionFestaGiochiMaxischermo({
         </div>
       </div>
 
-      {/* EDITOR QUIZ SPOSI CON DOMANDE PRESET */}
+      {/* EDITOR QUIZ SPOSI COMPLETO DI 4 RISPOSTE A, B, C, D */}
       <div className="pt-3 border-t border-slate-700/80 space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-xs font-bold text-[#D4AF37] flex items-center gap-1.5">
-            <HelpCircle className="w-4 h-4 text-[#D4AF37]" /> Quiz della Coppia (Personalizza Domande)
+            <HelpCircle className="w-4 h-4 text-[#D4AF37]" /> Quiz della Coppia (Domande &amp; 4 Risposte)
           </span>
           <button
             type="button"
             onClick={() => addQuizQuestion()}
             className="px-2.5 py-1 text-[10px] font-bold bg-[#D4AF37] text-slate-900 rounded-lg flex items-center gap-1 hover:bg-amber-400 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> Aggiungi Domanda
+            <Plus className="w-3.5 h-3.5" /> Nuova Domanda
           </button>
         </div>
 
@@ -1007,51 +1057,113 @@ export function SectionFestaGiochiMaxischermo({
           <select
             onChange={(e) => {
               if (e.target.value) {
-                addQuizQuestion(e.target.value);
+                const selectedPreset = QUIZ_PRESET_QUESTIONS[Number(e.target.value)];
+                if (selectedPreset) addQuizQuestion(selectedPreset);
                 e.target.value = "";
               }
             }}
             className="w-full text-xs p-2 rounded-xl bg-slate-800 border border-slate-700 text-white font-medium cursor-pointer"
           >
-            <option value="">-- Scegli tra 10 Domande Preimpostate --</option>
+            <option value="">-- Scegli tra Domande Preimpostate --</option>
             {QUIZ_PRESET_QUESTIONS.map((q, idx) => (
-              <option key={idx} value={q}>
-                {q}
+              <option key={idx} value={idx}>
+                {q.question}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="space-y-2">
-          {(quizQuestions || []).map((q: any, idx: number) => (
-            <div key={q.id || idx} className="p-3 bg-slate-800/90 rounded-2xl border border-slate-700 space-y-1.5">
-              <div className="flex gap-2 items-center">
-                <span className="text-xs font-bold text-[#D4AF37]">{idx + 1}.</span>
-                <input
-                  type="text"
-                  value={q.question}
-                  onChange={(e) => updateQuizQuestion(idx, "question", e.target.value)}
-                  className="flex-1 text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"
-                  placeholder="Domanda..."
-                />
-                <button
-                  type="button"
-                  onClick={() => removeQuizQuestion(idx)}
-                  className="p-1.5 text-rose-400 hover:bg-rose-950 rounded-lg cursor-pointer"
-                  title="Elimina domanda"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+        {/* LISTA DOMANDE EDITOR IN DASHBOARD */}
+        <div className="space-y-4">
+          {(quizQuestions || []).map((q: any, idx: number) => {
+            const correctIdx = q.correctOptionIdx ?? 0;
+            return (
+              <div key={q.id || idx} className="p-3.5 bg-slate-800/90 rounded-2xl border border-slate-700 space-y-2.5">
+                <div className="flex gap-2 items-center">
+                  <span className="text-xs font-bold text-[#D4AF37]">{idx + 1}.</span>
+                  <input
+                    type="text"
+                    value={q.question || ""}
+                    onChange={(e) => updateQuizQuestionField(idx, "question", e.target.value)}
+                    className="flex-1 text-xs p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"
+                    placeholder="Scrivi la domanda..."
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeQuizQuestion(idx)}
+                    className="p-1.5 text-rose-400 hover:bg-rose-950 rounded-lg cursor-pointer"
+                    title="Elimina domanda"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* 4 OPZIONI DI RISPOSTA A, B, C, D */}
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 mb-0.5">Opzione A</label>
+                    <input
+                      type="text"
+                      value={q.optionA || q.answer || ""}
+                      onChange={(e) => updateQuizQuestionField(idx, "optionA", e.target.value)}
+                      className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium"
+                      placeholder="Risposta A..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 mb-0.5">Opzione B</label>
+                    <input
+                      type="text"
+                      value={q.optionB || ""}
+                      onChange={(e) => updateQuizQuestionField(idx, "optionB", e.target.value)}
+                      className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium"
+                      placeholder="Risposta B..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 mb-0.5">Opzione C</label>
+                    <input
+                      type="text"
+                      value={q.optionC || ""}
+                      onChange={(e) => updateQuizQuestionField(idx, "optionC", e.target.value)}
+                      className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium"
+                      placeholder="Risposta C..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 mb-0.5">Opzione D</label>
+                    <input
+                      type="text"
+                      value={q.optionD || ""}
+                      onChange={(e) => updateQuizQuestionField(idx, "optionD", e.target.value)}
+                      className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium"
+                      placeholder="Risposta D..."
+                    />
+                  </div>
+                </div>
+
+                {/* SELEZIONE DELLA RISPOSTA ESATTA */}
+                <div className="flex items-center justify-between pt-1 bg-slate-900/60 p-2 rounded-xl border border-slate-700/60">
+                  <span className="text-[10px] font-bold text-[#D4AF37] flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Qual è la risposta corretta?
+                  </span>
+                  <select
+                    value={correctIdx}
+                    onChange={(e) => updateQuizQuestionField(idx, "correctOptionIdx", Number(e.target.value))}
+                    className="text-xs p-1 bg-slate-800 border border-slate-600 text-emerald-400 font-bold rounded-lg cursor-pointer"
+                  >
+                    <option value={0}>Opzione A</option>
+                    <option value={1}>Opzione B</option>
+                    <option value={2}>Opzione C</option>
+                    <option value={3}>Opzione D</option>
+                  </select>
+                </div>
               </div>
-              <input
-                type="text"
-                value={q.answer}
-                onChange={(e) => updateQuizQuestion(idx, "answer", e.target.value)}
-                className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-emerald-400 font-mono"
-                placeholder="Risposta corretta..."
-              />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
