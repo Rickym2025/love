@@ -9,18 +9,15 @@ import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import AudioPlayer from "@/components/AudioPlayer";
 import Marquee from "@/components/Marquee";
-import PartingClouds from "@/components/PartingClouds";
 import PartnerStores from "@/components/PartnerStores";
-import EnvelopeWax from "@/components/EnvelopeWax";
-import WaterRippleImage from "@/components/ui/water-ripple-image";
-import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
-import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
-import CosmosHero from "@/components/ui/CosmosHero";
+import InvitationHero from "@/components/invitation/InvitationHero";
+import InvitationSchedule from "@/components/invitation/InvitationSchedule";
+import InvitationLocation from "@/components/invitation/InvitationLocation";
+import InvitationTemplateC from "@/components/invitation/InvitationTemplateC";
 import CircularGallery from "@/components/ui/CircularGallery";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
 import LoveQuiz from "@/components/LoveQuiz";
-import InvitationTemplateC from "@/components/invitation/InvitationTemplateC";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, BACKGROUND_PRESETS } from "@/components/agency/constants";
 
 function InvitationContent({ params }: { params?: { slug?: string } }) {
@@ -65,7 +62,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [apertoAcqua, setApertoAcqua] = useState(false);
   const [apertoCosmos, setApertoCosmos] = useState(false);
 
-  // RILEVAMENTO GIORNO DEL MATRIMONIO (AUTO-COLLASSO INVITO)
+  // RILEVAMENTO GIORNO MATRIMONIO
   const isWeddingDayOverride = searchParams?.get("isWeddingDay") === "true";
   const today = new Date();
   const currentDay = today.getDate().toString();
@@ -180,7 +177,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         setApertoCosmos={setApertoCosmos}
       />
 
-      {/* SE È IL GIORNO DEL MATRIMONIO: HUB FESTA AUTO-ESPANSO IN CIMA */}
       {isTodayWedding && (
         <div className="max-w-xl mx-auto px-4 pt-6 space-y-4 relative z-20">
           <div className="p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-center space-y-4 animate-fade-in">
@@ -219,7 +215,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
         </div>
       )}
 
-      {/* CONTENUTO INVITO (VISIBILE O COLLASSATO IN BASE AL GIORNO) */}
       {(!isTodayWedding || !invitationCollapsed) && (
         <>
           {isTemplateC ? (
@@ -327,7 +322,11 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
                   <div className="flex justify-center gap-2">
                     {colorsList.map((color, i) => (
-                      <div key={i} className="w-7 h-7 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: color }} />
+                      <div
+                        key={i}
+                        className="w-7 h-7 rounded-full border border-slate-300 shadow-sm"
+                        style={{ backgroundColor: color }}
+                      />
                     ))}
                   </div>
 
