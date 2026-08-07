@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag, PartyPopper, HelpCircle, Image as ImageIcon, Puzzle, Eye } from "lucide-react";
+import { Heart, Sparkles, Music, Layers, Calendar, MapPin, Palette, Gift, MessageSquare, Plus, Trash2, ShoppingBag, PartyPopper, HelpCircle, Image as ImageIcon, Upload } from "lucide-react";
 import {
   WELCOME_PHRASE_PRESETS,
   DATE_DISPLAY_MODES,
@@ -27,7 +27,6 @@ export interface PartnerStoreItem {
   logoUrl?: string;
 }
 
-// 10 DOMANDE QUIZ PREIMPOSTATE D'AUTORE
 export const QUIZ_PRESET_QUESTIONS = [
   "Dove ci siamo conosciuti per la prima volta?",
   "Chi ha fatto il primo passo?",
@@ -40,8 +39,6 @@ export const QUIZ_PRESET_QUESTIONS = [
   "Qual è la data del nostro primo anniversario?",
   "Chi è il più ritardatario tra gli sposi?",
 ];
-
-// ... (Sottosezioni 1-11 intatte)
 
 export function SectionDatiSposi({
   coupleNames,
@@ -373,7 +370,7 @@ export function SectionEffettoStart({
       )}
 
       <div>
-        <label className="block text-[10px] font-bold mb-1 font-bold">URL Foto Principale Sposi (Zoom / Cerimonia)</label>
+        <label className="block text-[10px] font-bold mb-1">URL Foto Principale Sposi (Zoom / Cerimonia)</label>
         <input
           type="text"
           placeholder="https://images.unsplash.com/photo-..."
@@ -844,7 +841,6 @@ export function SectionRsvpFesta({
   );
 }
 
-// 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO (SBLOCCATA CON PULSANTI REATTIVI)
 export function SectionFestaGiochiMaxischermo({
   quizQuestions = [
     { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
@@ -877,6 +873,34 @@ export function SectionFestaGiochiMaxischermo({
     const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
     const updated = currentQ.map((q: any, i: number) => (i === idx ? { ...q, [field]: val } : q));
     handleUpdate("quizQuestions", updated);
+  };
+
+  // UPLOAD DA FILE LOCALE PER PUZZLE
+  const handlePuzzleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          handleUpdate("puzzleImage", event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // UPLOAD DA FILE LOCALE PER GRATTA E SCOPRI
+  const handleScratchFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          handleUpdate("scratchPhotoUrl", event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -927,12 +951,12 @@ export function SectionFestaGiochiMaxischermo({
         </div>
       </div>
 
-      {/* CAMPI FOTO GIOCHI PUZZLE & GRATTA LA FOTO */}
+      {/* CAMPI FOTO GIOCHI PUZZLE & GRATTA LA FOTO CON UPLOAD LOCALE */}
       <div className="pt-3 border-t border-slate-700/80 space-y-3">
         <span className="text-xs font-bold text-[#D4AF37] block">📷 Immagini Personalizzate dei Giochi:</span>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-[10px] text-slate-300 mb-1 font-bold">Foto per il Puzzle 3x3</label>
+          <div className="space-y-1">
+            <label className="block text-[10px] text-slate-300 font-bold">Foto per il Puzzle 3x3</label>
             <input
               type="text"
               placeholder="https://images.unsplash.com/photo-..."
@@ -940,9 +964,14 @@ export function SectionFestaGiochiMaxischermo({
               onChange={(e) => handleUpdate("puzzleImage", e.target.value)}
               className="w-full text-xs p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-mono"
             />
+            <label className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#D4AF37] bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700">
+              <Upload className="w-3 h-3" /> Carica dal tuo Dispositivo
+              <input type="file" accept="image/*" onChange={handlePuzzleFileUpload} className="hidden" />
+            </label>
           </div>
-          <div>
-            <label className="block text-[10px] text-slate-300 mb-1 font-bold">Foto per il Gratta e Scopri</label>
+
+          <div className="space-y-1">
+            <label className="block text-[10px] text-slate-300 font-bold">Foto per il Gratta e Scopri</label>
             <input
               type="text"
               placeholder="https://images.unsplash.com/photo-..."
@@ -950,6 +979,10 @@ export function SectionFestaGiochiMaxischermo({
               onChange={(e) => handleUpdate("scratchPhotoUrl", e.target.value)}
               className="w-full text-xs p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-mono"
             />
+            <label className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#D4AF37] bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700">
+              <Upload className="w-3 h-3" /> Carica dal tuo Dispositivo
+              <input type="file" accept="image/*" onChange={handleScratchFileUpload} className="hidden" />
+            </label>
           </div>
         </div>
       </div>
