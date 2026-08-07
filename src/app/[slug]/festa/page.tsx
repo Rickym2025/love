@@ -19,12 +19,60 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
   const coupleNames = searchParams?.get("couple") || "Elena & Davide";
   const defaultGalleryMode = searchParams?.get("gallery") || "polaroid";
 
-  // STATO PER TOGGLE GALLERIA 3D CIRCOLARE / POLAROID
+  // TOGGLE PER CAMBIARE DA POLAROID A GALLERIA 3D CIRCOLARE
   const [selectedGalleryStyle, setSelectedGalleryStyle] = useState<string>(defaultGalleryMode);
 
   const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
   const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
   const audioUrl = searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
+
+  // DOMANDE PARSATE DALL'URL O DEFAULTS
+  let quizQuestions = [
+    {
+      question: "Dove ci siamo conosciuti per la prima volta?",
+      optionA: "In università",
+      optionB: "In discoteca",
+      optionC: "Al mare in vacanza",
+      optionD: "Tramite amici comuni",
+      correctOptionIdx: 0,
+    },
+    {
+      question: "Chi ha fatto la proposta di nozze?",
+      optionA: "Elena",
+      optionB: "Davide",
+      optionC: "Insieme a Parigi",
+      optionD: "I genitori",
+      correctOptionIdx: 1,
+    },
+  ];
+
+  try {
+    const rawQuiz = searchParams?.get("quiz");
+    if (rawQuiz) {
+      quizQuestions = JSON.parse(decodeURIComponent(rawQuiz));
+    }
+  } catch (e) {
+    // fallback
+  }
+
+  // FOTO PER LA GALLERIA 3D CIRCOLARE
+  const circularGalleryItems = [
+    {
+      common: coupleNames,
+      binomial: "Il nostro primo ballo",
+      photo: { url: scratchPhotoUrl, text: "Ballo Sposi", by: "Invitati" },
+    },
+    {
+      common: "Taglio della Torta",
+      binomial: "Momento Dolce",
+      photo: { url: puzzleImage, text: "Torta Nozze", by: "Fotografo" },
+    },
+    {
+      common: "Brindisi con gli Amici",
+      binomial: "Festa & Party",
+      photo: { url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80", text: "Brindisi", by: "Amici" },
+    },
+  ];
 
   return (
     <div className="min-h-screen w-full bg-slate-950 text-white overflow-x-hidden font-sans pb-16 select-none">
@@ -83,14 +131,14 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           {selectedGalleryStyle === "circular" ? (
             <div className="space-y-3 pt-2">
               <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase tracking-wider block">🎡 Galleria 3D Circolare Ruotante</span>
-              <CircularGallery />
+              <CircularGallery items={circularGalleryItems} />
             </div>
           ) : (
             <PhotoWallSection />
           )}
         </div>
 
-        {/* SEPARATORE DI LUSSO TRA GALLERIA E GIOCHI */}
+        {/* DIVISORE LUXURY TRA GALLERIA E GIOCHI */}
         <div className="relative my-8 flex items-center justify-center">
           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D4AF37]/40"></div></div>
           <div className="relative px-6 py-2 bg-slate-900 border-2 border-[#D4AF37] rounded-full text-[#D4AF37] font-serif text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-xl">
@@ -98,7 +146,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </div>
         </div>
 
-        {/* GIOCHI FESTA CON DIVISORI DEDICATI */}
+        {/* GIOCHI FESTA CON DIVISORI ELEGANTI */}
         <div className="space-y-8">
           {/* GIOCO 1: PUZZLE */}
           <PhotoPuzzle imageSrc={puzzleImage} />
@@ -119,7 +167,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </div>
 
           {/* GIOCO 3: QUIZ SPOSI */}
-          <LoveQuiz />
+          <LoveQuiz questions={quizQuestions} />
         </div>
       </main>
     </div>
