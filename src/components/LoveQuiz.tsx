@@ -47,6 +47,7 @@ export default function LoveQuiz({
 
   const activeQuestion = questions[currentQIdx] || questions[0];
 
+  // SE L'AGENZIA HA INSERITO LE 4 RISPOSTE, LE USA; ALTRIMENTI COMPLETA CON FALLBACK
   const optionsList = [
     activeQuestion.optionA || activeQuestion.answer || "Opzione A",
     activeQuestion.optionB || "Opzione B",
