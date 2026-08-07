@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, MapPin, Gift } from "lucide-react";
+import { Sparkles, MapPin, Gift, PartyPopper } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import PartingClouds from "@/components/PartingClouds";
@@ -16,6 +16,9 @@ import WaterRippleImage from "@/components/ui/water-ripple-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import CosmosHero from "@/components/ui/CosmosHero";
+import CircularGallery from "@/components/ui/CircularGallery";
+import PhotoPuzzle from "@/components/PhotoPuzzle";
+import ScratchPhoto from "@/components/ScratchPhoto";
 import InvitationTemplateC from "@/components/invitation/InvitationTemplateC";
 import { DRESS_CODE_PALETTES, DRESS_CODE_PHOTOS, WELCOME_PHRASE_PRESETS, BACKGROUND_PRESETS } from "./constants";
 
@@ -53,6 +56,9 @@ export interface AgencyPreviewProps {
   heroBgImage?: string;
   heroMediaImage?: string;
   ricevimentoImage?: string;
+  puzzleImage?: string;
+  scratchPhotoUrl?: string;
+  galleryStyle?: string;
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -91,6 +97,9 @@ export default function AgencyPreview({
   heroBgImage = "palette",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+  puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+  scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+  galleryStyle = "polaroid",
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
@@ -168,9 +177,9 @@ export default function AgencyPreview({
   const showLocationModule = modules.locationMappa !== false;
   const showGoogleMapIframe = modules.showOnlyMap !== false;
 
-  const fullscreenDynamicUrl = `/${
-    selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco"
-  }?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&rsvpStyle=${rsvpStyle}&day=${encodeURIComponent(
+  const slugName = selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco";
+
+  const fullscreenDynamicUrl = `/${slugName}?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&rsvpStyle=${rsvpStyle}&day=${encodeURIComponent(
     weddingDateDay
   )}&month=${encodeURIComponent(weddingDateMonth)}&year=${encodeURIComponent(
     weddingDateYear
@@ -180,21 +189,34 @@ export default function AgencyPreview({
     audioUrl
   )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}&water=${encodeURIComponent(waterImageUrl || "")}`;
 
+  const festaFullscreenUrl = `/${slugName}/festa?isWeddingDay=true`;
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
-      <div className="flex justify-between items-center w-full max-w-[340px] mb-2 text-white">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" /> Live Preview Sincronizzata
+      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN EVIDENTI E GRANDI */}
+      <div className="flex flex-col gap-1.5 w-full max-w-[340px] mb-3 text-white">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center justify-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
         </span>
-        <Link
-          href={fullscreenDynamicUrl}
-          target="_blank"
-          className="text-[10px] text-[#D4AF37] hover:text-white flex items-center gap-1 font-bold bg-[#FAF7F2]/10 px-2 py-1 rounded-lg transition-all"
-        >
-          Apri Fullscreen ↗
-        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <Link
+            href={fullscreenDynamicUrl}
+            target="_blank"
+            className="text-xs text-slate-900 hover:bg-amber-400 flex items-center justify-center gap-1 font-bold bg-[#D4AF37] px-3 py-2 rounded-xl shadow-md transition-all text-center"
+          >
+            ✦ Fullscreen Invito ↗
+          </Link>
+          <Link
+            href={festaFullscreenUrl}
+            target="_blank"
+            className="text-xs text-white hover:bg-slate-700 flex items-center justify-center gap-1 font-bold bg-slate-800 border border-[#D4AF37]/50 px-3 py-2 rounded-xl shadow-md transition-all text-center"
+          >
+            🎉 Fullscreen Festa ↗
+          </Link>
+        </div>
       </div>
 
+      {/* FRAME SMARTPHONE MOCKUP */}
       <div
         className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
         style={containerBgStyle}
@@ -208,7 +230,6 @@ export default function AgencyPreview({
 
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* MODELLO C (LANDING STORYBOARD COMPLETO) */}
         {selectedTemplate === "C" ? (
           <InvitationTemplateC
             coupleNames={coupleNames}
@@ -533,18 +554,25 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {/* GIOCHI DELLA FESTA */}
-            {modules.hubGiochiFesta && (
-              <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
-                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
-                  🎮 Giochi della Festa per gli Invitati
+            {/* GIOCHI DELLA FESTA LIVE IN PREVIEW */}
+            {modules.hubGiochiFesta !== false && (
+              <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-3">
+                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1">
+                  <PartyPopper className="w-3.5 h-3.5" /> Giochi della Festa &amp; Maxischermo
                 </span>
-                <p className="text-[10px] text-slate-300">
-                  Partecipa al Quiz della coppia, gioca al Puzzle e scopri la foto speciale!
-                </p>
-                <div className="pt-1">
-                  <LoveQuiz />
-                </div>
+
+                {galleryStyle === "circular" && <CircularGallery />}
+                <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
+                <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
+                <div className="py-1"><LoveQuiz /></div>
+
+                <Link
+                  href={festaFullscreenUrl}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#D4AF37] text-slate-900 px-3 py-1.5 rounded-lg shadow-md hover:bg-amber-400 transition-colors"
+                >
+                  <PartyPopper className="w-3.5 h-3.5 text-slate-900" /> Apri Maxischermo Festa ↗
+                </Link>
               </div>
             )}
           </>
