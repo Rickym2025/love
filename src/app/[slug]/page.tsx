@@ -49,6 +49,37 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80";
   const galleryStyle = searchParams?.get("gallery") || "polaroid";
 
+  const rawQuiz = searchParams?.get("quiz");
+  let quizQuestions = [
+    {
+      question: "Dove ci siamo conosciuti per la prima volta?",
+      optionA: "In università",
+      optionB: "In discoteca",
+      optionC: "Al mare in vacanza",
+      optionD: "Tramite amici comuni",
+      correctOptionIdx: 0,
+    },
+    {
+      question: "Chi ha fatto la proposta di nozze?",
+      optionA: "Elena",
+      optionB: "Davide",
+      optionC: "Insieme a Parigi",
+      optionD: "I genitori",
+      correctOptionIdx: 1,
+    },
+  ];
+
+  if (rawQuiz) {
+    try {
+      const parsedQuiz = JSON.parse(decodeURIComponent(rawQuiz));
+      if (Array.isArray(parsedQuiz) && parsedQuiz.length > 0) {
+        quizQuestions = parsedQuiz;
+      }
+    } catch (e) {
+      // fallback
+    }
+  }
+
   const defaultAudioUrl = isTemplateB
     ? "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Francesca%20e%20Luca:%20Quella%20Fotografia%20B.mp3"
     : "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
@@ -61,6 +92,16 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [suonaMusica, setSuonaMusica] = useState(false);
   const [apertoAcqua, setApertoAcqua] = useState(false);
   const [apertoCosmos, setApertoCosmos] = useState(false);
+
+  // LINK DINAMICO ALLA FESTA CON TUTTE LE IMPOSTAZIONI DEL CONFIGURATORE
+  const quizEncoded = rawQuiz ? rawQuiz : encodeURIComponent(JSON.stringify(quizQuestions));
+  const festaDynamicUrl = `/${cleanSlug}/festa?gallery=${encodeURIComponent(
+    galleryStyle
+  )}&puzzle=${encodeURIComponent(puzzleImage)}&scratch=${encodeURIComponent(
+    scratchPhotoUrl
+  )}&couple=${encodeURIComponent(coupleNames)}&audio=${encodeURIComponent(
+    audioUrl
+  )}&quiz=${quizEncoded}`;
 
   // RILEVAMENTO GIORNO MATRIMONIO
   const isWeddingDayOverride = searchParams?.get("isWeddingDay") === "true";
@@ -101,7 +142,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
   const bgMain = colorsList[0] || "#FAF7F2";
-  const bgCard = colorsList[1] || "#FFFFFF";
   const borderCard = colorsList[2] || "#E6C687";
 
   const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgParam);
@@ -191,10 +231,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
             {galleryStyle === "circular" && <CircularGallery />}
             <div className="py-2"><PhotoPuzzle imageSrc={puzzleImage} /></div>
             <div className="py-2"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
-            <div className="py-2"><LoveQuiz /></div>
+            <div className="py-2"><LoveQuiz questions={quizQuestions} /></div>
 
             <Link
-              href={`/${cleanSlug}/festa`}
+              href={festaDynamicUrl}
               className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-6 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
             >
               <Heart className="w-4 h-4 fill-slate-900" /> Carica Foto per il Maxischermo ↗
@@ -293,7 +333,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                 scheduleItems={scheduleItems}
                 accentColor={accentColor}
                 textColor={textColor}
-                bgCard={bgCard}
+                bgCard={bgMain}
                 borderCard={borderCard}
               />
 
@@ -306,7 +346,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                   showGoogleMapIframe={showGoogleMapIframe}
                   accentColor={accentColor}
                   textColor={textColor}
-                  bgCard={bgCard}
+                  bgCard={bgMain}
                   borderCard={borderCard}
                 />
               )}
@@ -388,7 +428,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                     Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
                   </p>
                   <Link
-                    href={`/${cleanSlug}/festa`}
+                    href={festaDynamicUrl}
                     className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
                   >
                     <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
