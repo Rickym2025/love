@@ -145,7 +145,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
 
       {showMarquee && <Marquee text={marqueeText} coupleNames={coupleNames} />}
 
-      {/* 1. HERO START INIZIALE ESEGUITO PER TUTTI I TEMPLATE (A, B, C) */}
+      {/* 1. HERO START INIZIALE PER TUTTI I TEMPLATE (A, B, C) */}
       <InvitationHero
         start={start}
         coupleNames={coupleNames}
@@ -191,6 +191,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
           showListaNozze={showListaNozze}
           showHubGiochi={showHubGiochi}
           cleanSlug={cleanSlug}
+          playWeddingAudio={playWeddingAudio}
         />
       ) : (
         /* MODELLO A & B STANDARD */
