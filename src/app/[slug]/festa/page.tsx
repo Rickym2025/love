@@ -3,9 +3,10 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Sparkles, ArrowLeft, Gamepad2, Camera, Plus, X, User, MessageSquare } from "lucide-react";
+import { Sparkles, ArrowLeft, Gamepad2, Plus, X, User, MessageSquare } from "lucide-react";
 import PhotoWallSection, { PhotoWallItem, POLAROID_FILTERS, CAPTION_PRESETS } from "@/components/PhotoWallSection";
 import CircularGallery, { GalleryItem } from "@/components/ui/CircularGallery";
+import SocialCards, { CardItem } from "@/components/ui/SocialCards";
 import LoveQuiz from "@/components/LoveQuiz";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
@@ -18,21 +19,22 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
   const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
   const coupleNames = searchParams?.get("couple") || "Elena & Davide";
   
-  // SOLTANTO LA GALLERIA SELEZIONATA IN DASHBOARD (NO TOGGLE IN FESTA)
+  // RILEVA QUALE DELLE 3 GALLERIE È STATA SELEZIONATA IN DASHBOARD
   const galleryStyle = searchParams?.get("gallery") || "polaroid";
 
   const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
   const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
   const audioUrl = searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
 
-  // LISTA FOTO CONDIVISA PER BACKGROUND DINAMICO & GALLERIE
+  // LISTA FOTO CONDIVISA
   const [photosList, setPhotosList] = useState<PhotoWallItem[]>([
     { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
     { id: "2", url: puzzleImage, caption: "Taglio della Torta Insieme", author: "Zii Rossi" },
     { id: "3", url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80", caption: "Brindisi in Giardino", author: "Amici di Sempre" },
+    { id: "4", url: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1000&q=80", caption: "Arrivo degli Invitati", author: "Marco & Sara" },
   ]);
 
-  // BACKGROUND DINAMICO RANDOM OGNI 5 SECONDI
+  // BACKGROUND DINAMICO CHE CAMBIA OGNI 5 SECONDI
   const [bgImageIndex, setBgImageIndex] = useState(0);
 
   useEffect(() => {
@@ -43,40 +45,40 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     return () => clearInterval(interval);
   }, [photosList]);
 
-  // MODAL FILTRI E DEDICA PER LA GALLERIA 3D CIRCOLARE
-  const [selectedPhoto3D, setSelectedPhoto3D] = useState<PhotoWallItem | null>(null);
+  // MODAL FILTRI & DEDICA
+  const [selectedPhotoModal, setSelectedPhotoModal] = useState<PhotoWallItem | null>(null);
   const [activeFilterId, setActiveFilterId] = useState("normal");
   const [editAuthor, setEditAuthor] = useState("");
   const [editCaption, setEditCaption] = useState("");
 
   const currentFilter = POLAROID_FILTERS.find((f) => f.id === activeFilterId) || POLAROID_FILTERS[0];
 
-  const handleOpen3DPhotoModal = (galleryItem: GalleryItem) => {
-    setSelectedPhoto3D({
-      id: galleryItem.id || Date.now().toString(),
-      url: galleryItem.photo.url,
-      caption: galleryItem.common,
-      author: galleryItem.photo.by,
+  const handleOpenPhotoModal = (url: string, caption?: string, author?: string) => {
+    setSelectedPhotoModal({
+      id: Date.now().toString(),
+      url,
+      caption: caption || "Momento del Matrimonio ❤️",
+      author: author || "Invitato",
     });
     setActiveFilterId("normal");
-    setEditAuthor(galleryItem.photo.by || "Invitato");
-    setEditCaption(galleryItem.common || "Momento Speciale ❤️");
+    setEditAuthor(author || "Invitato");
+    setEditCaption(caption || "Momento Speciale ❤️");
   };
 
-  const handleSave3DAsNewPhoto = () => {
-    if (!selectedPhoto3D) return;
+  const handleSaveAsNewPhoto = () => {
+    if (!selectedPhotoModal) return;
     const newPhoto: PhotoWallItem = {
       id: Date.now().toString(),
-      url: selectedPhoto3D.url,
+      url: selectedPhotoModal.url,
       caption: editCaption || "Nuovo Scatto d'Amore",
       author: editAuthor || "Invitato",
       filterCss: currentFilter.filterCss,
     };
     setPhotosList((prev) => [newPhoto, ...prev]);
-    setSelectedPhoto3D(null);
+    setSelectedPhotoModal(null);
   };
 
-  // PARSING DOMANDE QUIZ DA DASHBOARD
+  // PARSING DOMANDE QUIZ
   let quizQuestions = [
     {
       question: "Dove ci siamo conosciuti per la prima volta?",
@@ -105,10 +107,10 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
       }
     }
   } catch (e) {
-    // fallback se non in formato JSON
+    // fallback
   }
 
-  // TRASFORMAZIONE FOTO PER LA GALLERIA 3D CIRCOLARE
+  // ELEMENTI PER GALLERIA 3D CIRCOLARE
   const circularItems: GalleryItem[] = photosList.map((item) => ({
     id: item.id,
     common: item.caption || coupleNames,
@@ -120,13 +122,22 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     },
   }));
 
+  // ELEMENTI PER GALLERIA CARTE A VENTAGLIO GSAP
+  const fanCardItems: CardItem[] = photosList.map((item) => ({
+    id: item.id,
+    imgUrl: item.url,
+    alt: item.caption,
+    caption: item.caption || "Foto Sposi",
+    author: item.author || "Invitato",
+  }));
+
   const currentBgUrl = photosList[bgImageIndex]?.url || scratchPhotoUrl;
 
   return (
     <div className="min-h-screen w-full bg-slate-950 text-white overflow-x-hidden font-sans pb-16 select-none relative">
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* BACKGROUND DINAMICO CHE CAMBIA OGNI 5 SECONDI */}
+      {/* BACKGROUND DINAMICO RANDOM OGNI 5 SECONDI */}
       <div
         className="fixed inset-0 pointer-events-none z-0 transition-all duration-1000 bg-cover bg-center opacity-20 blur-md scale-105"
         style={{ backgroundImage: `url(${currentBgUrl})` }}
@@ -156,7 +167,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </p>
         </div>
 
-        {/* RENDERING ESCLUSIVO DELLA GALLERIA SELEZIONATA IN DASHBOARD */}
+        {/* INIZIO GALLERIA SELEZIONATA (POLAROID / 3D CIRCOLARE / CARTE A VENTAGLIO GSAP) */}
         <div className="p-5 bg-slate-900/90 backdrop-blur-md rounded-3xl border-2 border-[#D4AF37]/60 shadow-2xl space-y-4">
           {galleryStyle === "circular" ? (
             <div className="space-y-3">
@@ -168,7 +179,20 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
               </p>
               <CircularGallery
                 items={circularItems}
-                onItemClick={(item) => handleOpen3DPhotoModal(item)}
+                onItemClick={(item) => handleOpenPhotoModal(item.photo.url, item.common, item.photo.by)}
+              />
+            </div>
+          ) : galleryStyle === "fan" ? (
+            <div className="space-y-3">
+              <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase tracking-wider flex items-center justify-center gap-1.5">
+                🎴 Galleria Carte a Ventaglio GSAP
+              </span>
+              <p className="text-xs font-serif italic text-slate-300">
+                Sfoglia le carte o toccane una per applicare i 10 Filtri Polaroid e personalizzare la tua dedica!
+              </p>
+              <SocialCards
+                cards={fanCardItems}
+                onItemClick={(card) => handleOpenPhotoModal(card.imgUrl, card.caption, card.author)}
               />
             </div>
           ) : (
@@ -179,12 +203,12 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           )}
         </div>
 
-        {/* MODAL LIGHTBOX PER GALLERIA 3D CIRCOLARE */}
-        {selectedPhoto3D && (
+        {/* MODAL LIGHTBOX PER GALLERIE INTERATTIVE */}
+        {selectedPhotoModal && (
           <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
             <button
               type="button"
-              onClick={() => setSelectedPhoto3D(null)}
+              onClick={() => setSelectedPhotoModal(null)}
               className="absolute top-4 right-4 z-50 p-3 bg-slate-800 text-white rounded-full hover:bg-slate-700 cursor-pointer shadow-2xl border border-slate-600"
             >
               <X className="w-6 h-6" />
@@ -194,13 +218,13 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
               <div className="flex items-center justify-center gap-2 border-b border-slate-800 pb-3">
                 <Sparkles className="w-5 h-5 text-[#D4AF37]" />
                 <h4 className="text-base md:text-lg font-serif font-bold text-[#D4AF37] uppercase tracking-wider">
-                  Personalizza Foto 3D &amp; Filtri Polaroid
+                  Personalizza Foto &amp; Filtri Polaroid
                 </h4>
               </div>
 
               <div className="w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37]/50 shadow-inner bg-black relative">
                 <img
-                  src={selectedPhoto3D.url}
+                  src={selectedPhotoModal.url}
                   alt="Foto Ingrandita"
                   className="w-full h-full object-contain md:object-cover transition-all duration-300"
                   style={{ filter: currentFilter.filterCss }}
@@ -279,14 +303,14 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
               <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
                 <button
                   type="button"
-                  onClick={handleSave3DAsNewPhoto}
+                  onClick={handleSaveAsNewPhoto}
                   className="flex-1 py-3.5 bg-[#D4AF37] text-slate-950 font-bold text-sm rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2 shadow-lg cursor-pointer"
                 >
                   <Plus className="w-5 h-5" /> Salva come Nuova Foto
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedPhoto3D(null)}
+                  onClick={() => setSelectedPhotoModal(null)}
                   className="px-6 py-3.5 bg-slate-800 text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-700 transition-colors cursor-pointer border border-slate-700"
                 >
                   Chiudi
@@ -306,7 +330,6 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
 
         {/* GIOCHI FESTA CON DIVISORI ELEGANTI */}
         <div className="space-y-8">
-          {/* GIOCO 1: PUZZLE */}
           <PhotoPuzzle imageSrc={puzzleImage} />
 
           <div className="flex items-center justify-center gap-2 text-[#D4AF37] font-serif text-xs tracking-widest opacity-80 my-4">
@@ -315,7 +338,6 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
             <span>✦ ✦ ✦</span>
           </div>
 
-          {/* GIOCO 2: GRATTA E SCOPRI */}
           <ScratchPhoto imageSrc={scratchPhotoUrl} />
 
           <div className="flex items-center justify-center gap-2 text-[#D4AF37] font-serif text-xs tracking-widest opacity-80 my-4">
@@ -324,7 +346,6 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
             <span>✦ ✦ ✦</span>
           </div>
 
-          {/* GIOCO 3: QUIZ SPOSI */}
           <LoveQuiz questions={quizQuestions} />
         </div>
       </main>
