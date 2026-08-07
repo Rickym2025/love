@@ -31,7 +31,7 @@ const ScrollExpandMedia = ({
   bgImageSrc,
   title,
   date,
-  scrollToExpand = "Scorri per Ingrandire",
+  scrollToExpand = "🎵 Scorri col dito per ingrandire e ascoltare la musica ✦",
   textBlend,
   onExpand,
   children,
@@ -51,10 +51,20 @@ const ScrollExpandMedia = ({
     setMediaFullyExpanded(false);
   }, [mediaType]);
 
+  // AVVIA LA MUSICA A QUALSIASI SEGNALE DI SCROLL O TOUCH
   const triggerAudio = () => {
-    if (!musicStartedRef.current && typeof onExpand === 'function') {
+    if (!musicStartedRef.current) {
       musicStartedRef.current = true;
-      onExpand();
+      if (typeof onExpand === 'function') {
+        onExpand();
+      }
+      if (typeof window !== "undefined") {
+        const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
+        if (audio) {
+          audio.muted = false;
+          audio.play().catch(() => {});
+        }
+      }
     }
   };
 
@@ -129,36 +139,17 @@ const ScrollExpandMedia = ({
       }
     };
 
-    window.addEventListener('wheel', handleWheel as unknown as EventListener, {
-      passive: false,
-    });
+    window.addEventListener('wheel', handleWheel as unknown as EventListener, { passive: false });
     window.addEventListener('scroll', handleScroll as EventListener);
-    window.addEventListener(
-      'touchstart',
-      handleTouchStart as unknown as EventListener,
-      { passive: false }
-    );
-    window.addEventListener(
-      'touchmove',
-      handleTouchMove as unknown as EventListener,
-      { passive: false }
-    );
+    window.addEventListener('touchstart', handleTouchStart as unknown as EventListener, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove as unknown as EventListener, { passive: false });
     window.addEventListener('touchend', handleTouchEnd as EventListener);
 
     return () => {
-      window.removeEventListener(
-        'wheel',
-        handleWheel as unknown as EventListener
-      );
+      window.removeEventListener('wheel', handleWheel as unknown as EventListener);
       window.removeEventListener('scroll', handleScroll as EventListener);
-      window.removeEventListener(
-        'touchstart',
-        handleTouchStart as unknown as EventListener
-      );
-      window.removeEventListener(
-        'touchmove',
-        handleTouchMove as unknown as EventListener
-      );
+      window.removeEventListener('touchstart', handleTouchStart as unknown as EventListener);
+      window.removeEventListener('touchmove', handleTouchMove as unknown as EventListener);
       window.removeEventListener('touchend', handleTouchEnd as EventListener);
     };
   }, [scrollProgress, mediaFullyExpanded, touchStartY]);
@@ -184,7 +175,8 @@ const ScrollExpandMedia = ({
   return (
     <div
       ref={sectionRef}
-      className='transition-colors duration-700 ease-in-out overflow-x-hidden select-none'
+      onClick={triggerAudio}
+      className='transition-colors duration-700 ease-in-out overflow-x-hidden select-none cursor-pointer'
     >
       <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
@@ -257,7 +249,7 @@ const ScrollExpandMedia = ({
                   )}
                   {scrollToExpand && (
                     <p
-                      className='text-[#D4AF37] font-bold text-center text-xs uppercase tracking-widest drop-shadow'
+                      className='text-[#D4AF37] font-bold text-center text-xs uppercase tracking-widest drop-shadow bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-xs border border-[#D4AF37]/50 mt-2 animate-bounce'
                       style={{ transform: `translateX(${textTranslateX}vw)` }}
                     >
                       {scrollToExpand}
