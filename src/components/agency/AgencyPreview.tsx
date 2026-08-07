@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { Sparkles, MapPin, Gift, PartyPopper } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
@@ -180,54 +179,76 @@ export default function AgencyPreview({
 
   const slugName = selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco";
 
-  const quizEncoded = encodeURIComponent(JSON.stringify(quizQuestions || []));
+  // SALVATAGGIO STATO LIVE PER APERTURA FULLSCREEN SENZA BLOCCHI BROWSER
+  const saveCurrentStateToLocalStorage = () => {
+    if (typeof window === "undefined") return;
+    const previewData = {
+      selectedTemplate,
+      introStart,
+      dateDisplayMode,
+      scheduleSchema,
+      rsvpStyle,
+      coupleNames,
+      weddingDateDay,
+      weddingDateMonth,
+      weddingDateYear,
+      locationName,
+      locationAddress,
+      audioUrl,
+      welcomePhrase: computedWelcomePhrase,
+      selectedPaletteIdx: safeIdx,
+      heroBgImage,
+      waterImageUrl,
+      heroMediaImage,
+      ricevimentoImage,
+      puzzleImage,
+      scratchPhotoUrl,
+      galleryStyle,
+      quizQuestions,
+      customIban,
+    };
+    localStorage.setItem("love_invitation_data", JSON.stringify(previewData));
+    localStorage.setItem(`love_invitation_${slugName}`, JSON.stringify(previewData));
+  };
 
-  // URL INVITO DINAMICO
-  const fullscreenDynamicUrl = `/${slugName}?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&rsvpStyle=${rsvpStyle}&day=${encodeURIComponent(
-    weddingDateDay
-  )}&month=${encodeURIComponent(weddingDateMonth)}&year=${encodeURIComponent(
-    weddingDateYear
-  )}&couple=${encodeURIComponent(coupleNames)}&location=${encodeURIComponent(
-    locationName
-  )}&phrase=${encodeURIComponent(computedWelcomePhrase)}&audio=${encodeURIComponent(
-    audioUrl
-  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}&water=${encodeURIComponent(
-    waterImageUrl || ""
-  )}&gallery=${encodeURIComponent(galleryStyle || "polaroid")}&puzzle=${encodeURIComponent(
-    puzzleImage || ""
-  )}&scratch=${encodeURIComponent(scratchPhotoUrl || "")}&quiz=${quizEncoded}`;
+  const handleOpenFullscreenInvito = (e: React.MouseEvent) => {
+    e.preventDefault();
+    saveCurrentStateToLocalStorage();
+    window.open(`/${slugName}?preview=true`, "_blank", "noopener,noreferrer");
+  };
 
-  // URL FESTA DINAMICO CON SINCRONIZZAZIONE DI TUTTE LE IMPOSTAZIONI
-  const festaFullscreenUrl = `/${slugName}/festa?isWeddingDay=true&gallery=${encodeURIComponent(
-    galleryStyle || "polaroid"
-  )}&puzzle=${encodeURIComponent(puzzleImage || "")}&scratch=${encodeURIComponent(
-    scratchPhotoUrl || ""
-  )}&couple=${encodeURIComponent(coupleNames || "")}&audio=${encodeURIComponent(
-    audioUrl || ""
-  )}&quiz=${quizEncoded}`;
+  const handleOpenFullscreenFesta = (e: React.MouseEvent) => {
+    e.preventDefault();
+    saveCurrentStateToLocalStorage();
+    window.open(`/${slugName}/festa?preview=true`, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
-      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN EVIDENTI E GRANDI */}
+      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN SICURI SENZA BLOCCHI */}
       <div className="flex flex-col gap-1.5 w-full max-w-[340px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center justify-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
         </span>
         <div className="grid grid-cols-2 gap-2">
-          <Link
-            href={fullscreenDynamicUrl}
+          <a
+            href={`/${slugName}?preview=true`}
+            onClick={handleOpenFullscreenInvito}
             target="_blank"
-            className="text-xs text-slate-900 hover:bg-amber-400 flex items-center justify-center gap-1 font-bold bg-[#D4AF37] px-3 py-2 rounded-xl shadow-md transition-all text-center"
+            rel="noopener noreferrer"
+            className="text-xs text-slate-900 hover:bg-amber-400 flex items-center justify-center gap-1 font-bold bg-[#D4AF37] px-3 py-2 rounded-xl shadow-md transition-all text-center cursor-pointer"
           >
             ✦ Fullscreen Invito ↗
-          </Link>
-          <Link
-            href={festaFullscreenUrl}
+          </a>
+          <a
+            href={`/${slugName}/festa?preview=true`}
+            onClick={handleOpenFullscreenFesta}
             target="_blank"
-            className="text-xs text-white hover:bg-slate-700 flex items-center justify-center gap-1 font-bold bg-slate-800 border border-[#D4AF37]/50 px-3 py-2 rounded-xl shadow-md transition-all text-center"
+            rel="noopener noreferrer"
+            className="text-xs text-white hover:bg-slate-700 flex items-center justify-center gap-1 font-bold bg-slate-800 border border-[#D4AF37]/50 px-3 py-2 rounded-xl shadow-md transition-all text-center cursor-pointer"
           >
             🎉 Fullscreen Festa ↗
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -500,7 +521,7 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+            {showFregi && <div className="text-center text-[#D4AF37] font-[#D4AF37] text-xs tracking-widest">✦ ✦ ✦</div>}
 
             {/* DRESS CODE CON GALLERIA OUTFIT */}
             {modules.codiceAbbigliamento && (
@@ -569,7 +590,7 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {/* GIOCHI DELLA FESTA LIVE IN PREVIEW */}
+            {/* GIOCHI DELLA FESTA LIVE IN PREVIEW CON QUIZ AGGIORNATO */}
             {modules.hubGiochiFesta !== false && (
               <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-3">
                 <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1">
@@ -579,15 +600,21 @@ export default function AgencyPreview({
                 {galleryStyle === "circular" && <CircularGallery />}
                 <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
                 <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
-                <div className="py-1"><LoveQuiz questions={quizQuestions} /></div>
+                
+                {/* QUIZ SPOSI LIVE PASSA LE DOMANDE DELLA DASHBOARD */}
+                <div className="py-1">
+                  <LoveQuiz questions={quizQuestions} />
+                </div>
 
-                <Link
-                  href={festaFullscreenUrl}
+                <a
+                  href={`/${slugName}/festa?preview=true`}
+                  onClick={handleOpenFullscreenFesta}
                   target="_blank"
-                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#D4AF37] text-slate-900 px-3 py-1.5 rounded-lg shadow-md hover:bg-amber-400 transition-colors"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#D4AF37] text-slate-900 px-3 py-1.5 rounded-lg shadow-md hover:bg-amber-400 transition-colors cursor-pointer"
                 >
                   <PartyPopper className="w-3.5 h-3.5 text-slate-900" /> Apri Maxischermo Festa ↗
-                </Link>
+                </a>
               </div>
             )}
           </>
