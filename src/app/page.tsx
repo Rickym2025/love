@@ -10,10 +10,10 @@ import {
   Sparkles,
   Heart,
   CheckCircle2,
-  Building2,
   ArrowRight,
   ChevronDown,
   BookOpen,
+  UserCheck,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -56,7 +56,7 @@ export default function LandingPage() {
     },
     {
       q: 'Dove trovo la Dashboard Risultati?',
-      a: 'Ogni matrimonio ha la sua Dashboard riservata raggiungibile all\'indirizzo love.rmstudio.app/dashboard/elena-e-davide dove scaricare l\'Excel per il catering.',
+      a: 'Ogni matrimonio ha la sua Dashboard riservata raggiungibile all\'indirizzo love.rmstudio.app/agency/sposi-in-love dove scaricare l\'Excel per il catering.',
     },
     {
       q: 'Come funziona la canzone personalizzata di FF Edizioni?',
@@ -64,7 +64,7 @@ export default function LandingPage() {
     },
     {
       q: 'Posso personalizzare i colori e le immagini?',
-      a: 'Certamente! Ogni matrimonio può avere la sua palette colori, le foto di coppia e la scelta della busta.',
+      a: 'Certamente! Ogni matrimonio può avere la sua palette colori, le foto di coppia, il modello preferito e la scelta della busta.',
     },
     {
       q: 'Come funziona la pagina "La Festa" e il Maxischermo?',
@@ -91,7 +91,7 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B]">
       
-      {/* SFONDO CONTINUO SU TUTTO IL SITO (AVORIO CON HERO-BG) */}
+      {/* SFONDO CONTINUO AVORIO */}
       <div
         className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -99,7 +99,7 @@ export default function LandingPage() {
 
       <KineticGrid className="relative z-10">
         
-        {/* NAVBAR */}
+        {/* NAVBAR CONI 3 MODELLI DEMO + ACCESSO AGENZIE */}
         <header className="border-b border-[#D4AF37]/30 bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40 shadow-sm">
           <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -119,24 +119,35 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <Link href="/elena-e-davide" className="text-xs text-[#D4AF37] hover:underline font-bold hidden md:block">
-                Demo "Elena & Davide" ↗
-              </Link>
-              <Link href="/francesca-e-luca" className="text-xs text-[#1E293B] hover:underline font-bold hidden md:block">
-                Demo "Francesca & Luca" ↗
-              </Link>
-              <a href="https://blogs.rmstudio.app/love/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#D4AF37] flex items-center gap-1">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <div className="hidden lg:flex items-center gap-4 text-xs font-bold">
+                <Link href="/elena-e-davide" className="text-[#D4AF37] hover:underline">
+                  Modello A ↗
+                </Link>
+                <Link href="/francesca-e-luca" className="text-slate-700 hover:underline">
+                  Modello B ↗
+                </Link>
+                <Link href="/giulia-e-marco" className="text-[#8B6508] hover:underline font-serif">
+                  Modello C (Landing) ↗
+                </Link>
+              </div>
+
+              <a href="https://blogs.rmstudio.app/love/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#D4AF37] hidden sm:flex items-center gap-1">
                 <BookOpen className="w-3.5 h-3.5" /> Blog
               </a>
-              <a href="#prezzi" className="px-6 py-2.5 rounded-full bg-[#D4AF37] text-slate-900 text-xs font-bold shadow-md hover:bg-amber-400 transition">
+
+              <Link href="/login" className="px-4 py-2 rounded-full border border-[#D4AF37] text-[#8B6508] text-xs font-bold hover:bg-amber-100 transition flex items-center gap-1">
+                <UserCheck className="w-3.5 h-3.5" /> Login Agenzie
+              </Link>
+
+              <a href="#prezzi" className="px-5 py-2 rounded-full bg-[#D4AF37] text-slate-900 text-xs font-bold shadow-md hover:bg-amber-400 transition">
                 Crea Ora
               </a>
             </div>
           </div>
         </header>
 
-        {/* HERO SECTION */}
+        {/* HERO SECTION CON 3 MODELLI DEMO */}
         <section className="py-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
           
           <div className="inline-flex p-1 rounded-full bg-white border border-[#D4AF37]/30 mb-8 shadow-sm">
@@ -168,65 +179,54 @@ export default function LandingPage() {
             Busta d'epoca con sigillo in ceralacca dorata, giochi come lo Scratch della Data, colonna sonora inedita e lista nozze integrata.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
-            <Link href="/elena-e-davide" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-900 font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition">
-              <span>Demo "Elena & Davide"</span>
+          {/* PULSANTI PROVA PER I 3 MODELLI */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-2xl">
+            <Link href="/elena-e-davide" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition">
+              <span>Demo "Elena &amp; Davide" (A)</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/francesca-e-luca" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1E293B] text-white font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition">
-              <span>Demo "Francesca & Luca"</span>
+            <Link href="/francesca-e-luca" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#1E293B] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition">
+              <span>Demo "Francesca &amp; Luca" (B)</span>
               <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/giulia-e-marco" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#FAF7F2] text-[#8B6508] border-2 border-[#D4AF37] font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-amber-100 transition">
+              <span>Demo "Giulia &amp; Marco" (Modello C)</span>
+              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             </Link>
           </div>
         </section>
 
-        {/* RECENSIONI - STRISCIA SCORREVOLE AUTOMATICA */}
+        {/* RECENSIONI SCORREVOLI */}
         <section className="py-12 bg-white/80 backdrop-blur-sm border-y border-[#D4AF37]/30 overflow-hidden shadow-sm">
           <div className="max-w-6xl mx-auto px-6 text-center mb-6">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Recensioni Sposi & Agenzie</span>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Recensioni Sposi &amp; Agenzie</span>
           </div>
           <Marquee items={testimonials} />
         </section>
 
-        {/* SEZIONE ALTERNATA 1 (IMMAGINE SINISTRA | DESCRIZIONE DESTRA) */}
+        {/* SEZIONE MODELLO C EVIDENZIATO */}
         <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative">
             <img
               src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"
-              alt="Busta Ceralacca"
+              alt="Modello C Storyboard"
               className="w-full h-full object-cover"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+                🎡 Modello C • Storyboard Landing con Kinetic Grid
+              </span>
+            </div>
           </div>
           <div>
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Busta D'Epoca & Ceralacca 3D</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Un'emozione al primo tocco</h3>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Novità 2026 • Modello C</span>
+            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Layout Storyboard ad Impatto Cinematografico</h3>
             <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              L'invitato tocca il sigillo dorato sullo schermo del telefono: la busta si apre con musica d'autore e pioggia di petali animati.
+              Perfetto per gli sposi che desiderano una vera e propria Landing Page d'Autore con sfondi reattivi Kinetic Grid, blocchi storia alternati e zero footer scuri.
             </p>
-            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-              Prova la Busta Live →
+            <Link href="/giulia-e-marco" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+              Prova la Demo "Giulia &amp; Marco" (Modello C) →
             </Link>
-          </div>
-        </section>
-
-        {/* SEZIONE ALTERNATA 2 (DESCRIZIONE SINISTRA | IMMAGINE DESTRA) */}
-        <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
-          <div className="order-2 md:order-1">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">La Festa & Maxischermo Live</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">I ricordi scattati dagli invitati</h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              Gli amici scattano foto e registrano video direttamente dal loro cellulare ed inviano gli scatti sul proiettore della sala.
-            </p>
-            <Link href="/elena-e-davide/festa" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-              Scopri la Pagina della Festa →
-            </Link>
-          </div>
-          <div className="order-1 md:order-2 h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-            <img
-              src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop"
-              alt="Maxischermo Festa"
-              className="w-full h-full object-cover"
-            />
           </div>
         </section>
 
@@ -280,10 +280,10 @@ export default function LandingPage() {
                   
                   <ul className="space-y-3 text-xs text-[#1E293B] mb-8 font-medium">
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Busta d'epoca con Ceralacca 3D</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Conferma Partecipazione (Menu & Intolleranze)</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Conferma Partecipazione (Menu &amp; Intolleranze)</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Gioco "Gratta per svelare la Data"</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora Inedita FF Edizioni</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze IBAN & Amazon Affiliata</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze IBAN &amp; Amazon Affiliata</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Pagina "La Festa" con Scatto Foto/Video</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Trasmissione Live su Proiettore / Maxischermo</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Dashboard Risultati con Export Excel Catering</li>
@@ -296,7 +296,7 @@ export default function LandingPage() {
 
               <div className="bg-[#1E293B] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl border-2 border-[#D4AF37]">
                 <div>
-                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per Wedding Planner & Agenzie</span>
+                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per Wedding Planner &amp; Agenzie</span>
                   <h3 className="font-serif text-3xl text-white mb-2">Agency Hub</h3>
                   <div className="text-4xl font-serif text-[#D4AF37] mb-6">€490 <span className="text-xs text-slate-300 font-normal">/ anno (10 Matrimoni)</span></div>
                   
@@ -331,7 +331,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap justify-center gap-4 text-xs font-bold text-[#1E293B]">
               <a href="https://rmstudio.app/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:underline">Privacy Policy</a>
               <span>•</span>
-              <a href="https://rmstudio.app/termini.html" target="_blank" rel="noopener noreferrer" className="hover:underline">Cookie Policy & Termini</a>
+              <a href="https://rmstudio.app/termini.html" target="_blank" rel="noopener noreferrer" className="hover:underline">Cookie Policy &amp; Termini</a>
               <span>•</span>
               <a href="mailto:info@rmstudio.app" className="text-[#D4AF37] hover:underline">info@rmstudio.app</a>
             </div>
