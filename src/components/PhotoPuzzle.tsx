@@ -76,7 +76,7 @@ export default function PhotoPuzzle({
         </p>
       )}
 
-      {/* GRIGLIA PUZZLE INGRANDITA (h-80) CON BORDI DORATI */}
+      {/* GRIGLIA PUZZLE HD (h-80) CON CALCOLO MATEMATICO EXACT POSITION */}
       <div className="grid grid-cols-3 gap-1.5 w-full h-80 rounded-2xl overflow-hidden border-2 border-[#D4AF37] bg-slate-900 p-1 shadow-inner relative">
         {tiles.map((tilePos, currentIdx) => {
           const row = Math.floor(tilePos / 3);
@@ -96,8 +96,7 @@ export default function PhotoPuzzle({
                 style={{
                   backgroundImage: `url(${photoUrl})`,
                   backgroundSize: "300% 300%",
-                  left: `-${col * 100}%`,
-                  top: `-${row * 100}%`,
+                  backgroundPosition: `${col * 50}% ${row * 50}%`,
                 }}
               />
             </div>
