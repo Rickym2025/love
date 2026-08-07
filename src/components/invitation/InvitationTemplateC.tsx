@@ -104,7 +104,7 @@ export default function InvitationTemplateC({
 
   return (
     <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
-      {/* ✦ 1. SFONDO TEXTURE PERSONALIZZATA CON PARALLAX SOFT ✦ */}
+      {/* 1. SFONDO TEXTURE PERSONALIZZATA CON PARALLAX SOFT */}
       {hasCustomBg && (
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
@@ -112,14 +112,14 @@ export default function InvitationTemplateC({
         />
       )}
 
-      {/* ✦ 2. SFONDO A PALLINI REATTIVI (KINETIC GRID) GARANTITO ✦ */}
-      <div className="fixed inset-0 z-0 opacity-50 pointer-events-none overflow-hidden">
+      {/* 2. SFONDO A PALLINI REATTIVI (KINETIC GRID) VISIBILE AL 100% */}
+      <div className="fixed inset-0 z-0 opacity-60 pointer-events-none overflow-hidden">
         <KineticGrid />
       </div>
 
       <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
         {/* 1. SLIDE INIZIALE HERO LANDING */}
-        <div className="p-6 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
+        <div className="p-6 bg-[#FAF7F2]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
           <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
           <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
@@ -304,7 +304,7 @@ export default function InvitationTemplateC({
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
-            <p className="text-xs text-slate-600 font-serif">Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:</p>
+            <p className="text-xs text-slate-600 font-serif font-serif">Il regalo più grande è la vostra presenza. Per chi desidera contribuire al nostro viaggio di nozze:</p>
             <div className="p-3 bg-[#FAF7F2] rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#1E293B] break-all">{customIban}</div>
           </div>
         )}
