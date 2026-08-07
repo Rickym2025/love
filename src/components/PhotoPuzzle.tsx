@@ -76,7 +76,7 @@ export default function PhotoPuzzle({
         </p>
       )}
 
-      {/* GRIGLIA PUZZLE HD CON CALCOLO ESATTO DELLE POSIZIONI */}
+      {/* GRIGLIA PUZZLE HD */}
       <div className="grid grid-cols-3 gap-1.5 w-full h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37] bg-black p-1.5 shadow-inner relative">
         {tiles.map((tilePos, currentIdx) => {
           const row = Math.floor(tilePos / 3);
