@@ -293,3 +293,10 @@ export default function LoginPage() {
         )}
 
         <div className="pt-4 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+          <span>RM Studio B2B Security • Licenza 10 Matrimoni Inclusa</span>
+        </div>
+      </div>
+    </div>
+  );
+}
