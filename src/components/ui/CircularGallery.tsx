@@ -7,6 +7,7 @@ const cn = (...classes: (string | undefined | null | false)[]) => {
 };
 
 export interface GalleryItem {
+  id?: string;
   common: string;
   binomial: string;
   photo: {
@@ -21,10 +22,11 @@ export interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   items?: GalleryItem[];
   radius?: number;
   autoRotateSpeed?: number;
+  onItemClick?: (item: GalleryItem, index: number) => void;
 }
 
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
-  ({ items, className, radius = 280, autoRotateSpeed = 0.05, ...props }, ref) => {
+  ({ items, className, radius = 280, autoRotateSpeed = 0.05, onItemClick, ...props }, ref) => {
     const [rotation, setRotation] = useState(0);
     const [isScrolling, setIsScrolling] = useState(false);
     const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -98,7 +100,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         ref={ref}
         role="region"
         aria-label="Circular 3D Gallery"
-        className={cn("relative w-full h-[420px] flex items-center justify-center overflow-hidden py-6 select-none", className)}
+        className={cn("relative w-full h-[440px] flex items-center justify-center overflow-hidden py-6 select-none", className)}
         style={{ perspective: '1200px' }}
         {...props}
       >
@@ -119,9 +121,15 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             return (
               <div
                 key={item.photo?.url || i} 
-                role="group"
-                aria-label={item.common}
-                className="absolute w-[200px] h-[260px]"
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (typeof onItemClick === "function") {
+                    onItemClick(item, i);
+                  }
+                }}
+                aria-label={`Visualizza e modifica ${item.common}`}
+                className="absolute w-[200px] h-[260px] cursor-pointer group active:scale-95 transition-transform"
                 style={{
                   transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
                   left: '50%',
@@ -132,16 +140,17 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   transition: 'opacity 0.3s linear'
                 }}
               >
-                <div className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden group border-2 border-[#D4AF37] bg-slate-900/80 backdrop-blur-md">
+                <div className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden border-2 border-[#D4AF37] bg-slate-900/90 backdrop-blur-md group-hover:border-amber-300 transition-colors">
                   <img
                     src={item.photo?.url}
                     alt={item.photo?.text || item.common}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     style={{ objectPosition: item.photo?.pos || 'center' }}
                   />
-                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white text-left">
+                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/95 via-black/60 to-transparent text-white text-left">
                     <h2 className="text-sm font-serif font-bold text-[#D4AF37] leading-tight truncate">{item.common}</h2>
                     <em className="text-[10px] italic opacity-90 block truncate">{item.binomial}</em>
+                    <span className="text-[9px] font-bold text-amber-300 block mt-1 uppercase tracking-wider">✦ Tocca per Filtri &amp; Dedica</span>
                   </div>
                 </div>
               </div>
