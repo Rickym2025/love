@@ -16,6 +16,8 @@ import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import CosmosHero from "@/components/ui/CosmosHero";
 import CircularGallery from "@/components/ui/CircularGallery";
+import SocialCards, { CardItem } from "@/components/ui/SocialCards";
+import PhotoWallSection from "@/components/PhotoWallSection";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
 import InvitationTemplateC from "@/components/invitation/InvitationTemplateC";
@@ -179,7 +181,7 @@ export default function AgencyPreview({
 
   const slugName = selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco";
 
-  // SALVATAGGIO STATO LIVE PER APERTURA FULLSCREEN SENZA BLOCCHI BROWSER
+  // SALVATAGGIO STATO LIVE PER APERTURA FULLSCREEN
   const saveCurrentStateToLocalStorage = () => {
     if (typeof window === "undefined") return;
     const previewData = {
@@ -223,9 +225,22 @@ export default function AgencyPreview({
     window.open(`/${slugName}/festa?preview=true`, "_blank", "noopener,noreferrer");
   };
 
+  // ELEMENTI PER LA GALLERIA CARTE A VENTAGLIO IN ANTEPRIMA
+  const previewFanCards: CardItem[] = [
+    { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
+    { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
+    { imgUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80", caption: "Brindisi", author: "Amici" },
+  ];
+
+  // ELEMENTI PER IL PHOTO WALL POLAROID IN ANTEPRIMA
+  const previewPolaroidPhotos = [
+    { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
+    { id: "2", url: puzzleImage, caption: "Taglio della Torta", author: "Zii Rossi" },
+  ];
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
-      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN SICURI SENZA BLOCCHI */}
+      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN */}
       <div className="flex flex-col gap-1.5 w-full max-w-[340px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center justify-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
@@ -521,7 +536,7 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {showFregi && <div className="text-center text-[#D4AF37] font-[#D4AF37] text-xs tracking-widest">✦ ✦ ✦</div>}
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
 
             {/* DRESS CODE CON GALLERIA OUTFIT */}
             {modules.codiceAbbigliamento && (
@@ -590,18 +605,28 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {/* GIOCHI DELLA FESTA LIVE IN PREVIEW CON QUIZ AGGIORNATO */}
+            {/* GIOCHI DELLA FESTA LIVE IN PREVIEW CON GALLERIA DINAMICA SELEZIONATA */}
             {modules.hubGiochiFesta !== false && (
               <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-3">
                 <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1">
                   <PartyPopper className="w-3.5 h-3.5" /> Giochi della Festa &amp; Maxischermo
                 </span>
 
-                {galleryStyle === "circular" && <CircularGallery />}
+                {/* RENDERING ESATTO DELLA GALLERIA SELEZIONATA IN DASHBOARD */}
+                <div className="py-1">
+                  {galleryStyle === "circular" ? (
+                    <CircularGallery />
+                  ) : galleryStyle === "fan" ? (
+                    <SocialCards cards={previewFanCards} />
+                  ) : (
+                    <PhotoWallSection photos={previewPolaroidPhotos} isAgencyDashboard={true} />
+                  )}
+                </div>
+
                 <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
                 <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
                 
-                {/* QUIZ SPOSI LIVE PASSA LE DOMANDE DELLA DASHBOARD */}
+                {/* QUIZ SPOSI LIVE CON LE DOMANDE DELLA DASHBOARD */}
                 <div className="py-1">
                   <LoveQuiz questions={quizQuestions} />
                 </div>
