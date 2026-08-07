@@ -872,27 +872,10 @@ export function SectionRsvpFesta({
 }
 
 export function SectionFestaGiochiMaxischermo({
-  quizQuestions = [
-    {
-      question: "Dove ci siamo conosciuti per la prima volta?",
-      optionA: "In università",
-      optionB: "In discoteca",
-      optionC: "Al mare in vacanza",
-      optionD: "Tramite amici comuni",
-      correctOptionIdx: 0,
-    },
-    {
-      question: "Chi ha fatto la proposta di nozze?",
-      optionA: "Elena",
-      optionB: "Davide",
-      optionC: "Insieme a Parigi",
-      optionD: "I genitori",
-      correctOptionIdx: 1,
-    },
-  ],
+  quizQuestions = [],
   galleryStyle = "polaroid",
-  puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-  scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+  puzzleImage = "",
+  scratchPhotoUrl = "",
   handleUpdate,
   toggleModule,
   modules,
@@ -925,7 +908,6 @@ export function SectionFestaGiochiMaxischermo({
     handleUpdate("quizQuestions", updated);
   };
 
-  // UPLOAD DA FILE LOCALE PER PUZZLE
   const handlePuzzleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -939,7 +921,6 @@ export function SectionFestaGiochiMaxischermo({
     }
   };
 
-  // UPLOAD DA FILE LOCALE PER GRATTA E SCOPRI
   const handleScratchFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -972,21 +953,22 @@ export function SectionFestaGiochiMaxischermo({
         </button>
       </div>
 
-      {/* TIPO DI GALLERIA FOTOGRAFICA FESTA */}
+      {/* SELETTORE DELLE 3 TIPOLOGIE DI GALLERIA FOTOGRAFICA FESTA */}
       <div className="space-y-2">
-        <label className="block text-[11px] font-bold text-[#D4AF37]">Tipologia Galleria Fotografica Festa</label>
-        <div className="grid grid-cols-2 gap-2">
+        <label className="block text-[11px] font-bold text-[#D4AF37]">Tipologia Galleria Fotografica Festa (Scegli tra 3 Stili)</label>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => handleUpdate("galleryStyle", "polaroid")}
             className={`p-2.5 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all ${
-              galleryStyle !== "circular"
+              galleryStyle === "polaroid" || !galleryStyle
                 ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-md"
                 : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
             }`}
           >
             📸 Photo Wall Polaroid
           </button>
+
           <button
             type="button"
             onClick={() => handleUpdate("galleryStyle", "circular")}
@@ -998,10 +980,22 @@ export function SectionFestaGiochiMaxischermo({
           >
             🎡 Galleria 3D Circolare
           </button>
+
+          <button
+            type="button"
+            onClick={() => handleUpdate("galleryStyle", "fan")}
+            className={`p-2.5 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all ${
+              galleryStyle === "fan"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-md"
+                : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
+            }`}
+          >
+            🎴 Carte a Ventaglio GSAP
+          </button>
         </div>
       </div>
 
-      {/* CAMPI FOTO GIOCHI PUZZLE & GRATTA LA FOTO CON UPLOAD LOCALE */}
+      {/* CAMPI FOTO GIOCHI PUZZLE & GRATTA LA FOTO */}
       <div className="pt-3 border-t border-slate-700/80 space-y-3">
         <span className="text-xs font-bold text-[#D4AF37] block">📷 Immagini Personalizzate dei Giochi:</span>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1037,7 +1031,7 @@ export function SectionFestaGiochiMaxischermo({
         </div>
       </div>
 
-      {/* EDITOR QUIZ SPOSI COMPLETO DI 4 RISPOSTE A, B, C, D */}
+      {/* EDITOR QUIZ SPOSI CON 4 RISPOSTE */}
       <div className="pt-3 border-t border-slate-700/80 space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-xs font-bold text-[#D4AF37] flex items-center gap-1.5">
@@ -1052,28 +1046,6 @@ export function SectionFestaGiochiMaxischermo({
           </button>
         </div>
 
-        <div>
-          <label className="block text-[10px] text-slate-400 mb-1">Seleziona e aggiungi una domanda preimpostata d&apos;autore:</label>
-          <select
-            onChange={(e) => {
-              if (e.target.value) {
-                const selectedPreset = QUIZ_PRESET_QUESTIONS[Number(e.target.value)];
-                if (selectedPreset) addQuizQuestion(selectedPreset);
-                e.target.value = "";
-              }
-            }}
-            className="w-full text-xs p-2 rounded-xl bg-slate-800 border border-slate-700 text-white font-medium cursor-pointer"
-          >
-            <option value="">-- Scegli tra Domande Preimpostate --</option>
-            {QUIZ_PRESET_QUESTIONS.map((q, idx) => (
-              <option key={idx} value={idx}>
-                {q.question}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* LISTA DOMANDE EDITOR IN DASHBOARD */}
         <div className="space-y-4">
           {(quizQuestions || []).map((q: any, idx: number) => {
             const correctIdx = q.correctOptionIdx ?? 0;
@@ -1098,7 +1070,6 @@ export function SectionFestaGiochiMaxischermo({
                   </button>
                 </div>
 
-                {/* 4 OPZIONI DI RISPOSTA A, B, C, D */}
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div>
                     <label className="block text-[9px] font-bold text-slate-400 mb-0.5">Opzione A</label>
@@ -1145,10 +1116,9 @@ export function SectionFestaGiochiMaxischermo({
                   </div>
                 </div>
 
-                {/* SELEZIONE DELLA RISPOSTA ESATTA */}
                 <div className="flex items-center justify-between pt-1 bg-slate-900/60 p-2 rounded-xl border border-slate-700/60">
                   <span className="text-[10px] font-bold text-[#D4AF37] flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Qual è la risposta corretta?
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Risposta corretta:
                   </span>
                   <select
                     value={correctIdx}
