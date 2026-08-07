@@ -8,8 +8,8 @@ import ConfiguratorBrand from "./ConfiguratorBrand";
 export interface AgencyConfiguratorProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  selectedTemplate: "A" | "B";
-  setSelectedTemplate: (val: "A" | "B") => void;
+  selectedTemplate: "A" | "B" | "C";
+  setSelectedTemplate: (val: "A" | "B" | "C") => void;
   introStart: string;
   setIntroStart: (val: string) => void;
   dateDisplayMode: string;
@@ -52,6 +52,20 @@ export interface AgencyConfiguratorProps {
   setHeroBgImage?: (val: string) => void;
   heroMediaImage?: string;
   setHeroMediaImage?: (val: string) => void;
+  puzzleImage?: string;
+  setPuzzleImage?: (val: string) => void;
+  scratchPhotoUrl?: string;
+  setScratchPhotoUrl?: (val: string) => void;
+  quizQuestions?: any[];
+  setQuizQuestions?: (val: any[]) => void;
+  galleryStyle?: string;
+  setGalleryStyle?: (val: string) => void;
+  puzzlePrize?: string;
+  setPuzzlePrize?: (val: string) => void;
+  scratchPrize?: string;
+  setScratchPrize?: (val: string) => void;
+  quizPrize?: string;
+  setQuizPrize?: (val: string) => void;
   scheduleItems?: any[];
   setScheduleItems?: (items: any[]) => void;
   showAmazonAffiliate?: boolean;
@@ -71,17 +85,22 @@ export interface AgencyConfiguratorProps {
 export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
   const { activeTab } = props;
 
-  // GESTORE DINAMICO E UNIVERSALE DI AGGIORNAMENTO STATO
+  // GESTORE DINAMICO E UNIVERSALE DI AGGIORNAMENTO STATO PER TUTTE LE PROPS
   const handleUpdate = (field: string, value: any) => {
-    // 1. Mappatura dinamica automatica: cerca setField (es. setHeroBgImage)
     const setterName = `set${field.charAt(0).toUpperCase()}${field.slice(1)}`;
     if (typeof (props as any)[setterName] === "function") {
       (props as any)[setterName](value);
     }
 
-    // 2. Mappature esplicite di sicurezza
     if (field === "heroBgImage" && props.setHeroBgImage) props.setHeroBgImage(value);
     if (field === "heroMediaImage" && props.setHeroMediaImage) props.setHeroMediaImage(value);
+    if (field === "puzzleImage" && props.setPuzzleImage) props.setPuzzleImage(value);
+    if (field === "scratchPhotoUrl" && props.setScratchPhotoUrl) props.setScratchPhotoUrl(value);
+    if (field === "quizQuestions" && props.setQuizQuestions) props.setQuizQuestions(value);
+    if (field === "galleryStyle" && props.setGalleryStyle) props.setGalleryStyle(value);
+    if (field === "puzzlePrize" && props.setPuzzlePrize) props.setPuzzlePrize(value);
+    if (field === "scratchPrize" && props.setScratchPrize) props.setScratchPrize(value);
+    if (field === "quizPrize" && props.setQuizPrize) props.setQuizPrize(value);
     if (field === "showAmazonAffiliate" && props.setShowAmazonAffiliate) props.setShowAmazonAffiliate(value);
     if (field === "customStores" && props.setCustomStores) props.setCustomStores(value);
     if (field === "scheduleItems" && props.setScheduleItems) props.setScheduleItems(value);
@@ -122,6 +141,13 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
           {...props}
           heroBgImage={props.heroBgImage}
           heroMediaImage={props.heroMediaImage}
+          puzzleImage={props.puzzleImage}
+          scratchPhotoUrl={props.scratchPhotoUrl}
+          quizQuestions={props.quizQuestions}
+          galleryStyle={props.galleryStyle}
+          puzzlePrize={props.puzzlePrize}
+          scratchPrize={props.scratchPrize}
+          quizPrize={props.quizPrize}
           scheduleItems={props.scheduleItems}
           showAmazonAffiliate={props.showAmazonAffiliate}
           customStores={props.customStores}
