@@ -41,15 +41,27 @@ export default function RsvpForm({
 
   // SALVATAGGIO REALE IN SUPABASE TABELLA love_rsvps
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!guestName.trim()) {
-      alert("Inserisci il tuo Nome e Cognome per confermare.");
-      return;
-    }
+  e.preventDefault();
+  if (!guestName.trim()) return;
 
-    setIsLoading(true);
+  setIsLoading(true);
 
-    const res = await saveLoveRsvp({
+  // 1. Salvataggio su DB Supabase
+  const res = await saveLoveRsvp({
+    experience_slug: cleanSlug,
+    guest_name: guestName.trim(),
+    attending: attending !== false,
+    guests_count: guestCount,
+    menu_preference: menuPreference,
+    dietary_notes: allergies.trim(),
+    song_request: songRequest.trim(),
+  });
+
+  // 2. ⚡ INVIO WEBHOOK AD n8N PER EMAIL ISTANTANEA AGLI SPOSI
+  fetch("https://n8n.rmstudio.app/webhook/love-notifica-conferma", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       experience_slug: cleanSlug,
       guest_name: guestName.trim(),
       attending: attending !== false,
@@ -57,16 +69,12 @@ export default function RsvpForm({
       menu_preference: menuPreference,
       dietary_notes: allergies.trim(),
       song_request: songRequest.trim(),
-    });
+    }),
+  }).catch(() => {}); // invio in background silenzioso
 
-    setIsLoading(false);
-    if (res.success) {
-      setInviato(true);
-    } else {
-      // Fallback in caso di mancata connessione a Supabase
-      setInviato(true);
-    }
-  };
+  setIsLoading(false);
+  setInviato(true);
+};
 
   if (submitted) {
     return (
