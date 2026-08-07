@@ -94,8 +94,22 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
       { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it", logoUrl: "/logo.png" }
     ],
     quizQuestions = [
-      { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
-      { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+      {
+        question: "Dove ci siamo conosciuti per la prima volta?",
+        optionA: "In università",
+        optionB: "In discoteca",
+        optionC: "Al mare in vacanza",
+        optionD: "Tramite amici comuni",
+        correctOptionIdx: 0,
+      },
+      {
+        question: "Chi ha fatto la proposta di nozze?",
+        optionA: "Elena",
+        optionB: "Davide",
+        optionC: "Insieme a Parigi",
+        optionD: "I genitori",
+        correctOptionIdx: 1,
+      },
     ],
     galleryStyle = "polaroid",
     modules = {},
@@ -327,7 +341,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO (DARK/GOLD SEPARATA) */}
+      {/* 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO */}
       <SectionFestaGiochiMaxischermo
         quizQuestions={quizQuestions}
         galleryStyle={galleryStyle}
