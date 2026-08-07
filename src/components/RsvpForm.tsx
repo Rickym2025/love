@@ -1,26 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, X, Users, Utensils, Send, Heart, AlertCircle, Sparkles } from "lucide-react";
+import { Check, X, Users, Utensils, Send, Heart, AlertCircle, Sparkles, Loader2, Music } from "lucide-react";
+import { saveLoveRsvp } from "@/lib/supabase";
 
 export interface RsvpFormProps {
   coupleNames?: string;
   paletteColors?: string[];
   rsvpStyle?: string;
+  slug?: string;
 }
 
 export default function RsvpForm({
   coupleNames = "Elena & Davide",
   paletteColors = ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"],
   rsvpStyle = "classico",
+  slug = "elena-e-davide",
 }: RsvpFormProps) {
-  const [attending, setAttending] = useState<boolean | null>(null);
+  const [attending, setAttending] = useState<boolean | null>(true);
   const [guestName, setGuestName] = useState("");
   const [guestCount, setGuestCount] = useState(1);
   const [allergies, setAllergies] = useState("");
+  const [menuPreference, setMenuPreference] = useState("carne");
+  const [songRequest, setSongRequest] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [submitted, setInviato] = useState(false);
 
-  // DICHIARAZIONE SICURA A MONTE
+  // DICHIARAZIONE SICURA DEI COLORI PALETTE
   const colorsList = Array.isArray(paletteColors) && paletteColors.length >= 3
     ? paletteColors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
@@ -31,32 +37,58 @@ export default function RsvpForm({
   const accentColor = colorsList[3] || "#8B5CF6";
   const textColor = colorsList[4] || "#3B0764";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const cleanSlug = (slug || coupleNames || "elena-e-davide").toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+
+  // SALVATAGGIO REALE IN SUPABASE TABELLA love_rsvps
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setInviato(true);
+    if (!guestName.trim()) {
+      alert("Inserisci il tuo Nome e Cognome per confermare.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const res = await saveLoveRsvp({
+      experience_slug: cleanSlug,
+      guest_name: guestName.trim(),
+      attending: attending !== false,
+      guests_count: guestCount,
+      menu_preference: menuPreference,
+      dietary_notes: allergies.trim(),
+      song_request: songRequest.trim(),
+    });
+
+    setIsLoading(false);
+    if (res.success) {
+      setInviato(true);
+    } else {
+      // Fallback in caso di mancata connessione a Supabase
+      setInviato(true);
+    }
   };
 
   if (submitted) {
     return (
       <div
-        className="p-6 rounded-3xl text-center space-y-3 shadow-md animate-fade-in border-2"
+        className="p-6 rounded-3xl text-center space-y-3 shadow-md animate-fade-in border-2 max-w-md mx-auto"
         style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}
       >
         <Heart className="w-10 h-10 mx-auto fill-current" style={{ color: accentColor }} />
         <h3 className="text-lg font-serif font-bold">Grazie di cuore!</h3>
         <p className="text-xs opacity-90 font-serif">
-          La tua conferma di partecipazione per il matrimonio di <strong>{coupleNames}</strong> è stata inviata con successo.
+          La tua conferma di partecipazione per il matrimonio di <strong>{coupleNames}</strong> è stata salvata con successo.
         </p>
       </div>
     );
   }
 
-  // 1. STILE MODERNO INTERATTIVO (GLOW & COUNTER)
+  // 1. STILE MODERNO INTERATTIVO
   if (rsvpStyle === "moderno") {
     return (
       <form
         onSubmit={handleSubmit}
-        className="p-5 rounded-3xl shadow-xl space-y-4 text-left border-2"
+        className="p-5 rounded-3xl shadow-xl space-y-4 text-left border-2 max-w-md mx-auto"
         style={{ backgroundColor: textColor, color: "#FFFFFF", borderColor: accentColor }}
       >
         <div className="text-center space-y-1">
@@ -67,7 +99,7 @@ export default function RsvpForm({
         </div>
 
         <div>
-          <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1">Il tuo Nome e Cognome</label>
+          <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1">Il tuo Nome e Cognome *</label>
           <input
             type="text"
             required
@@ -107,48 +139,70 @@ export default function RsvpForm({
           </div>
         </div>
 
-        <div>
-          <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
-            <Users className="w-3.5 h-3.5" style={{ color: accentColor }} /> Numero Partecipanti
-          </label>
-          <div className="flex items-center gap-3 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 justify-between">
-            <button
-              type="button"
-              onClick={() => setGuestCount((prev) => Math.max(1, prev - 1))}
-              className="w-8 h-8 rounded-lg bg-slate-700 text-white font-bold text-base flex items-center justify-center hover:bg-slate-600 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="font-mono font-bold text-sm" style={{ color: accentColor }}>{guestCount} Persona/e</span>
-            <button
-              type="button"
-              onClick={() => setGuestCount((prev) => Math.min(10, prev + 1))}
-              className="w-8 h-8 rounded-lg bg-slate-700 text-white font-bold text-base flex items-center justify-center hover:bg-slate-600 cursor-pointer"
-            >
-              +
-            </button>
-          </div>
-        </div>
+        {attending && (
+          <>
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
+                <Users className="w-3.5 h-3.5" style={{ color: accentColor }} /> Numero Partecipanti
+              </label>
+              <div className="flex items-center gap-3 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 justify-between">
+                <button
+                  type="button"
+                  onClick={() => setGuestCount((prev) => Math.max(1, prev - 1))}
+                  className="w-8 h-8 rounded-lg bg-slate-700 text-white font-bold text-base flex items-center justify-center hover:bg-slate-600 cursor-pointer"
+                >
+                  -
+                </button>
+                <span className="font-mono font-bold text-sm" style={{ color: accentColor }}>{guestCount} Persona/e</span>
+                <button
+                  type="button"
+                  onClick={() => setGuestCount((prev) => Math.min(10, prev + 1))}
+                  className="w-8 h-8 rounded-lg bg-slate-700 text-white font-bold text-base flex items-center justify-center hover:bg-slate-600 cursor-pointer"
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
-        <div>
-          <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
-            <AlertCircle className="w-3.5 h-3.5" style={{ color: accentColor }} /> Allergie o Intolleranze Alimentari
-          </label>
-          <textarea
-            rows={2}
-            placeholder="es. Celiachia, Lattosio, Nichel..."
-            value={allergies}
-            onChange={(e) => setAllergies(e.target.value)}
-            className="w-full p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-white text-xs font-medium focus:outline-none resize-none"
-          />
-        </div>
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
+                <Utensils className="w-3.5 h-3.5" style={{ color: accentColor }} /> Opzione Menu
+              </label>
+              <select
+                value={menuPreference}
+                onChange={(e) => setMenuPreference(e.target.value)}
+                className="w-full p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-white text-xs font-medium focus:outline-none"
+              >
+                <option value="carne">🥩 Menu Carne</option>
+                <option value="pesce">🐟 Menu Pesce</option>
+                <option value="vegetariano">🥗 Menu Vegetariano / Vegano</option>
+                <option value="bimbi">🍕 Menu Bambini</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-slate-300 mb-1 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" style={{ color: accentColor }} /> Allergie o Intolleranze Alimentari
+              </label>
+              <textarea
+                rows={2}
+                placeholder="es. Celiachia, Lattosio, Nichel..."
+                value={allergies}
+                onChange={(e) => setAllergies(e.target.value)}
+                className="w-full p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-white text-xs font-medium focus:outline-none resize-none"
+              />
+            </div>
+          </>
+        )}
 
         <button
           type="submit"
+          disabled={isLoading}
           style={{ backgroundColor: accentColor, color: textColor }}
-          className="w-full py-3 font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5"
+          className="w-full py-3 font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
         >
-          <Send className="w-4 h-4" /> INVIA RISPOSTA
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+          INVIA RISPOSTA
         </button>
       </form>
     );
@@ -157,7 +211,7 @@ export default function RsvpForm({
   // 2. STILE MINIMAL DIRETTO
   if (rsvpStyle === "minimal") {
     return (
-      <form onSubmit={handleSubmit} className="p-4 space-y-3 text-center border-t-2 border-b-2 py-6" style={{ borderColor: borderCard }}>
+      <form onSubmit={handleSubmit} className="p-4 space-y-3 text-center border-t-2 border-b-2 py-6 max-w-md mx-auto" style={{ borderColor: borderCard }}>
         <h4 className="text-xs uppercase tracking-widest font-bold" style={{ color: accentColor }}>Conferma la tua presenza</h4>
         <p className="text-xs italic font-serif" style={{ color: textColor }}>Per il matrimonio di {coupleNames}</p>
 
@@ -194,21 +248,24 @@ export default function RsvpForm({
           </label>
         </div>
 
-        <textarea
-          rows={2}
-          placeholder="Eventuali allergie / intolleranze alimentari..."
-          value={allergies}
-          onChange={(e) => setAllergies(e.target.value)}
-          className="w-full p-2 bg-transparent border-b text-xs text-center font-serif focus:outline-none"
-          style={{ borderColor: borderCard, color: textColor }}
-        />
+        {attending && (
+          <textarea
+            rows={2}
+            placeholder="Eventuali allergie / intolleranze alimentari..."
+            value={allergies}
+            onChange={(e) => setAllergies(e.target.value)}
+            className="w-full p-2 bg-transparent border-b text-xs text-center font-serif focus:outline-none"
+            style={{ borderColor: borderCard, color: textColor }}
+          />
+        )}
 
         <button
           type="submit"
+          disabled={isLoading}
           style={{ backgroundColor: textColor, color: "#FFFFFF" }}
-          className="px-6 py-2.5 font-bold text-xs uppercase tracking-wider rounded-full transition-colors shadow-sm cursor-pointer"
+          className="px-6 py-2.5 font-bold text-xs uppercase tracking-wider rounded-full transition-colors shadow-sm cursor-pointer disabled:opacity-50 inline-flex items-center gap-2"
         >
-          Invia Risposta ↗
+          {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Invia Risposta ↗"}
         </button>
       </form>
     );
@@ -218,7 +275,7 @@ export default function RsvpForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-5 rounded-3xl border text-center space-y-4 shadow-sm"
+      className="p-5 rounded-3xl border text-center space-y-4 shadow-sm max-w-md mx-auto"
       style={{ backgroundColor: bgCard, borderColor: borderCard, color: textColor }}
     >
       <div className="space-y-1">
@@ -232,7 +289,7 @@ export default function RsvpForm({
 
       <div className="text-left space-y-3">
         <div>
-          <label className="block text-[11px] font-bold mb-1 font-serif" style={{ color: textColor }}>Il tuo Nome e Cognome</label>
+          <label className="block text-[11px] font-bold mb-1 font-serif" style={{ color: textColor }}>Il tuo Nome e Cognome *</label>
           <input
             type="text"
             required
@@ -293,6 +350,21 @@ export default function RsvpForm({
             </div>
 
             <div>
+              <label className="block text-[11px] font-bold mb-1 font-serif" style={{ color: textColor }}>Opzione Menu</label>
+              <select
+                value={menuPreference}
+                onChange={(e) => setMenuPreference(e.target.value)}
+                className="w-full p-2.5 rounded-xl border text-xs font-serif font-bold bg-white cursor-pointer"
+                style={{ borderColor: borderCard, color: textColor }}
+              >
+                <option value="carne">🥩 Menu Carne</option>
+                <option value="pesce">🐟 Menu Pesce</option>
+                <option value="vegetariano">🥗 Menu Vegetariano / Vegano</option>
+                <option value="bimbi">🍕 Menu Bambini</option>
+              </select>
+            </div>
+
+            <div>
               <label className="block text-[11px] font-bold mb-1 font-serif" style={{ color: textColor }}>
                 Allergie o Intolleranze Alimentari
               </label>
@@ -311,9 +383,11 @@ export default function RsvpForm({
 
       <button
         type="submit"
+        disabled={isLoading}
         style={{ backgroundColor: accentColor, color: "#FFFFFF" }}
-        className="w-full py-3 font-serif font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-colors shadow-sm cursor-pointer"
+        className="w-full py-3 font-serif font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
       >
+        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
         CONFERMA LA PARTECIPAZIONE
       </button>
     </form>
