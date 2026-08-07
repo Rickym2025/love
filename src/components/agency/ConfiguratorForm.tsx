@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Save, CheckCircle2 } from "lucide-react";
+import { Save, CheckCircle2, Loader2 } from "lucide-react";
+import { saveLoveExperience } from "@/lib/supabase";
 import {
   SectionDatiSposi,
   SectionModelliPreset,
@@ -51,6 +52,9 @@ export interface ConfiguratorFormProps {
   customStores?: PartnerStoreItem[];
   quizQuestions?: any[];
   galleryStyle?: string;
+  puzzlePrize?: string;
+  scratchPrize?: string;
+  quizPrize?: string;
   modules?: Record<string, boolean>;
   onUpdate?: (field: string, value: any) => void;
 }
@@ -75,7 +79,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
     ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
     waterImageUrl = "",
-    puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+    puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
     scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
     selectedPaletteIdx = 0,
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
@@ -93,30 +97,17 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     customStores = [
       { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it", logoUrl: "/logo.png" }
     ],
-    quizQuestions = [
-      {
-        question: "Dove ci siamo conosciuti per la prima volta?",
-        optionA: "In università",
-        optionB: "In discoteca",
-        optionC: "Al mare in vacanza",
-        optionD: "Tramite amici comuni",
-        correctOptionIdx: 0,
-      },
-      {
-        question: "Chi ha fatto la proposta di nozze?",
-        optionA: "Elena",
-        optionB: "Davide",
-        optionC: "Insieme a Parigi",
-        optionD: "I genitori",
-        correctOptionIdx: 1,
-      },
-    ],
+    quizQuestions = [],
     galleryStyle = "polaroid",
+    puzzlePrize = "💃 Hai vinto un ballo speciale con la Sposa!",
+    scratchPrize = "🥂 Hai vinto un drink offerto dallo Sposo!",
+    quizPrize = "📸 Hai vinto un selfie di gruppo con gli Sposi!",
     modules = {},
     onUpdate,
   } = props;
 
   const [salvatoState, setSalvatoState] = useState(false);
+  const [isSavingSupabase, setIsSavingSupabase] = useState(false);
 
   const handleUpdate = (field: string, value: any) => {
     if (typeof onUpdate === "function") {
@@ -124,9 +115,66 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     }
   };
 
-  const handleManualSave = () => {
-    setSalvatoState(true);
-    setTimeout(() => setSalvatoState(false), 2500);
+  const handleManualSave = async () => {
+    setIsSavingSupabase(true);
+    const slug = (coupleNames || "elena-e-davide").toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+    const weddingDateFormatted = `${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`;
+
+    // SALVATAGGIO IN SUPABASE TABELLA love_experiences
+    const fullConfigState = {
+      selectedTemplate,
+      introStart,
+      dateDisplayMode,
+      scheduleSchema,
+      rsvpStyle,
+      eventThemePreset,
+      customEventTheme,
+      coupleNames,
+      weddingDateDay,
+      weddingDateMonth,
+      weddingDateYear,
+      locationName,
+      locationAddress,
+      audioUrl,
+      waterImageUrl,
+      selectedPhrasePreset,
+      customWelcomePhrase,
+      dressCodeNotes,
+      selectedPaletteIdx,
+      heroBgImage,
+      heroMediaImage,
+      ricevimentoImage,
+      puzzleImage,
+      scratchPhotoUrl,
+      galleryStyle,
+      quizQuestions,
+      puzzlePrize,
+      scratchPrize,
+      quizPrize,
+      customIban,
+      scheduleItems,
+      showAmazonAffiliate,
+      customStores,
+      modules,
+    };
+
+    const res = await saveLoveExperience({
+      slug,
+      couple_names: coupleNames,
+      wedding_date: weddingDateFormatted,
+      location_name: locationName,
+      location_address: locationAddress,
+      iban: customIban,
+      modules_config: fullConfigState,
+    });
+
+    setIsSavingSupabase(false);
+    if (res.success) {
+      setSalvatoState(true);
+      setTimeout(() => setSalvatoState(false), 3000);
+    } else {
+      alert("Salvato in locale! Nota: configura le chiavi Supabase nel file .env per la persistenza cloud.");
+    }
   };
 
   const toggleModule = (key: string) => {
@@ -202,25 +250,29 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
   return (
     <div className="w-full space-y-6 text-[#1E293B]">
-      {/* BARRA SALVATAGGIO AUTOMATICO */}
+      {/* BARRA SALVATAGGIO REALE SUPABASE */}
       <div className="p-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl border border-[#D4AF37] flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-pulse" />
           <span className="text-xs font-bold text-slate-200">
-            Salvataggio Automatico Attivo <span className="text-[#D4AF37] font-mono text-[10px] ml-1">({coupleNames})</span>
+            Salvataggio Automatico Cloud <span className="text-[#D4AF37] font-mono text-[10px] ml-1">({coupleNames})</span>
           </span>
         </div>
         <button
           type="button"
+          disabled={isSavingSupabase}
           onClick={handleManualSave}
-          className="px-4 py-2 bg-[#D4AF37] text-slate-900 font-bold text-xs rounded-xl hover:bg-amber-400 transition-all flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95"
+          className="px-4 py-2 bg-[#D4AF37] text-slate-900 font-bold text-xs rounded-xl hover:bg-amber-400 transition-all flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95 disabled:opacity-50"
         >
-          <Save className="w-3.5 h-3.5" />
-          {salvatoState ? "✓ Invito Salvato!" : "✦ Salva Invito"}
+          {isSavingSupabase ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Save className="w-3.5 h-3.5" />
+          )}
+          {salvatoState ? "✓ Salvato su Cloud Supabase!" : "✦ Salva Invito su DB"}
         </button>
       </div>
 
-      {/* 1. DATI SPOSI & FRASE BENVENUTO */}
       <SectionDatiSposi
         coupleNames={coupleNames}
         selectedPhrasePreset={selectedPhrasePreset}
@@ -232,7 +284,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 2. MODELLI PREIMPOSTATI */}
       <SectionModelliPreset
         selectedTemplate={selectedTemplate}
         applyTemplateA={applyTemplateA}
@@ -245,17 +296,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 3. COLONNA SONORA D'AUTORE */}
       <SectionColonnaSonora audioUrl={audioUrl} handleUpdate={handleUpdate} />
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 4. SFONDO DELL'INVITO & TEXTURES */}
       <SectionSfondoTextures heroBgImage={heroBgImage} handleUpdate={handleUpdate} />
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 5. EFFETTO START INIZIALE */}
       <SectionEffettoStart
         introStart={introStart}
         eventThemePreset={eventThemePreset}
@@ -269,7 +317,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 6. DATA DEL MATRIMONIO */}
       <SectionDataMatrimonio
         weddingDateDay={weddingDateDay}
         weddingDateMonth={weddingDateMonth}
@@ -282,7 +329,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 7. PROGRAMMA GIORNATA & ORARI */}
       <SectionProgrammaGiornata
         scheduleSchema={scheduleSchema}
         scheduleItems={scheduleItems}
@@ -294,7 +340,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 8. LOCATION & MAPPA GOOGLE */}
       <SectionLocationMappa
         locationName={locationName}
         locationAddress={locationAddress}
@@ -305,7 +350,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 9. DRESS CODE & PALETTE */}
       <SectionDressCode
         selectedPaletteIdx={selectedPaletteIdx}
         dressCodeNotes={dressCodeNotes}
@@ -316,7 +360,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 10. LISTA NOZZE & NEGOZI LOCALI CON LOGO */}
       <SectionListaNozze
         customIban={customIban}
         showAmazonAffiliate={showAmazonAffiliate}
@@ -331,7 +374,6 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 11. RSVP */}
       <SectionRsvpFesta
         rsvpStyle={rsvpStyle}
         handleUpdate={handleUpdate}
@@ -341,12 +383,14 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO */}
       <SectionFestaGiochiMaxischermo
         quizQuestions={quizQuestions}
         galleryStyle={galleryStyle}
         puzzleImage={puzzleImage}
         scratchPhotoUrl={scratchPhotoUrl}
+        puzzlePrize={puzzlePrize}
+        scratchPrize={scratchPrize}
+        quizPrize={quizPrize}
         handleUpdate={handleUpdate}
         toggleModule={toggleModule}
         modules={modules}
