@@ -106,6 +106,7 @@ export default function PhotoWallSection({
         </p>
       </div>
 
+      {/* GRIGLIA FOTO CON PROPORZIONI QUADRATE INVARIABILI (ASPECT-SQUARE) */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pt-2">
         {albumPhotos.map((item) => (
           <div
@@ -124,7 +125,8 @@ export default function PhotoWallSection({
               </button>
             )}
 
-            <div className="w-full h-40 md:h-48 rounded-xl overflow-hidden relative border border-slate-700 bg-black">
+            {/* CONTENITORE FOTO CON ASPECT-SQUARE PER EVITARE ALLUNGAMENTI */}
+            <div className="w-full aspect-square rounded-xl overflow-hidden relative border border-slate-700 bg-black">
               <img
                 src={item.url}
                 alt={item.caption || "Foto Album"}
@@ -141,6 +143,7 @@ export default function PhotoWallSection({
         ))}
       </div>
 
+      {/* MODAL INGRANDITO HD PER PERSONALIZZARE FOTO */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
           <button
