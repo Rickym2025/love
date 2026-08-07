@@ -4,6 +4,7 @@ import React from "react";
 import ConfiguratorForm from "./ConfiguratorForm";
 import ConfiguratorList from "./ConfiguratorList";
 import ConfiguratorBrand from "./ConfiguratorBrand";
+import WhatsAppSender from "./WhatsAppSender";
 
 export interface AgencyConfiguratorProps {
   activeTab: string;
@@ -136,6 +137,7 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
 
   return (
     <div className="p-6 w-full max-w-3xl mx-auto">
+      {/* SCHEDA 1: FORM CREAZIONE E MODIFICA */}
       {activeTab === "create" && (
         <ConfiguratorForm
           {...props}
@@ -155,8 +157,15 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
         />
       )}
 
+      {/* SCHEDA 2: LISTA INVITI SALVATI */}
       {activeTab === "list" && <ConfiguratorList />}
 
+      {/* SCHEDA 3: SPEDIZIONE WHATSAPP & LISTA INVITATI */}
+      {activeTab === "whatsapp" && (
+        <WhatsAppSender slug={props.coupleNames} coupleNames={props.coupleNames} />
+      )}
+
+      {/* SCHEDA 4: BRAND WHITE-LABEL */}
       {activeTab === "brand" && <ConfiguratorBrand />}
     </div>
   );
