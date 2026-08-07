@@ -11,6 +11,7 @@ import LoveQuiz from "@/components/LoveQuiz";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
 import AudioPlayer from "@/components/AudioPlayer";
+import { fetchLoveGuestbookItems, saveLoveGuestbookItem } from "@/lib/supabase";
 
 function FestaContent({ params }: { params?: { slug?: string } }) {
   const searchParams = useSearchParams();
@@ -18,18 +19,21 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
   const slug = params?.slug || "elena-e-davide";
   const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
 
-  // DATI DI DEFAULT
   const [coupleNames, setCoupleNames] = useState(searchParams?.get("couple") || "Elena & Davide");
   const [galleryStyle, setGalleryStyle] = useState(searchParams?.get("gallery") || "polaroid");
   const [puzzleImage, setPuzzleImage] = useState(
-    searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
+    searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80"
   );
   const [scratchPhotoUrl, setScratchPhotoUrl] = useState(
-    searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+    searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
   );
   const [audioUrl, setAudioUrl] = useState(
     searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
   );
+
+  const [puzzlePrize, setPuzzlePrize] = useState("💃 Hai vinto un ballo speciale con la Sposa!");
+  const [scratchPrize, setScratchPrize] = useState("🥂 Hai vinto un drink offerto dallo Sposo!");
+  const [quizPrize, setQuizPrize] = useState("📸 Hai vinto un selfie di gruppo con gli Sposi!");
 
   const [quizQuestions, setQuizQuestions] = useState<any[]>([
     {
@@ -40,92 +44,43 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
       optionD: "Tramite amici comuni",
       correctOptionIdx: 0,
     },
-    {
-      question: "Chi ha fatto la proposta di nozze?",
-      optionA: "Elena",
-      optionB: "Davide",
-      optionC: "Insieme a Parigi",
-      optionD: "I genitori",
-      correctOptionIdx: 1,
-    },
   ]);
 
-  // SINCRONIZZAZIONE DATI DA LOCALSTORAGE E URL SEARCHPARAMS
-  useEffect(() => {
-    // 1. Prova prima a leggere i parametri dall'URL
-    const paramGallery = searchParams?.get("gallery");
-    const paramPuzzle = searchParams?.get("puzzle");
-    const paramScratch = searchParams?.get("scratch");
-    const paramAudio = searchParams?.get("audio");
-    const paramCouple = searchParams?.get("couple");
-    const paramQuiz = searchParams?.get("quiz");
-
-    if (paramGallery) setGalleryStyle(paramGallery);
-    if (paramPuzzle) setPuzzleImage(paramPuzzle);
-    if (paramScratch) setScratchPhotoUrl(paramScratch);
-    if (paramAudio) setAudioUrl(paramAudio);
-    if (paramCouple) setCoupleNames(paramCouple);
-
-    if (paramQuiz) {
-      try {
-        const parsedQuiz = JSON.parse(decodeURIComponent(paramQuiz));
-        if (Array.isArray(parsedQuiz) && parsedQuiz.length > 0) {
-          setQuizQuestions(parsedQuiz);
-        }
-      } catch (e) {
-        // fallback
-      }
-    }
-
-    // 2. Fallback per sincronizzazione diretta con la Dashboard (LocalStorage)
-    try {
-      const storedDataRaw = localStorage.getItem("love_invitation_data") || localStorage.getItem(`love_invitation_${cleanSlug}`);
-      if (storedDataRaw) {
-        const localData = JSON.parse(storedDataRaw);
-        if (localData.galleryStyle && !paramGallery) setGalleryStyle(localData.galleryStyle);
-        if (localData.puzzleImage && !paramPuzzle) setPuzzleImage(localData.puzzleImage);
-        if (localData.scratchPhotoUrl && !paramScratch) setScratchPhotoUrl(localData.scratchPhotoUrl);
-        if (localData.audioUrl && !paramAudio) setAudioUrl(localData.audioUrl);
-        if (localData.coupleNames && !paramCouple) setCoupleNames(localData.coupleNames);
-        if (Array.isArray(localData.quizQuestions) && localData.quizQuestions.length > 0 && !paramQuiz) {
-          setQuizQuestions(localData.quizQuestions);
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, [searchParams, cleanSlug]);
-
-  // LISTA FOTO CONDIVISA PER BACKGROUND E GALLERIE
+  // LISTA FOTO DALLA TABELLA GUESTBOOK SUPABASE
   const [photosList, setPhotosList] = useState<PhotoWallItem[]>([
     { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
     { id: "2", url: puzzleImage, caption: "Taglio della Torta Insieme", author: "Zii Rossi" },
-    { id: "3", url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80", caption: "Brindisi in Giardino", author: "Amici di Sempre" },
-    { id: "4", url: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1000&q=80", caption: "Arrivo degli Invitati", author: "Marco & Sara" },
   ]);
 
-  // Sincronizza le immagini nella lista se cambiano le props dei giochi
+  // CARICAMENTO INIZIALE FOTO DA SUPABASE DATABASES
   useEffect(() => {
-    setPhotosList((prev) => {
-      const updated = [...prev];
-      if (scratchPhotoUrl) updated[0] = { ...updated[0], url: scratchPhotoUrl };
-      if (puzzleImage) updated[1] = { ...updated[1], url: puzzleImage };
-      return updated;
-    });
-  }, [scratchPhotoUrl, puzzleImage]);
+    async function loadGuestbookFromSupabase() {
+      const res = await fetchLoveGuestbookItems(cleanSlug);
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        const mapped = res.data.map((item: any) => ({
+          id: item.id,
+          url: item.photo_url || scratchPhotoUrl,
+          caption: item.message || "Foto del Matrimonio",
+          author: item.author_name || "Invitato",
+        }));
+        setPhotosList(mapped);
+      }
+    }
+    loadGuestbookFromSupabase();
+  }, [cleanSlug, scratchPhotoUrl]);
 
-  // BACKGROUND DINAMICO: SCORRIMENTO RILASSANTE OGNI 12 SECONDI
+  // BACKGROUND DINAMICO CHE CAMBIA OGNI 12 SECONDI
   const [bgImageIndex, setBgImageIndex] = useState(0);
 
   useEffect(() => {
     if (photosList.length === 0) return;
     const interval = setInterval(() => {
       setBgImageIndex((prev) => (prev + 1) % photosList.length);
-    }, 12000); // 12 Secondi (molto più calmo e naturale)
+    }, 12000);
     return () => clearInterval(interval);
   }, [photosList]);
 
-  // MODAL LIGHTBOX PER PERSONALIZZARE LE FOTO
+  // MODAL FILTRI & DEDICA
   const [selectedPhotoModal, setSelectedPhotoModal] = useState<PhotoWallItem | null>(null);
   const [activeFilterId, setActiveFilterId] = useState("normal");
   const [editAuthor, setEditAuthor] = useState("");
@@ -145,8 +100,9 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     setEditCaption(caption || "Momento Speciale ❤️");
   };
 
-  const handleSaveAsNewPhoto = () => {
+  const handleSaveAsNewPhoto = async () => {
     if (!selectedPhotoModal) return;
+
     const newPhoto: PhotoWallItem = {
       id: Date.now().toString(),
       url: selectedPhotoModal.url,
@@ -154,23 +110,28 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
       author: editAuthor || "Invitato",
       filterCss: currentFilter.filterCss,
     };
+
     setPhotosList((prev) => [newPhoto, ...prev]);
+
+    // SALVATAGGIO REALE IN SUPABASE TABELLA love_guestbook
+    await saveLoveGuestbookItem({
+      experience_slug: cleanSlug,
+      author_name: editAuthor || "Invitato",
+      message: editCaption || "Foto del Matrimonio",
+      photo_url: selectedPhotoModal.url,
+    });
+
     setSelectedPhotoModal(null);
   };
 
-  // ELEMENTI PER GALLERIA 3D CIRCOLARE
+  // ELEMENTI PER GALLERIE
   const circularItems: GalleryItem[] = photosList.map((item) => ({
     id: item.id,
     common: item.caption || coupleNames,
     binomial: item.author ? `- ${item.author}` : "Foto Album",
-    photo: {
-      url: item.url,
-      text: item.caption || "Foto Sposi",
-      by: item.author || "Invitato",
-    },
+    photo: { url: item.url, text: item.caption || "Foto Sposi", by: item.author || "Invitato" },
   }));
 
-  // ELEMENTI PER GALLERIA CARTE A VENTAGLIO GSAP
   const fanCardItems: CardItem[] = photosList.map((item) => ({
     id: item.id,
     imgUrl: item.url,
@@ -185,14 +146,12 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     <div className="min-h-screen w-full bg-slate-950 text-white overflow-x-hidden font-sans pb-16 select-none relative">
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* BACKGROUND DINAMICO SCORREVOLE (MOLTO PIÙ CHIARO E DEFINITO) */}
       <div
         className="fixed inset-0 pointer-events-none z-0 transition-all duration-1000 bg-cover bg-center opacity-45 md:opacity-55 blur-sm scale-105"
         style={{ backgroundImage: `url(${currentBgUrl})` }}
       />
       <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-slate-950/60 via-slate-950/70 to-slate-950/90" />
 
-      {/* HEADER FESTA */}
       <header className="p-4 bg-slate-900/90 border-b border-[#D4AF37]/40 flex justify-between items-center backdrop-blur-md sticky top-0 z-40">
         <Link
           href={`/${cleanSlug}`}
@@ -206,7 +165,6 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-10 text-center relative z-10">
-        {/* HERO FESTA */}
         <div className="space-y-3 p-6 md:p-8 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-md rounded-3xl border-2 border-[#D4AF37] shadow-2xl">
           <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block">🎉 RICEVIMENTO &amp; PARTY</span>
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-white">{coupleNames}</h1>
@@ -215,43 +173,26 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </p>
         </div>
 
-        {/* GALLERIA SELEZIONATA DALLA DASHBOARD */}
         <div className="p-5 bg-slate-900/90 backdrop-blur-md rounded-3xl border-2 border-[#D4AF37]/60 shadow-2xl space-y-4">
           {galleryStyle === "circular" ? (
             <div className="space-y-3">
               <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase tracking-wider flex items-center justify-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Galleria 3D Circolare Ruotante
               </span>
-              <p className="text-xs font-serif italic text-slate-300">
-                Tocca qualsiasi foto per aprirla, applicare i filtri e personalizzare la dedica!
-              </p>
-              <CircularGallery
-                items={circularItems}
-                onItemClick={(item) => handleOpenPhotoModal(item.photo.url, item.common, item.photo.by)}
-              />
+              <CircularGallery items={circularItems} onItemClick={(item) => handleOpenPhotoModal(item.photo.url, item.common, item.photo.by)} />
             </div>
           ) : galleryStyle === "fan" ? (
             <div className="space-y-3">
               <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase tracking-wider flex items-center justify-center gap-1.5">
                 🎴 Galleria Carte a Ventaglio
               </span>
-              <p className="text-xs font-serif italic text-slate-300">
-                Sfoglia le carte o toccane una per applicare i 10 Filtri Polaroid e personalizzare la tua dedica!
-              </p>
-              <SocialCards
-                cards={fanCardItems}
-                onItemClick={(card) => handleOpenPhotoModal(card.imgUrl, card.caption, card.author)}
-              />
+              <SocialCards cards={fanCardItems} onItemClick={(card) => handleOpenPhotoModal(card.imgUrl, card.caption, card.author)} />
             </div>
           ) : (
-            <PhotoWallSection
-              photos={photosList}
-              onUpdatePhotos={(updated) => setPhotosList(updated)}
-            />
+            <PhotoWallSection photos={photosList} onUpdatePhotos={(updated) => setPhotosList(updated)} />
           )}
         </div>
 
-        {/* MODAL INGRANDITO HD PER PERSONALIZZARE FOTO */}
         {selectedPhotoModal && (
           <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
             <button
@@ -271,12 +212,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
               </div>
 
               <div className="w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37]/50 shadow-inner bg-black relative">
-                <img
-                  src={selectedPhotoModal.url}
-                  alt="Foto Ingrandita"
-                  className="w-full h-full object-contain md:object-cover transition-all duration-300"
-                  style={{ filter: currentFilter.filterCss }}
-                />
+                <img src={selectedPhotoModal.url} alt="Foto Ingrandita" className="w-full h-full object-contain md:object-cover transition-all duration-300" style={{ filter: currentFilter.filterCss }} />
               </div>
 
               <div className="space-y-3 text-left bg-slate-800/90 p-4 rounded-2xl border border-slate-700">
@@ -285,26 +221,15 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
                     <label className="block text-xs md:text-sm font-bold text-[#D4AF37] mb-1 flex items-center gap-1.5">
                       <User className="w-4 h-4" /> Chi ha scattato la foto?
                     </label>
-                    <input
-                      type="text"
-                      value={editAuthor}
-                      onChange={(e) => setEditAuthor(e.target.value)}
-                      className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-bold focus:border-[#D4AF37] outline-none"
-                      placeholder="Il tuo nome o nickname..."
-                    />
+                    <input type="text" value={editAuthor} onChange={(e) => setEditAuthor(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-bold focus:border-[#D4AF37] outline-none" placeholder="Il tuo nome..." />
                   </div>
 
                   <div>
                     <label className="block text-xs md:text-sm font-bold text-[#D4AF37] mb-1 flex items-center gap-1.5">
                       <MessageSquare className="w-4 h-4" /> Scegli una frase pronta:
                     </label>
-                    <select
-                      onChange={(e) => {
-                        if (e.target.value) setEditCaption(e.target.value);
-                      }}
-                      className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-medium cursor-pointer focus:border-[#D4AF37] outline-none"
-                    >
-                      <option value="">-- Seleziona Frase d&apos;Auguri --</option>
+                    <select onChange={(e) => { if (e.target.value) setEditCaption(e.target.value); }} className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-medium cursor-pointer focus:border-[#D4AF37] outline-none">
+                      <option value="">-- Seleziona Frase --</option>
                       {CAPTION_PRESETS.map((cap, i) => (
                         <option key={i} value={cap}>{cap}</option>
                       ))}
@@ -313,87 +238,24 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs md:text-sm font-bold text-[#D4AF37] mb-1">
-                    Oppure scrivi la tua Dedica Personalizzata (Stile Instagram):
-                  </label>
-                  <input
-                    type="text"
-                    value={editCaption}
-                    onChange={(e) => setEditCaption(e.target.value)}
-                    className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-serif font-bold focus:border-[#D4AF37] outline-none"
-                    placeholder="Scrivi qui la tua dedica per gli sposi..."
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5 text-left">
-                <span className="text-xs uppercase font-bold text-slate-400 block">
-                  Scegli il Filtro Polaroid:
-                </span>
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                  {POLAROID_FILTERS.map((f) => (
-                    <button
-                      key={f.id}
-                      type="button"
-                      onClick={() => setActiveFilterId(f.id)}
-                      className={`px-3.5 py-2 text-xs font-bold rounded-xl shrink-0 border transition-all cursor-pointer ${
-                        activeFilterId === f.id
-                          ? "bg-[#D4AF37] text-slate-950 border-[#D4AF37] shadow-lg scale-105"
-                          : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
-                      }`}
-                    >
-                      {f.name}
-                    </button>
-                  ))}
+                  <label className="block text-xs md:text-sm font-bold text-[#D4AF37] mb-1">Dedica Personalizzata (Stile Instagram):</label>
+                  <input type="text" value={editCaption} onChange={(e) => setEditCaption(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-slate-600 bg-slate-950 text-white font-serif font-bold focus:border-[#D4AF37] outline-none" placeholder="Scrivi la tua dedica..." />
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
-                <button
-                  type="button"
-                  onClick={handleSaveAsNewPhoto}
-                  className="flex-1 py-3.5 bg-[#D4AF37] text-slate-950 font-bold text-sm rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2 shadow-lg cursor-pointer"
-                >
-                  <Plus className="w-5 h-5" /> Salva come Nuova Foto
+                <button type="button" onClick={handleSaveAsNewPhoto} className="flex-1 py-3.5 bg-[#D4AF37] text-slate-950 font-bold text-sm rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+                  <Plus className="w-5 h-5" /> Salva Foto &amp; Invia a Supabase
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedPhotoModal(null)}
-                  className="px-6 py-3.5 bg-slate-800 text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-700 transition-colors cursor-pointer border border-slate-700"
-                >
-                  Chiudi
-                </button>
+                <button type="button" onClick={() => setSelectedPhotoModal(null)} className="px-6 py-3.5 bg-slate-800 text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-700 transition-colors cursor-pointer border border-slate-700">Chiudi</button>
               </div>
             </div>
           </div>
         )}
 
-        {/* DIVISORE LUXURY TRA GALLERIA E GIOCHI */}
-        <div className="relative my-8 flex items-center justify-center">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D4AF37]/40"></div></div>
-          <div className="relative px-6 py-2 bg-slate-900 border-2 border-[#D4AF37] rounded-full text-[#D4AF37] font-serif text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-xl">
-            <Gamepad2 className="w-4 h-4 text-[#D4AF37]" /> GIOCHI DELLA FESTA <Gamepad2 className="w-4 h-4 text-[#D4AF37]" />
-          </div>
-        </div>
-
-        {/* GIOCHI FESTA CON DATI SINCRONIZZATI DALLA DASHBOARD */}
         <div className="space-y-8">
-          <PhotoPuzzle imageSrc={puzzleImage} />
-
-          <div className="flex items-center justify-center gap-2 text-[#D4AF37] font-serif text-xs tracking-widest opacity-80 my-4">
-            <span>✦ ✦ ✦</span>
-            <span className="text-[10px] uppercase tracking-wider text-slate-400">Prossimo Gioco</span>
-            <span>✦ ✦ ✦</span>
-          </div>
-
+          <PhotoPuzzle imageSrc={puzzleImage} puzzlePrize={puzzlePrize} />
           <ScratchPhoto imageSrc={scratchPhotoUrl} />
-
-          <div className="flex items-center justify-center gap-2 text-[#D4AF37] font-serif text-xs tracking-widest opacity-80 my-4">
-            <span>✦ ✦ ✦</span>
-            <span className="text-[10px] uppercase tracking-wider text-slate-400">Prossimo Gioco</span>
-            <span>✦ ✦ ✦</span>
-          </div>
-
           <LoveQuiz questions={quizQuestions} />
         </div>
       </main>
@@ -403,13 +265,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
 
 export default function FestaPage({ params }: { params?: { slug?: string } }) {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-slate-950 text-[#D4AF37] font-serif font-bold text-sm">
-          Caricamento Pagina Festa...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-950 text-[#D4AF37] font-serif font-bold text-sm">Caricamento Pagina Festa...</div>}>
       <FestaContent params={params} />
     </Suspense>
   );
