@@ -1,9 +1,9 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Sparkles, Heart, Camera, ArrowLeft } from "lucide-react";
+import { Sparkles, Heart, ArrowLeft } from "lucide-react";
 import PhotoWallSection from "@/components/PhotoWallSection";
 import CircularGallery from "@/components/ui/CircularGallery";
 import LoveQuiz from "@/components/LoveQuiz";
@@ -49,7 +49,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </p>
         </div>
 
-        {/* GALLERIA SELEZIONATA (CIRCOLARE 3D O POLAROID) */}
+        {/* GALLERIA FOTOGRAFICA SELEZIONATA (3D CIRCOLARE O POLAROID) */}
         <div className="p-4 bg-slate-900 rounded-3xl border border-slate-800 shadow-xl">
           {galleryStyle === "circular" ? (
             <div className="space-y-2">
@@ -61,10 +61,14 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           )}
         </div>
 
-        {/* GIOCHI FESTA */}
+        <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-2">✦ ✦ ✦ DIVISORIO GIOCHI FESTA ✦ ✦ ✦</div>
+
+        {/* GIOCHI FESTA CON DIVISORI */}
         <div className="space-y-6">
           <PhotoPuzzle imageSrc={puzzleImage} />
+          <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-2">✦ ✦ ✦</div>
           <ScratchPhoto imageSrc={scratchPhotoUrl} />
+          <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-2">✦ ✦ ✦</div>
           <LoveQuiz />
         </div>
       </main>
