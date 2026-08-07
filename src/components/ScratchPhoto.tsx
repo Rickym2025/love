@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import Image from "next/image";
 
 export interface ScratchPhotoProps {
   imageSrc?: string;
@@ -9,12 +8,14 @@ export interface ScratchPhotoProps {
 }
 
 export default function ScratchPhoto({
-  imageSrc = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
-  overlayText = "🎰 Gratta col dito per scoprire la Foto della Coppia",
+  imageSrc = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+  overlayText = "🎰 Gratta col dito per scoprire la Foto Segreta",
 }: ScratchPhotoProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isScratching, setIsScratching] = useState(false);
+
+  const photoUrl = imageSrc || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -22,25 +23,23 @@ export default function ScratchPhoto({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const width = (canvas.width = canvas.parentElement?.clientWidth || 300);
-    const height = (canvas.height = 200);
+    const width = (canvas.width = canvas.parentElement?.clientWidth || 340);
+    const height = (canvas.height = 240);
 
-    // SFONDO STRATO DORATO DA CANCELLARE
     const gradient = ctx.createLinearGradient(0, 0, width, height);
     gradient.addColorStop(0, "#D4AF37");
-    gradient.addColorStop(0.5, "#F3E8FF");
+    gradient.addColorStop(0.5, "#FAF7F2");
     gradient.addColorStop(1, "#B8860B");
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    ctx.font = "bold 12px serif";
+    ctx.font = "bold 13px serif";
     ctx.fillStyle = "#1E293B";
     ctx.textAlign = "center";
     ctx.fillText(overlayText, width / 2, height / 2);
   }, [overlayText]);
 
-  // CALCOLO SOGLIA EFFETTIVA CANCELLAZIONE (>75%)
   const checkScratchPercentage = () => {
     const canvas = canvasRef.current;
     if (!canvas || isRevealed) return;
@@ -61,7 +60,7 @@ export default function ScratchPhoto({
       const totalPixels = canvas.width * canvas.height;
       const percentage = (transparentPixels / totalPixels) * 100;
 
-      // SI RIVELA SOLO SE SUPERATA LA SOGLIA DEL 75%
+      // SOGLIA RIGOROSA DEL 75% PER RILEVARE
       if (percentage >= 75) {
         setIsRevealed(true);
       }
@@ -76,7 +75,7 @@ export default function ScratchPhoto({
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 22, 0, Math.PI * 2);
+    ctx.arc(x, y, 24, 0, Math.PI * 2);
     ctx.fill();
 
     checkScratchPercentage();
@@ -95,8 +94,8 @@ export default function ScratchPhoto({
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto h-[200px] rounded-2xl overflow-hidden border-2 border-[#D4AF37] shadow-lg select-none">
-      <img src={imageSrc} alt="Foto Sposi Rivelata" className="w-full h-full object-cover" />
+    <div className="relative w-full max-w-md mx-auto h-[240px] rounded-3xl overflow-hidden border-2 border-[#D4AF37] shadow-xl select-none">
+      <img src={photoUrl} alt="Foto Segreta Sposi" className="w-full h-full object-cover" />
 
       {!isRevealed && (
         <canvas
