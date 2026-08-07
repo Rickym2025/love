@@ -430,4 +430,126 @@ export default function AgencyPreview({
 
             {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
 
-            {/* LOCATION CON MAPPA GOOGLE
+            {/* LOCATION CON MAPPA GOOGLE SEPARATA */}
+            {showLocationModule && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
+                  📍 Location del Matrimonio
+                </span>
+                <p className="font-bold text-xs" style={{ color: textColor }}>{locationName}</p>
+                <p className="text-[10px] font-medium text-slate-600">{locationAddress}</p>
+
+                {showGoogleMapIframe && (
+                  <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
+                    <iframe
+                      title="Mappa Location"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    />
+                  </div>
+                )}
+
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg transition-colors shadow-sm"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
+                </a>
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* DRESS CODE CON GALLERIA OUTFIT */}
+            {modules.codiceAbbigliamento && (
+              <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
+                  Dress Code &amp; Palette
+                </span>
+                <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
+
+                <div className="flex justify-center gap-1.5 py-1">
+                  {colorsList.map((c, i) => (
+                    <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
+                  ))}
+                </div>
+
+                <div className="pt-1">
+                  <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
+                    Esempi di Abbigliamento Consigliati (Scorri ➔)
+                  </span>
+                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
+                    {outfitPhotos.map((imgUrl, idx) => (
+                      <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
+                        <img
+                          src={imgUrl}
+                          alt={`Outfit ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* NEGOZI CONVENZIONATI */}
+            {modules.negoziConvenzionati && (
+              <div className="p-2">
+                <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* LISTA NOZZE IBAN */}
+            {modules.listaNozzeAmazon && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center space-y-2 bg-white border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs flex items-center justify-center gap-1" style={{ color: accentColor }}>
+                  <Gift className="w-3.5 h-3.5" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
+                </span>
+                <div className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 text-[10px] font-mono font-bold text-[#1E293B] break-all">
+                  {customIban}
+                </div>
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* MODULO RSVP */}
+            {modules.confermaRsvp && (
+              <div className="p-3">
+                <RsvpForm
+                  coupleNames={coupleNames}
+                  paletteColors={colorsList}
+                  rsvpStyle={rsvpStyle}
+                />
+              </div>
+            )}
+
+            {/* GIOCHI DELLA FESTA */}
+            {modules.hubGiochiFesta && (
+              <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-2">
+                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block">
+                  🎮 Giochi della Festa per gli Invitati
+                </span>
+                <p className="text-[10px] text-slate-300">
+                  Partecipa al Quiz della coppia, gioca al Puzzle e scopri la foto speciale!
+                </p>
+                <div className="pt-1">
+                  <LoveQuiz />
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
