@@ -69,3 +69,27 @@ input, select, textarea, button {
 .orbit-center-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .orbit-tooltip { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 200px; background: #FAF7F2; border: 1px solid #D4AF37; color: #1E293B; font-size: 12px; border-radius: 8px; padding: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; z-index: 50; }
 .orbit-item:hover .orbit-tooltip { opacity: 1; }
+
+/* REGOLA STILI PER LA GALLERIA CARTE A VENTAGLIO GSAP */
+.fan-layout {
+  min-height: 280px;
+  position: relative;
+}
+
+@media (min-width: 640px) {
+  .fan-layout {
+    min-height: 340px;
+  }
+}
+
+@media (min-width: 768px) {
+  .fan-layout {
+    min-height: 400px;
+  }
+}
+
+.fan-card {
+  will-change: transform, opacity;
+  transform-origin: center center;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.3);
+}
