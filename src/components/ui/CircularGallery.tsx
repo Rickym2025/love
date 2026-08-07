@@ -17,8 +17,8 @@ export interface GalleryItem {
   };
 }
 
-interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
-  items: GalleryItem[];
+export interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
+  items?: GalleryItem[];
   radius?: number;
   autoRotateSpeed?: number;
 }
