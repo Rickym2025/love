@@ -44,11 +44,14 @@ function getSlotConfig(totalCards: number, slot: number) {
 }
 
 const ARROW_CLASSES =
-  "relative flex items-center justify-center rounded-full border-[1.5px] border-[#D4AF37]/50 bg-slate-900/80 text-[#D4AF37] cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-[#D4AF37] hover:text-amber-300 active:scale-95 transition-all duration-300";
+  "relative flex items-center justify-center rounded-full border-[1.5px] border-[#D4AF37]/50 bg-slate-900/90 text-[#D4AF37] cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-[#D4AF37] hover:text-amber-300 active:scale-95 transition-all duration-300";
 
 export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
   const totalCards = cards.length;
-  const needsPagination = totalCards > MAX_VISIBLE;
+
+  // FRECCETTE E SELETTORE ATTIVI CON 2 O PIÙ FOTO (NON SERVE ARRIVARE A 7)
+  const needsPagination = totalCards > 1;
+
   const [centerIndex, setCenterIndex] = useState(needsPagination ? HALF : totalCards >> 1);
   const [hoveredSlot, setHoveredSlot] = useState<number | null>(null);
 
@@ -70,7 +73,7 @@ export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
     return null;
   };
 
-  const slotCount = needsPagination ? MAX_VISIBLE : totalCards;
+  const slotCount = needsPagination ? Math.min(totalCards, MAX_VISIBLE) : totalCards;
 
   const chevron = (direction: "left" | "right") => (
     <svg className="relative z-[2] w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -81,7 +84,7 @@ export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
   return (
     <section className="flex flex-col items-center w-full py-4 lg:py-6 px-2 relative z-20">
       <div className="flex items-center justify-center w-full max-w-[90rem]">
-        <div className="fan-layout flex relative justify-center items-center w-full h-[300px] sm:h-[350px] md:h-[420px]">
+        <div className="fan-layout flex relative justify-center items-center w-full h-[280px] sm:h-[340px] md:h-[400px]">
           {cards.map((card, index) => {
             const slot = getSlotForCard(index);
             const isVisible = slot !== null;
@@ -139,17 +142,26 @@ export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
         </div>
       </div>
 
+      {/* FRECCE E SELETTORE A PALLINI SEMPRE VISIBILI QUANDO CI SONO PIÙ FOTO */}
       {needsPagination && (
         <div className="flex items-center justify-center gap-4 mt-6 z-30">
-          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("left")} aria-label="Previous">
+          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("left")} aria-label="Foto Precedente">
             {chevron("left")}
           </button>
           <div className="flex items-center gap-2">
             {cards.map((_, i) => (
-              <span key={i} className={`w-2 h-2 rounded-full transition-all duration-300 ${i === centerIndex ? "bg-[#D4AF37] scale-[1.3]" : "bg-slate-700"}`} />
+              <button
+                key={i}
+                type="button"
+                onClick={() => setCenterIndex(i)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  i === centerIndex ? "bg-[#D4AF37] scale-[1.3] shadow-md" : "bg-slate-700 hover:bg-slate-500"
+                }`}
+                title={`Vai alla foto ${i + 1}`}
+              />
             ))}
           </div>
-          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("right")} aria-label="Next">
+          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("right")} aria-label="Foto Successiva">
             {chevron("right")}
           </button>
         </div>
