@@ -50,34 +50,34 @@ export default function PhotoPuzzle({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white p-5 rounded-3xl border-2 border-[#D4AF37] shadow-xl text-center space-y-4">
-      <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-        <h4 className="text-xs font-serif font-bold text-[#8B6508] flex items-center gap-1.5 uppercase">
-          <Puzzle className="w-4 h-4 text-[#D4AF37]" /> Puzzle 3x3 degli Sposi
+    <div className="w-full max-w-lg mx-auto bg-slate-900 text-white p-5 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-center space-y-4">
+      <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h4 className="text-sm font-serif font-bold text-[#D4AF37] flex items-center gap-2 uppercase tracking-wider">
+          <Puzzle className="w-5 h-5 text-[#D4AF37]" /> Puzzle 3x3 degli Sposi
         </h4>
         <button
           type="button"
           onClick={shuffleTiles}
-          className="p-1.5 bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-amber-100 cursor-pointer"
+          className="px-3 py-1.5 bg-slate-800 text-[#D4AF37] border border-[#D4AF37]/50 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:bg-slate-700 cursor-pointer transition-all"
         >
-          <RefreshCw className="w-3 h-3" /> Mescola Tessere
+          <RefreshCw className="w-3.5 h-3.5" /> Mescola
         </button>
       </div>
 
       {isSolved ? (
-        <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-300 text-emerald-800 space-y-2 animate-fade-in">
-          <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-600" />
-          <h5 className="font-serif font-bold text-base">Complimenti! Puzzle Risolto!</h5>
-          <p className="text-xs font-serif">Hai ricomposto perfettamente la foto degli sposi!</p>
+        <div className="p-6 bg-emerald-950/80 rounded-2xl border-2 border-emerald-500 text-emerald-200 space-y-2 animate-fade-in">
+          <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-400" />
+          <h5 className="font-serif font-bold text-lg text-white">Complimenti! Puzzle Risolto!</h5>
+          <p className="text-xs font-serif text-emerald-300">Hai ricomposto perfettamente la foto degli sposi!</p>
         </div>
       ) : (
-        <p className="text-[11px] font-serif italic text-slate-600">
+        <p className="text-xs font-serif italic text-slate-300">
           Tocca due tessere per scambiarle di posto e ricomporre la foto!
         </p>
       )}
 
-      {/* GRIGLIA PUZZLE HD (h-80) CON CALCOLO MATEMATICO EXACT POSITION */}
-      <div className="grid grid-cols-3 gap-1.5 w-full h-80 rounded-2xl overflow-hidden border-2 border-[#D4AF37] bg-slate-900 p-1 shadow-inner relative">
+      {/* GRIGLIA PUZZLE HD CON CALCOLO ESATTO DELLE POSIZIONI */}
+      <div className="grid grid-cols-3 gap-1.5 w-full h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37] bg-black p-1.5 shadow-inner relative">
         {tiles.map((tilePos, currentIdx) => {
           const row = Math.floor(tilePos / 3);
           const col = tilePos % 3;
@@ -88,7 +88,7 @@ export default function PhotoPuzzle({
               key={currentIdx}
               onClick={() => handleTileClick(currentIdx)}
               className={`relative w-full h-full cursor-pointer overflow-hidden rounded-xl transition-all duration-200 ${
-                isSelected ? "ring-4 ring-[#D4AF37] scale-95 z-20 shadow-lg" : "hover:opacity-90"
+                isSelected ? "ring-4 ring-[#D4AF37] scale-95 z-20 shadow-2xl" : "hover:opacity-90"
               }`}
             >
               <div
