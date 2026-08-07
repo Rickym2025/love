@@ -63,7 +63,6 @@ export default function PhotoWallSection({
     setEditCaption(photo.caption || "Momento del Matrimonio ❤️");
   };
 
-  // SALVA COME NUOVA FOTO NELL'ALBUM (NON SOVRASCRIVE L'ORIGINALE)
   const handleSaveAsNewPhoto = () => {
     if (!selectedPhoto) return;
 
@@ -83,7 +82,6 @@ export default function PhotoWallSection({
     setSelectedPhoto(null);
   };
 
-  // CANCELLAZIONE FOTO (RISERVATA SOLTANTO ALL'AGENZIA DALLA DASHBOARD)
   const handleDeletePhoto = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isAgencyDashboard) return;
@@ -101,14 +99,13 @@ export default function PhotoWallSection({
     <div className="w-full space-y-4 text-center">
       <div className="space-y-1.5">
         <h3 className="text-lg md:text-xl font-serif font-bold text-[#D4AF37] flex items-center justify-center gap-2 uppercase tracking-wide">
-          <Camera className="w-6 h-6 text-[#D4AF37]" /> Album Fotografico degli Sposi
+          <Camera className="w-6 h-6 text-[#D4AF37]" /> Album Fotografico Polaroid
         </h3>
         <p className="text-xs md:text-sm font-serif italic text-slate-300 max-w-lg mx-auto">
           Tocca una foto per ingrandirla, applicare i 10 Filtri Polaroid e personalizzare la dedica in stile Instagram!
         </p>
       </div>
 
-      {/* GRIGLIA FOTO ALBUM */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pt-2">
         {albumPhotos.map((item) => (
           <div
@@ -116,7 +113,6 @@ export default function PhotoWallSection({
             onClick={() => handleOpenPhotoModal(item)}
             className="p-2.5 bg-slate-900 rounded-2xl border-2 border-[#D4AF37]/60 shadow-lg hover:border-[#D4AF37] hover:scale-[1.02] transition-all cursor-pointer relative group flex flex-col justify-between"
           >
-            {/* PULSANTE ELIMINA RISERVATO SOLO ALL'AGENZIA DALLA DASHBOARD */}
             {isAgencyDashboard && (
               <button
                 type="button"
@@ -145,7 +141,6 @@ export default function PhotoWallSection({
         ))}
       </div>
 
-      {/* MODAL INGRANDITO (SENIOR-FRIENDLY & INSTAGRAM) */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
           <button
@@ -164,7 +159,6 @@ export default function PhotoWallSection({
               </h4>
             </div>
 
-            {/* ANTEPRIMA GRANDE HD */}
             <div className="w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37]/50 shadow-inner bg-black relative">
               <img
                 src={selectedPhoto.url}
@@ -174,7 +168,6 @@ export default function PhotoWallSection({
               />
             </div>
 
-            {/* CAMPI STILE INSTAGRAM */}
             <div className="space-y-3 text-left bg-slate-800/90 p-4 rounded-2xl border border-slate-700">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
@@ -222,7 +215,6 @@ export default function PhotoWallSection({
               </div>
             </div>
 
-            {/* SELEZIONE 10 FILTRI POLAROID */}
             <div className="space-y-1.5 text-left">
               <span className="text-xs uppercase font-bold text-slate-400 block">
                 Scegli il Filtro Polaroid:
@@ -245,14 +237,13 @@ export default function PhotoWallSection({
               </div>
             </div>
 
-            {/* PULSANTI SALVA / CHIUDI */}
             <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={handleSaveAsNewPhoto}
                 className="flex-1 py-3.5 bg-[#D4AF37] text-slate-950 font-bold text-sm rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2 shadow-lg cursor-pointer"
               >
-                <Plus className="w-5 h-5" /> Salva come Nuova Foto nell&apos;Album
+                <Plus className="w-5 h-5" /> Salva come Nuova Foto
               </button>
               <button
                 type="button"
