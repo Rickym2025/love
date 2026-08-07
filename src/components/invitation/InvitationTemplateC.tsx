@@ -1,14 +1,24 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
+import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart, PartyPopper } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import KineticGrid from "@/components/ui/kinetic-grid";
+import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
+import EnvelopeWax from "@/components/EnvelopeWax";
+import PartingClouds from "@/components/PartingClouds";
+import WaterRippleImage from "@/components/ui/water-ripple-image";
+import CosmosHero from "@/components/ui/CosmosHero";
+import CircularGallery from "@/components/ui/CircularGallery";
+import SocialCards, { CardItem } from "@/components/ui/SocialCards";
+import PhotoWallSection from "@/components/PhotoWallSection";
+import PhotoPuzzle from "@/components/PhotoPuzzle";
+import ScratchPhoto from "@/components/ScratchPhoto";
+import LoveQuiz from "@/components/LoveQuiz";
 
 export interface ScheduleItem {
   id: string;
@@ -27,6 +37,7 @@ export interface InvitationTemplateCProps {
   outfitPhotos: string[];
   colors: string[];
   rsvpStyle: string;
+  introStart?: string;
   heroMediaImage?: string;
   ricevimentoImage?: string;
   heroBgImage?: string;
@@ -44,6 +55,13 @@ export interface InvitationTemplateCProps {
   showNegozi?: boolean;
   showListaNozze?: boolean;
   showHubGiochi?: boolean;
+  galleryStyle?: string;
+  puzzleImage?: string;
+  scratchPhotoUrl?: string;
+  quizQuestions?: any[];
+  puzzlePrize?: string;
+  scratchPrize?: string;
+  quizPrize?: string;
   cleanSlug?: string;
   playWeddingAudio?: () => void;
 }
@@ -59,9 +77,11 @@ export default function InvitationTemplateC({
   outfitPhotos = [],
   colors = ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"],
   rsvpStyle = "classico",
+  introStart = "expand",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-  heroBgImage = "palette",
+  heroBgImage = "/sfondi/fiori.jpg", // SFONDO PREDEFINITO FIORI
+  waterImageUrl = "",
   dateMode = "countdown",
   scheduleSchema = "classico",
   scheduleItems = [
@@ -81,7 +101,14 @@ export default function InvitationTemplateC({
   showNegozi = true,
   showListaNozze = true,
   showHubGiochi = true,
-  cleanSlug = "elena-e-davide",
+  galleryStyle = "polaroid",
+  puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
+  scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+  quizQuestions = [],
+  puzzlePrize = "💃 Hai vinto un ballo speciale con la Sposa!",
+  scratchPrize = "🥂 Hai vinto un drink offerto dallo Sposo!",
+  quizPrize = "📸 Hai vinto un selfie di gruppo con gli Sposi!",
+  cleanSlug = "giulia-e-marco",
   playWeddingAudio,
 }: InvitationTemplateCProps) {
   const colorsList = Array.isArray(colors) && colors.length >= 3
@@ -94,13 +121,19 @@ export default function InvitationTemplateC({
   const textColor = colorsList[4] || "#1E293B";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-  const hasCustomBg = heroBgImage && heroBgImage !== "palette" && heroBgImage !== "#FFFFFF";
+  const activeBg = heroBgImage || "/sfondi/fiori.jpg";
+  const hasCustomBg = activeBg && activeBg !== "palette" && activeBg !== "#FFFFFF";
 
   const triggerAudioInteraction = () => {
     if (typeof playWeddingAudio === "function") {
       playWeddingAudio();
     }
   };
+
+  const previewFanCards: CardItem[] = [
+    { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
+    { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
+  ];
 
   return (
     <KineticGrid className="w-full min-h-screen">
@@ -109,11 +142,57 @@ export default function InvitationTemplateC({
         {hasCustomBg && (
           <div
             className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
-            style={{ backgroundImage: `url(${heroBgImage})` }}
+            style={{ backgroundImage: `url(${activeBg})` }}
           />
         )}
 
         <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
+          
+          {/* EFFETTO START INIZIALE SELEZIONATO IN DASHBOARD */}
+          {introStart === "expand" && (
+            <div className="py-2">
+              <ScrollExpandMedia
+                bgImageSrc={activeBg}
+                mediaSrc={heroMediaImage}
+                title={coupleNames}
+                date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                onExpand={triggerAudioInteraction}
+              />
+            </div>
+          )}
+
+          {introStart === "busta" && (
+            <div className="p-2">
+              <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={triggerAudioInteraction} />
+            </div>
+          )}
+
+          {introStart === "nuvole" && (
+            <div className="relative py-2">
+              <PartingClouds inline={true} onOpen={triggerAudioInteraction} />
+            </div>
+          )}
+
+          {introStart === "lago" && (
+            <div className="relative w-full h-52 overflow-hidden border-2 border-sky-300 rounded-3xl">
+              <WaterRippleImage
+                src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
+                onClick={triggerAudioInteraction}
+              />
+            </div>
+          )}
+
+          {introStart === "cosmos" && (
+            <div className="relative w-full h-[320px] rounded-3xl overflow-hidden border-2 border-[#D4AF37]">
+              <CosmosHero
+                coupleNames={coupleNames}
+                weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                inline={true}
+                onEnter={triggerAudioInteraction}
+              />
+            </div>
+          )}
+
           {/* 1. SLIDE INIZIALE HERO LANDING */}
           <div className="p-6 bg-gradient-to-br from-[#FAF7F2]/90 via-white/90 to-[#FDFBF7]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
@@ -307,18 +386,37 @@ export default function InvitationTemplateC({
 
           {/* 11. RSVP */}
           <div id="rsvp" className="pt-2">
-            <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} />
+            <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} slug={cleanSlug} />
           </div>
 
-          {/* 12. FESTA */}
-          {showHubGiochi && (
-            <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
+          {/* 12. GIOCHI DELLA FESTA & MAXISCHERMO INTEGRATI NEL TEMPLATE C */}
+          {showHubGiochi !== false && (
+            <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-2xl text-center space-y-5 border-2 border-[#D4AF37]">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
                 <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
               </span>
-              <p className="text-xs text-slate-300">Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!</p>
-              <Link href={`/${cleanSlug}/festa`} className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg">
-                <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+              <p className="text-xs text-slate-300">
+                Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
+              </p>
+
+              {/* GALLERIA INTERATTIVA */}
+              <div className="py-2">
+                {galleryStyle === "circular" ? (
+                  <CircularGallery />
+                ) : galleryStyle === "fan" ? (
+                  <SocialCards cards={previewFanCards} />
+                ) : (
+                  <PhotoWallSection photos={[{ id: "1", url: scratchPhotoUrl, caption: "Il primo ballo", author: coupleNames }]} isAgencyDashboard={true} />
+                )}
+              </div>
+
+              {/* PUZZLE & GRATTA E SCOPRI & QUIZ */}
+              <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} puzzlePrize={puzzlePrize} /></div>
+              <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
+              <div className="py-1"><LoveQuiz questions={quizQuestions} /></div>
+
+              <Link href={`/${cleanSlug}/festa`} className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-950 px-6 py-3.5 rounded-xl hover:bg-amber-400 transition-colors shadow-lg cursor-pointer">
+                <Heart className="w-4 h-4 fill-slate-950" /> Entra nella Pagina della Festa ↗
               </Link>
             </div>
           )}
