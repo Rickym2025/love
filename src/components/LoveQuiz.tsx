@@ -18,54 +18,56 @@ export interface LoveQuizProps {
   questions?: QuizQuestionItem[];
 }
 
-export default function LoveQuiz({
-  questions = [
-    {
-      id: "1",
-      question: "Dove ci siamo conosciuti per la prima volta?",
-      optionA: "In università",
-      optionB: "In discoteca",
-      optionC: "Al mare in vacanza",
-      optionD: "Tramite amici comuni",
-      correctOptionIdx: 0,
-    },
-    {
-      id: "2",
-      question: "Chi ha fatto la proposta di nozze?",
-      optionA: "Elena",
-      optionB: "Davide",
-      optionC: "Insieme a Parigi",
-      optionD: "I genitori",
-      correctOptionIdx: 1,
-    },
-  ],
-}: LoveQuizProps) {
+const DEFAULT_QUESTIONS: QuizQuestionItem[] = [
+  {
+    id: "1",
+    question: "Dove ci siamo conosciuti per la prima volta?",
+    optionA: "In università",
+    optionB: "In discoteca",
+    optionC: "Al mare in vacanza",
+    optionD: "Tramite amici comuni",
+    correctOptionIdx: 0,
+  },
+  {
+    id: "2",
+    question: "Chi ha fatto la proposta di nozze?",
+    optionA: "Elena",
+    optionB: "Davide",
+    optionC: "Insieme a Parigi",
+    optionD: "I genitori",
+    correctOptionIdx: 1,
+  },
+];
+
+export default function LoveQuiz({ questions }: LoveQuizProps) {
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const activeQuestion = questions[currentQIdx] || questions[0];
+  // VALIDAZIONE SICURA DELL'ARRAY DELLE DOMANDE
+  const validQuestions = Array.isArray(questions) && questions.length > 0 ? questions : DEFAULT_QUESTIONS;
+  const activeQuestion = validQuestions[currentQIdx] || validQuestions[0] || DEFAULT_QUESTIONS[0];
 
-  // SE L'AGENZIA HA INSERITO LE 4 RISPOSTE, LE USA; ALTRIMENTI COMPLETA CON FALLBACK
+  // ESTRAZIONE SICURA DELLE 4 OPZIONI CON OPTIONAL CHAINING
   const optionsList = [
-    activeQuestion.optionA || activeQuestion.answer || "Opzione A",
-    activeQuestion.optionB || "Opzione B",
-    activeQuestion.optionC || "Opzione C",
-    activeQuestion.optionD || "Opzione D",
+    activeQuestion?.optionA || activeQuestion?.answer || "Opzione A",
+    activeQuestion?.optionB || "Opzione B",
+    activeQuestion?.optionC || "Opzione C",
+    activeQuestion?.optionD || "Opzione D",
   ];
 
   const handleSelectOption = (idx: number) => {
     if (selectedOption !== null) return;
     setSelectedOption(idx);
 
-    const isCorrect = idx === (activeQuestion.correctOptionIdx ?? 0);
+    const isCorrect = idx === (activeQuestion?.correctOptionIdx ?? 0);
     if (isCorrect) {
       setScore((prev) => prev + 1);
     }
 
     setTimeout(() => {
-      if (currentQIdx < questions.length - 1) {
+      if (currentQIdx < validQuestions.length - 1) {
         setCurrentQIdx((prev) => prev + 1);
         setSelectedOption(null);
       } else {
@@ -88,7 +90,7 @@ export default function LoveQuiz({
           <HelpCircle className="w-5 h-5 text-[#D4AF37]" /> Quiz degli Sposi
         </h4>
         <span className="text-xs font-mono font-bold text-slate-300 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
-          {currentQIdx + 1} / {questions.length}
+          {currentQIdx + 1} / {validQuestions.length}
         </span>
       </div>
 
@@ -97,7 +99,7 @@ export default function LoveQuiz({
           <Trophy className="w-12 h-12 mx-auto text-[#D4AF37]" />
           <h5 className="font-serif font-bold text-lg text-white">Quiz Completato!</h5>
           <p className="text-sm text-slate-300">
-            Hai indovinato <strong className="text-[#D4AF37] text-base">{score}</strong> risposte su {questions.length}!
+            Hai indovinato <strong className="text-[#D4AF37] text-base">{score}</strong> risposte su {validQuestions.length}!
           </p>
           <button
             type="button"
@@ -110,14 +112,14 @@ export default function LoveQuiz({
       ) : (
         <div className="space-y-4 text-left">
           <h5 className="text-base font-serif font-bold text-white text-center leading-snug p-2 bg-slate-800/50 rounded-xl border border-slate-800">
-            {activeQuestion.question}
+            {activeQuestion?.question || "Domanda del Quiz"}
           </h5>
 
           {/* 4 OPZIONI INTERATTIVE A, B, C, D */}
           <div className="grid grid-cols-1 gap-2.5 pt-1">
             {optionsList.map((opt, idx) => {
               const isSelected = selectedOption === idx;
-              const isCorrect = idx === (activeQuestion.correctOptionIdx ?? 0);
+              const isCorrect = idx === (activeQuestion?.correctOptionIdx ?? 0);
 
               let buttonStyle = "bg-slate-800 text-slate-200 border-slate-700 hover:border-[#D4AF37]";
               if (selectedOption !== null) {
