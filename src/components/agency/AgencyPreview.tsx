@@ -61,6 +61,9 @@ export interface AgencyPreviewProps {
   scratchPhotoUrl?: string;
   galleryStyle?: string;
   quizQuestions?: any[];
+  puzzlePrize?: string;
+  scratchPrize?: string;
+  quizPrize?: string;
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -96,13 +99,16 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
-  heroBgImage = "palette",
+  heroBgImage = "/sfondi/fiori.jpg", // SFONDO PREDEFINITO FIORI
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
   scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   galleryStyle = "polaroid",
   quizQuestions = [],
+  puzzlePrize = "💃 Hai vinto un ballo speciale con la Sposa!",
+  scratchPrize = "🥂 Hai vinto un drink offerto dallo Sposo!",
+  quizPrize = "📸 Hai vinto un selfie di gruppo con gli Sposi!",
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
@@ -198,7 +204,7 @@ export default function AgencyPreview({
       audioUrl,
       welcomePhrase: computedWelcomePhrase,
       selectedPaletteIdx: safeIdx,
-      heroBgImage,
+      heroBgImage: heroBgImage || "/sfondi/fiori.jpg",
       waterImageUrl,
       heroMediaImage,
       ricevimentoImage,
@@ -206,6 +212,9 @@ export default function AgencyPreview({
       scratchPhotoUrl,
       galleryStyle,
       quizQuestions,
+      puzzlePrize,
+      scratchPrize,
+      quizPrize,
       customIban,
     };
     localStorage.setItem("love_invitation_data", JSON.stringify(previewData));
@@ -227,7 +236,6 @@ export default function AgencyPreview({
   const previewFanCards: CardItem[] = [
     { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
     { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
-    { imgUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80", caption: "Brindisi", author: "Amici" },
   ];
 
   const previewPolaroidPhotos = [
@@ -264,12 +272,11 @@ export default function AgencyPreview({
         </div>
       </div>
 
-      {/* MOCKUP SMARTPHONE PROPORZIONATO (REALE DESIGN IPHONE 350x680) */}
+      {/* MOCKUP SMARTPHONE PROPORZIONATO */}
       <div
         className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin"
         style={containerBgStyle}
       >
-        {/* DYNAMIC ISLAND IPHONE */}
         <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs" />
 
         {!isWhiteBg && !isPaletteSync && (
@@ -282,6 +289,7 @@ export default function AgencyPreview({
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
         {selectedTemplate === "C" ? (
+          /* TEMPLATE C COMPLETO DI EFFETTO START, SFONDO FIORI E GIOCHI FESTA */
           <InvitationTemplateC
             coupleNames={coupleNames}
             welcomePhrase={computedWelcomePhrase}
@@ -293,9 +301,10 @@ export default function AgencyPreview({
             outfitPhotos={outfitPhotos}
             colors={colorsList}
             rsvpStyle={rsvpStyle}
+            introStart={introStart}
             heroMediaImage={heroMediaImage}
             ricevimentoImage={ricevimentoImage}
-            heroBgImage={heroBgImage}
+            heroBgImage={heroBgImage || "/sfondi/fiori.jpg"}
             waterImageUrl={waterImageUrl}
             dateMode={dateDisplayMode}
             scheduleSchema={scheduleSchema}
@@ -310,6 +319,13 @@ export default function AgencyPreview({
             showNegozi={modules.negoziConvenzionati !== false}
             showListaNozze={modules.listaNozzeAmazon !== false}
             showHubGiochi={modules.hubGiochiFesta !== false}
+            galleryStyle={galleryStyle}
+            puzzleImage={puzzleImage}
+            scratchPhotoUrl={scratchPhotoUrl}
+            quizQuestions={quizQuestions}
+            puzzlePrize={puzzlePrize}
+            scratchPrize={scratchPrize}
+            quizPrize={quizPrize}
             cleanSlug="giulia-e-marco"
             playWeddingAudio={playWeddingAudio}
           />
@@ -357,7 +373,7 @@ export default function AgencyPreview({
             {introStart === "expand" && (
               <div className="py-1 px-2">
                 <ScrollExpandMedia
-                  bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" : heroBgImage}
+                  bgImageSrc={heroBgImage || "/sfondi/fiori.jpg"}
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -612,7 +628,6 @@ export default function AgencyPreview({
                   <PartyPopper className="w-3.5 h-3.5" /> Giochi della Festa &amp; Maxischermo
                 </span>
 
-                {/* RENDERING ESATTO DELLA GALLERIA SELEZIONATA IN DASHBOARD */}
                 <div className="py-1">
                   {galleryStyle === "circular" ? (
                     <CircularGallery />
@@ -623,10 +638,9 @@ export default function AgencyPreview({
                   )}
                 </div>
 
-                <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
+                <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} puzzlePrize={puzzlePrize} /></div>
                 <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
                 
-                {/* QUIZ SPOSI LIVE CON LE DOMANDE AGGIORNATE IN REAL-TIME */}
                 <div className="py-1">
                   <LoveQuiz questions={quizQuestions} />
                 </div>
