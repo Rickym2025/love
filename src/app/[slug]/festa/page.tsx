@@ -1,95 +1,87 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Sparkles, Heart, Camera, ArrowLeft } from "lucide-react";
 import PhotoWallSection from "@/components/PhotoWallSection";
+import CircularGallery from "@/components/ui/CircularGallery";
 import LoveQuiz from "@/components/LoveQuiz";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
-import { PartyPopper, Gamepad2, Tv, Sparkles } from "lucide-react";
+import AudioPlayer from "@/components/AudioPlayer";
 
-export default function PartyPage({ params }: { params: { slug: string } }) {
-  const coupleNames = params?.slug === "francesca-e-luca" ? "Francesca & Luca" : "Elena & Davide";
-  const [activeTab, setActiveTab] = useState<"games" | "photowall">("photowall");
+function FestaContent({ params }: { params?: { slug?: string } }) {
+  const searchParams = useSearchParams();
+
+  const slug = params?.slug || "elena-e-davide";
+  const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
+  const coupleNames = searchParams?.get("couple") || "Elena & Davide";
+  const galleryStyle = searchParams?.get("gallery") || "polaroid";
+  const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80";
+  const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80";
+  const audioUrl = searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
 
   return (
-    <div className="min-h-screen bg-[#1E293B] text-white font-sans pb-24">
-      
-      {/* HEADER FESTA */}
-      <header className="py-12 px-6 text-center border-b border-slate-700 bg-slate-900/60 backdrop-blur-md">
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
-          ✦ WEDDING PARTY HUB ✦
-        </span>
-        <h1 className="font-serif text-4xl md:text-5xl font-bold text-white tracking-wide">
-          La Festa di {coupleNames}
-        </h1>
-        <p className="text-xs text-slate-400 mt-2">Gioca, scatta e condividi i tuoi ricordi in tempo reale sul maxischermo!</p>
+    <div className="min-h-screen w-full bg-slate-950 text-white overflow-x-hidden font-sans pb-12 select-none">
+      {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-        {/* SWITCH TAB GIOCHI / PHOTO WALL */}
-        <div className="flex justify-center gap-3 mt-6">
-          <button
-            onClick={() => setActiveTab("photowall")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition ${
-              activeTab === "photowall" ? "bg-[#D4AF37] text-slate-900" : "bg-slate-800 text-slate-300"
-            }`}
-          >
-            📸 Guest Photo Wall (10 Filtri)
-          </button>
-          <button
-            onClick={() => setActiveTab("games")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition ${
-              activeTab === "games" ? "bg-[#D4AF37] text-slate-900" : "bg-slate-800 text-slate-300"
-            }`}
-          >
-            🎮 Hub Giochi Sposi
-          </button>
-        </div>
+      {/* HEADER FESTA */}
+      <header className="p-4 bg-slate-900/90 border-b border-[#D4AF37]/40 flex justify-between items-center backdrop-blur-md sticky top-0 z-40">
+        <Link
+          href={`/${cleanSlug}`}
+          className="text-xs font-bold text-[#D4AF37] hover:text-white flex items-center gap-1 bg-slate-800 px-3 py-1.5 rounded-xl border border-[#D4AF37]/30 transition-all"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Torna all&apos;Invito
+        </Link>
+        <span className="text-xs font-serif font-bold text-white flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Pagina Festa &amp; Maxischermo
+        </span>
       </header>
 
-      {/* ─── TAB 1: GUEST PHOTO WALL ─── */}
-      {activeTab === "photowall" && (
-        <main className="py-8">
-          <PhotoWallSection coupleNames={coupleNames} />
-        </main>
-      )}
+      <main className="max-w-xl mx-auto px-4 py-8 space-y-8 text-center relative z-10">
+        {/* HERO FESTA */}
+        <div className="space-y-2 p-6 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl border-2 border-[#D4AF37] shadow-2xl">
+          <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block">🎉 RICEVIMENTO &amp; PARTY</span>
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{coupleNames}</h1>
+          <p className="text-xs text-slate-300 font-serif">
+            Partecipa ai giochi, scatta una foto per il Maxischermo e divertiti insieme agli sposi!
+          </p>
+        </div>
 
-      {/* ─── TAB 2: HUB GIOCHI SPOSI CON PREMI ─── */}
-      {activeTab === "games" && (
-        <main className="py-8 max-w-4xl mx-auto px-6 space-y-12">
-          <div className="text-center mb-8">
-            <h2 className="font-serif text-3xl font-bold text-[#D4AF37]">Sfida gli altri Invitati!</h2>
-            <p className="text-xs text-slate-400 mt-1">Vinci premi esclusivi offerti dagli sposi per la serata.</p>
-          </div>
-
-          {/* GAME 1: LOVE QUIZ */}
-          <div className="bg-slate-800/80 p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl">
-            <div className="flex items-center gap-2 mb-4 text-[#D4AF37]">
-              <Gamepad2 className="w-5 h-5" />
-              <h3 className="font-serif text-xl font-bold">1. Il Love Quiz della Coppia</h3>
+        {/* GALLERIA SELEZIONATA (CIRCOLARE 3D O POLAROID) */}
+        <div className="p-4 bg-slate-900 rounded-3xl border border-slate-800 shadow-xl">
+          {galleryStyle === "circular" ? (
+            <div className="space-y-2">
+              <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase block">🎡 Galleria 3D Circolare Ruotante</span>
+              <CircularGallery />
             </div>
-            <p className="text-xs text-slate-300 mb-4">Rispondi alle 3 domande sulla storia degli sposi per vincere un 🍹 Drink al Bar!</p>
-            <LoveQuiz coupleNames={coupleNames} />
-          </div>
+          ) : (
+            <PhotoWallSection />
+          )}
+        </div>
 
-          {/* GAME 2: PUZZLE FOTO SPOSI */}
-          <div className="bg-slate-800/80 p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl">
-            <div className="flex items-center gap-2 mb-4 text-[#D4AF37]">
-              <Sparkles className="w-5 h-5" />
-              <h3 className="font-serif text-xl font-bold">2. Puzzle Foto Sposi</h3>
-            </div>
-            <p className="text-xs text-slate-300 mb-4">Ricomponi le tessere del puzzle 3x3 nel minor tempo possibile per aggiudicarti un 💃 Ballo con la Sposa o 🕺 Ballo con lo Sposo!</p>
-            <PhotoPuzzle />
-          </div>
-
-          {/* GAME 3: GRATTA LA FOTO */}
-          <div className="bg-slate-800/80 p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl">
-            <div className="flex items-center gap-2 mb-4 text-[#D4AF37]">
-              <PartyPopper className="w-5 h-5" />
-              <h3 className="font-serif text-xl font-bold">3. Gratta e Scopri la Foto Segreta</h3>
-            </div>
-            <ScratchPhoto />
-          </div>
-        </main>
-      )}
+        {/* GIOCHI FESTA */}
+        <div className="space-y-6">
+          <PhotoPuzzle imageSrc={puzzleImage} />
+          <ScratchPhoto imageSrc={scratchPhotoUrl} />
+          <LoveQuiz />
+        </div>
+      </main>
     </div>
+  );
+}
+
+export default function FestaPage({ params }: { params?: { slug?: string } }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-950 text-[#D4AF37] font-serif font-bold text-sm">
+          Caricamento Pagina Festa...
+        </div>
+      }
+    >
+      <FestaContent params={params} />
+    </Suspense>
   );
 }
