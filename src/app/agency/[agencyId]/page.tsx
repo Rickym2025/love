@@ -89,14 +89,28 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   // STATI DEDICATI AI GIOCHI DELLA FESTA
   const [puzzleImage, setPuzzleImage] = useState(
-    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80"
   );
   const [scratchPhotoUrl, setScratchPhotoUrl] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
   );
   const [quizQuestions, setQuizQuestions] = useState([
-    { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
-    { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+    {
+      question: "Dove ci siamo conosciuti per la prima volta?",
+      optionA: "In università",
+      optionB: "In discoteca",
+      optionC: "Al mare in vacanza",
+      optionD: "Tramite amici comuni",
+      correctOptionIdx: 0,
+    },
+    {
+      question: "Chi ha fatto la proposta di nozze?",
+      optionA: "Elena",
+      optionB: "Davide",
+      optionC: "Insieme a Parigi",
+      optionD: "I genitori",
+      correctOptionIdx: 1,
+    },
   ]);
   const [galleryStyle, setGalleryStyle] = useState("polaroid");
 
@@ -294,7 +308,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. PREVIEW LIVE SMARTPHONE */}
+      {/* 3. PREVIEW LIVE SMARTPHONE CON QUIZ QUESTIONS TRASMESSO CORRETTAMENTE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
@@ -326,6 +340,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           puzzleImage={puzzleImage}
           scratchPhotoUrl={scratchPhotoUrl}
           galleryStyle={galleryStyle}
+          quizQuestions={quizQuestions}
           partnerStores={partnerStores}
           showAmazonAffiliate={showAmazonAffiliate}
           scheduleItems={scheduleItems}
