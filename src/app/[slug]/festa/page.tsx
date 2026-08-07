@@ -17,16 +17,86 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
 
   const slug = params?.slug || "elena-e-davide";
   const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
-  const coupleNames = searchParams?.get("couple") || "Elena & Davide";
-  
-  // RILEVA QUALE DELLE 3 GALLERIE È STATA SELEZIONATA IN DASHBOARD
-  const galleryStyle = searchParams?.get("gallery") || "polaroid";
 
-  const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
-  const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
-  const audioUrl = searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3";
+  // DATI DI DEFAULT
+  const [coupleNames, setCoupleNames] = useState(searchParams?.get("couple") || "Elena & Davide");
+  const [galleryStyle, setGalleryStyle] = useState(searchParams?.get("gallery") || "polaroid");
+  const [puzzleImage, setPuzzleImage] = useState(
+    searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
+  );
+  const [scratchPhotoUrl, setScratchPhotoUrl] = useState(
+    searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+  );
+  const [audioUrl, setAudioUrl] = useState(
+    searchParams?.get("audio") || "https://pub-89945f8350374b50818d716fdc3c108b.r2.dev/Matrimonio/Elena%20e%20Davide:%20La%20Nostra%20Melodia%20A.mp3"
+  );
 
-  // LISTA FOTO CONDIVISA
+  const [quizQuestions, setQuizQuestions] = useState<any[]>([
+    {
+      question: "Dove ci siamo conosciuti per la prima volta?",
+      optionA: "In università",
+      optionB: "In discoteca",
+      optionC: "Al mare in vacanza",
+      optionD: "Tramite amici comuni",
+      correctOptionIdx: 0,
+    },
+    {
+      question: "Chi ha fatto la proposta di nozze?",
+      optionA: "Elena",
+      optionB: "Davide",
+      optionC: "Insieme a Parigi",
+      optionD: "I genitori",
+      correctOptionIdx: 1,
+    },
+  ]);
+
+  // SINCRONIZZAZIONE DATI DA LOCALSTORAGE E URL SEARCHPARAMS
+  useEffect(() => {
+    // 1. Prova prima a leggere i parametri dall'URL
+    const paramGallery = searchParams?.get("gallery");
+    const paramPuzzle = searchParams?.get("puzzle");
+    const paramScratch = searchParams?.get("scratch");
+    const paramAudio = searchParams?.get("audio");
+    const paramCouple = searchParams?.get("couple");
+    const paramQuiz = searchParams?.get("quiz");
+
+    if (paramGallery) setGalleryStyle(paramGallery);
+    if (paramPuzzle) setPuzzleImage(paramPuzzle);
+    if (paramScratch) setScratchPhotoUrl(paramScratch);
+    if (paramAudio) setAudioUrl(paramAudio);
+    if (paramCouple) setCoupleNames(paramCouple);
+
+    if (paramQuiz) {
+      try {
+        const parsedQuiz = JSON.parse(decodeURIComponent(paramQuiz));
+        if (Array.isArray(parsedQuiz) && parsedQuiz.length > 0) {
+          setQuizQuestions(parsedQuiz);
+        }
+      } catch (e) {
+        // fallback
+      }
+    }
+
+    // 2. Fallback per sincronizzazione diretta con la Dashboard (LocalStorage)
+    try {
+      const storedDataRaw = localStorage.getItem("love_invitation_data") || localStorage.getItem(`love_invitation_${cleanSlug}`);
+      if (storedDataRaw) {
+        const localData = JSON.parse(storedDataRaw);
+        if (localData.galleryStyle && !paramGallery) setGalleryStyle(localData.galleryStyle);
+        if (localData.puzzleImage && !paramPuzzle) setPuzzleImage(localData.puzzleImage);
+        if (localData.scratchPhotoUrl && !paramScratch) setScratchPhotoUrl(localData.scratchPhotoUrl);
+        if (localData.audioUrl && !paramAudio) setAudioUrl(localData.audioUrl);
+        if (localData.coupleNames && !paramCouple) setCoupleNames(localData.coupleNames);
+        if (Array.isArray(localData.quizQuestions) && localData.quizQuestions.length > 0 && !paramQuiz) {
+          setQuizQuestions(localData.quizQuestions);
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [searchParams, cleanSlug]);
+
+  // LISTA FOTO CONDIVISA PER BACKGROUND E GALLERIE
   const [photosList, setPhotosList] = useState<PhotoWallItem[]>([
     { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
     { id: "2", url: puzzleImage, caption: "Taglio della Torta Insieme", author: "Zii Rossi" },
@@ -34,18 +104,28 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     { id: "4", url: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1000&q=80", caption: "Arrivo degli Invitati", author: "Marco & Sara" },
   ]);
 
-  // BACKGROUND DINAMICO CHE CAMBIA OGNI 5 SECONDI
+  // Sincronizza le immagini nella lista se cambiano le props dei giochi
+  useEffect(() => {
+    setPhotosList((prev) => {
+      const updated = [...prev];
+      if (scratchPhotoUrl) updated[0] = { ...updated[0], url: scratchPhotoUrl };
+      if (puzzleImage) updated[1] = { ...updated[1], url: puzzleImage };
+      return updated;
+    });
+  }, [scratchPhotoUrl, puzzleImage]);
+
+  // BACKGROUND DINAMICO: SCORRIMENTO RILASSANTE OGNI 12 SECONDI
   const [bgImageIndex, setBgImageIndex] = useState(0);
 
   useEffect(() => {
     if (photosList.length === 0) return;
     const interval = setInterval(() => {
       setBgImageIndex((prev) => (prev + 1) % photosList.length);
-    }, 5000);
+    }, 12000); // 12 Secondi (molto più calmo e naturale)
     return () => clearInterval(interval);
   }, [photosList]);
 
-  // MODAL FILTRI & DEDICA
+  // MODAL LIGHTBOX PER PERSONALIZZARE LE FOTO
   const [selectedPhotoModal, setSelectedPhotoModal] = useState<PhotoWallItem | null>(null);
   const [activeFilterId, setActiveFilterId] = useState("normal");
   const [editAuthor, setEditAuthor] = useState("");
@@ -78,38 +158,6 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     setSelectedPhotoModal(null);
   };
 
-  // PARSING DOMANDE QUIZ
-  let quizQuestions = [
-    {
-      question: "Dove ci siamo conosciuti per la prima volta?",
-      optionA: "In università",
-      optionB: "In discoteca",
-      optionC: "Al mare in vacanza",
-      optionD: "Tramite amici comuni",
-      correctOptionIdx: 0,
-    },
-    {
-      question: "Chi ha fatto la proposta di nozze?",
-      optionA: "Elena",
-      optionB: "Davide",
-      optionC: "Insieme a Parigi",
-      optionD: "I genitori",
-      correctOptionIdx: 1,
-    },
-  ];
-
-  try {
-    const rawQuiz = searchParams?.get("quiz");
-    if (rawQuiz) {
-      const parsed = JSON.parse(decodeURIComponent(rawQuiz));
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        quizQuestions = parsed;
-      }
-    }
-  } catch (e) {
-    // fallback
-  }
-
   // ELEMENTI PER GALLERIA 3D CIRCOLARE
   const circularItems: GalleryItem[] = photosList.map((item) => ({
     id: item.id,
@@ -137,12 +185,12 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
     <div className="min-h-screen w-full bg-slate-950 text-white overflow-x-hidden font-sans pb-16 select-none relative">
       {audioUrl && <AudioPlayer audioUrl={audioUrl} />}
 
-      {/* BACKGROUND DINAMICO RANDOM OGNI 5 SECONDI */}
+      {/* BACKGROUND DINAMICO SCORREVOLE (MOLTO PIÙ CHIARO E DEFINITO) */}
       <div
-        className="fixed inset-0 pointer-events-none z-0 transition-all duration-1000 bg-cover bg-center opacity-20 blur-md scale-105"
+        className="fixed inset-0 pointer-events-none z-0 transition-all duration-1000 bg-cover bg-center opacity-45 md:opacity-55 blur-sm scale-105"
         style={{ backgroundImage: `url(${currentBgUrl})` }}
       />
-      <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-slate-950/80 via-slate-950/90 to-slate-950" />
+      <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-slate-950/60 via-slate-950/70 to-slate-950/90" />
 
       {/* HEADER FESTA */}
       <header className="p-4 bg-slate-900/90 border-b border-[#D4AF37]/40 flex justify-between items-center backdrop-blur-md sticky top-0 z-40">
@@ -167,7 +215,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </p>
         </div>
 
-        {/* INIZIO GALLERIA SELEZIONATA (POLAROID / 3D CIRCOLARE / CARTE A VENTAGLIO GSAP) */}
+        {/* GALLERIA SELEZIONATA DALLA DASHBOARD */}
         <div className="p-5 bg-slate-900/90 backdrop-blur-md rounded-3xl border-2 border-[#D4AF37]/60 shadow-2xl space-y-4">
           {galleryStyle === "circular" ? (
             <div className="space-y-3">
@@ -185,7 +233,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           ) : galleryStyle === "fan" ? (
             <div className="space-y-3">
               <span className="text-xs font-serif font-bold text-[#D4AF37] uppercase tracking-wider flex items-center justify-center gap-1.5">
-                🎴 Galleria Carte a Ventaglio GSAP
+                🎴 Galleria Carte a Ventaglio
               </span>
               <p className="text-xs font-serif italic text-slate-300">
                 Sfoglia le carte o toccane una per applicare i 10 Filtri Polaroid e personalizzare la tua dedica!
@@ -203,7 +251,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           )}
         </div>
 
-        {/* MODAL LIGHTBOX PER GALLERIE INTERATTIVE */}
+        {/* MODAL INGRANDITO HD PER PERSONALIZZARE FOTO */}
         {selectedPhotoModal && (
           <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
             <button
@@ -328,7 +376,7 @@ function FestaContent({ params }: { params?: { slug?: string } }) {
           </div>
         </div>
 
-        {/* GIOCHI FESTA CON DIVISORI ELEGANTI */}
+        {/* GIOCHI FESTA CON DATI SINCRONIZZATI DALLA DASHBOARD */}
         <div className="space-y-8">
           <PhotoPuzzle imageSrc={puzzleImage} />
 
