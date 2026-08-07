@@ -844,4 +844,183 @@ export function SectionRsvpFesta({
   );
 }
 
-// 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO (
+// 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO (SBLOCCATA CON PULSANTI REATTIVI)
+export function SectionFestaGiochiMaxischermo({
+  quizQuestions = [
+    { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
+    { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+  ],
+  galleryStyle = "polaroid",
+  puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+  scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+  handleUpdate,
+  toggleModule,
+  modules,
+}: any) {
+  const addQuizQuestion = (presetText?: string) => {
+    const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
+    const newQ = {
+      id: Date.now().toString(),
+      question: presetText || "Nuova Domanda del Quiz...",
+      answer: "Risposta corretta",
+    };
+    handleUpdate("quizQuestions", [...currentQ, newQ]);
+  };
+
+  const removeQuizQuestion = (idx: number) => {
+    const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
+    const updated = currentQ.filter((_: any, i: number) => i !== idx);
+    handleUpdate("quizQuestions", updated);
+  };
+
+  const updateQuizQuestion = (idx: number, field: "question" | "answer", val: string) => {
+    const currentQ = Array.isArray(quizQuestions) ? quizQuestions : [];
+    const updated = currentQ.map((q: any, i: number) => (i === idx ? { ...q, [field]: val } : q));
+    handleUpdate("quizQuestions", updated);
+  };
+
+  return (
+    <div className="p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl border-2 border-[#D4AF37] shadow-2xl space-y-5 text-left">
+      <div className="flex justify-between items-center border-b border-slate-700/80 pb-3">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-2">
+          <PartyPopper className="w-5 h-5 text-[#D4AF37]" /> Festa, Giochi &amp; Maxischermo (Sezione Separata)
+        </h3>
+        <button
+          type="button"
+          onClick={() => toggleModule("hubGiochiFesta")}
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+            modules?.hubGiochiFesta !== false
+              ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-md"
+              : "bg-slate-800 text-slate-400 border-slate-700"
+          }`}
+        >
+          {modules?.hubGiochiFesta !== false ? "✓ Festa Attiva" : "✕ Disattiva"}
+        </button>
+      </div>
+
+      {/* TIPO DI GALLERIA FOTOGRAFICA FESTA */}
+      <div className="space-y-2">
+        <label className="block text-[11px] font-bold text-[#D4AF37]">Tipologia Galleria Fotografica Festa</label>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => handleUpdate("galleryStyle", "polaroid")}
+            className={`p-2.5 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all ${
+              galleryStyle !== "circular"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-md"
+                : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
+            }`}
+          >
+            📸 Photo Wall Polaroid
+          </button>
+          <button
+            type="button"
+            onClick={() => handleUpdate("galleryStyle", "circular")}
+            className={`p-2.5 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all ${
+              galleryStyle === "circular"
+                ? "bg-[#D4AF37] text-slate-900 border-[#D4AF37] shadow-md"
+                : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
+            }`}
+          >
+            🎡 Galleria 3D Circolare
+          </button>
+        </div>
+      </div>
+
+      {/* CAMPI FOTO GIOCHI PUZZLE & GRATTA LA FOTO */}
+      <div className="pt-3 border-t border-slate-700/80 space-y-3">
+        <span className="text-xs font-bold text-[#D4AF37] block">📷 Immagini Personalizzate dei Giochi:</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-[10px] text-slate-300 mb-1 font-bold">Foto per il Puzzle 3x3</label>
+            <input
+              type="text"
+              placeholder="https://images.unsplash.com/photo-..."
+              value={puzzleImage || ""}
+              onChange={(e) => handleUpdate("puzzleImage", e.target.value)}
+              className="w-full text-xs p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] text-slate-300 mb-1 font-bold">Foto per il Gratta e Scopri</label>
+            <input
+              type="text"
+              placeholder="https://images.unsplash.com/photo-..."
+              value={scratchPhotoUrl || ""}
+              onChange={(e) => handleUpdate("scratchPhotoUrl", e.target.value)}
+              className="w-full text-xs p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-mono"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* EDITOR QUIZ SPOSI CON DOMANDE PRESET */}
+      <div className="pt-3 border-t border-slate-700/80 space-y-3">
+        <div className="flex justify-between items-center">
+          <span className="text-xs font-bold text-[#D4AF37] flex items-center gap-1.5">
+            <HelpCircle className="w-4 h-4 text-[#D4AF37]" /> Quiz della Coppia (Personalizza Domande)
+          </span>
+          <button
+            type="button"
+            onClick={() => addQuizQuestion()}
+            className="px-2.5 py-1 text-[10px] font-bold bg-[#D4AF37] text-slate-900 rounded-lg flex items-center gap-1 hover:bg-amber-400 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi Domanda
+          </button>
+        </div>
+
+        <div>
+          <label className="block text-[10px] text-slate-400 mb-1">Seleziona e aggiungi una domanda preimpostata d&apos;autore:</label>
+          <select
+            onChange={(e) => {
+              if (e.target.value) {
+                addQuizQuestion(e.target.value);
+                e.target.value = "";
+              }
+            }}
+            className="w-full text-xs p-2 rounded-xl bg-slate-800 border border-slate-700 text-white font-medium cursor-pointer"
+          >
+            <option value="">-- Scegli tra 10 Domande Preimpostate --</option>
+            {QUIZ_PRESET_QUESTIONS.map((q, idx) => (
+              <option key={idx} value={q}>
+                {q}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          {(quizQuestions || []).map((q: any, idx: number) => (
+            <div key={q.id || idx} className="p-3 bg-slate-800/90 rounded-2xl border border-slate-700 space-y-1.5">
+              <div className="flex gap-2 items-center">
+                <span className="text-xs font-bold text-[#D4AF37]">{idx + 1}.</span>
+                <input
+                  type="text"
+                  value={q.question}
+                  onChange={(e) => updateQuizQuestion(idx, "question", e.target.value)}
+                  className="flex-1 text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"
+                  placeholder="Domanda..."
+                />
+                <button
+                  type="button"
+                  onClick={() => removeQuizQuestion(idx)}
+                  className="p-1.5 text-rose-400 hover:bg-rose-950 rounded-lg cursor-pointer"
+                  title="Elimina domanda"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <input
+                type="text"
+                value={q.answer}
+                onChange={(e) => updateQuizQuestion(idx, "answer", e.target.value)}
+                className="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded-lg text-emerald-400 font-mono"
+                placeholder="Risposta corretta..."
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
