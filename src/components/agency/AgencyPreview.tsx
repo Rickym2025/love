@@ -59,6 +59,7 @@ export interface AgencyPreviewProps {
   puzzleImage?: string;
   scratchPhotoUrl?: string;
   galleryStyle?: string;
+  quizQuestions?: any[];
   marqueeText?: string;
   customIban?: string;
   modules?: Record<string, boolean>;
@@ -100,6 +101,7 @@ export default function AgencyPreview({
   puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
   scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   galleryStyle = "polaroid",
+  quizQuestions = [],
   marqueeText,
   customIban = "IT60 X 05428 11101 000000123456",
   modules = {},
@@ -138,7 +140,6 @@ export default function AgencyPreview({
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
   const bgMain = colorsList[0] || "#FAF7F2";
-  const bgCard = colorsList[1] || "#FFFFFF";
   const borderCard = colorsList[2] || "#E6C687";
 
   const currentPreset = (BACKGROUND_PRESETS || []).find((p) => p.url === heroBgImage);
@@ -179,6 +180,9 @@ export default function AgencyPreview({
 
   const slugName = selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco";
 
+  const quizEncoded = encodeURIComponent(JSON.stringify(quizQuestions || []));
+
+  // URL INVITO DINAMICO
   const fullscreenDynamicUrl = `/${slugName}?template=${selectedTemplate}&start=${introStart}&dateMode=${dateDisplayMode}&schedule=${scheduleSchema}&rsvpStyle=${rsvpStyle}&day=${encodeURIComponent(
     weddingDateDay
   )}&month=${encodeURIComponent(weddingDateMonth)}&year=${encodeURIComponent(
@@ -187,9 +191,20 @@ export default function AgencyPreview({
     locationName
   )}&phrase=${encodeURIComponent(computedWelcomePhrase)}&audio=${encodeURIComponent(
     audioUrl
-  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}&water=${encodeURIComponent(waterImageUrl || "")}`;
+  )}&palette=${safeIdx}&heroBg=${encodeURIComponent(heroBgImage || "palette")}&water=${encodeURIComponent(
+    waterImageUrl || ""
+  )}&gallery=${encodeURIComponent(galleryStyle || "polaroid")}&puzzle=${encodeURIComponent(
+    puzzleImage || ""
+  )}&scratch=${encodeURIComponent(scratchPhotoUrl || "")}&quiz=${quizEncoded}`;
 
-  const festaFullscreenUrl = `/${slugName}/festa?isWeddingDay=true`;
+  // URL FESTA DINAMICO CON SINCRONIZZAZIONE DI TUTTE LE IMPOSTAZIONI
+  const festaFullscreenUrl = `/${slugName}/festa?isWeddingDay=true&gallery=${encodeURIComponent(
+    galleryStyle || "polaroid"
+  )}&puzzle=${encodeURIComponent(puzzleImage || "")}&scratch=${encodeURIComponent(
+    scratchPhotoUrl || ""
+  )}&couple=${encodeURIComponent(coupleNames || "")}&audio=${encodeURIComponent(
+    audioUrl || ""
+  )}&quiz=${quizEncoded}`;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
@@ -564,7 +579,7 @@ export default function AgencyPreview({
                 {galleryStyle === "circular" && <CircularGallery />}
                 <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
                 <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
-                <div className="py-1"><LoveQuiz /></div>
+                <div className="py-1"><LoveQuiz questions={quizQuestions} /></div>
 
                 <Link
                   href={festaFullscreenUrl}
