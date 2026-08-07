@@ -99,7 +99,7 @@ export default function AgencyPreview({
   heroBgImage = "palette",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
-  puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+  puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
   scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   galleryStyle = "polaroid",
   quizQuestions = [],
@@ -181,7 +181,6 @@ export default function AgencyPreview({
 
   const slugName = selectedTemplate === "A" ? "elena-e-davide" : selectedTemplate === "B" ? "francesca-e-luca" : "giulia-e-marco";
 
-  // SALVATAGGIO STATO LIVE PER APERTURA FULLSCREEN
   const saveCurrentStateToLocalStorage = () => {
     if (typeof window === "undefined") return;
     const previewData = {
@@ -225,14 +224,12 @@ export default function AgencyPreview({
     window.open(`/${slugName}/festa?preview=true`, "_blank", "noopener,noreferrer");
   };
 
-  // ELEMENTI PER LA GALLERIA CARTE A VENTAGLIO IN ANTEPRIMA
   const previewFanCards: CardItem[] = [
     { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
     { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
     { imgUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80", caption: "Brindisi", author: "Amici" },
   ];
 
-  // ELEMENTI PER IL PHOTO WALL POLAROID IN ANTEPRIMA
   const previewPolaroidPhotos = [
     { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
     { id: "2", url: puzzleImage, caption: "Taglio della Torta", author: "Zii Rossi" },
@@ -241,7 +238,7 @@ export default function AgencyPreview({
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
       {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN */}
-      <div className="flex flex-col gap-1.5 w-full max-w-[340px] mb-3 text-white">
+      <div className="flex flex-col gap-1.5 w-full max-w-[350px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center justify-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
         </span>
@@ -267,11 +264,14 @@ export default function AgencyPreview({
         </div>
       </div>
 
-      {/* FRAME SMARTPHONE MOCKUP */}
+      {/* MOCKUP SMARTPHONE PROPORZIONATO (REALE DESIGN IPHONE 350x680) */}
       <div
-        className="w-[340px] h-[580px] rounded-[40px] border-8 border-slate-800 shadow-2xl overflow-y-auto transition-colors space-y-4 pb-6 relative backdrop-blur-sm"
+        className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin"
         style={containerBgStyle}
       >
+        {/* DYNAMIC ISLAND IPHONE */}
+        <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs" />
+
         {!isWhiteBg && !isPaletteSync && (
           <div
             className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
@@ -626,7 +626,7 @@ export default function AgencyPreview({
                 <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} /></div>
                 <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
                 
-                {/* QUIZ SPOSI LIVE CON LE DOMANDE DELLA DASHBOARD */}
+                {/* QUIZ SPOSI LIVE CON LE DOMANDE AGGIORNATE IN REAL-TIME */}
                 <div className="py-1">
                   <LoveQuiz questions={quizQuestions} />
                 </div>
