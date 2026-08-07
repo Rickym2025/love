@@ -6,7 +6,7 @@ import { HelpCircle, CheckCircle2, XCircle, RefreshCw, Trophy } from "lucide-rea
 export interface QuizQuestionItem {
   id?: string;
   question: string;
-  answer: string;
+  answer?: string;
   optionA?: string;
   optionB?: string;
   optionC?: string;
@@ -23,7 +23,6 @@ export default function LoveQuiz({
     {
       id: "1",
       question: "Dove ci siamo conosciuti per la prima volta?",
-      answer: "In università",
       optionA: "In università",
       optionB: "In discoteca",
       optionC: "Al mare in vacanza",
@@ -33,7 +32,6 @@ export default function LoveQuiz({
     {
       id: "2",
       question: "Chi ha fatto la proposta di nozze?",
-      answer: "Davide",
       optionA: "Elena",
       optionB: "Davide",
       optionC: "Insieme a Parigi",
@@ -51,9 +49,9 @@ export default function LoveQuiz({
 
   const optionsList = [
     activeQuestion.optionA || activeQuestion.answer || "Opzione A",
-    activeQuestion.optionB || "In viaggio",
-    activeQuestion.optionC || "A cena",
-    activeQuestion.optionD || "In vacanza",
+    activeQuestion.optionB || "Opzione B",
+    activeQuestion.optionC || "Opzione C",
+    activeQuestion.optionD || "Opzione D",
   ];
 
   const handleSelectOption = (idx: number) => {
@@ -83,39 +81,39 @@ export default function LoveQuiz({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-slate-900 text-white p-5 rounded-3xl border-2 border-[#D4AF37] shadow-xl text-center space-y-4">
-      <div className="flex justify-between items-center border-b border-slate-700 pb-2">
-        <h4 className="text-xs font-serif font-bold text-[#D4AF37] flex items-center gap-1.5 uppercase">
-          <HelpCircle className="w-4 h-4 text-[#D4AF37]" /> Quiz degli Sposi
+    <div className="w-full max-w-lg mx-auto bg-slate-900 text-white p-5 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-center space-y-4">
+      <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h4 className="text-sm font-serif font-bold text-[#D4AF37] flex items-center gap-2 uppercase tracking-wider">
+          <HelpCircle className="w-5 h-5 text-[#D4AF37]" /> Quiz degli Sposi
         </h4>
-        <span className="text-[10px] font-mono font-bold text-slate-300">
+        <span className="text-xs font-mono font-bold text-slate-300 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
           {currentQIdx + 1} / {questions.length}
         </span>
       </div>
 
       {isFinished ? (
-        <div className="p-6 bg-slate-800 rounded-2xl border border-[#D4AF37] space-y-3 animate-fade-in">
-          <Trophy className="w-10 h-10 mx-auto text-[#D4AF37]" />
-          <h5 className="font-serif font-bold text-base text-white">Quiz Completato!</h5>
-          <p className="text-xs text-slate-300">
-            Hai indovinato <strong className="text-[#D4AF37] text-sm">{score}</strong> risposte su {questions.length}!
+        <div className="p-6 bg-slate-800/90 rounded-2xl border-2 border-[#D4AF37] space-y-3 animate-fade-in">
+          <Trophy className="w-12 h-12 mx-auto text-[#D4AF37]" />
+          <h5 className="font-serif font-bold text-lg text-white">Quiz Completato!</h5>
+          <p className="text-sm text-slate-300">
+            Hai indovinato <strong className="text-[#D4AF37] text-base">{score}</strong> risposte su {questions.length}!
           </p>
           <button
             type="button"
             onClick={restartQuiz}
-            className="px-4 py-2 bg-[#D4AF37] text-slate-900 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors flex items-center gap-1 mx-auto cursor-pointer"
+            className="px-5 py-2.5 bg-[#D4AF37] text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors flex items-center gap-2 mx-auto cursor-pointer shadow-lg"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> Gioca di Nuovo
+            <RefreshCw className="w-4 h-4" /> Gioca di Nuovo
           </button>
         </div>
       ) : (
         <div className="space-y-4 text-left">
-          <h5 className="text-sm font-serif font-bold text-white text-center leading-snug">
+          <h5 className="text-base font-serif font-bold text-white text-center leading-snug p-2 bg-slate-800/50 rounded-xl border border-slate-800">
             {activeQuestion.question}
           </h5>
 
           {/* 4 OPZIONI INTERATTIVE A, B, C, D */}
-          <div className="grid grid-cols-1 gap-2 pt-1">
+          <div className="grid grid-cols-1 gap-2.5 pt-1">
             {optionsList.map((opt, idx) => {
               const isSelected = selectedOption === idx;
               const isCorrect = idx === (activeQuestion.correctOptionIdx ?? 0);
@@ -135,11 +133,11 @@ export default function LoveQuiz({
                   type="button"
                   disabled={selectedOption !== null}
                   onClick={() => handleSelectOption(idx)}
-                  className={`p-3 rounded-xl border text-xs font-bold text-left flex items-center justify-between transition-all cursor-pointer ${buttonStyle}`}
+                  className={`p-3.5 rounded-xl border text-xs md:text-sm font-bold text-left flex items-center justify-between transition-all cursor-pointer ${buttonStyle}`}
                 >
                   <span>{String.fromCharCode(65 + idx)}. {opt}</span>
-                  {selectedOption !== null && isCorrect && <CheckCircle2 className="w-4 h-4 text-white" />}
-                  {selectedOption !== null && isSelected && !isCorrect && <XCircle className="w-4 h-4 text-white" />}
+                  {selectedOption !== null && isCorrect && <CheckCircle2 className="w-5 h-5 text-white" />}
+                  {selectedOption !== null && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-white" />}
                 </button>
               );
             })}
