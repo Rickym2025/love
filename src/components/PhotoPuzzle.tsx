@@ -1,80 +1,110 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import confetti from 'canvas-confetti';
+import React, { useState, useEffect } from "react";
+import { Puzzle, CheckCircle2, RefreshCw } from "lucide-react";
+
+export interface PhotoPuzzleProps {
+  imageSrc?: string;
+}
 
 export default function PhotoPuzzle({
-  photoUrl = 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop',
-  onWin,
-}: {
-  photoUrl?: string;
-  onWin?: () => void;
-}) {
-  const [tiles, setTiles] = useState([2, 0, 1, 5, 3, 4, 6, 7, 8]);
+  imageSrc = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+}: PhotoPuzzleProps) {
+  // PUZZLE 3x3 (9 TESSERE)
+  const initialTiles = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const [tiles, setTiles] = useState<number[]>([]);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [isSolved, setIsSolved] = useState(false);
 
-  const swapTiles = (index: number) => {
+  const shuffleTiles = () => {
+    const shuffled = [...initialTiles].sort(() => Math.random() - 0.5);
+    setTiles(shuffled);
+    setIsSolved(false);
+    setSelectedIdx(null);
+  };
+
+  useEffect(() => {
+    shuffleTiles();
+  }, [imageSrc]);
+
+  const handleTileClick = (index: number) => {
     if (isSolved) return;
-    const newTiles = [...tiles];
-    const emptyIndex = newTiles.indexOf(8);
 
-    // Controlla se il tassello è adiacente allo spazio vuoto
-    const isAdjacent =
-      (Math.abs(index - emptyIndex) === 1 && Math.floor(index / 3) === Math.floor(emptyIndex / 3)) ||
-      Math.abs(index - emptyIndex) === 3;
+    if (selectedIdx === null) {
+      setSelectedIdx(index);
+    } else {
+      // SCAMBIO TESSERE
+      const newTiles = [...tiles];
+      const temp = newTiles[selectedIdx];
+      newTiles[selectedIdx] = newTiles[index];
+      newTiles[index] = temp;
 
-    if (isAdjacent) {
-      newTiles[emptyIndex] = newTiles[index];
-      newTiles[index] = 8;
       setTiles(newTiles);
+      setSelectedIdx(null);
 
-      // Verifica se risolto
-      const solved = newTiles.every((val, idx) => val === idx);
+      // VERIFICA VITTORIA
+      const solved = newTiles.every((val, i) => val === i);
       if (solved) {
         setIsSolved(true);
-        confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
-        if (onWin) onWin();
       }
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-3xl border border-[#E2E8F0] shadow-md max-w-xs mx-auto text-center">
-      <p className="font-serif text-lg font-bold text-[#1E293B] mb-1">Puzzle Foto Sposi</p>
-      <p className="text-xs text-[#64748B] mb-4">Clicca sui tasselli per ricomporre la foto!</p>
+    <div className="w-full max-w-md mx-auto bg-white p-5 rounded-3xl border-2 border-[#D4AF37] shadow-xl text-center space-y-4">
+      <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+        <h4 className="text-xs font-serif font-bold text-[#8B6508] flex items-center gap-1.5 uppercase">
+          <Puzzle className="w-4 h-4 text-[#D4AF37]" /> Puzzle 3x3 degli Sposi
+        </h4>
+        <button
+          type="button"
+          onClick={shuffleTiles}
+          className="p-1.5 bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-amber-100 cursor-pointer"
+        >
+          <RefreshCw className="w-3 h-3" /> Mescola
+        </button>
+      </div>
 
-      <div className="grid grid-cols-3 gap-1 w-64 h-64 mx-auto rounded-xl overflow-hidden border-2 border-[#D4AF37] bg-slate-200">
-        {tiles.map((tileVal, idx) => {
-          if (tileVal === 8) {
-            return <div key={idx} className="bg-slate-100" />;
-          }
-          const row = Math.floor(tileVal / 3);
-          const col = tileVal % 3;
+      {isSolved ? (
+        <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-300 text-emerald-800 space-y-2 animate-fade-in">
+          <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-600" />
+          <h5 className="font-serif font-bold text-base">Complimenti! Puzzle Risolto!</h5>
+          <p className="text-xs font-serif">Hai ricomposto la foto del matrimonio degli sposi!</p>
+        </div>
+      ) : (
+        <p className="text-[11px] font-serif italic text-slate-600">
+          Tocca due tessere per scambiarle di posto e ricomporre l&apos;immagine!
+        </p>
+      )}
+
+      {/* GRIGLIA PUZZLE INGRANDITA (h-72 / h-80) */}
+      <div className="grid grid-cols-3 gap-1.5 w-full h-72 rounded-2xl overflow-hidden border-2 border-[#D4AF37] bg-slate-900 p-1 shadow-inner">
+        {tiles.map((tilePos, currentIdx) => {
+          const row = Math.floor(tilePos / 3);
+          const col = tilePos % 3;
+          const isSelected = selectedIdx === currentIdx;
 
           return (
-            <button
-              key={idx}
-              onClick={() => swapTiles(idx)}
-              className="relative w-full h-full overflow-hidden border border-white focus:outline-none transition-transform active:scale-95"
+            <div
+              key={currentIdx}
+              onClick={() => handleTileClick(currentIdx)}
+              className={`relative w-full h-full cursor-pointer overflow-hidden rounded-xl transition-all duration-200 ${
+                isSelected ? "ring-4 ring-[#D4AF37] scale-95 z-20 shadow-lg" : "hover:opacity-90"
+              }`}
             >
               <div
-                className="absolute inset-0 bg-cover bg-no-repeat"
+                className="w-[300%] h-[300%] absolute"
                 style={{
-                  backgroundImage: `url(${photoUrl})`,
-                  backgroundSize: '192px 192px',
-                  backgroundPosition: `-${col * 64}px -${row * 64}px`,
+                  backgroundImage: `url(${imageSrc})`,
+                  backgroundSize: "300% 300%",
+                  left: `-${col * 100}%`,
+                  top: `-${row * 100}%`,
                 }}
               />
-            </button>
+            </div>
           );
         })}
       </div>
-
-      {isSolved && (
-        <p className="text-xs font-bold text-emerald-600 mt-4 animate-bounce">
-          🎉 Puzzle Risolto con successo!
-        </p>
-      )}
     </div>
   );
 }
