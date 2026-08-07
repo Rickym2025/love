@@ -44,6 +44,8 @@ export interface ConfiguratorFormProps {
   heroMediaImage?: string;
   ricevimentoImage?: string;
   waterImageUrl?: string;
+  puzzleImage?: string;
+  scratchPhotoUrl?: string;
   scheduleItems?: ScheduleItem[];
   showAmazonAffiliate?: boolean;
   customStores?: PartnerStoreItem[];
@@ -73,6 +75,8 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
     ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
     waterImageUrl = "",
+    puzzleImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+    scratchPhotoUrl = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
     selectedPaletteIdx = 0,
     dressCodeNotes = "Abiti eleganti nei toni cromatici della palette",
     selectedPhrasePreset = "0",
@@ -313,7 +317,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 11. RSVP (SEPARATO) */}
+      {/* 11. RSVP */}
       <SectionRsvpFesta
         rsvpStyle={rsvpStyle}
         handleUpdate={handleUpdate}
@@ -323,10 +327,12 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 12. NUOVA SEZIONE DEDICATA: FESTA, GIOCHI & MAXISCHERMO (DARK/GOLD) */}
+      {/* 12. SEZIONE FESTA, GIOCHI & MAXISCHERMO (DARK/GOLD SEPARATA) */}
       <SectionFestaGiochiMaxischermo
         quizQuestions={quizQuestions}
         galleryStyle={galleryStyle}
+        puzzleImage={puzzleImage}
+        scratchPhotoUrl={scratchPhotoUrl}
         handleUpdate={handleUpdate}
         toggleModule={toggleModule}
         modules={modules}
