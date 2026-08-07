@@ -14,6 +14,9 @@ import {
   ChevronDown,
   BookOpen,
   UserCheck,
+  Wand2,
+  Gift,
+  ShieldCheck,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -40,43 +43,43 @@ export default function LandingPage() {
     {
       name: 'Marco & Giulia',
       role: 'Sposi 2026',
-      text: 'La canzone su misura prodotta con FF Edizioni ha fatto commuovere tutti all\'apertura del sito.',
+      text: 'Abbiamo scelto il servizio "Chiavi in Mano" e Riccardo ha pensato a tutto lui in meno di 24 ore. Spettacolare!',
       stars: 5,
     },
   ];
 
   const faqs = [
     {
+      q: 'Posso provare a creare la mia partecipazione gratuitamente?',
+      a: 'Certamente! Puoi accedere liberamente al configuratore, provare i colori, la musica, i quiz e la busta 3D senza inserire alcuna carta di credito. Pagherai solo quando vorrai sbloccare il link definitivo da inviare su WhatsApp.',
+    },
+    {
+      q: 'Come funziona il servizio "Chiavi in Mano" (€249)?',
+      a: 'Pensiamo a tutto noi! Ti basterà inviarci via WhatsApp le foto di coppia, i dettagli della location e le info: il team di RM Studio imposterà la grafica, ritaglierà le immagini e ti consegnerà il link pronto all\'uso in 24 ore.',
+    },
+    {
       q: 'Come funziona l\'invio della partecipazione agli invitati?',
-      a: 'Riceverai un link unico e personalizzato (es: love.rmstudio.app/elena-e-davide?guest=Mario+Rossi). Potrai inviarlo con un tap su WhatsApp, e-mail o tramite QR Code sulle partecipazioni fisiche.',
+      a: 'Riceverai un link unico e personalizzato (es: love.rmstudio.app/elena-e-davide). Potrai inviarlo con un tap su WhatsApp tramite la nostra dashboard o tramite QR Code sulle partecipazioni fisiche.',
     },
     {
       q: 'Gli invitati devono scaricare un\'applicazione?',
-      a: 'No! LOVE è una Web-App nativa ultra-veloce. Si apre dal browser di qualsiasi smartphone senza alcuna installazione.',
+      a: 'No! LOVE è una Web-App nativa ultra-veloce. Si apre dal browser di qualsiasi smartphone senza nessuna installazione.',
     },
     {
-      q: 'Dove trovo la Dashboard Risultati?',
-      a: 'Ogni matrimonio ha la sua Dashboard riservata raggiungibile all\'indirizzo love.rmstudio.app/agency/sposi-in-love dove scaricare l\'Excel per il catering.',
+      q: 'Dove trovo la Dashboard Risultati & Catering?',
+      a: 'Ogni matrimonio ha la sua Dashboard riservata dove vedere la lista conferme, la scelta del menu (carne/pesce/veg), la tabella intolleranze alimentari da scaricare per lo chef ed inviare i messaggi WhatsApp.',
     },
     {
       q: 'Come funziona la canzone personalizzata di FF Edizioni?',
       a: 'Creiamo un brano d\'autore inedito (in collaborazione con il Maestro Fausto Fusetti, iscritto SIAE) cucito sulla vostra storia d\'amore.',
     },
     {
-      q: 'Posso personalizzare i colori e le immagini?',
-      a: 'Certamente! Ogni matrimonio può avere la sua palette colori, le foto di coppia, il modello preferito e la scelta della busta.',
-    },
-    {
       q: 'Come funziona la pagina "La Festa" e il Maxischermo?',
-      a: 'Gli invitati accedono alla pagina /festa il giorno delle nozze, scattano foto dal telefono che vengono proiettate in diretta sul maxischermo del locale.',
+      a: 'Gli invitati accedono alla pagina /festa il giorno delle nozze, scattano foto dal telefono che vengono proiettate in diretta sul maxischermo della sala.',
     },
     {
       q: 'Se sono un\'agenzia, posso mettere il mio logo?',
       a: 'Sì! Con il piano Agency Hub il footer e le schermate mostreranno esclusivamente il logo e i contatti della tua agenzia.',
-    },
-    {
-      q: 'I dati delle allergie alimentari sono protetti?',
-      a: 'Sì, rispettiamo il regolamento GDPR. I dati delle preferenze alimentari sono visibili solo agli sposi e all\'agenzia.',
     },
     {
       q: 'Il sito scade dopo il matrimonio?',
@@ -84,14 +87,14 @@ export default function LandingPage() {
     },
     {
       q: 'Come posso procedere con l\'acquisto?',
-      a: 'Clicca su "Crea Ora" o contattaci su WhatsApp: attiveremo la bozza della tua partecipazione in pochi minuti!',
+      a: 'Puoi creare la tua bozza gratis subito cliccando su "Crea Bozza Gratuita" o contattarci su WhatsApp se desideri la realizzazione Chiavi in Mano!',
     },
   ];
 
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B]">
       
-      {/* SFONDO CONTINUO AVORIO */}
+      {/* SFONDO CONTINUO */}
       <div
         className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -99,7 +102,7 @@ export default function LandingPage() {
 
       <KineticGrid className="relative z-10">
         
-        {/* NAVBAR CONI 3 MODELLI DEMO + ACCESSO AGENZIE */}
+        {/* NAVBAR */}
         <header className="border-b border-[#D4AF37]/30 bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-40 shadow-sm">
           <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -119,7 +122,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-3 sm:gap-6">
               <div className="hidden lg:flex items-center gap-4 text-xs font-bold">
                 <Link href="/elena-e-davide" className="text-[#D4AF37] hover:underline">
                   Modello A ↗
@@ -140,14 +143,14 @@ export default function LandingPage() {
                 <UserCheck className="w-3.5 h-3.5" /> Login Agenzie
               </Link>
 
-              <a href="#prezzi" className="px-5 py-2 rounded-full bg-[#D4AF37] text-slate-900 text-xs font-bold shadow-md hover:bg-amber-400 transition">
-                Crea Ora
-              </a>
+              <Link href="/agency/sposi-in-love" className="px-5 py-2 rounded-full bg-[#D4AF37] text-slate-900 text-xs font-bold shadow-md hover:bg-amber-400 transition">
+                Crea Bozza Gratis
+              </Link>
             </div>
           </div>
         </header>
 
-        {/* HERO SECTION CON 3 MODELLI DEMO */}
+        {/* HERO SECTION */}
         <section className="py-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
           
           <div className="inline-flex p-1 rounded-full bg-white border border-[#D4AF37]/30 mb-8 shadow-sm">
@@ -176,24 +179,25 @@ export default function LandingPage() {
             Stupisci i tuoi invitati con un'esperienza da favola.
           </h1>
           <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-            Busta d'epoca con sigillo in ceralacca dorata, giochi come lo Scratch della Data, colonna sonora inedita e lista nozze integrata.
+            Busta d'epoca con sigillo in ceralacca 3D, giochi come lo Scratch della Data, colonna sonora inedita e spedizione 1-Tap su WhatsApp.
           </p>
 
-          {/* PULSANTI PROVA PER I 3 MODELLI */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-2xl">
-            <Link href="/elena-e-davide" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition">
-              <span>Demo "Elena &amp; Davide" (A)</span>
-              <ArrowRight className="w-4 h-4" />
+          {/* PULSANTI ACTION */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-2xl mb-4">
+            <Link href="/agency/sposi-in-love" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-900 font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-amber-400 transition cursor-pointer">
+              <Sparkles className="w-4 h-4 text-slate-900" />
+              <span>Crea Bozza Gratuita (Senza Carta)</span>
             </Link>
-            <Link href="/francesca-e-luca" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#1E293B] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition">
-              <span>Demo "Francesca &amp; Luca" (B)</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/giulia-e-marco" className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#FAF7F2] text-[#8B6508] border-2 border-[#D4AF37] font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-amber-100 transition">
-              <span>Demo "Giulia &amp; Marco" (Modello C)</span>
-              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-            </Link>
+
+            <a href="https://wa.me/3904251675950?text=Ciao%20Riccardo,%20vorrei%20il%20servizio%20Chiavi%20in%20Mano%20per%20la%20nostra%20partecipazione%20Love!" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1E293B] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition cursor-pointer">
+              <Wand2 className="w-4 h-4 text-[#D4AF37]" />
+              <span>Richiedi "Chiavi in Mano" (€249)</span>
+            </a>
           </div>
+
+          <p className="text-xs text-slate-500 font-serif italic">
+            ✦ Prova gratis il configuratore • Paghi solo quando vuoi sbloccare il link definitivo ✦
+          </p>
         </section>
 
         {/* RECENSIONI SCORREVOLI */}
@@ -204,28 +208,23 @@ export default function LandingPage() {
           <Marquee items={testimonials} />
         </section>
 
-        {/* SEZIONE MODELLO C EVIDENZIATO */}
+        {/* SEZIONE BUSTA CERALACCA */}
         <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative">
+          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
             <img
               src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"
-              alt="Modello C Storyboard"
+              alt="Busta Ceralacca"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
-              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-                🎡 Modello C • Storyboard Landing con Kinetic Grid
-              </span>
-            </div>
           </div>
           <div>
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Novità 2026 • Modello C</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Layout Storyboard ad Impatto Cinematografico</h3>
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Busta D'Epoca &amp; Ceralacca 3D</span>
+            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B] mb-4">Un'emozione al primo tocco</h3>
             <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              Perfetto per gli sposi che desiderano una vera e propria Landing Page d'Autore con sfondi reattivi Kinetic Grid, blocchi storia alternati e zero footer scuri.
+              L'invitato fully immersivo tocca il sigillo dorato sullo schermo del telefono: la busta si apre con musica d'autore e pioggia di petali animati.
             </p>
-            <Link href="/giulia-e-marco" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-              Prova la Demo "Giulia &amp; Marco" (Modello C) →
+            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+              Prova la Busta Live →
             </Link>
           </div>
         </section>
@@ -258,7 +257,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* SISTEMA ORBITALE RM STUDIO */}
+        {/* ECOSISTEMA RM STUDIO */}
         <section className="py-12 border-t border-[#D4AF37]/30 bg-white/40">
           <div className="max-w-6xl mx-auto px-6 text-center">
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-2">Ecosistema RM Studio</span>
@@ -266,51 +265,87 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* PREZZI COMPLETI */}
+        {/* NUOVA GRIGLIA A 3 PREZZI E PIANI */}
         <section id="prezzi" className="py-20 px-6 bg-white/80 backdrop-blur-sm border-t border-[#D4AF37]/30 shadow-inner">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B] text-center mb-16">Piani Semplici. Zero Abbonamenti.</h2>
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center space-y-2 mb-16">
+              <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block">Piani Semplici &amp; Trasparenti</span>
+              <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Scegli come realizzare il tuo Invito</h2>
+              <p className="text-xs text-slate-500 italic font-serif">Nessun abbonamento. Il sito rimane attivo per 1 anno completo dopo le nozze.</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
               
-              <div className="bg-[#FAF7F2] border border-[#D4AF37]/40 rounded-3xl p-8 flex flex-col justify-between shadow-sm hover:border-[#D4AF37] transition-all">
+              {/* PIANO 1: SPOSI SELF-SERVICE */}
+              <div className="bg-[#FAF7F2] border border-[#D4AF37]/40 rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:border-[#D4AF37] transition-all relative">
                 <div>
-                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per la Coppia</span>
-                  <h3 className="font-serif text-3xl text-[#1E293B] mb-2">Sposi Premium</h3>
-                  <div className="text-4xl font-serif text-[#1E293B] mb-6">€149 <span className="text-xs text-slate-600 font-normal">una tantum</span></div>
+                  <span className="text-[10px] text-[#D4AF37] uppercase font-bold block mb-1">Per la Coppia (Fai Da Te)</span>
+                  <h3 className="font-serif text-2xl text-[#1E293B] mb-2">Sposi Self-Service</h3>
+                  <div className="text-3xl font-serif text-[#1E293B] mb-4">€149 <span className="text-xs text-slate-600 font-normal">una tantum</span></div>
                   
-                  <ul className="space-y-3 text-xs text-[#1E293B] mb-8 font-medium">
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Busta d'epoca con Ceralacca 3D</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Conferma Partecipazione (Menu &amp; Intolleranze)</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Gioco "Gratta per svelare la Data"</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora Inedita FF Edizioni</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Lista Nozze IBAN &amp; Amazon Affiliata</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Pagina "La Festa" con Scatto Foto/Video</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Trasmissione Live su Proiettore / Maxischermo</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Dashboard Risultati con Export Excel Catering</li>
+                  <ul className="space-y-2.5 text-xs text-[#1E293B] mb-8 font-medium">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Creazione autonoma sul Configuratore</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Busta d'epoca con Ceralacca 3D</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Modulo RSVP con Menu &amp; Intolleranze</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Gioco "Gratta e Scopri la Data"</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Colonna Sonora Inedita FF Edizioni</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Lista Nozze IBAN &amp; Amazon Affiliata</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Spedizione 1-Tap via WhatsApp</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Export Excel Liste per Catering</li>
                   </ul>
                 </div>
-                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20vorrei%20informazioni%20per%20creare%20il%20sito%20Love!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-slate-900 font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-amber-400 transition">
-                  Attiva per il tuo Matrimonio
+
+                <Link href="/agency/sposi-in-love" className="w-full py-3 rounded-xl bg-[#D4AF37] text-slate-900 font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-amber-400 transition cursor-pointer">
+                  Crea Bozza Gratis ora
+                </Link>
+              </div>
+
+              {/* PIANO 2: SPOSI CHIAVI IN MANO (NOVITÀ CON LAUREL BADGE) */}
+              <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white border-2 border-[#D4AF37] rounded-3xl p-6 flex flex-col justify-between shadow-2xl relative scale-102">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#D4AF37] text-slate-950 text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full shadow-md flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-slate-950" /> Consigliato • Servizio VIP
+                </div>
+
+                <div>
+                  <span className="text-[10px] text-[#D4AF37] uppercase font-bold block mb-1 mt-2">Pensiamo a tutto noi</span>
+                  <h3 className="font-serif text-2xl text-white mb-2">Sposi "Chiavi in Mano"</h3>
+                  <div className="text-3xl font-serif text-[#D4AF37] mb-4">€249 <span className="text-xs text-slate-300 font-normal">una tantum</span></div>
+                  
+                  <ul className="space-y-2.5 text-xs text-slate-200 mb-8 font-medium">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> <strong className="text-amber-300">Tutto incluso del piano Premium</strong></li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> <strong className="text-amber-300">Configurazione completa gestita dal team RM Studio</strong></li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Fotoritocco &amp; ottimizzazione immagini smartphone</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Inserimento lista invitati e numeri WhatsApp</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Impostazione Quiz personalizzato &amp; Premi</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Selezione colonna sonora d'autore su misura</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Assistenza telefonica e WhatsApp prioritaria</li>
+                  </ul>
+                </div>
+
+                <a href="https://wa.me/3904251675950?text=Ciao%20Riccardo,%20desidero%20maggiori%20informazioni%20sul%20servizio%20Chiavi%20in%20Mano%20per%20il%20nostro%20matrimonio!" target="_blank" rel="noopener noreferrer" className="w-full py-3 rounded-xl bg-[#D4AF37] text-slate-950 font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-amber-400 transition cursor-pointer">
+                  Richiedi "Chiavi in Mano" ↗
                 </a>
               </div>
 
-              <div className="bg-[#1E293B] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl border-2 border-[#D4AF37]">
+              {/* PIANO 3: AGENCY HUB WHITE-LABEL */}
+              <div className="bg-[#1E293B] text-white rounded-3xl p-6 flex flex-col justify-between shadow-xl border border-slate-700">
                 <div>
-                  <span className="text-xs text-[#D4AF37] uppercase font-bold block mb-2">Per Wedding Planner &amp; Agenzie</span>
-                  <h3 className="font-serif text-3xl text-white mb-2">Agency Hub</h3>
-                  <div className="text-4xl font-serif text-[#D4AF37] mb-6">€490 <span className="text-xs text-slate-300 font-normal">/ anno (10 Matrimoni)</span></div>
+                  <span className="text-[10px] text-[#D4AF37] uppercase font-bold block mb-1">Per Wedding Planner &amp; Agenzie</span>
+                  <h3 className="font-serif text-2xl text-white mb-2">Agency Hub B2B</h3>
+                  <div className="text-3xl font-serif text-[#D4AF37] mb-4">€490 <span className="text-xs text-slate-300 font-normal">/ anno (10 Matrimoni)</span></div>
                   
-                  <ul className="space-y-3 text-xs text-slate-200 mb-8 font-medium">
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> 10 Matrimoni Sbloccati inclusi</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Logo della tua Agenzia nel Footer</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Selezione tra 10 Temi Grafici d'Élite</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Studio Configuratore a 3 Colonne</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Canale diretto per Brani Inediti FF Edizioni</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Export Excel Liste Invitati per Catering</li>
-                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Puntamento Domini Personalizzati dei Clienti</li>
+                  <ul className="space-y-2.5 text-xs text-slate-200 mb-8 font-medium">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> 10 Matrimoni Sbloccati inclusi</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Logo della tua Agenzia nel Footer</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Selezione tra 10 Temi Grafici d'Élite</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Studio Configuratore a 3 Colonne</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Modulo Spedizione 1-Tap WhatsApp</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Export Excel Liste Invitati per Catering</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" /> Puntamento Domini Personalizzati dei Clienti</li>
                   </ul>
                 </div>
-                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiori%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-slate-900 font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-amber-400 transition">
+
+                <a href="https://wa.me/3904251675950?text=Ciao%20RM%20Studio,%20sono%20un'agenzia%20e%20vorrei%20maggiori%20informazioni!" target="_blank" rel="noopener noreferrer" className="w-full py-3 rounded-xl bg-slate-800 text-white border border-[#D4AF37]/50 font-bold text-center text-xs uppercase tracking-wider block shadow-md hover:bg-slate-700 transition cursor-pointer">
                   Richiedi Licenza Agenzia
                 </a>
               </div>
