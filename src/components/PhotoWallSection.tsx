@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Camera, Sparkles, Plus, Trash2, X, Heart, MessageSquare, User } from "lucide-react";
+import { Camera, Sparkles, Plus, Trash2, X, User, MessageSquare } from "lucide-react";
 
 export interface PhotoWallItem {
   id: string;
@@ -108,7 +108,7 @@ export default function PhotoWallSection({
         </p>
       </div>
 
-      {/* GRIGLIA FOTO ALBUM - VISIBILE E AD ALTO CONTRASTO */}
+      {/* GRIGLIA FOTO ALBUM */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pt-2">
         {albumPhotos.map((item) => (
           <div
@@ -145,7 +145,7 @@ export default function PhotoWallSection({
         ))}
       </div>
 
-      {/* MODAL LIGHTBOX HD E SENIOR-FRIENDLY CON STILE INSTAGRAM */}
+      {/* MODAL INGRANDITO (SENIOR-FRIENDLY & INSTAGRAM) */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
           <button
@@ -164,7 +164,7 @@ export default function PhotoWallSection({
               </h4>
             </div>
 
-            {/* ANTEPRIMA GRANDE HD - ADATTA ANCHE AI PIÙ ANZIANI */}
+            {/* ANTEPRIMA GRANDE HD */}
             <div className="w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#D4AF37]/50 shadow-inner bg-black relative">
               <img
                 src={selectedPhoto.url}
@@ -174,7 +174,7 @@ export default function PhotoWallSection({
               />
             </div>
 
-            {/* CAMPI STILE INSTAGRAM: AUTORE & DEDICA CON TESTO GRANDE */}
+            {/* CAMPI STILE INSTAGRAM */}
             <div className="space-y-3 text-left bg-slate-800/90 p-4 rounded-2xl border border-slate-700">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
@@ -222,7 +222,7 @@ export default function PhotoWallSection({
               </div>
             </div>
 
-            {/* SELEZIONE 10 FILTRI POLAROID INGRANDITA */}
+            {/* SELEZIONE 10 FILTRI POLAROID */}
             <div className="space-y-1.5 text-left">
               <span className="text-xs uppercase font-bold text-slate-400 block">
                 Scegli il Filtro Polaroid:
@@ -245,7 +245,7 @@ export default function PhotoWallSection({
               </div>
             </div>
 
-            {/* PULSANTI DI AZIONE */}
+            {/* PULSANTI SALVA / CHIUDI */}
             <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
               <button
                 type="button"
