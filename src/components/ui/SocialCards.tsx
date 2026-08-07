@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import gsap from "gsap";
+import React, { useState, useCallback } from "react";
 
 export interface CardItem {
   id?: string;
@@ -21,35 +20,14 @@ const MAX_VISIBLE = 7;
 const HALF = 3;
 
 const FAN_POSITIONS = [
-  { rot: -21, scale: 0.7756, x: -30, y: 7.3, zIndex: 1 },
-  { rot: -14, scale: 0.8498, x: -22, y: 4.0, zIndex: 2 },
-  { rot: -7,  scale: 0.9346, x: -11, y: 1.3, zIndex: 3 },
-  { rot: 0,   scale: 1.0,    x: 0,   y: 0.0, zIndex: 10 },
-  { rot: 7,   scale: 0.9346, x: 11,  y: 1.3, zIndex: 3 },
-  { rot: 14,  scale: 0.8498, x: 22,  y: 4.0, zIndex: 2 },
-  { rot: 21,  scale: 0.7756, x: 30,  y: 7.3, zIndex: 1 },
+  { rot: -21, scale: 0.78, x: -160, y: 35, zIndex: 1 },
+  { rot: -14, scale: 0.85, x: -110, y: 20, zIndex: 2 },
+  { rot: -7,  scale: 0.93, x: -55,  y: 7,  zIndex: 3 },
+  { rot: 0,   scale: 1.0,  x: 0,    y: 0,  zIndex: 10 },
+  { rot: 7,   scale: 0.93, x: 55,   y: 7,  zIndex: 3 },
+  { rot: 14,  scale: 0.85, x: 110,  y: 20, zIndex: 2 },
+  { rot: 21,  scale: 0.78, x: 160,  y: 35, zIndex: 1 },
 ];
-
-function getResponsiveMultiplier(width: number) {
-  if (width < 480) return 0.28;
-  if (width < 640) return 0.38;
-  if (width < 768) return 0.5;
-  if (width < 1024) return 0.75;
-  return 1.0;
-}
-
-function getHeightMultiplier(width: number) {
-  let idealPx: number;
-  if (width < 480) idealPx = 22 * 16;
-  else if (width < 640) idealPx = 26 * 16;
-  else if (width < 768) idealPx = 28 * 16;
-  else if (width < 1024) idealPx = 34 * 16;
-  else idealPx = 38 * 16;
-
-  const available = typeof window !== "undefined" ? window.innerHeight * 0.7 : 500;
-  if (available >= idealPx) return 1;
-  return available / idealPx;
-}
 
 function getSlotConfig(totalCards: number, slot: number) {
   if (totalCards >= MAX_VISIBLE) return FAN_POSITIONS[slot];
@@ -58,196 +36,41 @@ function getSlotConfig(totalCards: number, slot: number) {
   const absDistance = Math.abs(distance);
   return {
     rot: distance * 21,
-    scale: 1.0 - 0.2244 * absDistance * absDistance,
-    x: distance * 30,
-    y: absDistance * absDistance * 7.3,
+    scale: 1.0 - 0.22 * absDistance * absDistance,
+    x: distance * 140,
+    y: absDistance * absDistance * 30,
     zIndex: 10 - Math.abs(slot - center),
   };
 }
 
 const ARROW_CLASSES =
-  "relative flex items-center justify-center rounded-full border-[1.5px] border-[#D4AF37]/40 bg-slate-900/80 text-[#D4AF37] cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-[#D4AF37] hover:text-amber-300 active:scale-95 transition-all duration-300";
+  "relative flex items-center justify-center rounded-full border-[1.5px] border-[#D4AF37]/50 bg-slate-900/80 text-[#D4AF37] cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-[#D4AF37] hover:text-amber-300 active:scale-95 transition-all duration-300";
 
 export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isAnimating = useRef(false);
-  const hasEntered = useRef(false);
-  const directionRef = useRef<"left" | "right" | null>(null);
-  const prevVisible = useRef<Set<number>>(new Set());
-
   const totalCards = cards.length;
   const needsPagination = totalCards > MAX_VISIBLE;
   const [centerIndex, setCenterIndex] = useState(needsPagination ? HALF : totalCards >> 1);
-
-  const getVisibleMap = useCallback((center: number) => {
-    const map = new Map<number, number>();
-    if (!needsPagination) {
-      cards.forEach((_, i) => map.set(i, i));
-      return map;
-    }
-    for (let slot = 0; slot < MAX_VISIBLE; slot++) {
-      map.set(((center + slot - HALF) % totalCards + totalCards) % totalCards, slot);
-    }
-    return map;
-  }, [totalCards, needsPagination, cards]);
+  const [hoveredSlot, setHoveredSlot] = useState<number | null>(null);
 
   const cycle = useCallback((direction: "left" | "right") => {
-    if (isAnimating.current || !needsPagination) return;
-    isAnimating.current = true;
-    directionRef.current = direction;
-    setCenterIndex(prev =>
+    if (!needsPagination) return;
+    setCenterIndex((prev) =>
       direction === "right" ? (prev + 1) % totalCards : (prev - 1 + totalCards) % totalCards
     );
   }, [totalCards, needsPagination]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !totalCards) return;
-
-    const cardElements = Array.from(container.querySelectorAll<HTMLElement>(".fan-card"));
-    if (!cardElements.length) return;
-
-    const visibleMap = getVisibleMap(centerIndex);
-    const previouslyVisible = prevVisible.current;
-    const direction = directionRef.current;
-    const isFirstMount = !hasEntered.current;
-    const multiplier = getResponsiveMultiplier(window.innerWidth);
-    const hMult = getHeightMultiplier(window.innerWidth);
-    const slotCount = needsPagination ? MAX_VISIBLE : totalCards;
-    const config = (slot: number) => getSlotConfig(slotCount, slot);
-
-    if (isFirstMount) isAnimating.current = true;
-
-    let completedCount = 0;
-    const visibleCount = visibleMap.size;
-    const onCardDone = () => {
-      if (++completedCount >= visibleCount) {
-        isAnimating.current = false;
-        if (isFirstMount) hasEntered.current = true;
-      }
-    };
-
-    cardElements.forEach((card, cardIndex) => {
-      const slot = visibleMap.get(cardIndex);
-      const wasVisible = previouslyVisible.has(cardIndex);
-
-      if (slot !== undefined) {
-        const { x, y, rot, scale, zIndex } = config(slot);
-        const target = {
-          x: `${x * multiplier}rem`,
-          y: `${y * hMult}rem`,
-          rotation: rot,
-          scale,
-          opacity: 1,
-          zIndex,
-        };
-
-        if (isFirstMount) {
-          gsap.set(card, { x: 0, y: `${12 * hMult}rem`, rotation: 0, scale: 0.5, opacity: 0 });
-          gsap.to(card, { ...target, duration: 1.2, ease: "elastic.out(1.05,.78)", delay: 0.2 + slot * 0.06, onComplete: onCardDone });
-        } else if (!wasVisible) {
-          const enterX = direction === "right" ? 40 : -40;
-          gsap.set(card, { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 30 : -30, scale: 0.5, opacity: 0 });
-          gsap.to(card, { ...target, duration: 0.6, ease: "power2.out", onComplete: onCardDone });
-        } else {
-          gsap.to(card, { ...target, duration: 0.5, ease: "power2.out", onComplete: onCardDone });
-        }
-      } else if (wasVisible) {
-        const exitX = direction === "right" ? -40 : 40;
-        gsap.to(card, { x: `${exitX}rem`, opacity: 0, scale: 0.5, rotation: direction === "right" ? -30 : 30, duration: 0.4, ease: "power2.in", zIndex: 0 });
-      } else if (isFirstMount) {
-        gsap.set(card, { opacity: 0, scale: 0.3, x: 0, y: 0, zIndex: 0 });
-      }
-    });
-
-    prevVisible.current = new Set(visibleMap.keys());
-
-    const visibleEntries: { el: HTMLElement; slot: number }[] = [];
-    cardElements.forEach((el, i) => {
-      const slot = visibleMap.get(i);
-      if (slot !== undefined) visibleEntries.push({ el, slot });
-    });
-    visibleEntries.sort((a, b) => a.slot - b.slot);
-
-    let activeSlot: number | null = null;
-    let leaveTimer: NodeJS.Timeout | null = null;
-    const centerSlot = visibleEntries.length >> 1;
-
-    const updateHoverLayout = (hoveredSlot: number | null) => {
-      const mult = getResponsiveMultiplier(window.innerWidth);
-      const hM = getHeightMultiplier(window.innerWidth);
-
-      visibleEntries.forEach(({ el, slot }) => {
-        const base = config(slot);
-        let targetX = base.x * mult;
-        let targetY = base.y * hM;
-        let targetRot = base.rot;
-        let targetScale = base.scale;
-        let delay = 0;
-
-        if (hoveredSlot !== null) {
-          const distance = Math.abs(slot - hoveredSlot);
-          delay = distance * 0.02;
-
-          if (slot === hoveredSlot) {
-            targetY -= 2.5 * hM;
-            targetScale *= 1.08;
-          } else {
-            const normalized = centerSlot > 0 ? (slot - centerSlot) / centerSlot : 0;
-            const pushStrength = 8 * (1 - Math.abs(normalized)) * (1 + 0.2 * Math.max(0, 3 - distance));
-
-            if (slot < hoveredSlot) {
-              targetX -= pushStrength * mult;
-              targetRot -= 3 / (distance + 1);
-            } else {
-              targetX += pushStrength * mult;
-              targetRot += 3 / (distance + 1);
-            }
-
-            if (slot === visibleEntries.length - 1 && hoveredSlot < centerSlot) targetY -= 1 * hM;
-            if (slot === 0 && hoveredSlot > centerSlot) targetY -= 1 * hM;
-          }
-        } else {
-          delay = Math.abs(slot - centerSlot) * 0.02;
-        }
-
-        gsap.to(el, {
-          x: `${targetX}rem`, y: `${targetY}rem`, rotation: targetRot, scale: targetScale,
-          duration: 0.5, delay, ease: "elastic.out(1,.75)", overwrite: "auto",
-        });
-        gsap.set(el, { zIndex: base.zIndex });
-      });
-    };
-
-    const enterHandlers = visibleEntries.map(({ el, slot }) => {
-      const handler = () => {
-        if (isAnimating.current) return;
-        if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
-        if (activeSlot !== slot) { activeSlot = slot; updateHoverLayout(slot); }
-      };
-      el.addEventListener("mouseenter", handler);
-      return { el, handler };
-    });
-
-    const onMouseLeave = () => {
-      if (isAnimating.current) return;
-      if (leaveTimer) clearTimeout(leaveTimer);
-      leaveTimer = setTimeout(() => { activeSlot = null; updateHoverLayout(null); }, 50);
-    };
-    container.addEventListener("mouseleave", onMouseLeave);
-
-    const onResize = () => { if (!isAnimating.current) updateHoverLayout(activeSlot); };
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      enterHandlers.forEach(({ el, handler }) => el.removeEventListener("mouseenter", handler));
-      container.removeEventListener("mouseleave", onMouseLeave);
-      window.removeEventListener("resize", onResize);
-      if (leaveTimer) clearTimeout(leaveTimer);
-    };
-  }, [centerIndex, totalCards, getVisibleMap, needsPagination]);
-
   if (!totalCards) return null;
+
+  const getSlotForCard = (cardIdx: number): number | null => {
+    if (!needsPagination) return cardIdx;
+    for (let slot = 0; slot < MAX_VISIBLE; slot++) {
+      const idx = ((centerIndex + slot - HALF) % totalCards + totalCards) % totalCards;
+      if (idx === cardIdx) return slot;
+    }
+    return null;
+  };
+
+  const slotCount = needsPagination ? MAX_VISIBLE : totalCards;
 
   const chevron = (direction: "left" | "right") => (
     <svg className="relative z-[2] w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -258,22 +81,60 @@ export default function SocialCards({ cards, onItemClick }: SocialCardsProps) {
   return (
     <section className="flex flex-col items-center w-full py-4 lg:py-6 px-2 relative z-20">
       <div className="flex items-center justify-center w-full max-w-[90rem]">
-        <div ref={containerRef} className="fan-layout flex relative justify-center items-center w-full h-[280px] sm:h-[340px] md:h-[400px]">
+        <div className="fan-layout flex relative justify-center items-center w-full h-[300px] sm:h-[350px] md:h-[420px]">
           {cards.map((card, index) => {
-            const cardContent = (
+            const slot = getSlotForCard(index);
+            const isVisible = slot !== null;
+            const baseConfig = slot !== null ? getSlotConfig(slotCount, slot) : { rot: 0, scale: 0.5, x: 0, y: 100, zIndex: 0 };
+
+            let extraX = 0;
+            let extraY = 0;
+            let extraScale = 1;
+            let extraRot = 0;
+
+            if (hoveredSlot !== null && slot !== null) {
+              if (slot === hoveredSlot) {
+                extraY = -25;
+                extraScale = 1.1;
+              } else {
+                const dist = slot - hoveredSlot;
+                extraX = dist < 0 ? -25 : 25;
+                extraRot = dist < 0 ? -4 : 4;
+              }
+            }
+
+            const finalX = baseConfig.x + extraX;
+            const finalY = baseConfig.y + extraY;
+            const finalScale = baseConfig.scale * extraScale;
+            const finalRot = baseConfig.rot + extraRot;
+
+            return (
               <div
+                key={card.id || index}
+                onMouseEnter={() => slot !== null && setHoveredSlot(slot)}
+                onMouseLeave={() => setHoveredSlot(null)}
                 onClick={() => onItemClick && onItemClick(card, index)}
-                className="fan-card absolute w-[150px] h-[210px] sm:w-[190px] sm:h-[260px] md:w-[230px] md:h-[310px] rounded-2xl border-2 border-[#D4AF37] bg-slate-900 shadow-2xl overflow-hidden cursor-pointer group transition-colors hover:border-amber-300"
+                className={`fan-card absolute w-[140px] h-[200px] sm:w-[180px] sm:h-[250px] md:w-[220px] md:h-[300px] rounded-2xl border-2 border-[#D4AF37] bg-slate-900 shadow-2xl overflow-hidden cursor-pointer group transition-all duration-500 ease-out ${
+                  isVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                }`}
+                style={{
+                  transform: `translate3d(${finalX}px, ${finalY}px, 0) rotate(${finalRot}deg) scale(${finalScale})`,
+                  zIndex: hoveredSlot === slot ? 30 : baseConfig.zIndex,
+                }}
               >
-                <img src={card.imgUrl} loading="lazy" alt={card.alt || `Card ${index}`} className="absolute inset-0 w-full h-full object-cover z-10 group-hover:scale-105 transition-transform duration-300" />
-                <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white z-20 text-left">
+                <img
+                  src={card.imgUrl}
+                  loading="lazy"
+                  alt={card.alt || `Card ${index}`}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/95 via-black/60 to-transparent text-white z-20 text-left">
                   <p className="text-xs font-serif font-bold text-[#D4AF37] truncate">{card.caption || "Foto Sposi"}</p>
                   <p className="text-[10px] text-slate-300 truncate">- {card.author || "Invitato"}</p>
+                  <span className="text-[9px] font-bold text-amber-300 block mt-0.5 uppercase tracking-wider">✦ Filtri &amp; Dedica</span>
                 </div>
               </div>
             );
-
-            return <div key={index}>{cardContent}</div>;
           })}
         </div>
       </div>
