@@ -14,6 +14,7 @@ import {
   SectionDressCode,
   SectionListaNozze,
   SectionRsvpFesta,
+  SectionFestaGiochiMaxischermo,
   ScheduleItem,
   PartnerStoreItem,
 } from "./FormSubSections";
@@ -46,6 +47,8 @@ export interface ConfiguratorFormProps {
   scheduleItems?: ScheduleItem[];
   showAmazonAffiliate?: boolean;
   customStores?: PartnerStoreItem[];
+  quizQuestions?: any[];
+  galleryStyle?: string;
   modules?: Record<string, boolean>;
   onUpdate?: (field: string, value: any) => void;
 }
@@ -86,6 +89,11 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
     customStores = [
       { id: "1", name: "Gioielleria Rossi & Lista Nozze Locale", url: "https://gioielleriarossi.it", logoUrl: "/logo.png" }
     ],
+    quizQuestions = [
+      { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
+      { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+    ],
+    galleryStyle = "polaroid",
     modules = {},
     onUpdate,
   } = props;
@@ -194,7 +202,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
         </button>
       </div>
 
-      {/* 1. DATI SPOSI & FRASE BENVENUTO (PRIMO MODULO) */}
+      {/* 1. DATI SPOSI & FRASE BENVENUTO */}
       <SectionDatiSposi
         coupleNames={coupleNames}
         selectedPhrasePreset={selectedPhrasePreset}
@@ -206,7 +214,7 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 2. MODELLI PREIMPOSTATI CON CAMPI IMMAGINI SUBITO SOTTO MODELLO C */}
+      {/* 2. MODELLI PREIMPOSTATI */}
       <SectionModelliPreset
         selectedTemplate={selectedTemplate}
         applyTemplateA={applyTemplateA}
@@ -305,9 +313,20 @@ export default function ConfiguratorForm(props: ConfiguratorFormProps) {
 
       <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
 
-      {/* 11. RSVP & FESTA */}
+      {/* 11. RSVP (SEPARATO) */}
       <SectionRsvpFesta
         rsvpStyle={rsvpStyle}
+        handleUpdate={handleUpdate}
+        toggleModule={toggleModule}
+        modules={modules}
+      />
+
+      <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest my-1">✦ ✦ ✦</div>
+
+      {/* 12. NUOVA SEZIONE DEDICATA: FESTA, GIOCHI & MAXISCHERMO (DARK/GOLD) */}
+      <SectionFestaGiochiMaxischermo
+        quizQuestions={quizQuestions}
+        galleryStyle={galleryStyle}
         handleUpdate={handleUpdate}
         toggleModule={toggleModule}
         modules={modules}
