@@ -87,6 +87,19 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
   );
 
+  // STATI DEDICATI AI GIOCHI DELLA FESTA
+  const [puzzleImage, setPuzzleImage] = useState(
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"
+  );
+  const [scratchPhotoUrl, setScratchPhotoUrl] = useState(
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
+  );
+  const [quizQuestions, setQuizQuestions] = useState([
+    { question: "Dove ci siamo conosciuti per la prima volta?", answer: "In università" },
+    { question: "Chi ha fatto la proposta di nozze?", answer: "Davide" },
+  ]);
+  const [galleryStyle, setGalleryStyle] = useState("polaroid");
+
   const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([
     { id: "1", time: "16:30", title: "Arrivo ed Accoglienza Ospiti" },
     { id: "2", time: "17:00", title: "Cerimonia Solenne di Nozze" },
@@ -247,6 +260,14 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
             setHeroMediaImage={setHeroMediaImage}
             ricevimentoImage={ricevimentoImage}
             setRicevimentoImage={setRicevimentoImage}
+            puzzleImage={puzzleImage}
+            setPuzzleImage={setPuzzleImage}
+            scratchPhotoUrl={scratchPhotoUrl}
+            setScratchPhotoUrl={setScratchPhotoUrl}
+            quizQuestions={quizQuestions}
+            setQuizQuestions={setQuizQuestions}
+            galleryStyle={galleryStyle}
+            setGalleryStyle={setGalleryStyle}
             scheduleItems={scheduleItems}
             setScheduleItems={setScheduleItems}
             showAmazonAffiliate={showAmazonAffiliate}
@@ -302,6 +323,9 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           heroBgImage={heroBgImage}
           heroMediaImage={heroMediaImage}
           ricevimentoImage={ricevimentoImage}
+          puzzleImage={puzzleImage}
+          scratchPhotoUrl={scratchPhotoUrl}
+          galleryStyle={galleryStyle}
           partnerStores={partnerStores}
           showAmazonAffiliate={showAmazonAffiliate}
           scheduleItems={scheduleItems}
