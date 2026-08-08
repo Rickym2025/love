@@ -25,57 +25,49 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const slug = params?.slug || "elena-e-davide";
   const cleanSlug = (slug || "").replace(/[^a-zA-Z0-9-]/g, "") || "elena-e-davide";
 
-  const template = searchParams?.get("template") || (cleanSlug === "francesca-e-luca" ? "B" : "A");
+  // INIZIALIZZATORE SINCRONO ISTANTANEO PER PREVENIRE FLASH DELLA BUSTA
+  const getInitialParam = (key: string, fallback: string) => {
+    if (typeof window !== "undefined") {
+      try {
+        const storedDataRaw = localStorage.getItem("love_invitation_data") || localStorage.getItem(`love_invitation_${cleanSlug}`);
+        if (storedDataRaw) {
+          const localData = JSON.parse(storedDataRaw);
+          if (localData[key]) return localData[key];
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+    return searchParams?.get(key) || fallback;
+  };
+
+  const defaultTemplate = cleanSlug === "giulia-e-marco" ? "C" : cleanSlug === "francesca-e-luca" ? "B" : "A";
+  const template = getInitialParam("template", defaultTemplate);
   const isTemplateC = template === "C";
   const isTemplateB = template === "B";
 
-  const [start, setStart] = useState(searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta"));
-  const [dateMode, setDateMode] = useState(searchParams?.get("dateMode") || "countdown");
-  const [schedule, setSchedule] = useState(searchParams?.get("schedule") || "classico");
-  const [rsvpStyle, setRsvpStyle] = useState(searchParams?.get("rsvpStyle") || "classico");
+  const defaultStart = isTemplateC ? "expand" : isTemplateB ? "nuvole" : "busta";
+  const defaultBg = isTemplateC ? "/sfondi/carta_pergamena.jpg" : isTemplateB ? "/sfondi/seta_rosa.jpg" : "/sfondi/fiori.jpg";
 
-  const [coupleNames, setCoupleNames] = useState(searchParams?.get("couple") || (isTemplateC ? "Giulia & Marco" : isTemplateB ? "Francesca & Luca" : "Elena & Davide"));
-  const [weddingDateDay, setWeddingDateDay] = useState(searchParams?.get("day") || "15");
-  const [weddingDateMonth, setWeddingDateMonth] = useState(searchParams?.get("month") || "Settembre");
-  const [weddingDateYear, setWeddingDateYear] = useState(searchParams?.get("year") || "2026");
-  const [locationName, setLocationName] = useState(searchParams?.get("location") || "Villa Rosa");
-  const [locationAddress, setLocationAddress] = useState(searchParams?.get("address") || "Via Roma 1, Roma");
-  const [welcomePhrase, setWelcomePhrase] = useState(searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.");
-  const [heroBgParam, setHeroBgParam] = useState(searchParams?.get("heroBg") || "/sfondi/fiori.jpg");
-  const [waterImageUrl, setWaterImageUrl] = useState(searchParams?.get("water") || "");
-  const [heroMediaImage, setHeroMediaImage] = useState(searchParams?.get("heroMedia") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80");
-  const [puzzleImage, setPuzzleImage] = useState(searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80");
-  const [scratchPhotoUrl, setScratchPhotoUrl] = useState(searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80");
-  const [galleryStyle, setGalleryStyle] = useState(searchParams?.get("gallery") || "polaroid");
+  const [start, setStart] = useState(() => getInitialParam("introStart", defaultStart));
+  const [dateMode, setDateMode] = useState(() => getInitialParam("dateDisplayMode", "countdown"));
+  const [schedule, setSchedule] = useState(() => getInitialParam("scheduleSchema", "classico"));
+  const [rsvpStyle, setRsvpStyle] = useState(() => getInitialParam("rsvpStyle", "classico"));
 
-  // SINCRONIZZAZIONE DATI REALI DA LOCALSTORAGE IN CASO DI PREVIEW / FULLSCREEN
-  useEffect(() => {
-    try {
-      const storedDataRaw = localStorage.getItem("love_invitation_data") || localStorage.getItem(`love_invitation_${cleanSlug}`);
-      if (storedDataRaw) {
-        const localData = JSON.parse(storedDataRaw);
-        if (localData.introStart) setStart(localData.introStart);
-        if (localData.dateDisplayMode) setDateMode(localData.dateDisplayMode);
-        if (localData.scheduleSchema) setSchedule(localData.scheduleSchema);
-        if (localData.rsvpStyle) setRsvpStyle(localData.rsvpStyle);
-        if (localData.coupleNames) setCoupleNames(localData.coupleNames);
-        if (localData.weddingDateDay) setWeddingDateDay(localData.weddingDateDay);
-        if (localData.weddingDateMonth) setWeddingDateMonth(localData.weddingDateMonth);
-        if (localData.weddingDateYear) setWeddingDateYear(localData.weddingDateYear);
-        if (localData.locationName) setLocationName(localData.locationName);
-        if (localData.locationAddress) setLocationAddress(localData.locationAddress);
-        if (localData.welcomePhrase) setWelcomePhrase(localData.welcomePhrase);
-        if (localData.heroBgImage) setHeroBgParam(localData.heroBgImage);
-        if (localData.waterImageUrl) setWaterImageUrl(localData.waterImageUrl);
-        if (localData.heroMediaImage) setHeroMediaImage(localData.heroMediaImage);
-        if (localData.puzzleImage) setPuzzleImage(localData.puzzleImage);
-        if (localData.scratchPhotoUrl) setScratchPhotoUrl(localData.scratchPhotoUrl);
-        if (localData.galleryStyle) setGalleryStyle(localData.galleryStyle);
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, [cleanSlug]);
+  const [coupleNames, setCoupleNames] = useState(() => getInitialParam("coupleNames", isTemplateC ? "Giulia & Marco" : isTemplateB ? "Francesca & Luca" : "Elena & Davide"));
+  const [weddingDateDay, setWeddingDateDay] = useState(() => getInitialParam("weddingDateDay", "15"));
+  const [weddingDateMonth, setWeddingDateMonth] = useState(() => getInitialParam("weddingDateMonth", "Settembre"));
+  const [weddingDateYear, setWeddingDateYear] = useState(() => getInitialParam("weddingDateYear", "2026"));
+  const [locationName, setLocationName] = useState(() => getInitialParam("locationName", "Villa Rosa"));
+  const [locationAddress, setLocationAddress] = useState(() => getInitialParam("locationAddress", "Via Roma 1, Roma"));
+  const [welcomePhrase, setWelcomePhrase] = useState(() => getInitialParam("welcomePhrase", "Due anime, un solo destino. Una storia scritta nel cuore."));
+  const [heroBgParam, setHeroBgParam] = useState(() => getInitialParam("heroBgImage", defaultBg));
+  const [waterImageUrl, setWaterImageUrl] = useState(() => getInitialParam("waterImageUrl", ""));
+  const [heroMediaImage, setHeroMediaImage] = useState(() => getInitialParam("heroMediaImage", "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"));
+  const [ricevimentoImage, setRicevimentoImage] = useState(() => getInitialParam("ricevimentoImage", "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"));
+  const [puzzleImage, setPuzzleImage] = useState(() => getInitialParam("puzzleImage", "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80"));
+  const [scratchPhotoUrl, setScratchPhotoUrl] = useState(() => getInitialParam("scratchPhotoUrl", "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"));
+  const [galleryStyle, setGalleryStyle] = useState(() => getInitialParam("galleryStyle", "polaroid"));
 
   const rawQuiz = searchParams?.get("quiz");
   let quizQuestions = [
@@ -206,7 +198,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors relative"
       style={{ backgroundColor: isWhiteBg ? "#FFFFFF" : bgMain, color: textColor }}
     >
-      {/* 1. OVERLAY HERO START (CON BUSTA/ZOOM VERO) */}
+      {/* 1. OVERLAY HERO START SOLTANTO PER MODELLI A & B */}
       {!isTemplateC && (
         <InvitationHero
           start={start}
@@ -292,6 +284,8 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               rsvpStyle={rsvpStyle}
               introStart={start}
               heroBgImage={heroBgParam}
+              heroMediaImage={heroMediaImage}
+              ricevimentoImage={ricevimentoImage}
               waterImageUrl={waterImageUrl}
               dateMode={dateMode}
               scheduleSchema={schedule}
