@@ -9,170 +9,32 @@ import { SectionMonogramStudio } from "./subsections/SectionMonogramStudio";
 import { SectionTableauDeMariage } from "./subsections/SectionTableauDeMariage";
 import { SectionBudgetPlanner } from "./subsections/SectionBudgetPlanner";
 
-export interface ScheduleItem {
-  id: string;
-  time: string;
-  title: string;
-}
-
 export interface AgencyConfiguratorProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  selectedTemplate: "A" | "B" | "C";
-  setSelectedTemplate: (val: "A" | "B" | "C") => void;
-  introStart: string;
-  setIntroStart: (val: string) => void;
-  dateDisplayMode: string;
-  setDateDisplayMode: (val: string) => void;
-  scheduleSchema: string;
-  setScheduleSchema: (val: string) => void;
-  rsvpStyle: string;
-  setRsvpStyle: (val: string) => void;
-  eventThemePreset: string;
-  setEventThemePreset: (val: string) => void;
-  customEventTheme: string;
-  setCustomEventTheme: (val: string) => void;
-  selectedColorScheme: string;
-  setSelectedColorScheme: (val: string) => void;
-  coupleNames: string;
-  setCoupleNames: (val: string) => void;
-  weddingDateDay: string;
-  setWeddingDateDay: (val: string) => void;
-  weddingDateMonth: string;
-  setWeddingDateMonth: (val: string) => void;
-  weddingDateYear: string;
-  setWeddingDateYear: (val: string) => void;
-  locationName: string;
-  setLocationName: (val: string) => void;
-  locationAddress: string;
-  setLocationAddress: (val: string) => void;
-  audioUrl: string;
-  setAudioUrl: (val: string) => void;
-  waterImageUrl: string;
-  setWaterImageUrl: (val: string) => void;
-  selectedPhrasePreset: string;
-  setSelectedPhrasePreset: (val: string) => void;
-  customWelcomePhrase: string;
-  setCustomWelcomePhrase: (val: string) => void;
-  dressCodeNotes: string;
-  setDressCodeNotes: (val: string) => void;
-  selectedPaletteIdx: number;
-  setSelectedPaletteIdx: (val: number) => void;
-  heroBgImage?: string;
-  setHeroBgImage?: (val: string) => void;
-  heroMediaImage?: string;
-  setHeroMediaImage?: (val: string) => void;
-  puzzleImage?: string;
-  setPuzzleImage?: (val: string) => void;
-  scratchPhotoUrl?: string;
-  setScratchPhotoUrl?: (val: string) => void;
-  quizQuestions?: any[];
-  setQuizQuestions?: (val: any[]) => void;
-  galleryStyle?: string;
-  setGalleryStyle?: (val: string) => void;
-  puzzlePrize?: string;
-  setPuzzlePrize?: (val: string) => void;
-  scratchPrize?: string;
-  setScratchPrize?: (val: string) => void;
-  quizPrize?: string;
-  setQuizPrize?: (val: string) => void;
-  scheduleItems?: ScheduleItem[];
-  setScheduleItems?: (items: ScheduleItem[]) => void;
-  showAmazonAffiliate?: boolean;
-  setShowAmazonAffiliate?: (val: boolean) => void;
-  customStores?: any[];
-  setCustomStores?: (stores: any[]) => void;
-  partnerStores?: any[];
-  setPartnerStores?: (stores: any[]) => void;
-  marqueeText: string;
-  setMarqueeText: (val: string) => void;
-  customIban: string;
-  setCustomIban: (val: string) => void;
-  modules: Record<string, boolean>;
-  toggleModule: (key: string) => void;
+  // ... altre props ...
+  [key: string]: any;
 }
 
 export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
   const { activeTab } = props;
 
-  // GESTORE UNIVERSALE E DINAMICO PER L'AGGIORNAMENTO DELLO STATO
   const handleUpdate = (field: string, value: any) => {
-    // 1. Mappatura dinamica automatica sul setter (es. setHeroBgImage)
     const setterName = `set${field.charAt(0).toUpperCase()}${field.slice(1)}`;
     if (typeof (props as any)[setterName] === "function") {
       (props as any)[setterName](value);
-    }
-
-    // 2. Mappature esplicite di sicurezza
-    if (field === "heroBgImage" && props.setHeroBgImage) props.setHeroBgImage(value);
-    if (field === "heroMediaImage" && props.setHeroMediaImage) props.setHeroMediaImage(value);
-    if (field === "puzzleImage" && props.setPuzzleImage) props.setPuzzleImage(value);
-    if (field === "scratchPhotoUrl" && props.setScratchPhotoUrl) props.setScratchPhotoUrl(value);
-    if (field === "quizQuestions" && props.setQuizQuestions) props.setQuizQuestions(value);
-    if (field === "galleryStyle" && props.setGalleryStyle) props.setGalleryStyle(value);
-    if (field === "puzzlePrize" && props.setPuzzlePrize) props.setPuzzlePrize(value);
-    if (field === "scratchPrize" && props.setScratchPrize) props.setScratchPrize(value);
-    if (field === "quizPrize" && props.setQuizPrize) props.setQuizPrize(value);
-    if (field === "showAmazonAffiliate" && props.setShowAmazonAffiliate) props.setShowAmazonAffiliate(value);
-    if (field === "customStores" && props.setCustomStores) props.setCustomStores(value);
-    if (field === "scheduleItems" && props.setScheduleItems) props.setScheduleItems(value);
-    if (field === "selectedTemplate") props.setSelectedTemplate(value);
-    if (field === "introStart") props.setIntroStart(value);
-    if (field === "dateDisplayMode") props.setDateDisplayMode(value);
-    if (field === "scheduleSchema") props.setScheduleSchema(value);
-    if (field === "rsvpStyle") props.setRsvpStyle(value);
-    if (field === "eventThemePreset") props.setEventThemePreset(value);
-    if (field === "customEventTheme") props.setCustomEventTheme(value);
-    if (field === "coupleNames") props.setCoupleNames(value);
-    if (field === "weddingDateDay") props.setWeddingDateDay(value);
-    if (field === "weddingDateMonth") props.setWeddingDateMonth(value);
-    if (field === "weddingDateYear") props.setWeddingDateYear(value);
-    if (field === "locationName") props.setLocationName(value);
-    if (field === "locationAddress") props.setLocationAddress(value);
-    if (field === "audioUrl") props.setAudioUrl(value);
-    if (field === "waterImageUrl") props.setWaterImageUrl(value);
-    if (field === "selectedPhrasePreset") props.setSelectedPhrasePreset(value);
-    if (field === "customWelcomePhrase") props.setCustomWelcomePhrase(value);
-    if (field === "dressCodeNotes") props.setDressCodeNotes(value);
-    if (field === "selectedPaletteIdx") props.setSelectedPaletteIdx(value);
-    if (field === "customIban") props.setCustomIban(value);
-    if (field === "marqueeText") props.setMarqueeText(value);
-
-    if (field === "modules") {
-      Object.keys(value).forEach((k) => {
-        if (value[k] !== props.modules[k]) {
-          props.toggleModule(k);
-        }
-      });
     }
   };
 
   return (
     <div className="p-6 w-full max-w-3xl mx-auto">
-      {/* TAB 1: CREA / MODIFICA INVITO */}
-      {activeTab === "create" && (
-        <ConfiguratorForm
-          {...props}
-          heroBgImage={props.heroBgImage}
-          heroMediaImage={props.heroMediaImage}
-          puzzleImage={props.puzzleImage}
-          scratchPhotoUrl={props.scratchPhotoUrl}
-          quizQuestions={props.quizQuestions}
-          galleryStyle={props.galleryStyle}
-          puzzlePrize={props.puzzlePrize}
-          scratchPrize={props.scratchPrize}
-          quizPrize={props.quizPrize}
-          scheduleItems={props.scheduleItems}
-          showAmazonAffiliate={props.showAmazonAffiliate}
-          customStores={props.customStores}
-          onUpdate={handleUpdate}
-        />
-      )}
+      {/* 1. CONFIGURATORE FORMS */}
+      {activeTab === "create" && <ConfiguratorForm {...props} onUpdate={handleUpdate} />}
 
-      {/* TAB 2: INVITI GIÀ CREATI (LISTA ARCHIVIO B2B) */}
+      {/* 2. INVITI SALVATI IN ARCHIVIO */}
       {activeTab === "list" && <ConfiguratorList />}
 
-      {/* TAB 3: MONOGRAM STUDIO AI (CERALACCA CON FAL.AI) */}
+      {/* 3. SIGILLO & INIZIALI 3D */}
       {activeTab === "monogram" && (
         <SectionMonogramStudio
           coupleNames={props.coupleNames}
@@ -181,22 +43,22 @@ export default function AgencyConfigurator(props: AgencyConfiguratorProps) {
         />
       )}
 
-      {/* TAB 4: TABLEAU DE MARIAGE (DISPOSIZIONE TAVOLI) */}
+      {/* 4. TABLEAU & MAPPA TAVOLI */}
       {activeTab === "tableau" && (
         <SectionTableauDeMariage coupleNames={props.coupleNames} slug={props.coupleNames} />
       )}
 
-      {/* TAB 5: BUDGET PLANNER SPESE FORNITORI */}
+      {/* 5. CONTROLLO SPESE & BUDGET */}
       {activeTab === "budget" && (
         <SectionBudgetPlanner coupleNames={props.coupleNames} slug={props.coupleNames} />
       )}
 
-      {/* TAB 6: SPEDIZIONE WHATSAPP & LISTA INVITATI */}
+      {/* 6. LISTA INVITATI & SPEDIZIONE WHATSAPP */}
       {activeTab === "whatsapp" && (
         <WhatsAppSender slug={props.coupleNames} coupleNames={props.coupleNames} />
       )}
 
-      {/* TAB 7: BRAND & LOGO WHITE-LABEL */}
+      {/* 7. BRAND & LOGO PERSONALIZZATO */}
       {activeTab === "brand" && <ConfiguratorBrand />}
     </div>
   );
