@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Lock, Sparkles, LogIn, UserPlus, ShieldAlert } from "lucide-react";
+import { Lock, LogIn, UserPlus, ShieldAlert } from "lucide-react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
@@ -43,7 +43,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     }
   }, [agencyId, isMasterDemo]);
 
-  const [sidebarWidth, setSidebarWidth] = useState(250);
+  // SIDEBAR A 290PX PER MOSTRARE IL TESTO DEL MENU SU 1 RIGA SENZA CAPO
+  const [sidebarWidth, setSidebarWidth] = useState(290);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
@@ -200,7 +201,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(180, Math.min(360, e.clientX));
+        const newWidth = Math.max(220, Math.min(380, e.clientX));
         setSidebarWidth(newWidth);
       } else if (isResizingPreview) {
         const newWidth = Math.max(320, Math.min(550, window.innerWidth - e.clientX));
@@ -266,7 +267,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. SIDEBAR AGENZIA */}
+      {/* 1. SIDEBAR AGENZIA (LARGHEZZA 290PX PER TESTO SU 1 RIGA) */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -285,8 +286,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE CON OVERFLOW-Y ISOLATO */}
-      <div className="flex-1 h-full overflow-y-scroll overflow-x-hidden bg-[#FAF7F2] border-r border-[#D4AF37]/20 relative z-10 overscroll-contain">
+      {/* 2. CONFIGURATORE CENTRALE - ISOLATO CON OVERFLOW-Y DEDICATO */}
+      <div className="flex-1 h-full overflow-y-auto overflow-x-hidden bg-[#FAF7F2] border-r border-[#D4AF37]/20 relative z-10 overscroll-contain">
         {activeTab === "list" ? (
           <div className="p-6">
             <ConfiguratorList
