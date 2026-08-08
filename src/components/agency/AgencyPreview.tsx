@@ -99,7 +99,7 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
-  heroBgImage = "/sfondi/fiori.jpg", // SFONDO PREDEFINITO FIORI
+  heroBgImage = "/sfondi/fiori.jpg",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
@@ -245,7 +245,6 @@ export default function AgencyPreview({
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-2 select-none">
-      {/* TESTATA ANTEPRIMA CON PULSANTI FULLSCREEN */}
       <div className="flex flex-col gap-1.5 w-full max-w-[350px] mb-3 text-white">
         <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] flex items-center justify-center gap-1.5">
           <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Live Preview Sincronizzata
@@ -272,7 +271,6 @@ export default function AgencyPreview({
         </div>
       </div>
 
-      {/* MOCKUP SMARTPHONE PROPORZIONATO */}
       <div
         className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin"
         style={containerBgStyle}
@@ -289,7 +287,6 @@ export default function AgencyPreview({
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
         {selectedTemplate === "C" ? (
-          /* TEMPLATE C COMPLETO DI EFFETTO START, SFONDO FIORI E GIOCHI FESTA */
           <InvitationTemplateC
             coupleNames={coupleNames}
             welcomePhrase={computedWelcomePhrase}
@@ -338,9 +335,15 @@ export default function AgencyPreview({
               </div>
             )}
 
+            {/* 1. BUSTA 3D CON SIGILLO IN CERALACCA PERSONALIZZATO */}
             {introStart === "busta" && modules.busta3d && (
               <div className="p-2">
-                <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={playWeddingAudio} />
+                <EnvelopeWax
+                  coupleNames={coupleNames}
+                  waxSealUrl={waterImageUrl || "/wax-seal.png"}
+                  inline={true}
+                  onOpen={playWeddingAudio}
+                />
               </div>
             )}
 
@@ -361,7 +364,11 @@ export default function AgencyPreview({
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-black/20">
                   <div className="relative w-12 h-12 drop-shadow-lg animate-pulse">
-                    <Image src="/wax-seal.png" alt="Sigillo Acqua" fill className="object-contain" priority unoptimized />
+                    <img
+                      src={waterImageUrl || "/wax-seal.png"}
+                      alt="Sigillo Acqua"
+                      className="w-full h-full object-contain rounded-full"
+                    />
                   </div>
                   <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest mt-1 drop-shadow">
                     Tocca per Aprire
