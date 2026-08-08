@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Gift, Plus, CheckCircle2, Trash2, DollarSign } from "lucide-react";
-import { fetchLoveBudgets, addLoveBudgetItem } from "@/lib/supabase";
+import { Gift, Plus, Trash2, DollarSign } from "lucide-react";
+import { fetchLoveBudgets, addLoveBudgetItem, deleteLoveBudgetItem } from "@/lib/supabase";
 
 export interface SectionBudgetPlannerProps {
   coupleNames?: string;
@@ -15,6 +15,7 @@ export function SectionBudgetPlanner({
 }: SectionBudgetPlannerProps) {
   const [items, setItems] = useState<any[]>([]);
   const [category, setCategory] = useState("location");
+  const [customCategory, setCustomCategory] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [estimatedCost, setEstimatedCost] = useState("");
   const [actualCost, setActualCost] = useState("");
@@ -40,9 +41,11 @@ export function SectionBudgetPlanner({
     e.preventDefault();
     if (!supplierName.trim()) return;
 
+    const finalCategory = category === "custom" ? (customCategory.trim() || "Spesa Personalizzata") : category;
+
     const newItem = {
       experience_slug: cleanSlug,
-      category,
+      category: finalCategory,
       supplier_name: supplierName.trim(),
       estimated_cost: Number(estimatedCost) || 0,
       actual_cost: Number(actualCost) || Number(estimatedCost) || 0,
@@ -54,11 +57,19 @@ export function SectionBudgetPlanner({
       setSupplierName("");
       setEstimatedCost("");
       setActualCost("");
+      setCustomCategory("");
       loadBudgetData();
     }
   };
 
-  const totalEstimated = items.reduce((acc, i) => acc + (Number(i.estimated_cost) || 0), 0);
+  // CANCELLAZIONE VOCE SPESA DA SUPABASE
+  const handleDeleteItem = async (itemId: string) => {
+    if (window.confirm("Sei sicuro di voler eliminare questa voce dal budget?")) {
+      await deleteLoveBudgetItem(itemId);
+      setItems((prev) => prev.filter((i) => i.id !== itemId));
+    }
+  };
+
   const totalActual = items.reduce((acc, i) => acc + (Number(i.actual_cost) || 0), 0);
 
   return (
@@ -79,11 +90,11 @@ export function SectionBudgetPlanner({
         </div>
       </div>
 
-      {/* FORM AGGIUNTA VOCE DI SPESA */}
+      {/* FORM AGGIUNTA VOCE DI SPESA CON OPZIONE MANUALE */}
       <form onSubmit={handleAddItem} className="p-4 bg-[#FAF7F2] rounded-2xl border border-slate-200 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <div>
-            <label className="block text-[10px] font-bold text-slate-700 mb-0.5">Categoria</label>
+            <label className="block text-[10px] font-bold text-slate-700 mb-0.5">Categoria Spesa</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -95,9 +106,23 @@ export function SectionBudgetPlanner({
               <option value="fiori">🌹 Allestimenti Floreali</option>
               <option value="musica">🎵 Musica &amp; DJ Set</option>
               <option value="abito">👗 Abito da Sposa / Sposo</option>
-              <option value="altro">✨ Altro Fornitore</option>
+              <option value="custom">✍️ Categoria Personalizzata...</option>
             </select>
           </div>
+
+          {category === "custom" && (
+            <div>
+              <label className="block text-[10px] font-bold text-[#8B6508] mb-0.5">Nome Categoria Personalizzata *</label>
+              <input
+                type="text"
+                required
+                placeholder="Es. Bomboniere / Noleggio Auto..."
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                className="w-full text-xs p-2 rounded-xl border border-[#D4AF37] bg-white font-bold"
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-[10px] font-bold text-slate-700 mb-0.5">Fornitore / Descrizione *</label>
@@ -131,7 +156,7 @@ export function SectionBudgetPlanner({
         </button>
       </form>
 
-      {/* TABELLA VOCE SPESE */}
+      {/* TABELLA VOCE SPESE CON ELIMINAZIONE */}
       <div className="divide-y divide-slate-100 max-h-[350px] overflow-y-auto">
         {items.map((item) => (
           <div key={item.id} className="py-3 flex justify-between items-center text-xs">
@@ -139,7 +164,20 @@ export function SectionBudgetPlanner({
               <span className="font-bold text-slate-900 block">{item.supplier_name}</span>
               <span className="text-[10px] text-slate-500 uppercase">{item.category}</span>
             </div>
-            <span className="font-bold font-mono text-sm text-[#8B6508]">€ {Number(item.actual_cost || 0).toLocaleString()}</span>
+            
+            <div className="flex items-center gap-3">
+              <span className="font-bold font-mono text-sm text-[#8B6508]">
+                € {Number(item.actual_cost || 0).toLocaleString()}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleDeleteItem(item.id)}
+                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                title="Elimina Voce Spesa"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         ))}
 
