@@ -44,9 +44,13 @@ export default function InvitationHero({
   setApertoAcqua,
   setApertoCosmos,
 }: InvitationHeroProps) {
+  const activeBg = heroBgParam && heroBgParam !== "palette" && heroBgParam.includes("/")
+    ? heroBgParam
+    : "/sfondi/fiori.jpg";
+
   return (
     <>
-      {/* 1. EFFETTO BUSTA 3D CON OVERLAY A TUTTO SCHERMO */}
+      {/* 1. EFFETTO BUSTA 3D */}
       {start === "busta" && showBusta && (
         <EnvelopeWax
           coupleNames={coupleNames}
@@ -58,7 +62,7 @@ export default function InvitationHero({
 
       {/* 2. EFFETTO NUVOLE 3D */}
       {start === "nuvole" && showNuvole && (
-        <PartingClouds onOpen={playWeddingAudio} />
+        <PartingClouds inline={inline} onOpen={playWeddingAudio} />
       )}
 
       {/* 3. EFFETTO SPECCHIO D'ACQUA LAGO */}
@@ -78,7 +82,7 @@ export default function InvitationHero({
       {start === "expand" && (
         <div className="py-2 px-4">
           <ScrollExpandMedia
-            bgImageSrc={heroBgParam || "/sfondi/fiori.jpg"}
+            bgImageSrc={activeBg}
             mediaSrc={heroMediaImage}
             title={coupleNames}
             date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -93,6 +97,7 @@ export default function InvitationHero({
           <CosmosHero
             coupleNames={coupleNames}
             weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            inline={inline}
             onEnter={() => {
               if (typeof playWeddingAudio === "function") playWeddingAudio();
               if (typeof setApertoCosmos === "function") setApertoCosmos(true);
