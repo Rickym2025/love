@@ -95,7 +95,7 @@ input, select, textarea, button {
 }
 
 
-/* ─── ANIMAZIONI MARQUEE LOOP CONTINUO ─── */
+/* ─── ANIMAZIONI MARQUEE LOOP 3D VERTICALE & ORIZZONTALE ─── */
 @keyframes marquee {
   from {
     transform: translateX(0%);
