@@ -37,78 +37,79 @@ export default function LandingPage() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
+  // 8 TESTIMONIANZE RICCHE IN ITALIANO PER IL MURO 3D
   const richTestimonials = [
     {
       names: 'Sofia & Lorenzo',
-      location: 'Sposi a Villa Borromeo (Milano)',
-      date: 'Matrimonio Settembre 2025',
+      location: 'Sposi • Villa Borromeo (Milano)',
+      date: 'Settembre 2025',
       stars: 5,
-      highlight: '🎯 130 Conferme Ricevute in 24 Ore',
+      highlight: '🎯 130 Conferme in 24 Ore',
       comment:
-        'I nostri invitati sono rimasti a bocca aperta quando hanno toccato la ceralacca 3D sullo schermo ed è partita la nostra canzone! La cosa più comoda in assoluto è stata raccogliere le conferme delle intolleranze alimentari: lo chef del catering ci ha ringraziato per la tabella Excel perfetta.',
+        'Invitati rimasti a bocca aperta per la ceralacca 3D e per la canzone d\'autore! Lo chef del catering ci ha ringraziato per la tabella Excel intolleranze perfetta.',
     },
     {
       names: 'Elena Valenti',
-      location: 'Wedding Planner d\'Élite (Milano & Lago di Como)',
-      date: 'Gestione 12 Matrimoni / Anno',
+      location: 'Wedding Planner (Milano & Como)',
+      date: '12 Matrimoni / Anno',
       stars: 5,
-      highlight: '💼 Servizio Impeccabile per le Agenzie',
+      highlight: '💼 Servizio Impeccabile B2B',
       comment:
-        'Agency Hub ha rivoluzionato il mio lavoro. Creare partecipazioni con il logo della mia agenzia nel footer mi dà un posizionamento di altissimo livello. L\'export automatico delle liste invitati ed il modulo WhatsApp ad un tocco azzerano giorni di stress.',
+        'Agency Hub ha rivoluzionato il mio lavoro. Logo agenzia nel footer, configuratore veloce ed export Excel liste invitati zero-stress.',
     },
     {
       names: 'Marco & Giulia',
-      location: 'Sposi a Villa Rosa (Roma)',
-      date: 'Matrimonio Giugno 2026',
+      location: 'Sposi • Villa Rosa (Roma)',
+      date: 'Giugno 2026',
       stars: 5,
       highlight: '🎵 Canzone Inedita Commovente',
       comment:
-        'Abbiamo scelto il servizio "Chiavi in Mano" e la Canzone Personalizzata del Maestro Fausto Fusetti. Ricevere 2 arrangiamenti diversi tra cui scegliere è stato emozionante. Quando parenti ed amici hanno aperto l\'invito hanno vissuto un momento di commozione pura.',
+        'Servizio Chiavi in Mano e Canzone del Maestro Fausto Fusetti straordinari. Ricevere 2 arrangiamenti diversi tra cui scegliere è stato emozionante!',
     },
     {
       names: 'Davide & Francesca',
-      location: 'Sposi a Tenuta Castel Venezze (Rovigo)',
-      date: 'Matrimonio Maggio 2025',
+      location: 'Sposi • Tenuta Castel Venezze',
+      date: 'Maggio 2025',
       stars: 5,
-      highlight: '🎰 Gioco Scratch della Data Virale',
+      highlight: '🎰 Gratta la Data Virale',
       comment:
-        'Tutti i nostri amici ci hanno fatto i complimenti per il gioco "Gratta la Data" col dito sullo schermo! La mappa navigatore GPS integrata ha guidato tutti direttamente al parcheggio della villa senza una sola telefonata di indicazioni.',
+        'Tutti i nostri amici hanno adorato il gioco "Gratta la Data" col dito! La mappa navigatore GPS ha guidato tutti direttamente al parcheggio.',
     },
     {
       names: 'Chiara & Alessandro',
-      location: 'Sposi a Villa Miani (Roma)',
-      date: 'Matrimonio Ottobre 2025',
+      location: 'Sposi • Villa Miani (Roma)',
+      date: 'Ottobre 2025',
       stars: 5,
       highlight: '🎉 Maxischermo Festa Spettacolare',
       comment:
-        'Durante il ricevimento gli invitati scattavano foto dal loro telefono e le vedevamo proiettate in diretta sul maxischermo della sala insieme alla classifica del Quiz degli Sposi. Una festa davvero indimenticabile per tutti!',
+        'Foto scattate dagli invitati proiettate in diretta sul maxischermo della sala insieme al Quiz degli Sposi. Una festa indimenticabile!',
     },
     {
       names: 'Roberto & Valentina',
-      location: 'Sposi a Castello di Guarene (Cuneo)',
-      date: 'Matrimonio Luglio 2025',
+      location: 'Sposi • Castello di Guarene',
+      date: 'Luglio 2025',
       stars: 5,
-      highlight: '🥩 Gestione Intolleranze per lo Chef',
+      highlight: '🥩 Intolleranze per lo Chef',
       comment:
-        'Avendo molti invitati celiaci e vegetariani, temevamo ritardi con la cucina. Grazie alla tabella Excel scaricata dalla dashboard, il catering aveva già tutti i piatti speciali pronti. Servizio impeccabile.',
+        'Grazie alla tabella Excel scaricata dalla dashboard, la cucina aveva già tutti i piatti speciali pronti per i celiaci. Nessun ritardo.',
     },
     {
       names: 'Silvia Moretti',
-      location: 'Wedding Planner & Event Designer (Firenze)',
-      date: 'Gestione Eventi Luxury',
+      location: 'Wedding Planner (Firenze)',
+      date: 'Eventi Luxury',
       stars: 5,
       highlight: '✨ Impatto Emozionale Unico',
       comment:
-        'I miei clienti cercano l\'eccellenza. LOVE offre quell\'effetto WOW che la carta non potrà mai dare, mantenendo al tempo stesso la classe e la raffinatezza della busta d\'epoca. Indispensabile per ogni agenzia.',
+        'LOVE offre quell\'effetto WOW che la carta non potrà mai dare, mantenendo la classe della busta d\'epoca. Indispensabile per le agenzie.',
     },
     {
       names: 'Gianluca & Beatrice',
-      location: 'Sposi a Villa Cordevigo (Verona)',
-      date: 'Matrimonio Aprile 2026',
+      location: 'Sposi • Villa Cordevigo (Verona)',
+      date: 'Aprile 2026',
       stars: 5,
-      highlight: '💬 Spedizione WhatsApp Istantanea',
+      highlight: '💬 Spedizione WhatsApp 1-Tap',
       comment:
-        'Inviare 150 partecipazioni personalizzate con il nome dell\'invitato direttamente su WhatsApp dal pannello ha richiesto meno di 10 minuti. Risposte arrivate tutte entro 48 ore!',
+        'Inviare 150 partecipazioni personalizzate su WhatsApp dal pannello ha richiesto meno di 10 minuti. Risposte arrivate tutte in 48 ore!',
     },
   ];
 
@@ -163,9 +164,40 @@ export default function LandingPage() {
     },
   ];
 
+  // SCHEDA TESTIMONIANZA COMPATTA PER IL MURO 3D
+  const TestimonialCard = ({ item }: { item: (typeof richTestimonials)[number] }) => (
+    <div className="w-[280px] sm:w-[320px] p-6 bg-slate-950/95 rounded-3xl border-2 border-[#D4AF37]/60 shadow-[0_0_20px_rgba(212,175,55,0.2)] flex flex-col justify-between space-y-4 hover:border-[#D4AF37] transition-all text-left">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-1 text-amber-400">
+            {[...Array(item.stars)].map((_, i) => (
+              <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+            ))}
+          </div>
+          <Quote className="w-6 h-6 text-[#D4AF37]/40" />
+        </div>
+
+        <span className="inline-block px-2.5 py-0.5 bg-[#D4AF37]/20 border border-[#D4AF37] text-amber-300 text-[10px] font-bold rounded-full">
+          {item.highlight}
+        </span>
+
+        <p className="text-sm text-slate-200 font-serif leading-relaxed italic">
+          &quot;{item.comment}&quot;
+        </p>
+      </div>
+
+      <div className="pt-3 border-t border-slate-800 space-y-0.5">
+        <h4 className="font-serif font-bold text-sm text-white">{item.names}</h4>
+        <p className="text-[11px] text-[#D4AF37] font-bold">{item.location}</p>
+        <p className="text-[10px] text-slate-400">{item.date}</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B] text-base leading-relaxed">
       
+      {/* SFONDO CONTINUO AVORIO */}
       <div
         className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -270,53 +302,63 @@ export default function LandingPage() {
           </p>
         </section>
 
-        {/* 🌟 SEZIONE RECENSIONI USANDO IL TUO COMPONENTE ESATTO DA 21ST.DEV */}
-        <section className="py-20 bg-slate-900 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
-          <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-            <div className="text-center space-y-2 max-w-3xl mx-auto px-6">
-              <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block flex items-center justify-center gap-2">
-                <Star className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" /> Storie d'Amore &amp; Testimonianze Reali
-              </span>
-              <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white">Cosa dicono le Coppie ed i Wedding Planner</h2>
-              <p className="text-base text-slate-300 font-serif">
-                Passa il mouse sopra per mettere in pausa lo scorrimento e leggere i racconti completi.
-              </p>
+        {/* 🌟 SEZIONE 3D VERTICAL TESTIMONIALS WALL (COME IMMAGINE 1 21ST.DEV) */}
+        <section className="py-20 bg-slate-950 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
+          <div className="max-w-6xl mx-auto space-y-6 relative z-10 text-center px-6">
+            <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block flex items-center justify-center gap-2">
+              <Star className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" /> Storie d'Amore &amp; Testimonianze Reali
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white">
+              Cosa dicono le Coppie ed i Wedding Planner
+            </h2>
+            <p className="text-base text-slate-300 font-serif max-w-xl mx-auto">
+              Passa il mouse sopra qualsiasi scheda per mettere in pausa lo scorrimento e leggere il racconto.
+            </p>
+
+            {/* CONTENITORE CON PROSPETTIVA E TRASFORMAZIONE TRIDIMENSIONALE (COME IMMAGINE 1) */}
+            <div className="relative flex h-[500px] md:h-[580px] w-full items-center justify-center overflow-hidden [perspective:800px] pt-4">
+              <div
+                className="flex flex-row items-center gap-4 sm:gap-6"
+                style={{
+                  transform:
+                    'translateX(-60px) translateY(0px) translateZ(-80px) rotateX(20deg) rotateY(-12deg) rotateZ(18deg)',
+                }}
+              >
+                {/* COLONNA 1: SCORRIMENTO VERSO IL BASSO */}
+                <Marquee vertical pauseOnHover repeat={3} className="[--duration:38s]">
+                  {richTestimonials.slice(0, 4).map((item, idx) => (
+                    <TestimonialCard key={idx} item={item} />
+                  ))}
+                </Marquee>
+
+                {/* COLONNA 2: SCORRIMENTO VERSO L'ALTO (REVERSE) */}
+                <Marquee vertical pauseOnHover reverse repeat={3} className="[--duration:42s]">
+                  {richTestimonials.slice(2, 6).map((item, idx) => (
+                    <TestimonialCard key={idx} item={item} />
+                  ))}
+                </Marquee>
+
+                {/* COLONNA 3: SCORRIMENTO VERSO IL BASSO */}
+                <Marquee vertical pauseOnHover repeat={3} className="[--duration:36s]">
+                  {richTestimonials.slice(4, 8).map((item, idx) => (
+                    <TestimonialCard key={idx} item={item} />
+                  ))}
+                </Marquee>
+
+                {/* COLONNA 4: SCORRIMENTO VERSO L'ALTO (NASCOSTA SU SCHERMI PICCOLI) */}
+                <Marquee vertical pauseOnHover reverse repeat={3} className="[--duration:44s] hidden sm:flex">
+                  {richTestimonials.slice(1, 5).map((item, idx) => (
+                    <TestimonialCard key={idx} item={item} />
+                  ))}
+                </Marquee>
+              </div>
+
+              {/* GRADIENTI DI SFUMATURA CINEMATOGRAFICA AI BORDI */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-slate-950 via-slate-950/80 to-transparent z-20"></div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent z-20"></div>
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-20"></div>
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent z-20"></div>
             </div>
-
-            {/* UTILIZZO COMPONENTE MARQUEE 21ST.DEV ESATTO */}
-            <Marquee pauseOnHover repeat={4} className="[--duration:50s]">
-              {richTestimonials.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="w-[360px] sm:w-[420px] shrink-0 p-8 bg-slate-950/90 rounded-3xl border-2 border-[#D4AF37]/60 shadow-[0_0_25px_rgba(212,175,55,0.2)] flex flex-col justify-between space-y-5 hover:border-[#D4AF37] transition-all relative group text-left my-2"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-1 text-amber-400">
-                        {[...Array(item.stars)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        ))}
-                      </div>
-                      <Quote className="w-8 h-8 text-[#D4AF37]/30 group-hover:text-[#D4AF37] transition-colors" />
-                    </div>
-
-                    <span className="inline-block px-3 py-1 bg-[#D4AF37]/20 border border-[#D4AF37] text-amber-300 text-xs font-bold rounded-full">
-                      {item.highlight}
-                    </span>
-
-                    <p className="text-base text-slate-200 font-serif leading-relaxed italic">
-                      &quot;{item.comment}&quot;
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-800 space-y-1">
-                    <h4 className="font-serif font-bold text-lg text-white">{item.names}</h4>
-                    <p className="text-xs text-[#D4AF37] font-bold">{item.location}</p>
-                    <p className="text-[11px] text-slate-400">{item.date}</p>
-                  </div>
-                </div>
-              ))}
-            </Marquee>
           </div>
         </section>
 
@@ -335,9 +377,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 bg-amber-50 border border-[#D4AF37] rounded-2xl flex items-center justify-center text-[#8B6508]">
                 <Zap className="w-6 h-6 text-[#D4AF37]" />
               </div>
-              <h3 className="font-serif font-bold text-xl text-[#1E293B]">Spedizione Istantanea con un Tocco</h3>
+              <h3 className="font-serif font-bold text-xl text-[#1E293B]">Spedisci in un Secondo con un Tocco</h3>
               <p className="text-base text-slate-600 leading-relaxed font-serif">
-                Spedisci l&apos;invito personalizzato con il nome di ciascun invitato in un secondo con un semplice tocco su WhatsApp. Zero costi di spedizione o francobolli.
+                Invia l&apos;invito personalizzato con il nome di ciascun invitato in un secondo con un semplice tocco su WhatsApp. Zero costi di spedizione o francobolli.
               </p>
             </div>
 
@@ -506,31 +548,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* SEZIONE BUSTA CERALACCA DETAIL */}
-        <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
-          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-            <img
-              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"
-              alt="Busta Ceralacca"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="text-left space-y-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">Busta D'Epoca &amp; Ceralacca 3D</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Un'emozione al primo tocco</h3>
-            <p className="text-base text-slate-600 leading-relaxed font-serif">
-              L&apos;invitato tocca il sigillo dorato sullo schermo del telefono: la busta si apre con la vostra colonna sonora d&apos;autore e pioggia di petali animati.
-            </p>
-            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-              Prova la Busta Live →
-            </Link>
-          </div>
-        </section>
-
         {/* FOCUS NEUROMARKETING: CANZONE SU MISURA CON DOPPIA PROPOSTA D'ASCOLTO */}
         <section id="canzone-inedita" className="py-20 px-6 max-w-6xl mx-auto">
-          <div className="p-8 sm:p-12 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl border-2 border-[#D4AF37] shadow-[0_0_35px_rgba(212,175,55,0.35)] space-y-8 relative overflow-hidden">
-            <div className="max-w-3xl space-y-4 text-left">
+          <div className="p-8 sm:p-12 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl border-2 border-[#D4AF37] shadow-[0_0_35px_rgba(212,175,55,0.35)] space-y-8 relative overflow-hidden text-left">
+            <div className="max-w-3xl space-y-4">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest flex items-center gap-2">
                 <Award className="w-5 h-5 text-[#D4AF37]" /> FF EDIZIONI • PRODUZIONI MUSICALI D'AUTORE
               </span>
