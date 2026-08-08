@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Heart, PartyPopper, ChevronDown, ChevronUp, Gift } from "lucide-react";
@@ -29,24 +29,53 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const isTemplateC = template === "C";
   const isTemplateB = template === "B";
 
-  const start = searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta");
-  const dateMode = searchParams?.get("dateMode") || "countdown";
-  const schedule = searchParams?.get("schedule") || "classico";
-  const rsvpStyle = searchParams?.get("rsvpStyle") || "classico";
+  const [start, setStart] = useState(searchParams?.get("start") || (isTemplateB ? "nuvole" : "busta"));
+  const [dateMode, setDateMode] = useState(searchParams?.get("dateMode") || "countdown");
+  const [schedule, setSchedule] = useState(searchParams?.get("schedule") || "classico");
+  const [rsvpStyle, setRsvpStyle] = useState(searchParams?.get("rsvpStyle") || "classico");
 
-  const coupleNames = searchParams?.get("couple") || (isTemplateC ? "Giulia & Marco" : isTemplateB ? "Francesca & Luca" : "Elena & Davide");
-  const weddingDateDay = searchParams?.get("day") || "15";
-  const weddingDateMonth = searchParams?.get("month") || "Settembre";
-  const weddingDateYear = searchParams?.get("year") || "2026";
-  const locationName = searchParams?.get("location") || "Villa Rosa";
-  const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
-  const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
-  const heroBgParam = searchParams?.get("heroBg") || "/sfondi/fiori.jpg";
-  const waterImageUrl = searchParams?.get("water") || "";
-  const heroMediaImage = searchParams?.get("heroMedia") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
-  const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80";
-  const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80";
-  const galleryStyle = searchParams?.get("gallery") || "polaroid";
+  const [coupleNames, setCoupleNames] = useState(searchParams?.get("couple") || (isTemplateC ? "Giulia & Marco" : isTemplateB ? "Francesca & Luca" : "Elena & Davide"));
+  const [weddingDateDay, setWeddingDateDay] = useState(searchParams?.get("day") || "15");
+  const [weddingDateMonth, setWeddingDateMonth] = useState(searchParams?.get("month") || "Settembre");
+  const [weddingDateYear, setWeddingDateYear] = useState(searchParams?.get("year") || "2026");
+  const [locationName, setLocationName] = useState(searchParams?.get("location") || "Villa Rosa");
+  const [locationAddress, setLocationAddress] = useState(searchParams?.get("address") || "Via Roma 1, Roma");
+  const [welcomePhrase, setWelcomePhrase] = useState(searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.");
+  const [heroBgParam, setHeroBgParam] = useState(searchParams?.get("heroBg") || "/sfondi/fiori.jpg");
+  const [waterImageUrl, setWaterImageUrl] = useState(searchParams?.get("water") || "");
+  const [heroMediaImage, setHeroMediaImage] = useState(searchParams?.get("heroMedia") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80");
+  const [puzzleImage, setPuzzleImage] = useState(searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80");
+  const [scratchPhotoUrl, setScratchPhotoUrl] = useState(searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80");
+  const [galleryStyle, setGalleryStyle] = useState(searchParams?.get("gallery") || "polaroid");
+
+  // SINCRONIZZAZIONE DATI REALI DA LOCALSTORAGE IN CASO DI PREVIEW / FULLSCREEN
+  useEffect(() => {
+    try {
+      const storedDataRaw = localStorage.getItem("love_invitation_data") || localStorage.getItem(`love_invitation_${cleanSlug}`);
+      if (storedDataRaw) {
+        const localData = JSON.parse(storedDataRaw);
+        if (localData.introStart) setStart(localData.introStart);
+        if (localData.dateDisplayMode) setDateMode(localData.dateDisplayMode);
+        if (localData.scheduleSchema) setSchedule(localData.scheduleSchema);
+        if (localData.rsvpStyle) setRsvpStyle(localData.rsvpStyle);
+        if (localData.coupleNames) setCoupleNames(localData.coupleNames);
+        if (localData.weddingDateDay) setWeddingDateDay(localData.weddingDateDay);
+        if (localData.weddingDateMonth) setWeddingDateMonth(localData.weddingDateMonth);
+        if (localData.weddingDateYear) setWeddingDateYear(localData.weddingDateYear);
+        if (localData.locationName) setLocationName(localData.locationName);
+        if (localData.locationAddress) setLocationAddress(localData.locationAddress);
+        if (localData.welcomePhrase) setWelcomePhrase(localData.welcomePhrase);
+        if (localData.heroBgImage) setHeroBgParam(localData.heroBgImage);
+        if (localData.waterImageUrl) setWaterImageUrl(localData.waterImageUrl);
+        if (localData.heroMediaImage) setHeroMediaImage(localData.heroMediaImage);
+        if (localData.puzzleImage) setPuzzleImage(localData.puzzleImage);
+        if (localData.scratchPhotoUrl) setScratchPhotoUrl(localData.scratchPhotoUrl);
+        if (localData.galleryStyle) setGalleryStyle(localData.galleryStyle);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [cleanSlug]);
 
   const rawQuiz = searchParams?.get("quiz");
   let quizQuestions = [
@@ -177,7 +206,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors relative"
       style={{ backgroundColor: isWhiteBg ? "#FFFFFF" : bgMain, color: textColor }}
     >
-      {/* 1. OVERLAY BUSTA 3D / HERO START (OVERLAY A SCHERMO INTERO) */}
+      {/* 1. OVERLAY HERO START (CON BUSTA/ZOOM VERO) */}
       {!isTemplateC && (
         <InvitationHero
           start={start}
