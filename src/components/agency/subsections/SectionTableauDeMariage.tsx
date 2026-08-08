@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Users, Plus, RefreshCw, AlertCircle } from "lucide-react";
-import { fetchLoveRsvps, fetchLoveTables, addLoveTable, updateGuestTable } from "@/lib/supabase";
+import { Users, Plus, RefreshCw, AlertCircle, Trash2, CheckCircle2, Circle } from "lucide-react";
+import { fetchLoveRsvps, fetchLoveTables, addLoveTable, updateGuestTable, deleteLoveTable } from "@/lib/supabase";
 
 export interface SectionTableauDeMariageProps {
   coupleNames?: string;
@@ -18,6 +18,7 @@ export function SectionTableauDeMariage({
   const [newTableName, setNewTableName] = useState("");
   const [newTableCapacity, setNewTableCapacity] = useState(8);
   const [isLoading, setIsLoading] = useState(false);
+  const [guestFilter, setGuestFilter] = useState<"all" | "unassigned" | "assigned">("all");
 
   const cleanSlug = (slug || coupleNames || "elena-e-davide")
     .toLowerCase()
@@ -65,6 +66,26 @@ export function SectionTableauDeMariage({
       prev.map((g) => (g.id === rsvpId ? { ...g, table_name: tableName } : g))
     );
   };
+
+  // CANCELLAZIONE TAVOLO DA SUPABASE
+  const handleDeleteTable = async (tableId: string, tableName: string) => {
+    if (window.confirm(`Sei sicuro di voler eliminare il "${tableName}"? Gli ospiti assegnati torneranno da sistemare.`)) {
+      await deleteLoveTable(tableId);
+      // Ripristina gli ospiti assegnati a quel tavolo
+      setGuests((prev) =>
+        prev.map((g) => (g.table_name === tableName ? { ...g, table_name: "Da Assegnare" } : g))
+      );
+      setTables((prev) => prev.filter((t) => t.id !== tableId));
+    }
+  };
+
+  const filteredGuests = guests.filter((g) => {
+    if (guestFilter === "unassigned") return !g.table_name || g.table_name === "Da Assegnare";
+    if (guestFilter === "assigned") return g.table_name && g.table_name !== "Da Assegnare";
+    return true;
+  });
+
+  const assignedCount = guests.filter((g) => g.table_name && g.table_name !== "Da Assegnare").length;
 
   return (
     <div className="p-6 bg-[#FAF7F2] rounded-3xl border-2 border-[#D4AF37]/50 shadow-xl space-y-6 text-left text-slate-800">
@@ -115,17 +136,27 @@ export function SectionTableauDeMariage({
         </button>
       </form>
 
-      {/* VISUALIZZAZIONE TAVOLI & INVITATI ASSEGNATI */}
+      {/* VISUALIZZAZIONE TAVOLI CON PULSANTE ELIMINAZIONE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tables.map((tbl) => {
           const seatedGuests = guests.filter((g) => g.table_name === tbl.table_name);
           return (
-            <div key={tbl.id} className="p-4 bg-white rounded-2xl border-2 border-[#D4AF37]/40 shadow-sm space-y-3">
+            <div key={tbl.id} className="p-4 bg-white rounded-2xl border-2 border-[#D4AF37]/40 shadow-sm space-y-3 relative group">
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                 <h4 className="font-serif font-bold text-sm text-[#8B6508]">{tbl.table_name}</h4>
-                <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                  {seatedGuests.length} / {tbl.seats_capacity} Posti Occupati
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                    {seatedGuests.length} / {tbl.seats_capacity} Posti
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteTable(tbl.id, tbl.table_name)}
+                    className="p-1 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                    title="Elimina Tavolo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-1.5 min-h-[60px]">
@@ -154,34 +185,82 @@ export function SectionTableauDeMariage({
         })}
       </div>
 
-      {/* LISTA INVITATI DA ASSEGNARE */}
+      {/* FILTRI CON SPUNTE VISIVE PER INVITATI SISTEMATI */}
       <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-sm">
-        <h4 className="font-serif font-bold text-xs uppercase text-[#8B6508]">
-          Assegna Invitati ai Tavoli ({guests.length} Confermati)
-        </h4>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-2">
+          <h4 className="font-serif font-bold text-xs uppercase text-[#8B6508]">
+            Assegna Invitati ai Tavoli ({assignedCount} / {guests.length} Sistemati)
+          </h4>
+
+          <div className="flex gap-1 text-[10px] font-bold">
+            <button
+              type="button"
+              onClick={() => setGuestFilter("all")}
+              className={`px-2.5 py-1 rounded-lg border ${
+                guestFilter === "all" ? "bg-[#D4AF37] text-slate-950 border-[#D4AF37]" : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              Tutti ({guests.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuestFilter("unassigned")}
+              className={`px-2.5 py-1 rounded-lg border ${
+                guestFilter === "unassigned" ? "bg-amber-500 text-white border-amber-500" : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              ⚪ Da Sistemare ({guests.length - assignedCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuestFilter("assigned")}
+              className={`px-2.5 py-1 rounded-lg border ${
+                guestFilter === "assigned" ? "bg-emerald-600 text-white border-emerald-600" : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              🟢 Sistemati ({assignedCount})
+            </button>
+          </div>
+        </div>
 
         <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
-          {guests.map((g) => (
-            <div key={g.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
-              <div>
-                <span className="font-bold text-slate-900 block">{g.guest_name}</span>
-                <span className="text-[10px] text-slate-500">
-                  Menu: {g.menu_preference} {g.dietary_notes ? `• ${g.dietary_notes}` : ""}
-                </span>
-              </div>
+          {filteredGuests.map((g) => {
+            const isAssigned = g.table_name && g.table_name !== "Da Assegnare";
+            return (
+              <div key={g.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  {isAssigned ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  ) : (
+                    <Circle className="w-4 h-4 text-amber-500 shrink-0" />
+                  )}
+                  <div>
+                    <span className={`font-bold block ${isAssigned ? "text-slate-900" : "text-amber-800"}`}>
+                      {g.guest_name}
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Menu: {g.menu_preference} {g.dietary_notes ? `• ${g.dietary_notes}` : ""}
+                    </span>
+                  </div>
+                </div>
 
-              <select
-                value={g.table_name || "Da Assegnare"}
-                onChange={(e) => handleAssignTable(g.id, e.target.value)}
-                className="text-xs p-1.5 rounded-lg border border-slate-300 bg-[#FAF7F2] font-bold text-[#8B6508] cursor-pointer"
-              >
-                <option value="Da Assegnare">-- Scegli Tavolo --</option>
-                {tables.map((t) => (
-                  <option key={t.id} value={t.table_name}>{t.table_name}</option>
-                ))}
-              </select>
-            </div>
-          ))}
+                <select
+                  value={g.table_name || "Da Assegnare"}
+                  onChange={(e) => handleAssignTable(g.id, e.target.value)}
+                  className={`text-xs p-1.5 rounded-lg border font-bold cursor-pointer ${
+                    isAssigned
+                      ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                      : "bg-amber-50 text-amber-800 border-amber-300"
+                  }`}
+                >
+                  <option value="Da Assegnare">-- Scegli Tavolo --</option>
+                  {tables.map((t) => (
+                    <option key={t.id} value={t.table_name}>{t.table_name}</option>
+                  ))}
+                </select>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
