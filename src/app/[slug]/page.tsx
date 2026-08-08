@@ -3,7 +3,7 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Heart, PartyPopper, ChevronDown, ChevronUp } from "lucide-react";
+import { Heart, PartyPopper, ChevronDown, ChevronUp, Gift } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import AudioPlayer from "@/components/AudioPlayer";
@@ -419,9 +419,9 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
                   </p>
                   <Link
                     href={festaDynamicUrl}
-                    className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
+                    className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-950 px-5 py-3 rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
                   >
-                    <Heart className="w-4 h-4 fill-slate-900" /> Entra nella Pagina della Festa ↗
+                    <Heart className="w-4 h-4 fill-slate-950" /> Entra nella Pagina della Festa ↗
                   </Link>
                 </div>
               )}
