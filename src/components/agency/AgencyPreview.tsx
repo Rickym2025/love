@@ -375,4 +375,299 @@ export default function AgencyPreview({
                   <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest mt-1 drop-shadow">
                     Tocca per Aprire
                   </span>
-                </di
+                </div>
+              </div>
+            )}
+
+            {introStart === "expand" && (
+              <div className="py-1 px-2">
+                <ScrollExpandMedia
+                  bgImageSrc={activeBg}
+                  mediaSrc={heroMediaImage}
+                  title={coupleNames}
+                  date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                  onExpand={playWeddingAudio}
+                />
+              </div>
+            )}
+
+            {introStart === "cosmos" && !startClosed && (
+              <div className="relative w-full h-[300px]">
+                <CosmosHero
+                  coupleNames={coupleNames}
+                  weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                  inline={true}
+                  onEnter={() => {
+                    playWeddingAudio();
+                    setStartClosed(true);
+                  }}
+                />
+              </div>
+            )}
+
+            {/* HERO SPOSI */}
+            <div className="text-center pt-3 px-4 space-y-2">
+              {heroMediaImage && (
+                <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-md relative">
+                  <img src={heroMediaImage} alt={coupleNames} className="w-full h-full object-cover" />
+                </div>
+              )}
+              <span className="text-[10px] tracking-widest uppercase font-bold block" style={{ color: accentColor }}>
+                Il Matrimonio di {coupleNames} • {activeTheme}
+              </span>
+              <p className="text-xs font-bold" style={{ color: textColor }}>
+                {weddingDateDay} {weddingDateMonth} {weddingDateYear}
+              </p>
+              <h3 className="text-2xl font-serif font-bold mt-1 drop-shadow-xs" style={{ color: textColor }}>
+                {coupleNames}
+              </h3>
+              <p className="text-xs italic font-serif opacity-90 px-2 pt-1 font-medium" style={{ color: textColor }}>
+                &quot;{computedWelcomePhrase}&quot;
+              </p>
+              <p className="text-xs font-bold uppercase pt-1" style={{ color: accentColor }}>{locationName}</p>
+            </div>
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* MODULO DATA */}
+            {dateDisplayMode === "countdown" && (
+              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/85 backdrop-blur-xs" style={{ borderColor: borderCard }}>
+                <span className="text-[10px] font-bold uppercase block mb-1 font-serif" style={{ color: accentColor }}>
+                  ⏳ Il nostro grande giorno inizia tra
+                </span>
+                <div className="flex justify-center gap-3 font-serif font-bold text-xs" style={{ color: textColor }}>
+                  <div><span className="block text-sm" style={{ color: accentColor }}>129</span><span className="text-[8px] uppercase text-slate-600 font-sans">Giorni</span></div>
+                  <span>:</span>
+                  <div><span className="block text-sm" style={{ color: accentColor }}>14</span><span className="text-[8px] uppercase text-slate-600 font-sans">Ore</span></div>
+                  <span>:</span>
+                  <div><span className="block text-sm" style={{ color: accentColor }}>23</span><span className="text-[8px] uppercase text-slate-600 font-sans">Minuti</span></div>
+                  <span>:</span>
+                  <div><span className="block text-sm" style={{ color: accentColor }}>17</span><span className="text-[8px] uppercase text-slate-600 font-sans">Secondi</span></div>
+                </div>
+              </div>
+            )}
+
+            {dateDisplayMode === "scratch" && modules.grattaData && (
+              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block mb-2" style={{ color: accentColor }}>
+                  🎰 Gratta col dito per scoprire la data
+                </span>
+                <ScratchDate day={weddingDateDay} month={weddingDateMonth} year={weddingDateYear} />
+              </div>
+            )}
+
+            {dateDisplayMode === "text" && (
+              <div className="my-3 mx-3 p-3 rounded-2xl text-center border shadow-sm bg-white/85 backdrop-blur-xs border-[#D4AF37]/40">
+                <span className="text-[10px] font-bold uppercase block mb-1" style={{ color: accentColor }}>Data del Matrimonio</span>
+                <p className="font-serif font-bold text-lg" style={{ color: textColor }}>{weddingDateDay} {weddingDateMonth} {weddingDateYear}</p>
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* PROGRAMMA GIORNATA */}
+            {scheduleSchema === "howitworks" && (
+              <div className="mx-3 my-3 p-2 rounded-2xl border text-center shadow-sm bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-1" style={{ color: accentColor }}>
+                  📍 Programma a Carte 3D
+                </span>
+                <TimelineHowItWorks items={scheduleItems} accentColor={accentColor} />
+              </div>
+            )}
+
+            {scheduleSchema === "classico" && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
+                  Programma della Giornata
+                </span>
+                <div className="space-y-1.5 text-xs pt-1 font-serif" style={{ color: textColor }}>
+                  {scheduleItems.map((item) => (
+                    <p key={item.id}>
+                      <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> — {item.title}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {scheduleSchema === "timeline" && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-2 bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs mb-2" style={{ color: accentColor }}>
+                  📍 Timeline Verticale Orari
+                </span>
+                <div className="relative pl-6 space-y-2 text-left border-l-2 text-xs" style={{ borderColor: accentColor, color: textColor }}>
+                  {scheduleItems.map((item) => (
+                    <div key={item.id}>
+                      <span className="font-bold" style={{ color: accentColor }}>{item.time}</span> — {item.title}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {scheduleSchema === "schede" && (
+              <div className="mx-3 my-3 grid grid-cols-2 gap-2 text-center text-xs">
+                {scheduleItems.map((item) => (
+                  <div key={item.id} className="p-2.5 rounded-xl border font-bold bg-white/85 backdrop-blur-xs border-slate-200 shadow-sm" style={{ color: textColor }}>
+                    <span className="block text-[10px]" style={{ color: accentColor }}>{item.time}</span> {item.title}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {scheduleSchema === "minimal" && (
+              <div className="mx-3 my-3 p-3 text-center space-y-1 font-serif text-xs bg-white/85 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm" style={{ color: textColor }}>
+                {scheduleItems.map((item) => (
+                  <p key={item.id}>
+                    <strong className="font-sans" style={{ color: accentColor }}>{item.time}</strong> • {item.title}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* LOCATION */}
+            {showLocationModule && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center shadow-sm space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
+                  📍 Location del Matrimonio
+                </span>
+                <p className="font-bold text-xs" style={{ color: textColor }}>{locationName}</p>
+                <p className="text-[10px] font-medium text-slate-600">{locationAddress}</p>
+
+                {showGoogleMapIframe && (
+                  <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 relative shadow-inner">
+                    <iframe
+                      title="Mappa Location"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    />
+                  </div>
+                )}
+
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#1E293B] text-white px-3 py-1.5 rounded-lg transition-colors shadow-sm"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Apri Mappa &amp; Indicazioni ↗
+                </a>
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* DRESS CODE CON GALLERIA OUTFIT */}
+            {modules.codiceAbbigliamento && (
+              <div className="mx-3 my-3 p-4 rounded-2xl text-center border shadow-sm space-y-2 bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs" style={{ color: accentColor }}>
+                  Dress Code &amp; Palette
+                </span>
+                <p className="text-[10px] font-serif" style={{ color: textColor }}>{dressCodeNotes}</p>
+
+                <div className="flex justify-center gap-1.5 py-1">
+                  {colorsList.map((c, i) => (
+                    <div key={i} className="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style={{ backgroundColor: c }} />
+                  ))}
+                </div>
+
+                <div className="pt-1">
+                  <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">
+                    Esempi di Abbigliamento Consigliati (Scorri ➔)
+                  </span>
+                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
+                    {outfitPhotos.map((imgUrl, idx) => (
+                      <div key={idx} className="w-20 h-28 flex-shrink-0 rounded-xl overflow-hidden relative shadow-sm border border-slate-200 snap-center">
+                        <img
+                          src={imgUrl}
+                          alt={`Outfit ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* NEGOZI CONVENZIONATI */}
+            {modules.negoziConvenzionati && (
+              <div className="p-2">
+                <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* LISTA NOZZE IBAN */}
+            {modules.listaNozzeAmazon && (
+              <div className="mx-3 my-3 p-4 rounded-2xl border text-center space-y-2 bg-white/85 backdrop-blur-xs border-slate-200">
+                <span className="text-[10px] font-bold uppercase block font-serif text-xs flex items-center justify-center gap-1" style={{ color: accentColor }}>
+                  <Gift className="w-3.5 h-3.5" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
+                </span>
+                <div className="p-2 bg-[#FAF7F2] rounded-xl border border-slate-200 text-[10px] font-mono font-bold text-[#1E293B] break-all">
+                  {customIban}
+                </div>
+              </div>
+            )}
+
+            {showFregi && <div className="text-center text-[#D4AF37] font-serif text-xs tracking-widest">✦ ✦ ✦</div>}
+
+            {/* MODULO RSVP */}
+            {modules.confermaRsvp && (
+              <div className="p-3">
+                <RsvpForm
+                  coupleNames={coupleNames}
+                  paletteColors={colorsList}
+                  rsvpStyle={rsvpStyle}
+                />
+              </div>
+            )}
+
+            {/* GIOCHI DELLA FESTA */}
+            {modules.hubGiochiFesta !== false && (
+              <div className="mx-3 my-3 p-4 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-2xl shadow-md text-center space-y-3">
+                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1">
+                  <PartyPopper className="w-3.5 h-3.5" /> Giochi della Festa &amp; Maxischermo
+                </span>
+
+                <div className="py-1">
+                  {galleryStyle === "circular" ? (
+                    <CircularGallery />
+                  ) : galleryStyle === "fan" ? (
+                    <SocialCards cards={previewFanCards} />
+                  ) : (
+                    <PhotoWallSection photos={previewPolaroidPhotos} isAgencyDashboard={true} />
+                  )}
+                </div>
+
+                <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} puzzlePrize={puzzlePrize} /></div>
+                <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
+                
+                <div className="py-1">
+                  <LoveQuiz questions={quizQuestions} />
+                </div>
+
+                <a
+                  href={`/${slugName}/festa?preview=true`}
+                  onClick={handleOpenFullscreenFesta}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-[#D4AF37] text-slate-900 px-3 py-1.5 rounded-lg shadow-md hover:bg-amber-400 transition-colors cursor-pointer"
+                >
+                  <PartyPopper className="w-3.5 h-3.5 text-slate-900" /> Apri Maxischermo Festa ↗
+                </a>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
