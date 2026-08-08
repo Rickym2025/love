@@ -126,9 +126,18 @@ export default function AgencyPreview({
     }
   };
 
+  // ASSEGNAZIONE AUTOMATICA DELLO SFONDO DI DEFAULT PER MODELLI A, B, C
   const getValidBg = (bg?: string) => {
     if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
-      return selectedTemplate === "C" ? "/sfondi/carta_pergamena.jpg" : selectedTemplate === "B" ? "/sfondi/seta_rosa.jpg" : "/sfondi/fiori.jpg";
+      return selectedTemplate === "C"
+        ? "/sfondi/carta_pergamena.jpg"
+        : selectedTemplate === "B"
+        ? "/sfondi/seta_rosa.jpg"
+        : "/sfondi/fiori.jpg";
+    }
+    if (bg === "/sfondi/fiori.jpg") {
+      if (selectedTemplate === "B") return "/sfondi/seta_rosa.jpg";
+      if (selectedTemplate === "C") return "/sfondi/carta_pergamena.jpg";
     }
     return bg;
   };
@@ -279,11 +288,14 @@ export default function AgencyPreview({
       >
         <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs pointer-events-none" />
 
-        {/* SFONDO TEXTURE VISIBILE IN TRASPARENZA */}
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-50 transition-opacity"
-          style={{ backgroundImage: `url(${activeBg})` }}
-        />
+        {/* IMMAGINE DI SFONDO VISIBILE DIRETTAMENTE */}
+        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
+          <img
+            src={activeBg}
+            alt="Sfondo Matrimonio"
+            className="w-full h-full object-cover opacity-60"
+          />
+        </div>
 
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
