@@ -127,6 +127,15 @@ export default function AgencyPreview({
     }
   };
 
+  const getValidBg = (bg?: string) => {
+    if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
+      return "/sfondi/fiori.jpg";
+    }
+    return bg;
+  };
+
+  const activeBg = getValidBg(heroBgImage);
+
   const palettesList = Array.isArray(DRESS_CODE_PALETTES)
     ? DRESS_CODE_PALETTES
     : Object.values(DRESS_CODE_PALETTES || {});
@@ -204,7 +213,7 @@ export default function AgencyPreview({
       audioUrl,
       welcomePhrase: computedWelcomePhrase,
       selectedPaletteIdx: safeIdx,
-      heroBgImage: heroBgImage || "/sfondi/fiori.jpg",
+      heroBgImage: activeBg,
       waterImageUrl,
       heroMediaImage,
       ricevimentoImage,
@@ -280,13 +289,14 @@ export default function AgencyPreview({
         {!isWhiteBg && !isPaletteSync && (
           <div
             className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
-            style={{ backgroundImage: `url(${heroBgImage})` }}
+            style={{ backgroundImage: `url(${activeBg})` }}
           />
         )}
 
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
         {selectedTemplate === "C" ? (
+          /* TEMPLATE C COMPLETO */
           <InvitationTemplateC
             coupleNames={coupleNames}
             welcomePhrase={computedWelcomePhrase}
@@ -301,7 +311,7 @@ export default function AgencyPreview({
             introStart={introStart}
             heroMediaImage={heroMediaImage}
             ricevimentoImage={ricevimentoImage}
-            heroBgImage={heroBgImage || "/sfondi/fiori.jpg"}
+            heroBgImage={activeBg}
             waterImageUrl={waterImageUrl}
             dateMode={dateDisplayMode}
             scheduleSchema={scheduleSchema}
@@ -324,6 +334,7 @@ export default function AgencyPreview({
             scratchPrize={scratchPrize}
             quizPrize={quizPrize}
             cleanSlug="giulia-e-marco"
+            inline={true}
             playWeddingAudio={playWeddingAudio}
           />
         ) : (
@@ -335,7 +346,6 @@ export default function AgencyPreview({
               </div>
             )}
 
-            {/* 1. BUSTA 3D CON SIGILLO IN CERALACCA PERSONALIZZATO */}
             {introStart === "busta" && modules.busta3d && (
               <div className="p-2">
                 <EnvelopeWax
@@ -380,7 +390,7 @@ export default function AgencyPreview({
             {introStart === "expand" && (
               <div className="py-1 px-2">
                 <ScrollExpandMedia
-                  bgImageSrc={heroBgImage || "/sfondi/fiori.jpg"}
+                  bgImageSrc={activeBg}
                   mediaSrc={heroMediaImage}
                   title={coupleNames}
                   date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
