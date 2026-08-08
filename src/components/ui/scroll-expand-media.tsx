@@ -24,7 +24,7 @@ interface ScrollExpandMediaProps {
   children?: ReactNode;
 }
 
-const ScrollExpandMedia = ({
+export default function ScrollExpandMedia({
   mediaType = 'image',
   mediaSrc,
   posterSrc,
@@ -35,7 +35,7 @@ const ScrollExpandMedia = ({
   textBlend,
   onExpand,
   children,
-}: ScrollExpandMediaProps) => {
+}: ScrollExpandMediaProps) {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showContent, setShowContent] = useState<boolean>(false);
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
@@ -51,7 +51,6 @@ const ScrollExpandMedia = ({
     setMediaFullyExpanded(false);
   }, [mediaType]);
 
-  // AVVIA LA MUSICA A QUALSIASI SEGNALE DI SCROLL O TOUCH
   const triggerAudio = () => {
     if (!musicStartedRef.current) {
       musicStartedRef.current = true;
@@ -70,6 +69,11 @@ const ScrollExpandMedia = ({
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
+      // ISOLAMENTO DELLO SCROLL: SE IL MOUSE E FUORI DAL CONTENITORE DELLA PREVIEW, IGNORA L'EVENTO
+      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
+        return;
+      }
+
       triggerAudio();
       if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
         setMediaFullyExpanded(false);
@@ -93,11 +97,17 @@ const ScrollExpandMedia = ({
     };
 
     const handleTouchStart = (e: TouchEvent) => {
+      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
+        return;
+      }
       triggerAudio();
       setTouchStartY(e.touches[0].clientY);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
+        return;
+      }
       triggerAudio();
       if (!touchStartY) return;
 
@@ -132,22 +142,13 @@ const ScrollExpandMedia = ({
       setTouchStartY(0);
     };
 
-    const handleScroll = (): void => {
-      triggerAudio();
-      if (!mediaFullyExpanded) {
-        window.scrollTo(0, 0);
-      }
-    };
-
     window.addEventListener('wheel', handleWheel as unknown as EventListener, { passive: false });
-    window.addEventListener('scroll', handleScroll as EventListener);
     window.addEventListener('touchstart', handleTouchStart as unknown as EventListener, { passive: false });
     window.addEventListener('touchmove', handleTouchMove as unknown as EventListener, { passive: false });
     window.addEventListener('touchend', handleTouchEnd as EventListener);
 
     return () => {
       window.removeEventListener('wheel', handleWheel as unknown as EventListener);
-      window.removeEventListener('scroll', handleScroll as EventListener);
       window.removeEventListener('touchstart', handleTouchStart as unknown as EventListener);
       window.removeEventListener('touchmove', handleTouchMove as unknown as EventListener);
       window.removeEventListener('touchend', handleTouchEnd as EventListener);
@@ -176,12 +177,12 @@ const ScrollExpandMedia = ({
     <div
       ref={sectionRef}
       onClick={triggerAudio}
-      className='transition-colors duration-700 ease-in-out overflow-x-hidden select-none cursor-pointer'
+      className='transition-colors duration-700 ease-in-out overflow-x-hidden select-none cursor-pointer w-full'
     >
-      <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
+      <section className='relative flex flex-col items-center justify-start min-h-[100dvh] w-full'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
           <motion.div
-            className='absolute inset-0 z-0 h-full'
+            className='absolute inset-0 z-0 h-full w-full'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 - scrollProgress }}
             transition={{ duration: 0.1 }}
@@ -191,17 +192,13 @@ const ScrollExpandMedia = ({
               alt='Sfondo Matrimonio'
               width={1920}
               height={1080}
-              className='w-screen h-screen'
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
+              className='w-full h-full object-cover object-center'
               priority
             />
             <div className='absolute inset-0 bg-black/20' />
           </motion.div>
 
-          <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
+          <div className='w-full flex flex-col items-center justify-start relative z-10'>
             <div className='flex flex-col items-center justify-center w-full h-[100dvh] relative'>
               <div
                 className='absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-none rounded-2xl overflow-hidden'
@@ -278,19 +275,19 @@ const ScrollExpandMedia = ({
               </div>
             </div>
 
-            <motion.section
-              className='flex flex-col w-full px-4 py-8 md:px-12'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showContent ? 1 : 0 }}
-              transition={{ duration: 0.7 }}
-            >
-              {children}
-            </motion.section>
+            {children && (
+              <motion.section
+                className='flex flex-col w-full px-4 py-8 md:px-12'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: showContent ? 1 : 0 }}
+                transition={{ duration: 0.7 }}
+              >
+                {children}
+              </motion.section>
+            )}
           </div>
         </div>
       </section>
     </div>
   );
-};
-
-export default ScrollExpandMedia;
+}
