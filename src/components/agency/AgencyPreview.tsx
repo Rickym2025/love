@@ -99,7 +99,7 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
-  heroBgImage = "/sfondi/fiori.jpg",
+  heroBgImage = "/sfondi/carta_pergamena.jpg",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
@@ -129,7 +129,7 @@ export default function AgencyPreview({
 
   const getValidBg = (bg?: string) => {
     if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
-      return "/sfondi/fiori.jpg";
+      return selectedTemplate === "C" ? "/sfondi/carta_pergamena.jpg" : "/sfondi/fiori.jpg";
     }
     return bg;
   };
