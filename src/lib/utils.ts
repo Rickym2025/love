@@ -1,6 +1,6 @@
-import { ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+// FUNZIONE helper CN IN PURO TYPESCRIPT NATIVO (SENZA CLSX O TAILWIND-MERGE)
+export function cn(...classes: (string | undefined | null | false | boolean)[]): string {
+  return classes.filter(Boolean).join(" ");
 }
+
+export default cn;
