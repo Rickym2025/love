@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
 import KineticGrid from '@/components/ui/kinetic-grid';
-import Marquee from '@/components/ui/Marquee';
+import Marquee from '@/components/Marquee';
 import {
   Sparkles,
   Heart,
