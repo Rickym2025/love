@@ -2,110 +2,102 @@
 
 import React from "react";
 import Image from "next/image";
-import PartingClouds from "@/components/PartingClouds";
 import EnvelopeWax from "@/components/EnvelopeWax";
+import PartingClouds from "@/components/PartingClouds";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import CosmosHero from "@/components/ui/CosmosHero";
 
 export interface InvitationHeroProps {
-  start: string;
-  coupleNames: string;
-  weddingDateDay: string;
-  weddingDateMonth: string;
-  weddingDateYear: string;
-  heroBgParam: string;
-  heroMediaImage: string;
+  start?: string;
+  coupleNames?: string;
+  weddingDateDay?: string;
+  weddingDateMonth?: string;
+  weddingDateYear?: string;
+  heroBgParam?: string;
+  heroMediaImage?: string;
   waterImageUrl?: string;
-  showBusta: boolean;
-  showNuvole: boolean;
-  apertoAcqua: boolean;
-  apertoCosmos: boolean;
-  playWeddingAudio: () => void;
-  setApertoAcqua: (val: boolean) => void;
-  setApertoCosmos: (val: boolean) => void;
+  showBusta?: boolean;
+  showNuvole?: boolean;
+  apertoAcqua?: boolean;
+  apertoCosmos?: boolean;
+  playWeddingAudio?: () => void;
+  setApertoAcqua?: (val: boolean) => void;
+  setApertoCosmos?: (val: boolean) => void;
 }
 
 export default function InvitationHero({
-  start,
-  coupleNames,
-  weddingDateDay,
-  weddingDateMonth,
-  weddingDateYear,
-  heroBgParam,
-  heroMediaImage,
+  start = "busta",
+  coupleNames = "Elena & Davide",
+  weddingDateDay = "15",
+  weddingDateMonth = "Settembre",
+  weddingDateYear = "2026",
+  heroBgParam = "/sfondi/fiori.jpg",
+  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   waterImageUrl = "",
-  showBusta,
-  showNuvole,
-  apertoAcqua,
-  apertoCosmos,
+  showBusta = true,
+  showNuvole = true,
+  apertoAcqua = false,
+  apertoCosmos = false,
   playWeddingAudio,
   setApertoAcqua,
   setApertoCosmos,
 }: InvitationHeroProps) {
-  const isWhiteBg = heroBgParam === "#FFFFFF";
-  const isPaletteSync = heroBgParam === "palette" || !heroBgParam;
-
   return (
-    <>
-      {/* 1. NUVOLE 3D CON AVVIO AUDIO */}
-      {start === "nuvole" && showNuvole && <PartingClouds onOpen={playWeddingAudio} />}
-
-      {/* 2. ZOOM MULTIMEDIALE ALLO SCROLL CON AVVIO AUDIO */}
-      {start === "expand" && (
-        <ScrollExpandMedia
-          bgImageSrc={isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" : heroBgParam}
-          mediaSrc={heroMediaImage || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"}
-          title={coupleNames}
-          date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-          scrollToExpand="Scorri per Ingrandire"
-          onExpand={playWeddingAudio}
+    <div className="w-full relative z-10">
+      {/* 1. EFFETTO BUSTA 3D CON SIGILLO PERSONALIZZATO */}
+      {start === "busta" && showBusta && (
+        <EnvelopeWax
+          coupleNames={coupleNames}
+          waxSealUrl={waterImageUrl || "/wax-seal.png"}
+          onOpen={playWeddingAudio}
         />
       )}
 
-      {/* 3. SPECCHIO D'ACQUA WEBGL CON AVVIO AUDIO AL TAP */}
+      {/* 2. EFFETTO NUVOLE 3D */}
+      {start === "nuvole" && showNuvole && (
+        <PartingClouds onOpen={playWeddingAudio} />
+      )}
+
+      {/* 3. EFFETTO SPECCHIO D'ACQUA LAGO */}
       {start === "lago" && !apertoAcqua && (
-        <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-900">
+        <div className="relative w-full h-56 md:h-64 overflow-hidden border-b-2 border-[#D4AF37]">
           <WaterRippleImage
-            src={waterImageUrl || (isPaletteSync || isWhiteBg ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" : heroBgParam)}
+            src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
             onClick={() => {
-              playWeddingAudio();
-              setApertoAcqua(true);
+              if (typeof playWeddingAudio === "function") playWeddingAudio();
+              if (typeof setApertoAcqua === "function") setApertoAcqua(true);
             }}
           />
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/30 hover:bg-black/20 transition-colors"
-            onClick={() => {
-              playWeddingAudio();
-              setApertoAcqua(true);
-            }}
-          >
-            <div className="relative w-24 h-24 drop-shadow-2xl animate-pulse">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority unoptimized />
-            </div>
-            <p className="mt-4 text-[#D4AF37] font-serif font-bold text-sm tracking-widest uppercase drop-shadow">
-              Tocca il Sigillo per Entrare
-            </p>
-          </div>
         </div>
       )}
 
-      {/* 4. ORIZZONTE COSMICO 3D CON AVVIO AUDIO AL TAP/SCROLL */}
-      {start === "cosmos" && !apertoCosmos && (
-        <CosmosHero
-          coupleNames={coupleNames}
-          weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-          onEnter={() => {
-            playWeddingAudio();
-            setApertoCosmos(true);
-          }}
-        />
+      {/* 4. ZOOM MULTIMEDIALE ALLO SCROLL */}
+      {start === "expand" && (
+        <div className="py-2 px-4">
+          <ScrollExpandMedia
+            bgImageSrc={heroBgParam || "/sfondi/fiori.jpg"}
+            mediaSrc={heroMediaImage}
+            title={coupleNames}
+            date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            onExpand={playWeddingAudio}
+          />
+        </div>
       )}
 
-      {/* 5. BUSTA LUXURY 3D CON AVVIO AUDIO */}
-      {start === "busta" && showBusta && (
-        <EnvelopeWax coupleNames={coupleNames} onOpen={playWeddingAudio} />
+      {/* 5. ORIZZONTE COSMICO 3D */}
+      {start === "cosmos" && !apertoCosmos && (
+        <div className="relative w-full h-[320px]">
+          <CosmosHero
+            coupleNames={coupleNames}
+            weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            onEnter={() => {
+              if (typeof playWeddingAudio === "function") playWeddingAudio();
+              if (typeof setApertoCosmos === "function") setApertoCosmos(true);
+            }}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 }
