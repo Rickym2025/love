@@ -35,13 +35,9 @@ export async function saveLoveExperience(data: {
       )
       .select();
 
-    if (error) {
-      console.error("Errore salvataggio Supabase experience:", error);
-      return { success: false, error };
-    }
+    if (error) return { success: false, error };
     return { success: true, data: result };
   } catch (err) {
-    console.error("Eccezione Supabase experience:", err);
     return { success: false, error: err };
   }
 }
@@ -55,9 +51,7 @@ export async function fetchLoveExperience(slug: string) {
       .eq("slug", slug)
       .single();
 
-    if (error) {
-      return { success: false, error };
-    }
+    if (error) return { success: false, error };
     return { success: true, data };
   } catch (err) {
     return { success: false, error: err };
@@ -73,6 +67,7 @@ export async function saveLoveRsvp(rsvp: {
   dietary_notes?: string;
   menu_preference?: string;
   song_request?: string;
+  table_name?: string;
 }) {
   try {
     const { data, error } = await supabase
@@ -86,21 +81,19 @@ export async function saveLoveRsvp(rsvp: {
           dietary_notes: rsvp.dietary_notes || "",
           menu_preference: rsvp.menu_preference || "carne",
           song_request: rsvp.song_request || "",
+          table_name: rsvp.table_name || "Da Assegnare",
         },
       ])
       .select();
 
-    if (error) {
-      console.error("Errore salvataggio RSVP:", error);
-      return { success: false, error };
-    }
+    if (error) return { success: false, error };
     return { success: true, data };
   } catch (err) {
     return { success: false, error: err };
   }
 }
 
-// 4. LETTURA TUTTI GLI RSVP PER CATERING / EXCEL
+// 4. LETTURA TUTTI GLI RSVP PER CATERING / TABLEAU DE MARIAGE
 export async function fetchLoveRsvps(experience_slug: string) {
   try {
     const { data, error } = await supabase
@@ -116,7 +109,90 @@ export async function fetchLoveRsvps(experience_slug: string) {
   }
 }
 
-// 5. SALVATAGGIO FOTO/MESSAGGIO IN GUESTBOOK E PHOTO WALL
+// 5. ASSEGNAZIONE INVITATO AD UN TAVOLO SPECIFICO
+export async function updateGuestTable(rsvpId: string, tableName: string) {
+  try {
+    const { data, error } = await supabase
+      .from("love_rsvps")
+      .update({ table_name: tableName })
+      .eq("id", rsvpId)
+      .select();
+
+    if (error) return { success: false, error };
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+// 6. GESTIONE TABELLA TAVOLI (TABLEAU DE MARIAGE)
+export async function fetchLoveTables(experience_slug: string) {
+  try {
+    const { data, error } = await supabase
+      .from("love_tables")
+      .select("*")
+      .eq("experience_slug", experience_slug)
+      .order("created_at", { ascending: true });
+
+    if (error) return { success: false, error };
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+export async function addLoveTable(experience_slug: string, tableName: string, capacity: number = 8) {
+  try {
+    const { data, error } = await supabase
+      .from("love_tables")
+      .insert([{ experience_slug, table_name: tableName, seats_capacity: capacity }])
+      .select();
+
+    if (error) return { success: false, error };
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+// 7. GESTIONE BUDGET PLANNER FORNITORI
+export async function fetchLoveBudgets(experience_slug: string) {
+  try {
+    const { data, error } = await supabase
+      .from("love_budgets")
+      .select("*")
+      .eq("experience_slug", experience_slug)
+      .order("created_at", { ascending: true });
+
+    if (error) return { success: false, error };
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+export async function addLoveBudgetItem(item: {
+  experience_slug: string;
+  category: string;
+  supplier_name: string;
+  estimated_cost: number;
+  actual_cost: number;
+  is_paid: boolean;
+}) {
+  try {
+    const { data, error } = await supabase
+      .from("love_budgets")
+      .insert([item])
+      .select();
+
+    if (error) return { success: false, error };
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+// 8. SALVATAGGIO FOTO/MESSAGGIO IN GUESTBOOK E PHOTO WALL
 export async function saveLoveGuestbookItem(item: {
   experience_slug: string;
   author_name: string;
@@ -136,17 +212,13 @@ export async function saveLoveGuestbookItem(item: {
       ])
       .select();
 
-    if (error) {
-      console.error("Errore salvataggio Guestbook:", error);
-      return { success: false, error };
-    }
+    if (error) return { success: false, error };
     return { success: true, data };
   } catch (err) {
     return { success: false, error: err };
   }
 }
 
-// 6. LETTURA TUTTE LE FOTO DELLA FESTA DALLA TABELLA GUESTBOOK
 export async function fetchLoveGuestbookItems(experience_slug: string) {
   try {
     const { data, error } = await supabase
