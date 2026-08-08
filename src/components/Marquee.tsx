@@ -1,56 +1,27 @@
 "use client";
 
-import React, { ComponentPropsWithoutRef, useRef } from 'react';
+import React, { ComponentPropsWithoutRef, useRef } from "react";
 
 const cn = (...classes: (string | undefined | null | false)[]) => {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 };
 
-interface MarqueeProps extends ComponentPropsWithoutRef<'div'> {
-  /**
-   * Optional CSS class name to apply custom styles
-   */
+export interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
   className?: string;
-  /**
-   * Whether to reverse the animation direction
-   * @default false
-   */
   reverse?: boolean;
-  /**
-   * Whether to pause the animation on hover
-   * @default false
-   */
   pauseOnHover?: boolean;
-  /**
-   * Content to be displayed in the marquee
-   */
-  children: React.ReactNode;
-  /**
-   * Whether to animate vertically instead of horizontally
-   * @default false
-   */
+  children?: React.ReactNode;
   vertical?: boolean;
-  /**
-   * Number of times to repeat the content
-   * @default 4
-   */
   repeat?: number;
-  /**
-   * If true, automatically repeats children enough to fill the visible area
-   */
   autoFill?: boolean;
-  /**
-   * ARIA label for accessibility
-   */
   ariaLabel?: string;
-  /**
-   * ARIA live region politeness
-   */
-  ariaLive?: 'off' | 'polite' | 'assertive';
-  /**
-   * ARIA role
-   */
+  ariaLive?: "off" | "polite" | "assertive";
   ariaRole?: string;
+
+  // PARAMETRI DI RETROCOMPATIBILITÀ PER LE ALTRE PAGINE (AgencyPreview, Invito, ecc.)
+  text?: string;
+  coupleNames?: string;
+  items?: Array<{ name: string; role?: string; text: string; stars?: number }>;
 }
 
 export function Marquee({
@@ -61,11 +32,42 @@ export function Marquee({
   vertical = false,
   repeat = 4,
   ariaLabel,
-  ariaLive = 'off',
-  ariaRole = 'marquee',
+  ariaLive = "off",
+  ariaRole = "marquee",
+  text,
+  coupleNames,
+  items,
   ...props
 }: MarqueeProps) {
   const marqueeRef = useRef<HTMLDivElement>(null);
+
+  // GENERAZIONE DINAMICA CONTENUTI IN BASE ALLE PROPS O AI CHILDREN
+  const renderedContent = children ? (
+    children
+  ) : text ? (
+    <span className="font-serif text-xs md:text-sm font-bold tracking-widest text-[#D4AF37] px-4 uppercase whitespace-nowrap">
+      {text}
+    </span>
+  ) : coupleNames ? (
+    <span className="font-serif text-xs md:text-sm font-bold tracking-widest text-[#D4AF37] px-4 uppercase whitespace-nowrap">
+      ✦ IL MATRIMONIO DI {coupleNames.toUpperCase()} ✦ BENVENUTI AL NOSTRO GIORNO SPECIALE ✦
+    </span>
+  ) : items ? (
+    <div className="flex gap-4 items-center">
+      {items.map((item, idx) => (
+        <div
+          key={idx}
+          className="p-3 bg-slate-900 border border-[#D4AF37]/50 rounded-xl text-white text-xs shrink-0 whitespace-nowrap"
+        >
+          <strong className="text-[#D4AF37]">{item.name}</strong>: &quot;{item.text}&quot;
+        </div>
+      ))}
+    </div>
+  ) : (
+    <span className="font-serif text-xs font-bold tracking-widest text-[#D4AF37] px-4 uppercase whitespace-nowrap">
+      ✦ LOVE — LE PARTECIPAZIONI DIGITALI D&apos;AUTORE ✦
+    </span>
+  );
 
   return (
     <div
@@ -73,12 +75,12 @@ export function Marquee({
       ref={marqueeRef}
       data-slot="marquee"
       className={cn(
-        'group flex overflow-hidden p-2 [--duration:45s] [--gap:1.5rem] [gap:var(--gap)] select-none cursor-grab active:cursor-grabbing',
+        "group flex overflow-hidden p-2 [--duration:45s] [--gap:1.5rem] [gap:var(--gap)] select-none cursor-grab active:cursor-grabbing",
         {
-          'flex-row': !vertical,
-          'flex-col': vertical,
+          "flex-row": !vertical,
+          "flex-col": vertical,
         },
-        className,
+        className
       )}
       aria-label={ariaLabel}
       aria-live={ariaLive}
@@ -92,20 +94,20 @@ export function Marquee({
               <div
                 key={i}
                 className={cn(
-                  !vertical ? 'flex-row [gap:var(--gap)]' : 'flex-col [gap:var(--gap)]',
-                  'flex shrink-0 justify-around',
-                  !vertical && 'animate-marquee flex-row',
-                  vertical && 'animate-marquee-vertical flex-col',
-                  pauseOnHover && 'group-hover:[animation-play-state:paused]',
-                  reverse && '[animation-direction:reverse]',
+                  !vertical ? "flex-row [gap:var(--gap)]" : "flex-col [gap:var(--gap)]",
+                  "flex shrink-0 justify-around",
+                  !vertical && "animate-marquee flex-row",
+                  vertical && "animate-marquee-vertical flex-col",
+                  pauseOnHover && "group-hover:[animation-play-state:paused]",
+                  reverse && "[animation-direction:reverse]"
                 )}
               >
-                {children}
+                {renderedContent}
               </div>
             ))}
           </>
         ),
-        [repeat, children, vertical, pauseOnHover, reverse],
+        [repeat, renderedContent, vertical, pauseOnHover, reverse]
       )}
     </div>
   );
