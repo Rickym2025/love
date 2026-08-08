@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Users, Plus, Utensils, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { Users, Plus, RefreshCw, AlertCircle } from "lucide-react";
 import { fetchLoveRsvps, fetchLoveTables, addLoveTable, updateGuestTable } from "@/lib/supabase";
 
 export interface SectionTableauDeMariageProps {
@@ -19,42 +19,46 @@ export function SectionTableauDeMariage({
   const [newTableCapacity, setNewTableCapacity] = useState(8);
   const [isLoading, setIsLoading] = useState(false);
 
-  const cleanSlug = (slug || coupleNames || "elena-e-davide").toLowerCase().replace(/[^a-z0-9]/g, "-");
+  const cleanSlug = (slug || coupleNames || "elena-e-davide")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "-");
 
   const loadTableauData = async () => {
     setIsLoading(true);
-    const [resRsvps, resTables] = await Promise.all([
-      fetchLoveRsvps(cleanSlug),
-      fetchLoveTables(cleanSlug),
-    ]);
+    try {
+      const [resRsvps, resTables] = await Promise.all([
+        fetchLoveRsvps(cleanSlug),
+        fetchLoveTables(cleanSlug),
+      ]);
 
-    if (resRsvps.success && resRsvps.data) {
-      // Filtra solo gli invitati che hanno confermato la presenza
-      setGuests(resRsvps.data.filter((g: any) => g.attending !== false));
+      if (resRsvps && resRsvps.success && resRsvps.data) {
+        setGuests(resRsvps.data.filter((g: any) => g.attending !== false));
+      }
+      if (resTables && resTables.success && resTables.data) {
+        setTables(resTables.data);
+      }
+    } catch (e) {
+      console.error("Errore caricamento Tableau:", e);
+    } finally {
+      setIsLoading(false);
     }
-    if (resTables.success && resTables.data) {
-      setTables(resTables.data);
-    }
-    setIsLoading(false);
   };
 
   useEffect(() => {
     loadTableauData();
   }, [cleanSlug]);
 
-  // CREAZIONE NUOVO TAVOLO
   const handleAddTable = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTableName.trim()) return;
 
     const res = await addLoveTable(cleanSlug, newTableName.trim(), newTableCapacity);
-    if (res.success) {
+    if (res && res.success) {
       setNewTableName("");
       loadTableauData();
     }
   };
 
-  // ASSEGNAZIONE INVITATO A TAVOLO
   const handleAssignTable = async (rsvpId: string, tableName: string) => {
     await updateGuestTable(rsvpId, tableName);
     setGuests((prev) =>
@@ -83,7 +87,7 @@ export function SectionTableauDeMariage({
         </button>
       </div>
 
-      {/* CREAZIONE NUOVO TAVOLO */}
+      {/* FORM CREAZIONE NUOVO TAVOLO */}
       <form onSubmit={handleAddTable} className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-2 items-center">
         <input
           type="text"
@@ -120,7 +124,7 @@ export function SectionTableauDeMariage({
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                 <h4 className="font-serif font-bold text-sm text-[#8B6508]">{tbl.table_name}</h4>
                 <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                  {seatedGuests.length} / {tbl.seats_capacity} Posti Occupati
+                  {seatedGuests.length} / {tbl.seats_capacity} Posti
                 </span>
               </div>
 
@@ -162,4 +166,24 @@ export function SectionTableauDeMariage({
               <div>
                 <span className="font-bold text-slate-900 block">{g.guest_name}</span>
                 <span className="text-[10px] text-slate-500">
-                  Menu: {g.menu_preference} {g.dietary_notes ? `• ${
+                  Menu: {g.menu_preference} {g.dietary_notes ? `• ${g.dietary_notes}` : ""}
+                </span>
+              </div>
+
+              <select
+                value={g.table_name || "Da Assegnare"}
+                onChange={(e) => handleAssignTable(g.id, e.target.value)}
+                className="text-xs p-1.5 rounded-lg border border-slate-300 bg-[#FAF7F2] font-bold text-[#8B6508] cursor-pointer"
+              >
+                <option value="Da Assegnare">-- Scegli Tavolo --</option>
+                {tables.map((t) => (
+                  <option key={t.id} value={t.table_name}>{t.table_name}</option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
