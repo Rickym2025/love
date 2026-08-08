@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Lock, Sparkles, LogIn, UserPlus, ArrowRight, ShieldAlert } from "lucide-react";
+import { Lock, Sparkles, LogIn, UserPlus, ShieldAlert } from "lucide-react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
@@ -21,7 +21,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   const isMasterDemo = agencyId === "sposi-in-love";
 
-  // STATO PER VERIFICA PERMESSI MASTER ADMIN
   const [isAuthorizedMaster, setIsAuthorizedMaster] = useState<boolean>(true);
   const [userEmail, setUserEmail] = useState<string>("");
 
@@ -36,7 +35,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         "riccardo@rmstudio.app",
       ];
 
-      // Se tenta di accedere allo studio demo "sposi-in-love" senza essere Riccardo, lo blocca
       if (isMasterDemo) {
         const hasPermission = authorizedEmails.includes(storedEmail);
         setIsAuthorizedMaster(hasPermission);
@@ -74,7 +72,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
       id: "3",
       coupleNames: "Giulia & Marco",
       date: "10 Ottobre 2026",
-      template: "Modello A",
+      template: "Modello C",
       paletteName: "Lavanda & Lillà",
       slug: "giulia-e-marco",
       status: "Bozza",
@@ -109,6 +107,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   
+  // SFONDO PREDEFINITO D'AUTORE FIORI
   const [heroBgImage, setHeroBgImage] = useState("/sfondi/fiori.jpg");
   const [heroMediaImage, setHeroMediaImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
@@ -227,7 +226,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     };
   }, [isResizingSidebar, isResizingPreview]);
 
-  // SCHERMATA BLOCCO SICUREZZA PER UTENTI NON AUTORIZZATI SULLO STUDIO DEMO
   if (isMasterDemo && !isAuthorizedMaster) {
     return (
       <div className="min-h-screen w-full bg-slate-950 text-white flex items-center justify-center p-6 relative overflow-hidden font-sans select-none">
@@ -245,9 +243,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
             <h2 className="text-2xl font-serif font-bold text-white">Accesso Riservato</h2>
             <p className="text-xs text-slate-300 font-serif leading-relaxed">
               Lo Studio Demo <strong className="text-amber-300">"Sposi in Love"</strong> è la matrice riservata esclusivamente a <strong>Riccardo Modena (RM Studio)</strong>.
-            </p>
-            <p className="text-xs text-slate-400">
-              Per creare e personalizzare i tuoi inviti di nozze, accedi al tuo Studio Agenzia personale o registrati gratuitamente in pochi secondi!
             </p>
           </div>
 
@@ -292,8 +287,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE */}
-      <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
+      {/* 2. CONFIGURATORE CENTRALE - OVERFLOW-Y ISOLATO PER EVITARE SCROLL PARASSITA */}
+      <div className="flex-1 h-full overflow-y-scroll overflow-x-hidden bg-[#FAF7F2] border-r border-[#D4AF37]/20 relative z-10 overscroll-contain">
         {activeTab === "list" ? (
           <div className="p-6">
             <ConfiguratorList
