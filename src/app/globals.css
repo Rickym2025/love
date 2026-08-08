@@ -101,7 +101,7 @@ input, select, textarea, button {
     transform: translateX(0%);
   }
   to {
-    transform: translateX(calc(-100% - var(--gap, 1.5rem)));
+    transform: translateX(calc(-100% - var(--gap, 1rem)));
   }
 }
 
@@ -110,14 +110,14 @@ input, select, textarea, button {
     transform: translateY(0%);
   }
   to {
-    transform: translateY(calc(-100% - var(--gap, 1.5rem)));
+    transform: translateY(calc(-100% - var(--gap, 1rem)));
   }
 }
 
 .animate-marquee {
-  animation: marquee var(--duration, 45s) linear infinite;
+  animation: marquee var(--duration, 40s) linear infinite;
 }
 
 .animate-marquee-vertical {
-  animation: marquee-vertical var(--duration, 45s) linear infinite;
+  animation: marquee-vertical var(--duration, 40s) linear infinite;
 }
