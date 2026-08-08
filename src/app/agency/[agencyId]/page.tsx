@@ -79,7 +79,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   
-  const [heroBgImage, setHeroBgImage] = useState("palette");
+  const [heroBgImage, setHeroBgImage] = useState("/sfondi/fiori.jpg");
   const [heroMediaImage, setHeroMediaImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
   );
@@ -87,13 +87,17 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
   );
 
-  // STATI DEDICATI AI GIOCHI DELLA FESTA
+  // STATI DEDICATI AI GIOCHI DELLA FESTA E PREMI POP-UP
   const [puzzleImage, setPuzzleImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80"
   );
   const [scratchPhotoUrl, setScratchPhotoUrl] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
   );
+  const [puzzlePrize, setPuzzlePrize] = useState("💃 Hai vinto un ballo speciale con la Sposa!");
+  const [scratchPrize, setScratchPrize] = useState("🥂 Hai vinto un drink offerto dallo Sposo!");
+  const [quizPrize, setQuizPrize] = useState("📸 Hai vinto un selfie di gruppo con gli Sposi!");
+
   const [quizQuestions, setQuizQuestions] = useState([
     {
       question: "Dove ci siamo conosciuti per la prima volta?",
@@ -196,7 +200,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. SIDEBAR */}
+      {/* 1. SIDEBAR AGENZIA */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
@@ -215,7 +219,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE */}
+      {/* 2. CONFIGURATORE CENTRALE CON TUTTI I MODULI */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         {activeTab === "list" ? (
           <div className="p-6">
@@ -278,6 +282,12 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
             setPuzzleImage={setPuzzleImage}
             scratchPhotoUrl={scratchPhotoUrl}
             setScratchPhotoUrl={setScratchPhotoUrl}
+            puzzlePrize={puzzlePrize}
+            setPuzzlePrize={setPuzzlePrize}
+            scratchPrize={scratchPrize}
+            setScratchPrize={setScratchPrize}
+            quizPrize={quizPrize}
+            setQuizPrize={setQuizPrize}
             quizQuestions={quizQuestions}
             setQuizQuestions={setQuizQuestions}
             galleryStyle={galleryStyle}
@@ -308,7 +318,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. PREVIEW LIVE SMARTPHONE CON QUIZ QUESTIONS TRASMESSO CORRETTAMENTE */}
+      {/* 3. PREVIEW LIVE SMARTPHONE CON PREMI & QUIZ SINCRONIZZATI */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
@@ -339,6 +349,9 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
           ricevimentoImage={ricevimentoImage}
           puzzleImage={puzzleImage}
           scratchPhotoUrl={scratchPhotoUrl}
+          puzzlePrize={puzzlePrize}
+          scratchPrize={scratchPrize}
+          quizPrize={quizPrize}
           galleryStyle={galleryStyle}
           quizQuestions={quizQuestions}
           partnerStores={partnerStores}
