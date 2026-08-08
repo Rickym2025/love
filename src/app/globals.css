@@ -93,3 +93,31 @@ input, select, textarea, button {
   transform-origin: center center;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.3);
 }
+
+
+/* ─── ANIMAZIONI MARQUEE LOOP CONTINUO ─── */
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1.5rem)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap, 1.5rem)));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 45s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 45s) linear infinite;
+}
