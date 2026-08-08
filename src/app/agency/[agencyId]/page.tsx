@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Lock, Sparkles, LogIn, UserPlus, ShieldAlert } from "lucide-react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
@@ -107,7 +106,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   const [dressCodeNotes, setDressCodeNotes] = useState("Abiti eleganti nei toni cromatici della palette");
   const [selectedPaletteIdx, setSelectedPaletteIdx] = useState(0);
   
-  // SFONDO PREDEFINITO D'AUTORE FIORI
   const [heroBgImage, setHeroBgImage] = useState("/sfondi/fiori.jpg");
   const [heroMediaImage, setHeroMediaImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
@@ -287,7 +285,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE - OVERFLOW-Y ISOLATO PER EVITARE SCROLL PARASSITA */}
+      {/* 2. CONFIGURATORE CENTRALE CON OVERFLOW-Y ISOLATO */}
       <div className="flex-1 h-full overflow-y-scroll overflow-x-hidden bg-[#FAF7F2] border-r border-[#D4AF37]/20 relative z-10 overscroll-contain">
         {activeTab === "list" ? (
           <div className="p-6">
