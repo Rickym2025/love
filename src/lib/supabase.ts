@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://aqrpkjwywepsfjdkolcr.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxcHJramd3eXdlcHNmamRrb2xjciIsInJvbGUiOiJhb24iLCJpYXQiOjE3MDk4NTUwMDB9.EXAMPLE';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://your-supabase-url.supabase.co";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "your-anon-key";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -93,7 +93,7 @@ export async function saveLoveRsvp(rsvp: {
   }
 }
 
-// 4. LETTURA TUTTI GLI RSVP PER CATERING / TABLEAU DE MARIAGE
+// 4. LETTURA TUTTI GLI RSVP
 export async function fetchLoveRsvps(experience_slug: string) {
   try {
     const { data, error } = await supabase
@@ -109,7 +109,7 @@ export async function fetchLoveRsvps(experience_slug: string) {
   }
 }
 
-// 5. ASSEGNAZIONE INVITATO AD UN TAVOLO SPECIFICO
+// 5. ASSEGNAZIONE INVITATO AD UN TAVOLO
 export async function updateGuestTable(rsvpId: string, tableName: string) {
   try {
     const { data, error } = await supabase
@@ -155,6 +155,16 @@ export async function addLoveTable(experience_slug: string, tableName: string, c
   }
 }
 
+export async function deleteLoveTable(tableId: string) {
+  try {
+    const { error } = await supabase.from("love_tables").delete().eq("id", tableId);
+    if (error) return { success: false, error };
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
 // 7. GESTIONE BUDGET PLANNER FORNITORI
 export async function fetchLoveBudgets(experience_slug: string) {
   try {
@@ -192,7 +202,17 @@ export async function addLoveBudgetItem(item: {
   }
 }
 
-// 8. SALVATAGGIO FOTO/MESSAGGIO IN GUESTBOOK E PHOTO WALL
+export async function deleteLoveBudgetItem(itemId: string) {
+  try {
+    const { error } = await supabase.from("love_budgets").delete().eq("id", itemId);
+    if (error) return { success: false, error };
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err };
+  }
+}
+
+// 8. SALVATAGGIO FOTO/MESSAGGIO IN GUESTBOOK
 export async function saveLoveGuestbookItem(item: {
   experience_slug: string;
   author_name: string;
