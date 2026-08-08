@@ -1,105 +1,61 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import { Heart, Sparkles } from "lucide-react";
 
 export interface EnvelopeWaxProps {
-  initials?: string;
   coupleNames?: string;
-  weddingDate?: string;
-  audioUrl?: string;
-  themeColor?: string;
-  onOpen?: () => void;
-  children?: React.ReactNode;
+  waxSealUrl?: string; // PROP PER IL SIGILLO PERSONALIZZATO
   inline?: boolean;
+  onOpen?: () => void;
 }
 
 export default function EnvelopeWax({
   coupleNames = "Elena & Davide",
-  weddingDate = "24 MAGGIO 2026",
-  onOpen,
-  children,
+  waxSealUrl = "/wax-seal.png",
   inline = false,
+  onOpen,
 }: EnvelopeWaxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
-    if (isOpen) return;
     setIsOpen(true);
-
-    const audio = document.getElementById("love-wedding-audio") as HTMLAudioElement;
-    if (audio) {
-      audio.play().catch((err) => console.log("Autoplay audio limitato:", err));
+    if (typeof onOpen === "function") {
+      onOpen();
     }
-
-    if (onOpen) onOpen();
   };
 
-  const containerClass = inline
-    ? `relative w-full h-[520px] my-2 flex items-center justify-center transition-opacity duration-1000 ${
-        isOpen ? "opacity-0 pointer-events-none delay-700 h-0 my-0 overflow-hidden" : "opacity-100"
-      }`
-    : `fixed inset-0 z-50 flex items-center justify-center bg-[#1E293B]/80 backdrop-blur-md transition-opacity duration-1000 ${
-        isOpen ? "opacity-0 pointer-events-none delay-700" : "opacity-100"
-      }`;
+  const sealImgSrc = waxSealUrl || "/wax-seal.png";
 
   return (
-    <>
-      <div className={containerClass}>
+    <div className={`w-full flex flex-col items-center justify-center select-none ${inline ? "py-2" : "py-8"}`}>
+      {!isOpen ? (
         <div
           onClick={handleOpen}
-          className="relative w-[92%] max-w-[420px] h-[560px] bg-[#FAF7F2] rounded-2xl shadow-2xl border-2 border-[#D4AF37]/40 cursor-pointer group flex flex-col justify-between p-8 select-none transition-transform duration-500 hover:scale-[1.01] overflow-hidden"
+          className="relative w-72 sm:w-80 h-48 sm:h-52 bg-[#F3E8FF] rounded-2xl border-2 border-[#D4AF37] shadow-2xl flex flex-col items-center justify-center p-4 cursor-pointer hover:scale-105 transition-all group overflow-hidden"
         >
-          {/* RILIEVI FLOREALI BOTANICI SUI LATI (STILE FOTO 1) */}
-          <div className="absolute inset-y-0 left-2 w-10 opacity-30 pointer-events-none bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:12px_12px]" />
-          <div className="absolute inset-y-0 right-2 w-10 opacity-30 pointer-events-none bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:12px_12px]" />
+          {/* LEMBI E SFUMATURA BUSTA A V */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2] via-[#F3E8FF] to-[#E9D5FF] opacity-90" />
+          <div className="absolute top-0 inset-x-0 h-24 border-b-2 border-[#D4AF37]/40 bg-[#FAF7F2]/60 [clip-path:polygon(0_0,_100%_0,_50%_100%)] shadow-inner" />
 
-          {/* Lembo Triangolare Superiore */}
-          <div
-            className="absolute top-0 left-0 right-0 h-1/2 bg-[#F5EFE6] rounded-t-2xl origin-top transition-transform duration-700 border-b border-[#D4AF37]/40 z-10 shadow-md"
-            style={{
-              clipPath: "polygon(0 0, 50% 80%, 100% 0)",
-              transform: isOpen ? "rotateX(180deg)" : "rotateX(0deg)",
-            }}
-          />
-
-          {/* Lembo Triangolare Inferiore */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#EFE8DC] rounded-b-2xl origin-bottom z-10 border-t border-[#D4AF37]/20"
-            style={{
-              clipPath: "polygon(0 100%, 50% 20%, 100% 100%)",
-            }}
-          />
-
-          {/* Nomi Sposi nell'Intestazione */}
-          <div className="z-20 text-center pt-8">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-1">
-              PARTECIPAZIONE DI MATRIMONIO
-            </span>
-            <h2 className="font-serif text-3xl text-[#1E293B] font-bold tracking-wide">{coupleNames}</h2>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-semibold mt-2">{weddingDate}</p>
+          {/* SIGILLO IN CERALACCA 3D REATTIVO */}
+          <div className="relative z-20 w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_10px_15px_rgba(212,175,55,0.5)] group-hover:rotate-6 transition-transform">
+            <img
+              src={sealImgSrc}
+              alt="Sigillo Ceralacca 3D"
+              className="w-full h-full object-contain rounded-full"
+            />
           </div>
 
-          {/* SIGILLO CERALACCA LOGO PNG public/wax-seal.png */}
-          <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${
-              isOpen ? "scale-150 opacity-0" : "scale-100 group-hover:scale-110"
-            }`}
-          >
-            <div className="relative w-28 h-28 drop-shadow-[0_12px_24px_rgba(212,175,55,0.45)]">
-              <Image src="/wax-seal.png" alt="Sigillo Ceralacca" fill className="object-contain" priority />
-            </div>
-          </div>
-
-          {/* Dicitura TOCCA PER APRIRE */}
-          <div className="z-20 text-center pb-4">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-[0.25em] animate-pulse block mb-1">^</span>
-            <span className="text-xs font-bold text-[#1E293B] uppercase tracking-[0.2em]">TOCCA PER APRIRE</span>
-          </div>
+          <span className="relative z-20 text-[10px] sm:text-xs font-serif font-bold text-[#8B6508] uppercase tracking-widest mt-2 animate-pulse flex items-center gap-1">
+            <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" /> Tocca il Sigillo per Aprire
+          </span>
         </div>
-      </div>
-
-      {children}
-    </>
+      ) : (
+        <div className="p-4 bg-emerald-950/80 text-emerald-200 rounded-2xl border border-emerald-500 text-xs font-serif font-bold flex items-center gap-2 animate-fade-in">
+          <Heart className="w-4 h-4 fill-emerald-400 text-emerald-400" /> Busta Aperta con Successo!
+        </div>
+      )}
+    </div>
   );
 }
