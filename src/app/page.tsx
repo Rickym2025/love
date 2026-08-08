@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
 import KineticGrid from '@/components/ui/kinetic-grid';
-import Marquee from '@/components/Marquee';
+import { Marquee } from '@/components/ui/Marquee';
 import {
   Sparkles,
   Heart,
@@ -37,7 +37,6 @@ export default function LandingPage() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  // 8 TESTIMONIANZE RICCHE, DETTAGLIATE ED INFORMATIVE
   const richTestimonials = [
     {
       names: 'Sofia & Lorenzo',
@@ -167,7 +166,6 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1E293B] text-base leading-relaxed">
       
-      {/* SFONDO CONTINUO AVORIO */}
       <div
         className="fixed inset-0 z-0 pointer-events-none opacity-20 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -255,7 +253,6 @@ export default function LandingPage() {
             Busta d'epoca con sigillo in ceralacca 3D, mappa navigatore GPS, risposta al menu con allergie, giochi per gli invitati e spedizione istantanea con un semplice tocco su WhatsApp.
           </p>
 
-          {/* PULSANTI ACTION AD ALTO CONTRASTO */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl mb-4">
             <Link href="/agency/sposi-in-love" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D4AF37] text-slate-950 font-bold text-sm shadow-xl flex items-center justify-center gap-2.5 hover:bg-amber-400 transition cursor-pointer">
               <Sparkles className="w-5 h-5 text-slate-950" />
@@ -273,7 +270,7 @@ export default function LandingPage() {
           </p>
         </section>
 
-        {/* 🌟 SEZIONE RECENSIONI SCORREVOLI IN LOOP CONTINUO (21ST.DEV MARQUEE) */}
+        {/* 🌟 SEZIONE RECENSIONI USANDO IL TUO COMPONENTE MARQUEE DA 21ST.DEV */}
         <section className="py-20 bg-slate-900 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
           <div className="max-w-6xl mx-auto space-y-8 relative z-10">
             <div className="text-center space-y-2 max-w-3xl mx-auto px-6">
@@ -286,7 +283,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* SCORRIMENTO INFINITO IN LOOP DA DESTRA A SINISTRA */}
+            {/* MARQUEE ESATTO 21ST.DEV */}
             <Marquee pauseOnHover repeat={4} className="[--duration:50s]">
               {richTestimonials.map((item, idx) => (
                 <div
@@ -754,7 +751,7 @@ export default function LandingPage() {
 
             <button
               type="submit"
-              className="w-full py-4 bg-[#D4AF37] text-slate-950 font-bold text-sm uppercase tracking-wider rounded-xl hover:bg-amber-400 transition-colors shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-4 bg-[#D4AF37] text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-amber-400 transition-colors shadow-lg flex items-center justify-center gap-2 cursor-pointer"
             >
               <Send className="w-4 h-4 text-slate-950" /> Invia Richiesta al Maestro &amp; Team
             </button>
