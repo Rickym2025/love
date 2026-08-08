@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { Sparkles, MapPin, Gift, PartyPopper } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
@@ -16,7 +15,7 @@ import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import CosmosHero from "@/components/ui/CosmosHero";
 import CircularGallery from "@/components/ui/CircularGallery";
-import SocialCards, { CardItem } from "@/components/ui/SocialCards";
+import SocialCards, { type CardItem } from "@/components/ui/SocialCards";
 import PhotoWallSection from "@/components/PhotoWallSection";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
@@ -237,13 +236,13 @@ export default function AgencyPreview({
   };
 
   const previewFanCards: CardItem[] = [
-    { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
-    { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
+    { imgUrl: scratchPhotoUrl || "", caption: "Il Primo Ballo", author: coupleNames || "Gli Sposi" },
+    { imgUrl: puzzleImage || "", caption: "Taglio Torta", author: "Zii Rossi" },
   ];
 
   const previewPolaroidPhotos = [
-    { id: "1", url: scratchPhotoUrl, caption: "Il Primo Ballo degli Sposi", author: coupleNames },
-    { id: "2", url: puzzleImage, caption: "Taglio della Torta", author: "Zii Rossi" },
+    { id: "1", url: scratchPhotoUrl || "", caption: "Il Primo Ballo degli Sposi", author: coupleNames || "Gli Sposi" },
+    { id: "2", url: puzzleImage || "", caption: "Taglio della Torta", author: "Zii Rossi" },
   ];
 
   return (
@@ -666,7 +665,7 @@ export default function AgencyPreview({
                 </a>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
