@@ -71,10 +71,10 @@ export function SectionTableauDeMariage({
       <div className="flex justify-between items-center border-b border-slate-200 pb-3">
         <div>
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#8B6508] flex items-center gap-1.5 mb-0.5">
-            <Users className="w-4 h-4 text-[#D4AF37]" /> Gestore Disposizione Tavoli
+            <Users className="w-4 h-4 text-[#D4AF37]" /> Tableau &amp; Mappa dei Tavoli
           </span>
           <h3 className="text-lg font-serif font-bold text-slate-900">
-            Tableau de Mariage per {coupleNames}
+            Disposizione degli Ospiti per {coupleNames}
           </h3>
         </div>
 
@@ -91,7 +91,7 @@ export function SectionTableauDeMariage({
       <form onSubmit={handleAddTable} className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-2 items-center">
         <input
           type="text"
-          placeholder="Nome Tavolo (es. Tavolo Sposi / Tavolo Parigi)..."
+          placeholder="Nome del Tavolo (es. Tavolo Sposi / Tavolo Parigi)..."
           value={newTableName}
           onChange={(e) => setNewTableName(e.target.value)}
           className="flex-1 text-xs p-2.5 rounded-xl border border-slate-300 bg-white font-bold"
@@ -124,7 +124,7 @@ export function SectionTableauDeMariage({
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                 <h4 className="font-serif font-bold text-sm text-[#8B6508]">{tbl.table_name}</h4>
                 <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                  {seatedGuests.length} / {tbl.seats_capacity} Posti
+                  {seatedGuests.length} / {tbl.seats_capacity} Posti Occupati
                 </span>
               </div>
 
