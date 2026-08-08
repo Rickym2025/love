@@ -99,7 +99,7 @@ export default function AgencyPreview({
     { id: "4", time: "20:00", title: "Cena di Gala & Taglio Torta" },
     { id: "5", time: "22:00", title: "Festa, DJ Set & Open Bar" },
   ],
-  heroBgImage = "/sfondi/carta_pergamena.jpg",
+  heroBgImage = "/sfondi/fiori.jpg",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   puzzleImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
@@ -129,7 +129,7 @@ export default function AgencyPreview({
 
   const getValidBg = (bg?: string) => {
     if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
-      return selectedTemplate === "C" ? "/sfondi/carta_pergamena.jpg" : "/sfondi/fiori.jpg";
+      return selectedTemplate === "C" ? "/sfondi/carta_pergamena.jpg" : selectedTemplate === "B" ? "/sfondi/seta_rosa.jpg" : "/sfondi/fiori.jpg";
     }
     return bg;
   };
@@ -164,13 +164,7 @@ export default function AgencyPreview({
   const textColor = isDarkBg ? "#FFFFFF" : ((activePalette as any)?.textColor || "#1E293B");
   const accentColor = isDarkBg ? "#D4AF37" : ((activePalette as any)?.accentColor || "#8B6508");
 
-  const isWhiteBg = heroBgImage === "#FFFFFF";
-  const isPaletteSync = heroBgImage === "palette" || !heroBgImage;
-  const containerBgStyle = isWhiteBg
-    ? { backgroundColor: "#FFFFFF", color: textColor }
-    : isPaletteSync
-    ? { backgroundColor: bgMain, color: textColor }
-    : { backgroundColor: bgMain, color: textColor };
+  const containerBgStyle = { backgroundColor: bgMain, color: textColor };
 
   const photosMap = DRESS_CODE_PHOTOS || {};
   const outfitPhotos: string[] =
@@ -284,14 +278,13 @@ export default function AgencyPreview({
         className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin"
         style={containerBgStyle}
       >
-        <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs" />
+        <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs pointer-events-none" />
 
-        {!isWhiteBg && !isPaletteSync && (
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20"
-            style={{ backgroundImage: `url(${activeBg})` }}
-          />
-        )}
+        {/* SFONDO TEXTURE D'AUTORE SEMPRE VISIBILE */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25"
+          style={{ backgroundImage: `url(${activeBg})` }}
+        />
 
         {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl} />}
 
@@ -339,7 +332,7 @@ export default function AgencyPreview({
           />
         ) : (
           /* MODELLO A & B */
-          <>
+          <div className="relative z-10">
             {modules.dedicheMarquee && (
               <div className="py-1">
                 <Marquee text={marqueeText} coupleNames={coupleNames} />
@@ -673,7 +666,7 @@ export default function AgencyPreview({
                 </a>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
