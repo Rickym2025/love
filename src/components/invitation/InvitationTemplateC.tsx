@@ -9,12 +9,8 @@ import PartnerStores from "@/components/PartnerStores";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import KineticGrid from "@/components/ui/kinetic-grid";
 import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
-import EnvelopeWax from "@/components/EnvelopeWax";
-import PartingClouds from "@/components/PartingClouds";
-import WaterRippleImage from "@/components/ui/water-ripple-image";
-import CosmosHero from "@/components/ui/CosmosHero";
 import CircularGallery from "@/components/ui/CircularGallery";
-import SocialCards, { CardItem } from "@/components/ui/SocialCards";
+import SocialCards, { type CardItem } from "@/components/ui/SocialCards";
 import PhotoWallSection from "@/components/PhotoWallSection";
 import PhotoPuzzle from "@/components/PhotoPuzzle";
 import ScratchPhoto from "@/components/ScratchPhoto";
@@ -123,7 +119,6 @@ export default function InvitationTemplateC({
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
-  // VALUTAZIONE RIGOROSA PER SFONDO CARTA PERGAMENA O CUSTOM D'AUTORE
   const getValidBg = (bg?: string) => {
     if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
       return "/sfondi/carta_pergamena.jpg";
@@ -148,36 +143,34 @@ export default function InvitationTemplateC({
   };
 
   const previewFanCards: CardItem[] = [
-    { imgUrl: scratchPhotoUrl, caption: "Il Primo Ballo", author: coupleNames },
-    { imgUrl: puzzleImage, caption: "Taglio Torta", author: "Zii Rossi" },
+    { imgUrl: scratchPhotoUrl || "", caption: "Il Primo Ballo", author: coupleNames || "Gli Sposi" },
+    { imgUrl: puzzleImage || "", caption: "Taglio Torta", author: "Zii Rossi" },
   ];
 
-  // RENDERING DEL CONTENUTO SENZA KINETIC GRID SE INLINE IN PREVIEW
   const MainContent = (
-    <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
-      {/* SFONDO TEXTURE PERGAMENA SEMPRE PRESENTE */}
+    <div className="relative w-full min-h-screen overflow-x-hidden" onClick={triggerAudioInteraction}>
+      {/* SFONDO TEXTURE PERGAMENA BEN VISIBILE */}
       <div
-        className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
+        className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none opacity-50 transition-opacity"
         style={{ backgroundImage: `url(${activeBg})` }}
       />
 
-      <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-        
-        {/* ZOOM MULTIMEDIALE ALLO SCROLL CON FOTO 1 E FOTO 2 */}
-        {introStart === "expand" && (
-          <div className="py-2">
-            <ScrollExpandMedia
-              bgImageSrc={safeRicevimento}
-              mediaSrc={safeHeroMedia}
-              title={coupleNames}
-              date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-              onExpand={triggerAudioInteraction}
-            />
-          </div>
-        )}
+      {/* 1. HERO ZOOM FULL SCREEN RIPRISTINATO FUORI DAL MAIN */}
+      {introStart === "expand" && (
+        <div className="w-full relative z-10">
+          <ScrollExpandMedia
+            bgImageSrc={safeRicevimento}
+            mediaSrc={safeHeroMedia}
+            title={coupleNames}
+            date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            onExpand={triggerAudioInteraction}
+          />
+        </div>
+      )}
 
-        {/* 1. SLIDE INIZIALE HERO LANDING */}
-        <div className="p-6 bg-gradient-to-br from-[#FAF7F2]/90 via-white/90 to-[#FDFBF7]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
+      <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
+        {/* 2. LANDING CARD */}
+        <div className="p-6 bg-white/85 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
           <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
           <p className="text-sm italic font-serif opacity-90">&quot;{welcomePhrase}&quot;</p>
@@ -193,21 +186,21 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 2. AUGURI DEGLI INVITATI */}
+        {/* 3. AUGURI DEGLI INVITATI */}
         <div className="space-y-2 pt-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 block text-center">Auguri degli Invitati</span>
           <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-3 bg-white/85 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
               <p className="text-xs italic font-serif">&quot;Non vediamo l&apos;ora!&quot;</p>
               <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Marco &amp; Sara</span>
             </div>
-            <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-3 bg-white/85 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
               <p className="text-xs italic font-serif">&quot;Auguri immensi ragazzi!&quot;</p>
               <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Zii Rossi</span>
             </div>
-            <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-3 bg-white/85 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex justify-center text-amber-400 mb-1"><Star className="w-3.5 h-3.5 fill-amber-400" /></div>
               <p className="text-xs italic font-serif">&quot;Ci saremo tutti a brindare!&quot;</p>
               <span className="text-[9px] font-bold text-slate-600 block mt-1.5">- Amici di Sempre</span>
@@ -215,8 +208,8 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 3. SEZIONE ALTERNATA 1: CERIMONIA */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
+        {/* 4. SEZIONE ALTERNATA CERIMONIA */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/85 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
           <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs bg-slate-100">
             <img src={safeHeroMedia} alt="Sposi Cerimonia" className="w-full h-full object-cover" />
           </div>
@@ -228,8 +221,8 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
+        {/* 5. SEZIONE ALTERNATA RICEVIMENTO */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/85 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
           <div className="space-y-2 order-2 md:order-1">
             <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
             <p className="text-xs font-medium text-slate-600 leading-relaxed">{locationAddress}</p>
@@ -239,9 +232,9 @@ export default function InvitationTemplateC({
           </div>
         </div>
 
-        {/* 5. MODULO DATA & COUNTDOWN */}
+        {/* 6. MODULO DATA */}
         {dateMode === "countdown" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/85 backdrop-blur-xs" style={{ borderColor: borderCard }}>
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               ⏳ Il nostro grande giorno inizia tra
             </span>
@@ -258,7 +251,7 @@ export default function InvitationTemplateC({
         )}
 
         {dateMode === "scratch" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
               🎰 Gratta col dito per scoprire la data
             </span>
@@ -266,9 +259,9 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 6. PROGRAMMA DELLA GIORNATA */}
+        {/* 7. PROGRAMMA DELLA GIORNATA */}
         {scheduleSchema === "howitworks" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               📍 Programma della Giornata
             </span>
@@ -277,7 +270,7 @@ export default function InvitationTemplateC({
         )}
 
         {scheduleSchema === "classico" && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Programma della Giornata
             </span>
@@ -291,9 +284,9 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 7. LOCATION CON MAPPA GOOGLE */}
+        {/* 8. LOCATION */}
         {showMappa && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <MapPin className="w-4 h-4" style={{ color: accentColor }} /> Location del Matrimonio
             </span>
@@ -326,9 +319,9 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 8. DRESS CODE & PALETTE */}
+        {/* 9. DRESS CODE & PALETTE */}
         {showDressCode && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
               Dress Code &amp; Palette
             </span>
@@ -353,12 +346,12 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 9. NEGOZI CONVENZIONATI */}
+        {/* 10. NEGOZI CONVENZIONATI */}
         {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
 
-        {/* 10. LISTA NOZZE IBAN */}
+        {/* 11. LISTA NOZZE IBAN */}
         {showListaNozze && (
-          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
+          <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/85 backdrop-blur-xs border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
               <Gift className="w-4 h-4" style={{ color: accentColor }} /> Lista Nozze &amp; Coordinate IBAN
             </span>
@@ -367,12 +360,12 @@ export default function InvitationTemplateC({
           </div>
         )}
 
-        {/* 11. RSVP */}
+        {/* 12. RSVP */}
         <div id="rsvp" className="pt-2">
           <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} slug={cleanSlug} />
         </div>
 
-        {/* 12. FESTA */}
+        {/* 13. FESTA */}
         {showHubGiochi !== false && (
           <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-2xl text-center space-y-5 border-2 border-[#D4AF37]">
             <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
@@ -403,7 +396,6 @@ export default function InvitationTemplateC({
     </div>
   );
 
-  // SE E INLINE IN PREVIEW DISATTIVA IL KINETIC GRID PER EVITARE SCROLL PARASSITA
   if (inline) {
     return <div className="w-full min-h-full">{MainContent}</div>;
   }
