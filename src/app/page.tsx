@@ -20,6 +20,16 @@ import {
   Send,
   Award,
   Volume2,
+  Smartphone,
+  Users,
+  Building2,
+  Zap,
+  FileSpreadsheet,
+  Layers,
+  Gamepad2,
+  MessageSquare,
+  MapPin,
+  Calendar,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -34,63 +44,63 @@ export default function LandingPage() {
     {
       name: 'Sofia & Lorenzo',
       role: 'Sposi 2025',
-      text: 'Quando gli invitati hanno aperto la partecipazione ed è partita la nostra canzone con i nostri nomi e la storia di come ci siamo conosciuti a Parigi, piangevano tutti!',
+      text: 'I nostri invitati sono impazziti per il sigillo in ceralacca e per la comodità della mappa Google e della conferma menu con le allergie!',
       stars: 5,
     },
     {
       name: 'Elena Valenti',
       role: 'Wedding Planner (Milano)',
-      text: 'La canzone d\'autore su misura è diventata il mio servizio di punta. Proporre ai clienti 2 arrangiamenti da scegliere crea un\'emozione indescrivibile.',
+      text: 'Agency Hub mi ha permesso di offrire le partecipazioni digitali nei miei pacchetti Luxury con l\'export Excel per i catering.',
       stars: 5,
     },
     {
       name: 'Marco & Giulia',
       role: 'Sposi 2026',
-      text: 'Avere un brano unico al mondo che parla dei nostri modi di dire e dei nostri viaggi è il regalo più bello del nostro matrimonio.',
+      text: 'Abbiamo scelto il servizio "Chiavi in Mano" e Riccardo ha pensato a tutto lui in meno di 24 ore. Spettacolare!',
       stars: 5,
     },
   ];
 
   const faqs = [
     {
-      q: 'Come funziona la Canzone Inedita Su Misura (+€300)?',
-      a: 'È un\'opera d\'arte unica al mondo prodotta da FF Edizioni. Ci racconterete la vostra storia: come vi siete conosciuti, le vostre avventure, i vostri aneddoti e modi di dire. Il Maestro Fausto Fusetti (iscritto SIAE n. 189515) scriverà ed inciderà in studio un brano irrepetibile con i vostri nomi.',
+      q: 'Come funziona l\'invio della partecipazione agli invitati?',
+      a: 'Riceverai un link unico e personalizzato (es: love.rmstudio.app/elena-e-davide). Potrai inviarlo con un tap su WhatsApp tramite la nostra dashboard o tramite QR Code sulle partecipazioni fisiche.',
     },
     {
-      q: 'Perché fornite 2 versioni del brano tra cui scegliere?',
-      a: 'Per garantirvi la perfezione assoluta! Per ogni richiesta componiamo 2 arrangiamenti musicali con sfumature e sonorità leggermente diverse, così potrete ascoltarli entrambi e scegliere la melodia esatta che fa battere il vostro cuore.',
+      q: 'Gli invitati devono scaricare un\'applicazione?',
+      a: 'No! LOVE è una Web-App nativa ultra-veloce. Si apre dal browser di qualsiasi smartphone (iPhone o Android) senza alcuna installazione.',
     },
     {
-      q: 'Una canzone su misura può essere riutilizzata da altri sposi?',
-      a: 'Mai! Ogni brano contiene i vostri nomi, le vostre date, la vostra città ed i vostri ricordi personali. È un\'opera d\'autore esclusiva e protetta che appartiene solo a voi.',
+      q: 'Dove trovo la Dashboard Risultati & Catering?',
+      a: 'Ogni matrimonio ha la sua Dashboard riservata dove vedere la lista conferme, la scelta del menu (carne/pesce/veg), la tabella intolleranze alimentari da scaricare in formato Excel per lo chef ed inviare i messaggi WhatsApp.',
+    },
+    {
+      q: 'Come funziona la canzone su misura (+€300)?',
+      a: 'È un servizio d\'élite opzionale di FF Edizioni: il Maestro Fausto Fusetti (iscritto SIAE n. 189515) compone e incide in studio un brano d\'autore inedito in 2 varianti d\'ascolto, cucito sulla vostra storia d\'amore.',
     },
     {
       q: 'Posso provare a creare la mia partecipazione gratuitamente?',
-      a: 'Certamente! Puoi accedere liberamente al configuratore, provare i temi grafici, le melodie strumentali di benvenuto, i quiz e la busta 3D senza inserire alcuna carta di credito. Pagherai solo quando vorrai sbloccare il link definitivo.',
+      a: 'Certamente! Puoi accedere liberamente al configuratore, provare i colori, la musica strumentale, i quiz e la busta 3D senza inserire alcuna carta di credito. Pagherai solo quando vorrai sbloccare il link definitivo.',
     },
     {
       q: 'Come funziona il servizio "Chiavi in Mano" (€249)?',
       a: 'Pensiamo a tutto noi! Ti basterà inviarci via WhatsApp le foto di coppia, i dettagli della location e le info: il team di RM Studio imposterà la grafica, ritaglierà le immagini e ti consegnerà il link pronto all\'uso in 24 ore.',
     },
     {
-      q: 'Come funziona l\'invio della partecipazione agli invitati?',
-      a: 'Riceverai un link unico e personalizzato (es: love.rmstudio.app/elena-e-davide). Potrai inviarlo con un tap su WhatsApp tramite la nostra dashboard o tramite QR Code sulle partecipazioni fisiche.',
-    },
-    {
-      q: 'Dove trovo la Dashboard Risultati & Catering?',
-      a: 'Ogni matrimonio ha la sua Dashboard riservata dove vedere la lista conferme, la scelta del menu (carne/pesce/veg), la tabella intolleranze alimentari da scaricare per lo chef ed inviare i messaggi WhatsApp.',
-    },
-    {
       q: 'Come funziona la pagina "La Festa" e il Maxischermo?',
       a: 'Gli invitati accedono alla pagina /festa il giorno delle nozze, scattano foto dal telefono che vengono proiettate in diretta sul maxischermo della sala.',
     },
     {
-      q: 'Se sono un\'agenzia, posso inserire la canzone su misura per i miei clienti?',
-      a: 'Assolutamente sì! Con Agency Hub potrai richiedere i brani inediti su misura per le tue coppie e proporre loro le 2 varianti d\'ascolto in anteprima.',
+      q: 'Se sono un\'agenzia, posso mettere il mio logo?',
+      a: 'Sì! Con il piano Agency Hub il footer e le schermate mostreranno esclusivamente il logo e i contatti della tua agenzia.',
     },
     {
       q: 'Il sito scade dopo il matrimonio?',
-      a: 'No, rimane attivo per 1 anno completo dopo le nozze per permettere a parenti ed amici di rivedere la galleria fotografica ed ascoltare la vostra canzone.',
+      a: 'No, rimane attivo per 1 anno completo dopo le nozze per permettere a parenti ed amici di rivedere la galleria fotografica.',
+    },
+    {
+      q: 'Come posso procedere con l\'acquisto?',
+      a: 'Puoi creare la tua bozza gratis subito cliccando su "Crea Bozza Gratuita" o scriverci dal form di contatto per richiedere il servizio Chiavi in Mano o la Licenza Agenzie!',
     },
   ];
 
@@ -153,7 +163,7 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* HERO SECTION CON LEVA EMOZIONALE */}
+        {/* HERO SECTION */}
         <section className="py-20 px-6 text-center max-w-5xl mx-auto flex flex-col items-center">
           
           <div className="inline-flex p-1 rounded-full bg-white border border-[#D4AF37]/30 mb-8 shadow-sm">
@@ -175,14 +185,14 @@ export default function LandingPage() {
             </button>
           </div>
 
-          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-3 flex items-center justify-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" /> Le Partecipazioni Digitali d'Autore
+          <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block mb-3">
+            Cosa Fai? • Le Partecipazioni Digitali d'Autore
           </span>
           <h1 className="font-serif text-4xl sm:text-7xl font-normal text-[#1E293B] leading-tight mb-6 max-w-4xl">
-            La vostra storia d'amore diventa un'opera d'arte.
+            La tua partecipazione di nozze diventa un'esperienza indimenticabile.
           </h1>
           <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-            Busta d'epoca con sigillo in ceralacca 3D, giochi interattivi, colonna sonora inedita con i vostri nomi e spedizione 1-Tap su WhatsApp.
+            Busta d'epoca con sigillo in ceralacca 3D, mappa GPS interattiva, conferma RSVP con scelta menu e allergie, giochi per gli invitati e spedizione 1-Tap su WhatsApp.
           </p>
 
           {/* PULSANTI ACTION */}
@@ -192,9 +202,9 @@ export default function LandingPage() {
               <span>Crea Bozza Gratuita (Senza Carta)</span>
             </Link>
 
-            <a href="#canzone-inedita" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1E293B] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition cursor-pointer">
-              <Music className="w-4 h-4 text-[#D4AF37]" />
-              <span>Canzone Inedita su Misura (+€300)</span>
+            <a href="#contatti" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1E293B] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition cursor-pointer">
+              <Wand2 className="w-4 h-4 text-[#D4AF37]" />
+              <span>Richiedi "Chiavi in Mano" (€249)</span>
             </a>
           </div>
 
@@ -209,6 +219,213 @@ export default function LandingPage() {
             <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold">Recensioni Sposi &amp; Agenzie</span>
           </div>
           <Marquee items={testimonials} />
+        </section>
+
+        {/* 🌟 NUOVA SEZIONE 1: PERCHÉ L'INVITO DIGITALE BATTE LA CARTA */}
+        <section className="py-20 px-6 max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block">Zero Stress • Zero Carta Sprecata</span>
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Perché le coppie scelgono la Partecipazione Digitale LOVE</h2>
+            <p className="text-sm text-slate-600 font-serif">
+              Addio a mesi di attesa in tipografia, buste perse per posta e foglietti smarriti con le allergie degli invitati.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-3 text-left">
+              <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#8B6508]">
+                <Zap className="w-6 h-6 text-[#D4AF37]" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">Inizio Istantaneo &amp; 1-Tap WhatsApp</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-serif">
+                Spedisci l&apos;invito personalizzato con il nome di ciascun invitato in un secondo con 1-Tap su WhatsApp. Zero costi di spedizione o francobolli.
+              </p>
+            </div>
+
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-3 text-left">
+              <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#8B6508]">
+                <FileSpreadsheet className="w-6 h-6 text-[#D4AF37]" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">RSVP &amp; Excel Catering Automatico</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-serif">
+                Raccogli le conferme, il numero degli ospiti, le preferenze menu (Carne/Pesce/Veg) e la tabella delle allergie da scaricare in Excel per lo chef.
+              </p>
+            </div>
+
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-3 text-left">
+              <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#8B6508]">
+                <MapPin className="w-6 h-6 text-[#D4AF37]" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">Mappa GPS Navigatore Integrata</h3>
+              <p className="text-xs text-slate-600 leading-relaxed font-serif">
+                Gli invitati non si perderanno mai: cliccano sul pulsante della villa ed il navigatore del loro smartphone li guida direttamente al parcheggio.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 🌟 NUOVA SEZIONE 2: SEMPLICE ANCHE PER I NONNI */}
+        <section className="py-20 px-6 max-w-6xl mx-auto bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl border-2 border-[#D4AF37] shadow-2xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center text-left p-2 sm:p-6">
+            <div className="space-y-4">
+              <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block flex items-center gap-1.5">
+                <Smartphone className="w-4 h-4 text-[#D4AF37]" /> Nessuna App da Scaricare
+              </span>
+              <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight">
+                Pensa a tutto il browser. Un tap ed è subito festa.
+              </h2>
+              <p className="text-sm text-slate-300 font-serif leading-relaxed">
+                LOVE è stato progettato per garantire un&apos;usabilità perfetta su qualsiasi smartphone (iPhone o Android) con caratteri ampi, pulsanti visibili ed ad alto contrasto.
+              </p>
+              <ul className="space-y-2.5 text-xs text-slate-200 font-medium pt-2">
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Si apre al volo dal link WhatsApp o dal QR Code stampato</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Caratteri senior-friendly chiari e leggibili per zii e nonni</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Mappa GPS, programma orari e conferma partecipazione in 1 schermata</li>
+              </ul>
+            </div>
+
+            <div className="h-80 sm:h-[380px] w-full rounded-2xl overflow-hidden border-2 border-[#D4AF37]/60 shadow-2xl relative">
+              <img
+                src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop"
+                alt="Partecipazione Smartphone"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 🌟 NUOVA SEZIONE 3: COME FUNZIONA IN 3 PASSI */}
+        <section className="py-20 px-6 max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-2 max-w-3xl mx-auto">
+            <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block">Semplice • Veloce • Intuitivo</span>
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Come realizzare la tua Partecipazione in 3 Passi</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md text-left space-y-3 relative">
+              <span className="w-8 h-8 rounded-full bg-[#D4AF37] text-slate-950 font-bold text-sm flex items-center justify-center font-mono">1</span>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">Crea la tua Bozza Gratis</h3>
+              <p className="text-xs text-slate-600 font-serif leading-relaxed">
+                Accedi al configuratore, prova i modelli preimpostati (A, B o C), seleziona la tua palette colori ed inserisci la location.
+              </p>
+            </div>
+
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md text-left space-y-3 relative">
+              <span className="w-8 h-8 rounded-full bg-[#D4AF37] text-slate-950 font-bold text-sm flex items-center justify-center font-mono">2</span>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">Personalizza Giochi &amp; Lista Nozze</h3>
+              <p className="text-xs text-slate-600 font-serif leading-relaxed">
+                Aggiungi lo Scratch col dito per svelare la data, imposta il Quiz della Coppia con i premi per gli ospiti e collega l&apos;IBAN o la lista Amazon.
+              </p>
+            </div>
+
+            <div className="p-8 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md text-left space-y-3 relative">
+              <span className="w-8 h-8 rounded-full bg-[#D4AF37] text-slate-950 font-bold text-sm flex items-center justify-center font-mono">3</span>
+              <h3 className="font-serif font-bold text-lg text-[#1E293B]">Spedisci &amp; Ricevi le Conferme</h3>
+              <p className="text-xs text-slate-600 font-serif leading-relaxed">
+                Invia il link agli invitati su WhatsApp in 1-tap, proietta le foto della festa sul maxischermo e scarica il report catering in Excel.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 🌟 NUOVA SEZIONE 4: VANTAGGI B2B PER WEDDING PLANNER */}
+        <section className="py-20 px-6 max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-3xl border border-[#D4AF37]/40 shadow-sm text-left">
+          <div className="grid md:grid-cols-2 gap-12 items-center p-2 sm:p-6">
+            <div className="space-y-4">
+              <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block flex items-center gap-1.5">
+                <Building2 className="w-4 h-4 text-[#D4AF37]" /> Piattaforma B2B White-Label
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1E293B] leading-tight">
+                Sei una Wedding Planner? Offri le Partecipazioni nei tuoi Pacchetti Luxury
+              </h2>
+              <p className="text-xs text-slate-600 font-serif leading-relaxed">
+                Con la licenza <strong>Agency Hub B2B</strong> potrai gestire fino a 10 matrimoni all&apos;anno col logo e i contatti della tua agenzia nel footer, configuratore B2B a 3 colonne e supporto dedicato.
+              </p>
+              <div className="pt-2">
+                <a href="#prezzi" className="inline-flex items-center gap-2 text-xs font-bold bg-[#1E293B] text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition shadow-md">
+                  Scopri la Licenza Agenzia B2B (€490) <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+                </a>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900 text-white rounded-2xl border-2 border-[#D4AF37] space-y-3 shadow-xl">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider block">💼 Incluso in Agency Hub:</span>
+              <ul className="space-y-2 text-xs text-slate-300 font-medium">
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> 10 Matrimoni Sbloccati all&apos;anno</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Logo ed intestazione della tua agenzia</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Studio Configuratore a 3 colonne per modifiche veloci</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Export Excel Liste Invitati per lo Chef</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Modulo Spedizione WhatsApp 1-Tap</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* 🌟 NUOVA SEZIONE 5: BENTO GRID FUNZIONALITÀ D'ÉLITE */}
+        <section className="py-20 px-6 max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-2 max-w-3xl mx-auto">
+            <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block">Tutto Incluso</span>
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">I Moduli Unici della Partecipazione LOVE</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 text-left">
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">💌</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">Busta d'Epoca &amp; Ceralacca 3D</h3>
+              <p className="text-xs text-slate-600 font-serif">L'invitato tocca il sigillo in ceralacca ed apre la busta con pioggia di petali animati.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">🎰</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">Scratch Date "Gratta la Data"</h3>
+              <p className="text-xs text-slate-600 font-serif">Gli invitati grattano lo strato dorato col dito sullo schermo per svelare giorno e ora.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">🥩</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">RSVP con Menu &amp; Intolleranze</h3>
+              <p className="text-xs text-slate-600 font-serif">Scelta del menu (Carne, Pesce, Veg) e segnalazione allergie da scaricare in Excel.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">🎁</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">Lista Nozze IBAN &amp; Amazon</h3>
+              <p className="text-xs text-slate-600 font-serif">Coordinate bancarie per regali e link diretto ai negozi convenzionati o lista Amazon.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">🎉</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">Pagina Festa &amp; Maxischermo</h3>
+              <p className="text-xs text-slate-600 font-serif">Foto scattate in sala proiettate in diretta sul maxischermo con Quiz e Puzzle.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-2">
+              <span className="text-2xl">💬</span>
+              <h3 className="font-serif font-bold text-base text-[#1E293B]">Spedizione 1-Tap su WhatsApp</h3>
+              <p className="text-xs text-slate-600 font-serif">Pannello per inviare l'invito personalizzato su WhatsApp a ciascun contatto.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* SEZIONE BUSTA CERALACCA DETAIL */}
+        <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
+          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+            <img
+              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"
+              alt="Busta Ceralacca"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="text-left space-y-4">
+            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">Busta D'Epoca &amp; Ceralacca 3D</span>
+            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Un'emozione al primo tocco</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              L'invitato tocca il sigillo dorato sullo schermo del telefono: la busta si apre con la vostra colonna sonora d'autore e pioggia di petali animati.
+            </p>
+            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+              Prova la Busta Live →
+            </Link>
+          </div>
         </section>
 
         {/* FOCUS NEUROMARKETING: CANZONE SU MISURA CON DOPPIA PROPOSTA D'ASCOLTO */}
@@ -248,27 +465,6 @@ export default function LandingPage() {
                 <Music className="w-4 h-4 text-slate-950" /> Richiedi la Vostra Canzone Unica ↗
               </a>
             </div>
-          </div>
-        </section>
-
-        {/* SEZIONE BUSTA CERALACCA */}
-        <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center border-t border-[#D4AF37]/20">
-          <div className="h-80 sm:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-            <img
-              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop"
-              alt="Busta Ceralacca"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="text-left space-y-4">
-            <span className="text-xs text-[#D4AF37] uppercase tracking-widest font-bold block">Busta D'Epoca &amp; Ceralacca 3D</span>
-            <h3 className="font-serif text-3xl sm:text-5xl text-[#1E293B]">Un'emozione al primo tocco</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              L'invitato tocca il sigillo dorato sullo schermo del telefono: la busta si apre con la vostra colonna sonora d'autore e pioggia di petali animati.
-            </p>
-            <Link href="/elena-e-davide" className="inline-flex items-center gap-2 text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
-              Prova la Busta Live →
-            </Link>
           </div>
         </section>
 
@@ -436,8 +632,8 @@ export default function LandingPage() {
                 name="richiesta_tipo"
                 className="w-full text-xs p-3.5 rounded-xl border border-slate-700 bg-slate-950 text-white font-medium focus:border-[#D4AF37] outline-none cursor-pointer"
               >
-                <option value="Canzone Inedita Su Misura (+€300)">🎼 Canzone Inedita Su Misura (2 Varianti Incluse - €300)</option>
                 <option value="Sposi Chiavi in Mano (€249)">💍 Servizio Sposi "Chiavi in Mano" (€249)</option>
+                <option value="Canzone Inedita Su Misura (€300)">🎼 Canzone Inedita Su Misura (2 Varianti Incluse - €300)</option>
                 <option value="Licenza Agency Hub B2B (€490)">💼 Licenza Agency Hub B2B Wedding Planner (€490)</option>
                 <option value="Informazioni Generali">❓ Informazioni Generali</option>
               </select>
