@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import EnvelopeWax from "@/components/EnvelopeWax";
 import PartingClouds from "@/components/PartingClouds";
 import WaterRippleImage from "@/components/ui/water-ripple-image";
@@ -21,6 +20,7 @@ export interface InvitationHeroProps {
   showNuvole?: boolean;
   apertoAcqua?: boolean;
   apertoCosmos?: boolean;
+  inline?: boolean;
   playWeddingAudio?: () => void;
   setApertoAcqua?: (val: boolean) => void;
   setApertoCosmos?: (val: boolean) => void;
@@ -39,17 +39,19 @@ export default function InvitationHero({
   showNuvole = true,
   apertoAcqua = false,
   apertoCosmos = false,
+  inline = false,
   playWeddingAudio,
   setApertoAcqua,
   setApertoCosmos,
 }: InvitationHeroProps) {
   return (
-    <div className="w-full relative z-10">
-      {/* 1. EFFETTO BUSTA 3D CON SIGILLO PERSONALIZZATO */}
+    <>
+      {/* 1. EFFETTO BUSTA 3D CON OVERLAY A TUTTO SCHERMO */}
       {start === "busta" && showBusta && (
         <EnvelopeWax
           coupleNames={coupleNames}
           waxSealUrl={waterImageUrl || "/wax-seal.png"}
+          inline={inline}
           onOpen={playWeddingAudio}
         />
       )}
@@ -98,6 +100,6 @@ export default function InvitationHero({
           />
         </div>
       )}
-    </div>
+    </>
   );
 }
