@@ -275,7 +275,7 @@ export default function AgencyPreview({
       </div>
 
       <div
-        className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin"
+        className="w-[350px] h-[680px] max-h-[82vh] rounded-[48px] border-[10px] border-slate-900 shadow-2xl overflow-y-auto overflow-x-hidden relative backdrop-blur-sm scrollbar-thin pointer-events-auto"
         style={containerBgStyle}
       >
         <div className="w-28 h-4 bg-slate-900 rounded-b-xl mx-auto sticky top-0 z-50 mb-2 border-b border-slate-800 shadow-xs pointer-events-none" />
@@ -666,7 +666,7 @@ export default function AgencyPreview({
                 </a>
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
