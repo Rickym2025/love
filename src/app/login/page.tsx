@@ -9,14 +9,11 @@ import { supabase } from "@/lib/supabase";
 export default function LoginPage() {
   const router = useRouter();
   
-  // STATO PER TOGGLE SCHEDA (LOGIN vs REGISTRAZIONE)
   const [mode, setMode] = useState<"login" | "register">("login");
 
-  // CAMPI FORM LOGIN
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  // CAMPI FORM REGISTRAZIONE
   const [regName, setRegName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regSlug, setRegSlug] = useState("");
@@ -33,9 +30,17 @@ export default function LoginPage() {
 
     const cleanInput = loginId.trim().toLowerCase().replace(/[^a-z0-9-@.]/g, "");
 
-    // ACCESSO SPECIALE MASTER ADMIN (RICCARDO MODENA)
-    if (cleanInput === "admin" || cleanInput === "riccardo@rmstudio.app") {
-      router.push("/admin");
+    // 1. ACCESSO SPECIALE MASTER ADMIN (RICCARDO MODENA)
+    if (
+      cleanInput === "admin" ||
+      cleanInput === "riccardo.modena@gmail.com" ||
+      cleanInput === "riccardo@rmstudio.com" ||
+      cleanInput === "riccardo@rmstudio.app"
+    ) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("love_user_email", "riccardo@rmstudio.app");
+      }
+      router.push("/agency/sposi-in-love");
       return;
     }
 
@@ -47,15 +52,21 @@ export default function LoginPage() {
         .single();
 
       if (data) {
-        // Accesso consentito
+        if (typeof window !== "undefined") {
+          localStorage.setItem("love_user_email", data.email || cleanInput);
+        }
         router.push(`/agency/${data.agency_id}`);
       } else {
-        // Se non trovata, suggerisce di registrarsi
-        setErrorMsg("ID Agenzia o Email non trovata. Clicca sulla scheda 'Registra Nuova Agenzia' per creare il tuo account!");
+        if (typeof window !== "undefined") {
+          localStorage.setItem("love_user_email", cleanInput);
+        }
+        router.push(`/agency/${cleanInput}`);
       }
     } catch (err) {
-      // Fallback
-      router.push(`/agency/${cleanInput || "sposi-in-love"}`);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("love_user_email", cleanInput);
+      }
+      router.push(`/agency/${cleanInput || "nuova-agenzia"}`);
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +84,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Auto-genera lo slug URL se lasciato vuoto
     const cleanSlug = (regSlug || regName)
       .toLowerCase()
       .trim()
@@ -81,7 +91,6 @@ export default function LoginPage() {
       .replace(/-+/g, "-");
 
     try {
-      // Registra la nuova agenzia su Supabase con 0/10 Matrimoni
       const { error: insertError } = await supabase.from("love_agencies").insert([
         {
           agency_id: cleanSlug,
@@ -93,14 +102,15 @@ export default function LoginPage() {
         },
       ]);
 
-      if (!insertError) {
-        // Redireziona all'Agency Studio appena creato
-        router.push(`/agency/${cleanSlug}`);
-      } else {
-        // Se lo slug esiste già, apre comunque lo studio
-        router.push(`/agency/${cleanSlug}`);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("love_user_email", regEmail.trim());
       }
+
+      router.push(`/agency/${cleanSlug}`);
     } catch (err) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("love_user_email", regEmail.trim());
+      }
       router.push(`/agency/${cleanSlug}`);
     } finally {
       setIsLoading(false);
@@ -109,12 +119,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-950 text-white flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none">
-      {/* SFONDO LUSSO SCURO */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
 
       <div className="max-w-lg w-full bg-slate-900/95 backdrop-blur-2xl border-2 border-[#D4AF37] p-6 md:p-8 rounded-3xl shadow-2xl space-y-6 relative z-10 text-center my-auto">
-        
-        {/* LOGO & TESTATA CON TESTI GRANDI */}
         <div className="space-y-2">
           <div className="relative w-16 h-14 mx-auto drop-shadow-2xl">
             <Image src="/logo.png" alt="LOVE Logo" fill className="object-contain" priority unoptimized />
@@ -128,7 +135,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* SELETTORE CHIARO TRA ACCEDI E REGISTRATI (FONT 14PX) */}
         <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-950 rounded-2xl border border-slate-800">
           <button
             type="button"
@@ -161,30 +167,26 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* MSG ERRORE IN EVIDENZA */}
         {errorMsg && (
           <div className="p-3 bg-rose-950/80 border border-rose-600 rounded-xl text-xs font-bold text-rose-200 text-left">
             ⚠️ {errorMsg}
           </div>
         )}
 
-        {/* MODALITÀ 1: FORM LOGIN PER AGENZIE ESISTENTI */}
         {mode === "login" && (
           <form onSubmit={handleLogin} className="space-y-4 text-left animate-fade-in">
             <div>
               <label className="block text-xs md:text-sm font-bold text-[#D4AF37] mb-1.5 flex items-center gap-1.5">
                 <Building2 className="w-4 h-4" /> ID Agenzia o Email
               </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={loginId}
-                  onChange={(e) => setLoginId(e.target.value)}
-                  className="w-full text-sm p-4 rounded-xl border-2 border-slate-700 bg-slate-950 text-white font-mono font-bold focus:border-[#D4AF37] outline-none"
-                  placeholder="es. sposi-in-love oppure la tua email"
-                />
-              </div>
+              <input
+                type="text"
+                required
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                className="w-full text-sm p-4 rounded-xl border-2 border-slate-700 bg-slate-950 text-white font-mono font-bold focus:border-[#D4AF37] outline-none"
+                placeholder="es. white-wedding oppure riccardo@rmstudio.app"
+              />
             </div>
 
             <div>
@@ -215,7 +217,6 @@ export default function LoginPage() {
           </form>
         )}
 
-        {/* MODALITÀ 2: REGISTRAZIONE NUOVA AGENZIA */}
         {mode === "register" && (
           <form onSubmit={handleRegister} className="space-y-4 text-left animate-fade-in">
             <div>
