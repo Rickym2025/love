@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Lock, Sparkles, LogIn, UserPlus, ArrowRight, ShieldAlert } from "lucide-react";
 import AgencySidebar from "@/components/agency/AgencySidebar";
 import AgencyConfigurator from "@/components/agency/AgencyConfigurator";
 import AgencyPreview from "@/components/agency/AgencyPreview";
@@ -15,6 +18,33 @@ export interface ScheduleItem {
 export default function AgencyStudioPage({ params }: { params?: { agencyId?: string } }) {
   const rawAgencyId = params?.agencyId || "sposi-in-love";
   const agencyId = (rawAgencyId || "").replace(/[^a-zA-Z0-9-]/g, "") || "sposi-in-love";
+
+  const isMasterDemo = agencyId === "sposi-in-love";
+
+  // STATO PER VERIFICA PERMESSI MASTER ADMIN
+  const [isAuthorizedMaster, setIsAuthorizedMaster] = useState<boolean>(true);
+  const [userEmail, setUserEmail] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedEmail = (localStorage.getItem("love_user_email") || "").toLowerCase().trim();
+      setUserEmail(storedEmail);
+
+      const authorizedEmails = [
+        "riccardo.modena@gmail.com",
+        "riccardo@rmstudio.com",
+        "riccardo@rmstudio.app",
+      ];
+
+      // Se tenta di accedere allo studio demo "sposi-in-love" senza essere Riccardo, lo blocca
+      if (isMasterDemo) {
+        const hasPermission = authorizedEmails.includes(storedEmail);
+        setIsAuthorizedMaster(hasPermission);
+      } else {
+        setIsAuthorizedMaster(true);
+      }
+    }
+  }, [agencyId, isMasterDemo]);
 
   const [sidebarWidth, setSidebarWidth] = useState(250);
   const [previewWidth, setPreviewWidth] = useState(400);
@@ -87,7 +117,6 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
   );
 
-  // STATI DEDICATI AI GIOCHI DELLA FESTA E PREMI POP-UP
   const [puzzleImage, setPuzzleImage] = useState(
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80"
   );
@@ -198,6 +227,50 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     };
   }, [isResizingSidebar, isResizingPreview]);
 
+  // SCHERMATA BLOCCO SICUREZZA PER UTENTI NON AUTORIZZATI SULLO STUDIO DEMO
+  if (isMasterDemo && !isAuthorizedMaster) {
+    return (
+      <div className="min-h-screen w-full bg-slate-950 text-white flex items-center justify-center p-6 relative overflow-hidden font-sans select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
+
+        <div className="max-w-md w-full bg-slate-900/95 backdrop-blur-2xl border-2 border-[#D4AF37] p-8 rounded-3xl shadow-2xl space-y-6 relative z-10 text-center my-auto">
+          <div className="w-16 h-16 bg-[#D4AF37]/20 border-2 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto text-[#D4AF37]">
+            <Lock className="w-8 h-8 animate-pulse" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center justify-center gap-1.5">
+              <ShieldAlert className="w-4 h-4 text-amber-400" /> Studio Master Demo Riservato
+            </span>
+            <h2 className="text-2xl font-serif font-bold text-white">Accesso Riservato</h2>
+            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+              Lo Studio Demo <strong className="text-amber-300">"Sposi in Love"</strong> è la matrice riservata esclusivamente a <strong>Riccardo Modena (RM Studio)</strong>.
+            </p>
+            <p className="text-xs text-slate-400">
+              Per creare e personalizzare i tuoi inviti di nozze, accedi al tuo Studio Agenzia personale o registrati gratuitamente in pochi secondi!
+            </p>
+          </div>
+
+          <div className="space-y-2.5 pt-2">
+            <Link
+              href="/login"
+              className="w-full py-3.5 bg-[#D4AF37] text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+            >
+              <LogIn className="w-4 h-4" /> Accedi con la tua Agenzia
+            </Link>
+
+            <Link
+              href="/login"
+              className="w-full py-3.5 bg-slate-800 text-white font-bold text-xs rounded-xl hover:bg-slate-700 transition-colors border border-slate-700 flex items-center justify-center gap-2"
+            >
+              <UserPlus className="w-4 h-4 text-[#D4AF37]" /> Registra Nuova Agenzia B2B
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
       {/* 1. SIDEBAR AGENZIA */}
@@ -219,7 +292,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE CON TUTTI I MODULI */}
+      {/* 2. CONFIGURATORE CENTRALE */}
       <div className="flex-1 h-full overflow-y-auto bg-[#FAF7F2] border-r border-[#D4AF37]/20">
         {activeTab === "list" ? (
           <div className="p-6">
@@ -318,7 +391,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Preview"
       />
 
-      {/* 3. PREVIEW LIVE SMARTPHONE CON PREMI & QUIZ SINCRONIZZATI */}
+      {/* 3. PREVIEW LIVE SMARTPHONE */}
       <div
         style={{ width: `${previewWidth}px` }}
         className="h-full bg-[#1E293B] overflow-hidden flex items-center justify-center p-4 flex-shrink-0"
