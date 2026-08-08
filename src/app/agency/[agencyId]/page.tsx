@@ -43,8 +43,8 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     }
   }, [agencyId, isMasterDemo]);
 
-  // SIDEBAR A 290PX PER MOSTRARE IL TESTO DEL MENU SU 1 RIGA SENZA CAPO
-  const [sidebarWidth, setSidebarWidth] = useState(290);
+  // LARGHEZZA SIDEBAR IMPOSTATA A 330PX PER TESTO SU 1 SOLA RIGA
+  const [sidebarWidth, setSidebarWidth] = useState(330);
   const [previewWidth, setPreviewWidth] = useState(400);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
@@ -201,7 +201,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(220, Math.min(380, e.clientX));
+        const newWidth = Math.max(260, Math.min(400, e.clientX));
         setSidebarWidth(newWidth);
       } else if (isResizingPreview) {
         const newWidth = Math.max(320, Math.min(550, window.innerWidth - e.clientX));
@@ -286,7 +286,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
         title="Trascina per ridimensionare Sidebar"
       />
 
-      {/* 2. CONFIGURATORE CENTRALE - ISOLATO CON OVERFLOW-Y DEDICATO */}
+      {/* 2. CONFIGURATORE CENTRALE - SCROLL ISOLATO ED ESCLUSIVO */}
       <div className="flex-1 h-full overflow-y-auto overflow-x-hidden bg-[#FAF7F2] border-r border-[#D4AF37]/20 relative z-10 overscroll-contain">
         {activeTab === "list" ? (
           <div className="p-6">
