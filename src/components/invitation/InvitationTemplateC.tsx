@@ -8,7 +8,11 @@ import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import KineticGrid from "@/components/ui/kinetic-grid";
-import InvitationHero from "@/components/invitation/InvitationHero";
+import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
+import EnvelopeWax from "@/components/EnvelopeWax";
+import PartingClouds from "@/components/PartingClouds";
+import WaterRippleImage from "@/components/ui/water-ripple-image";
+import CosmosHero from "@/components/ui/CosmosHero";
 import CircularGallery from "@/components/ui/CircularGallery";
 import SocialCards, { CardItem } from "@/components/ui/SocialCards";
 import PhotoWallSection from "@/components/PhotoWallSection";
@@ -74,9 +78,9 @@ export default function InvitationTemplateC({
   outfitPhotos = [],
   colors = ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"],
   rsvpStyle = "classico",
-  introStart = "busta",
-  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
-  ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+  introStart = "expand",
+  heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+  ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
   heroBgImage = "/sfondi/fiori.jpg",
   waterImageUrl = "",
   dateMode = "countdown",
@@ -118,8 +122,24 @@ export default function InvitationTemplateC({
   const textColor = colorsList[4] || "#1E293B";
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
-  const activeBg = heroBgImage || "/sfondi/fiori.jpg";
-  const hasCustomBg = activeBg && activeBg !== "palette" && activeBg !== "#FFFFFF";
+
+  // FUNZIONE PER PREVENIRE LINK IMMAGINI SPEZZATE (FALLBACK SU FIORI)
+  const getValidBg = (bg?: string) => {
+    if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
+      return "/sfondi/fiori.jpg";
+    }
+    return bg;
+  };
+
+  const activeBg = getValidBg(heroBgImage);
+
+  const safeHeroMedia = heroMediaImage && heroMediaImage.startsWith("http")
+    ? heroMediaImage
+    : "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
+
+  const safeRicevimento = ricevimentoImage && ricevimentoImage.startsWith("http")
+    ? ricevimentoImage
+    : "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
 
   const triggerAudioInteraction = () => {
     if (typeof playWeddingAudio === "function") {
@@ -134,30 +154,63 @@ export default function InvitationTemplateC({
 
   return (
     <KineticGrid className="w-full min-h-screen">
-      {/* 1. EFFETTO START HERO INIZIALE OVERLAY */}
-      <InvitationHero
-        start={introStart}
-        coupleNames={coupleNames}
-        weddingDateDay={weddingDateDay}
-        weddingDateMonth={weddingDateMonth}
-        weddingDateYear={weddingDateYear}
-        heroBgParam={activeBg}
-        heroMediaImage={heroMediaImage}
-        waterImageUrl={waterImageUrl}
-        inline={inline}
-        playWeddingAudio={playWeddingAudio}
-      />
+      {/* 1. EFFETTO START INIZIALE CORRETTO (ZOOM / BUSTA / NUVOLE) */}
+      {introStart === "busta" && (
+        <EnvelopeWax
+          coupleNames={coupleNames}
+          waxSealUrl={waterImageUrl || "/wax-seal.png"}
+          inline={inline}
+          onOpen={triggerAudioInteraction}
+        />
+      )}
+
+      {introStart === "nuvole" && (
+        <PartingClouds inline={inline} onOpen={triggerAudioInteraction} />
+      )}
+
+      {introStart === "lago" && (
+        <div className="relative w-full h-52 overflow-hidden border-2 border-sky-300 rounded-3xl">
+          <WaterRippleImage
+            src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
+            onClick={triggerAudioInteraction}
+          />
+        </div>
+      )}
+
+      {introStart === "cosmos" && (
+        <div className="relative w-full h-[320px] rounded-3xl overflow-hidden border-2 border-[#D4AF37]">
+          <CosmosHero
+            coupleNames={coupleNames}
+            weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+            inline={inline}
+            onEnter={triggerAudioInteraction}
+          />
+        </div>
+      )}
 
       <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
-        {hasCustomBg && (
-          <div
-            className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
-            style={{ backgroundImage: `url(${activeBg})` }}
-          />
-        )}
+        {/* SFONDO TEXTURE PERSONALIZZATA REALE */}
+        <div
+          className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
+          style={{ backgroundImage: `url(${activeBg})` }}
+        />
 
         <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-          {/* SLIDE INIZIALE HERO LANDING */}
+          
+          {/* SEZOINE ZOOM MULTIMEDIALE ALLO SCROLL (SE SELEZIONATO) */}
+          {introStart === "expand" && (
+            <div className="py-2">
+              <ScrollExpandMedia
+                bgImageSrc={activeBg}
+                mediaSrc={safeHeroMedia}
+                title={coupleNames}
+                date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
+                onExpand={triggerAudioInteraction}
+              />
+            </div>
+          )}
+
+          {/* 1. SLIDE INIZIALE HERO LANDING */}
           <div className="p-6 bg-gradient-to-br from-[#FAF7F2]/90 via-white/90 to-[#FDFBF7]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
@@ -167,14 +220,14 @@ export default function InvitationTemplateC({
               <a
                 href="#rsvp"
                 onClick={triggerAudioInteraction}
-                className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors"
+                className="inline-flex items-center gap-2 text-xs font-bold bg-[#D4AF37] text-slate-900 px-5 py-2.5 rounded-xl shadow-md hover:bg-amber-400 transition-colors cursor-pointer"
               >
                 CONFERMA PARTECIPAZIONE <ChevronRight className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* AUGURI DEGLI INVITATI */}
+          {/* 2. AUGURI DEGLI INVITATI */}
           <div className="space-y-2 pt-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
             <div className="grid grid-cols-3 gap-2 text-center">
@@ -196,10 +249,10 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* SEZIONE ALTERNATA 1: CERIMONIA */}
+          {/* 3. SEZIONE ALTERNATA 1: CERIMONIA */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
-            <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
-              <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
+            <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs bg-slate-100">
+              <img src={safeHeroMedia} alt="Sposi Cerimonia" className="w-full h-full object-cover" />
             </div>
             <div className="space-y-2">
               <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">La Cerimonia Solenne</span>
@@ -209,18 +262,18 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* SEZIONE ALTERNATA 2: RICEVIMENTO */}
+          {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
             <div className="space-y-2 order-2 md:order-1">
               <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
               <p className="text-xs font-medium text-slate-600 leading-relaxed">{locationAddress}</p>
             </div>
-            <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2">
-              <img src={ricevimentoImage} alt="Ricevimento" className="w-full h-full object-cover" />
+            <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs order-1 md:order-2 bg-slate-100">
+              <img src={safeRicevimento} alt="Ricevimento Festa" className="w-full h-full object-cover" />
             </div>
           </div>
 
-          {/* MODULO DATA & COUNTDOWN */}
+          {/* 5. MODULO DATA & COUNTDOWN */}
           {dateMode === "countdown" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
               <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
@@ -247,7 +300,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* PROGRAMMA DELLA GIORNATA */}
+          {/* 6. PROGRAMMA DELLA GIORNATA */}
           {scheduleSchema === "howitworks" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -272,7 +325,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* LOCATION CON MAPPA GOOGLE */}
+          {/* 7. LOCATION CON MAPPA GOOGLE */}
           {showMappa && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -307,7 +360,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* DRESS CODE & PALETTE */}
+          {/* 8. DRESS CODE & PALETTE */}
           {showDressCode && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -334,10 +387,10 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* NEGOZI CONVENZIONATI */}
+          {/* 9. NEGOZI CONVENZIONATI */}
           {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
 
-          {/* LISTA NOZZE IBAN */}
+          {/* 10. LISTA NOZZE IBAN */}
           {showListaNozze && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -348,12 +401,12 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* RSVP */}
+          {/* 11. RSVP */}
           <div id="rsvp" className="pt-2">
             <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} slug={cleanSlug} />
           </div>
 
-          {/* GIOCHI DELLA FESTA & MAXISCHERMO */}
+          {/* 12. FESTA */}
           {showHubGiochi !== false && (
             <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-2xl text-center space-y-5 border-2 border-[#D4AF37]">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
