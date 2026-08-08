@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Heart, PartyPopper, ChevronDown, ChevronUp, Gift } from "lucide-react";
@@ -177,6 +177,27 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       className="min-h-screen w-full overflow-x-hidden transition-colors relative"
       style={{ backgroundColor: isWhiteBg ? "#FFFFFF" : bgMain, color: textColor }}
     >
+      {/* 1. OVERLAY BUSTA 3D / HERO START (OVERLAY A SCHERMO INTERO) */}
+      {!isTemplateC && (
+        <InvitationHero
+          start={start}
+          coupleNames={coupleNames}
+          weddingDateDay={weddingDateDay}
+          weddingDateMonth={weddingDateMonth}
+          weddingDateYear={weddingDateYear}
+          heroBgParam={heroBgParam}
+          heroMediaImage={heroMediaImage}
+          waterImageUrl={waterImageUrl}
+          showBusta={showBusta}
+          showNuvole={showNuvole}
+          apertoAcqua={apertoAcqua}
+          apertoCosmos={apertoCosmos}
+          playWeddingAudio={playWeddingAudio}
+          setApertoAcqua={setApertoAcqua}
+          setApertoCosmos={setApertoCosmos}
+        />
+      )}
+
       {!isWhiteBg && !isPaletteSync && (
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
@@ -187,24 +208,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       {(audioUrl || suonaMusica) && <AudioPlayer audioUrl={audioUrl || defaultAudioUrl} />}
 
       {showMarquee && <Marquee text={marqueeText} coupleNames={coupleNames} />}
-
-      <InvitationHero
-        start={start}
-        coupleNames={coupleNames}
-        weddingDateDay={weddingDateDay}
-        weddingDateMonth={weddingDateMonth}
-        weddingDateYear={weddingDateYear}
-        heroBgParam={heroBgParam}
-        heroMediaImage={heroMediaImage}
-        waterImageUrl={waterImageUrl}
-        showBusta={showBusta}
-        showNuvole={showNuvole}
-        apertoAcqua={apertoAcqua}
-        apertoCosmos={apertoCosmos}
-        playWeddingAudio={playWeddingAudio}
-        setApertoAcqua={setApertoAcqua}
-        setApertoCosmos={setApertoCosmos}
-      />
 
       {isTodayWedding && (
         <div className="max-w-xl mx-auto px-4 pt-6 space-y-4 relative z-20">
