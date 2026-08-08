@@ -2,17 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart, PartyPopper } from "lucide-react";
+import { Star, ChevronRight, MapPin, Gift, Sparkles, Heart } from "lucide-react";
 import RsvpForm from "@/components/RsvpForm";
 import ScratchDate from "@/components/ScratchDate";
 import PartnerStores from "@/components/PartnerStores";
 import TimelineHowItWorks from "@/components/ui/TimelineHowItWorks";
 import KineticGrid from "@/components/ui/kinetic-grid";
-import ScrollExpandMedia from "@/components/ui/scroll-expand-media";
-import EnvelopeWax from "@/components/EnvelopeWax";
-import PartingClouds from "@/components/PartingClouds";
-import WaterRippleImage from "@/components/ui/water-ripple-image";
-import CosmosHero from "@/components/ui/CosmosHero";
+import InvitationHero from "@/components/invitation/InvitationHero";
 import CircularGallery from "@/components/ui/CircularGallery";
 import SocialCards, { CardItem } from "@/components/ui/SocialCards";
 import PhotoWallSection from "@/components/PhotoWallSection";
@@ -63,6 +59,7 @@ export interface InvitationTemplateCProps {
   scratchPrize?: string;
   quizPrize?: string;
   cleanSlug?: string;
+  inline?: boolean;
   playWeddingAudio?: () => void;
 }
 
@@ -77,10 +74,10 @@ export default function InvitationTemplateC({
   outfitPhotos = [],
   colors = ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"],
   rsvpStyle = "classico",
-  introStart = "expand",
+  introStart = "busta",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-  heroBgImage = "/sfondi/fiori.jpg", // SFONDO PREDEFINITO FIORI
+  heroBgImage = "/sfondi/fiori.jpg",
   waterImageUrl = "",
   dateMode = "countdown",
   scheduleSchema = "classico",
@@ -109,13 +106,13 @@ export default function InvitationTemplateC({
   scratchPrize = "🥂 Hai vinto un drink offerto dallo Sposo!",
   quizPrize = "📸 Hai vinto un selfie di gruppo con gli Sposi!",
   cleanSlug = "giulia-e-marco",
+  inline = false,
   playWeddingAudio,
 }: InvitationTemplateCProps) {
   const colorsList = Array.isArray(colors) && colors.length >= 3
     ? colors
     : ["#FAF7F2", "#FFFFFF", "#E6C687", "#8B5CF6", "#3B0764"];
 
-  const bgCard = colorsList[1] || "#FFFFFF";
   const borderCard = colorsList[2] || "#E6C687";
   const accentColor = colorsList[3] || "#8B6508";
   const textColor = colorsList[4] || "#1E293B";
@@ -137,8 +134,21 @@ export default function InvitationTemplateC({
 
   return (
     <KineticGrid className="w-full min-h-screen">
+      {/* 1. EFFETTO START HERO INIZIALE OVERLAY */}
+      <InvitationHero
+        start={introStart}
+        coupleNames={coupleNames}
+        weddingDateDay={weddingDateDay}
+        weddingDateMonth={weddingDateMonth}
+        weddingDateYear={weddingDateYear}
+        heroBgParam={activeBg}
+        heroMediaImage={heroMediaImage}
+        waterImageUrl={waterImageUrl}
+        inline={inline}
+        playWeddingAudio={playWeddingAudio}
+      />
+
       <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
-        {/* SFONDO TEXTURE PERSONALIZZATA CON PARALLAX SOFT */}
         {hasCustomBg && (
           <div
             className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
@@ -147,53 +157,7 @@ export default function InvitationTemplateC({
         )}
 
         <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
-          
-          {/* EFFETTO START INIZIALE SELEZIONATO IN DASHBOARD */}
-          {introStart === "expand" && (
-            <div className="py-2">
-              <ScrollExpandMedia
-                bgImageSrc={activeBg}
-                mediaSrc={heroMediaImage}
-                title={coupleNames}
-                date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-                onExpand={triggerAudioInteraction}
-              />
-            </div>
-          )}
-
-          {introStart === "busta" && (
-            <div className="p-2">
-              <EnvelopeWax coupleNames={coupleNames} inline={true} onOpen={triggerAudioInteraction} />
-            </div>
-          )}
-
-          {introStart === "nuvole" && (
-            <div className="relative py-2">
-              <PartingClouds inline={true} onOpen={triggerAudioInteraction} />
-            </div>
-          )}
-
-          {introStart === "lago" && (
-            <div className="relative w-full h-52 overflow-hidden border-2 border-sky-300 rounded-3xl">
-              <WaterRippleImage
-                src={waterImageUrl || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"}
-                onClick={triggerAudioInteraction}
-              />
-            </div>
-          )}
-
-          {introStart === "cosmos" && (
-            <div className="relative w-full h-[320px] rounded-3xl overflow-hidden border-2 border-[#D4AF37]">
-              <CosmosHero
-                coupleNames={coupleNames}
-                weddingDate={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
-                inline={true}
-                onEnter={triggerAudioInteraction}
-              />
-            </div>
-          )}
-
-          {/* 1. SLIDE INIZIALE HERO LANDING */}
+          {/* SLIDE INIZIALE HERO LANDING */}
           <div className="p-6 bg-gradient-to-br from-[#FAF7F2]/90 via-white/90 to-[#FDFBF7]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
@@ -210,7 +174,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 2. AUGURI DEGLI INVITATI */}
+          {/* AUGURI DEGLI INVITATI */}
           <div className="space-y-2 pt-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
             <div className="grid grid-cols-3 gap-2 text-center">
@@ -232,7 +196,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 3. SEZIONE ALTERNATA 1: CERIMONIA */}
+          {/* SEZIONE ALTERNATA 1: CERIMONIA */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
             <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs">
               <img src={heroMediaImage} alt="Sposi" className="w-full h-full object-cover" />
@@ -245,7 +209,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO */}
+          {/* SEZIONE ALTERNATA 2: RICEVIMENTO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
             <div className="space-y-2 order-2 md:order-1">
               <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
@@ -256,7 +220,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 5. MODULO DATA & COUNTDOWN */}
+          {/* MODULO DATA & COUNTDOWN */}
           {dateMode === "countdown" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
               <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
@@ -283,7 +247,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 6. PROGRAMMA DELLA GIORNATA */}
+          {/* PROGRAMMA DELLA GIORNATA */}
           {scheduleSchema === "howitworks" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -308,7 +272,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 7. LOCATION CON MAPPA GOOGLE */}
+          {/* LOCATION CON MAPPA GOOGLE */}
           {showMappa && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -343,7 +307,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 8. DRESS CODE & PALETTE */}
+          {/* DRESS CODE & PALETTE */}
           {showDressCode && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -370,10 +334,10 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 9. NEGOZI CONVENZIONATI */}
+          {/* NEGOZI CONVENZIONATI */}
           {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
 
-          {/* 10. LISTA NOZZE IBAN */}
+          {/* LISTA NOZZE IBAN */}
           {showListaNozze && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -384,22 +348,19 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 11. RSVP */}
+          {/* RSVP */}
           <div id="rsvp" className="pt-2">
             <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} slug={cleanSlug} />
           </div>
 
-          {/* 12. GIOCHI DELLA FESTA & MAXISCHERMO INTEGRATI NEL TEMPLATE C */}
+          {/* GIOCHI DELLA FESTA & MAXISCHERMO */}
           {showHubGiochi !== false && (
             <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-2xl text-center space-y-5 border-2 border-[#D4AF37]">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
                 <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
               </span>
-              <p className="text-xs text-slate-300">
-                Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
-              </p>
+              <p className="text-xs text-slate-300">Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!</p>
 
-              {/* GALLERIA INTERATTIVA */}
               <div className="py-2">
                 {galleryStyle === "circular" ? (
                   <CircularGallery />
@@ -410,7 +371,6 @@ export default function InvitationTemplateC({
                 )}
               </div>
 
-              {/* PUZZLE & GRATTA E SCOPRI & QUIZ */}
               <div className="py-1"><PhotoPuzzle imageSrc={puzzleImage} puzzlePrize={puzzlePrize} /></div>
               <div className="py-1"><ScratchPhoto imageSrc={scratchPhotoUrl} /></div>
               <div className="py-1"><LoveQuiz questions={quizQuestions} /></div>
