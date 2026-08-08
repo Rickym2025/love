@@ -81,7 +81,7 @@ export default function InvitationTemplateC({
   introStart = "expand",
   heroMediaImage = "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
   ricevimentoImage = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
-  heroBgImage = "/sfondi/fiori.jpg",
+  heroBgImage = "/sfondi/carta_pergamena.jpg",
   waterImageUrl = "",
   dateMode = "countdown",
   scheduleSchema = "classico",
@@ -123,10 +123,10 @@ export default function InvitationTemplateC({
 
   const mapQuery = encodeURIComponent((locationAddress || locationName || "Villa Rosa").trim());
 
-  // FUNZIONE PER PREVENIRE LINK IMMAGINI SPEZZATE (FALLBACK SU FIORI)
+  // VALUTAZIONE RIGOROSA PER IMMAGINI DI SFONDO D'AUTORE
   const getValidBg = (bg?: string) => {
     if (!bg || bg === "palette" || bg === "#FFFFFF" || !bg.includes("/")) {
-      return "/sfondi/fiori.jpg";
+      return "/sfondi/carta_pergamena.jpg";
     }
     return bg;
   };
@@ -154,7 +154,7 @@ export default function InvitationTemplateC({
 
   return (
     <KineticGrid className="w-full min-h-screen">
-      {/* 1. EFFETTO START INIZIALE CORRETTO (ZOOM / BUSTA / NUVOLE) */}
+      {/* 1. EFFETTO START INIZIALE OVERLAY PER MODELLO C */}
       {introStart === "busta" && (
         <EnvelopeWax
           coupleNames={coupleNames}
@@ -189,7 +189,7 @@ export default function InvitationTemplateC({
       )}
 
       <div className="relative w-full min-h-screen" onClick={triggerAudioInteraction}>
-        {/* SFONDO TEXTURE PERSONALIZZATA REALE */}
+        {/* SFONDO TEXTURE D'AUTORE CARTA PERGAMENA SEMPRE PRESENTE */}
         <div
           className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-25 transition-opacity"
           style={{ backgroundImage: `url(${activeBg})` }}
@@ -197,11 +197,11 @@ export default function InvitationTemplateC({
 
         <main className="max-w-xl mx-auto px-4 py-8 space-y-6 relative z-10 text-left">
           
-          {/* SEZOINE ZOOM MULTIMEDIALE ALLO SCROLL (SE SELEZIONATO) */}
+          {/* ZOOM MULTIMEDIALE CON FOTO 1 CERIMONIA & FOTO 2 RICEVIMENTO */}
           {introStart === "expand" && (
             <div className="py-2">
               <ScrollExpandMedia
-                bgImageSrc={activeBg}
+                bgImageSrc={safeRicevimento}
                 mediaSrc={safeHeroMedia}
                 title={coupleNames}
                 date={`${weddingDateDay} ${weddingDateMonth} ${weddingDateYear}`}
@@ -210,7 +210,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 1. SLIDE INIZIALE HERO LANDING */}
+          {/* SLIDE INIZIALE HERO LANDING */}
           <div className="p-6 bg-gradient-to-br from-[#FAF7F2]/90 via-white/90 to-[#FDFBF7]/90 backdrop-blur-xs rounded-3xl border-2 border-[#D4AF37] text-center space-y-3 shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-[#8B6508]">IL NOSTRO GIORNO SPECIALE</span>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1E293B]">{coupleNames}</h1>
@@ -227,7 +227,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 2. AUGURI DEGLI INVITATI */}
+          {/* AUGURI DEGLI INVITATI */}
           <div className="space-y-2 pt-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block text-center">Auguri degli Invitati</span>
             <div className="grid grid-cols-3 gap-2 text-center">
@@ -249,7 +249,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 3. SEZIONE ALTERNATA 1: CERIMONIA */}
+          {/* SEZIONE ALTERNATA 1: CERIMONIA */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
             <div className="w-full h-44 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs bg-slate-100">
               <img src={safeHeroMedia} alt="Sposi Cerimonia" className="w-full h-full object-cover" />
@@ -262,7 +262,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 4. SEZIONE ALTERNATA 2: RICEVIMENTO */}
+          {/* SEZIONE ALTERNATA 2: RICEVIMENTO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 bg-white/90 backdrop-blur-xs rounded-3xl border border-slate-200 shadow-sm">
             <div className="space-y-2 order-2 md:order-1">
               <span className="text-xs font-bold uppercase text-[#8B6508] tracking-wider">Ricevimento &amp; Gran Gala</span>
@@ -273,7 +273,7 @@ export default function InvitationTemplateC({
             </div>
           </div>
 
-          {/* 5. MODULO DATA & COUNTDOWN */}
+          {/* MODULO DATA & COUNTDOWN */}
           {dateMode === "countdown" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-2 bg-white/90 backdrop-blur-xs" style={{ borderColor: borderCard }}>
               <span className="text-xs font-bold uppercase tracking-wider block font-serif" style={{ color: accentColor }}>
@@ -300,7 +300,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 6. PROGRAMMA DELLA GIORNATA */}
+          {/* PROGRAMMA DELLA GIORNATA */}
           {scheduleSchema === "howitworks" && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -325,7 +325,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 7. LOCATION CON MAPPA GOOGLE */}
+          {/* LOCATION CON MAPPA GOOGLE */}
           {showMappa && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -360,7 +360,7 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 8. DRESS CODE & PALETTE */}
+          {/* DRESS CODE & PALETTE */}
           {showDressCode && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-4 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base" style={{ color: accentColor }}>
@@ -387,10 +387,10 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 9. NEGOZI CONVENZIONATI */}
+          {/* NEGOZI CONVENZIONATI */}
           {showNegozi && <PartnerStores stores={partnerStores} showAmazonAffiliate={showAmazonAffiliate} />}
 
-          {/* 10. LISTA NOZZE IBAN */}
+          {/* LISTA NOZZE IBAN */}
           {showListaNozze && (
             <div className="p-6 rounded-3xl shadow-md border text-center space-y-3 bg-white/90 backdrop-blur-xs border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider block font-serif text-base flex items-center justify-center gap-1.5" style={{ color: accentColor }}>
@@ -401,12 +401,12 @@ export default function InvitationTemplateC({
             </div>
           )}
 
-          {/* 11. RSVP */}
+          {/* RSVP */}
           <div id="rsvp" className="pt-2">
             <RsvpForm coupleNames={coupleNames} paletteColors={colorsList} rsvpStyle={rsvpStyle} slug={cleanSlug} />
           </div>
 
-          {/* 12. FESTA */}
+          {/* FESTA */}
           {showHubGiochi !== false && (
             <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-2xl text-center space-y-5 border-2 border-[#D4AF37]">
               <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
