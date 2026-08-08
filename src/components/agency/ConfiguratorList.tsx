@@ -54,15 +54,12 @@ export default function ConfiguratorList({
 }: ConfiguratorListProps) {
   const [downloadingSlug, setDownloadingSlug] = useState<string | null>(null);
 
-  // ESPORTAZIONE EXCEL CATERING DINAMICA DA SUPABASE TABELLA love_rsvps
   const handleExportCateringExcel = async (slug: string, coupleNames: string) => {
     setDownloadingSlug(slug);
 
-    // Chiamata reale a Supabase per recuperare tutti gli RSVP del matrimonio
     const res = await fetchLoveRsvps(slug);
     let rsvps = res.data || [];
 
-    // Fallback dati dimostrativi se il database non ha ancora risposte
     if (!rsvps || rsvps.length === 0) {
       rsvps = [
         {
@@ -81,18 +78,9 @@ export default function ConfiguratorList({
           dietary_notes: "Intollerante al lattosio",
           song_request: "Perfect - Ed Sheeran",
         },
-        {
-          guest_name: "Giuseppe Verdi",
-          attending: false,
-          guests_count: 0,
-          menu_preference: "-",
-          dietary_notes: "Nessuna",
-          song_request: "Nessuna",
-        },
       ];
     }
 
-    // Costruzione del file CSV per lo Chef / Catering
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Nome Invitato,Partecipa,Numero Ospiti,Menu Scelto,Allergie e Intolleranze Alimentari,Canzone Richiesta\n";
 
@@ -119,7 +107,6 @@ export default function ConfiguratorList({
     setDownloadingSlug(null);
   };
 
-  // IMPORTAZIONE LISTA EXCEL OSPITI
   const handleImportExcel = () => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -146,10 +133,10 @@ export default function ConfiguratorList({
       <div className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl border border-[#D4AF37]/30 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-base font-serif font-bold text-[#8B6508] flex items-center gap-2">
-            <FolderHeart className="w-5 h-5 text-[#D4AF37]" /> Inviti Già Creati ({invitations.length})
+            <FolderHeart className="w-5 h-5 text-[#D4AF37]" /> Inviti Salvati in Archivio ({invitations.length})
           </h2>
           <p className="text-xs text-slate-600 mt-1 font-serif">
-            Gestisci gli inviti attivi, scarica il report catering con intolleranze per lo chef ed importa la lista ospiti.
+            Gestisci gli inviti attivi, scarica il report catering per lo chef ed importa le liste ospiti.
           </p>
         </div>
 
@@ -162,81 +149,84 @@ export default function ConfiguratorList({
         </button>
       </div>
 
-      <div className="space-y-4">
+      {/* GRIGLIA UNIFORME A 2 COLONNE CON SCHEDE DI ALTEZZA IDENTICA */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {invitations.map((item) => (
           <div
             key={item.id}
-            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md hover:border-[#D4AF37] transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-md hover:border-[#D4AF37] transition-all flex flex-col justify-between space-y-4"
           >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-serif font-bold text-[#1E293B]">{item.coupleNames}</span>
+            <div className="space-y-2">
+              <div className="flex justify-between items-start">
+                <h3 className="font-serif font-bold text-base text-slate-900">{item.coupleNames}</h3>
                 <span
-                  className={`px-2 py-0.5 text-[9px] font-bold rounded-full ${
+                  className={`px-2.5 py-0.5 text-[9px] font-bold rounded-full border ${
                     item.status === "Attivo"
-                      ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                      : "bg-amber-100 text-amber-800 border border-amber-300"
+                      ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+                      : "bg-amber-100 text-amber-800 border-amber-300"
                   }`}
                 >
                   {item.status}
                 </span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500 font-serif">
-                <span>{item.date}</span>
-                <span>• {item.template}</span>
-                <span>• {item.paletteName}</span>
+
+              <div className="text-xs text-slate-500 font-serif space-y-0.5">
+                <p><strong>Data:</strong> {item.date}</p>
+                <p><strong>Grafica:</strong> {item.template} • {item.paletteName}</p>
               </div>
             </div>
 
-            {/* AZIONI RAPIDE: ESPORTA EXCEL CATERING + APRI INVITO + APRI FESTA + ELIMINA */}
-            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+            {/* PULSANTI DI AZIONE ALLINEATI SUL FONDO */}
+            <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-1.5 justify-between">
               <button
                 type="button"
                 disabled={downloadingSlug === item.slug}
                 onClick={() => handleExportCateringExcel(item.slug, item.coupleNames)}
-                className="px-3 py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
-                title="Scarica la lista ospiti e intolleranze per lo chef"
+                className="px-2.5 py-1.5 text-[11px] font-bold bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                title="Scarica lista catering in Excel"
               >
                 {downloadingSlug === item.slug ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <Loader2 className="w-3 h-3 animate-spin" />
                 ) : (
-                  <FileSpreadsheet className="w-3.5 h-3.5" />
+                  <FileSpreadsheet className="w-3 h-3" />
                 )}
-                Excel Catering (.csv)
+                Excel Catering
               </button>
 
-              <Link
-                href={`/${item.slug}`}
-                target="_blank"
-                className="px-3 py-1.5 text-xs font-bold bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-xl hover:bg-amber-100 transition-colors flex items-center gap-1.5"
-              >
-                <ExternalLink className="w-3.5 h-3.5" /> Invito ↗
-              </Link>
-
-              <Link
-                href={`/${item.slug}/festa`}
-                target="_blank"
-                className="px-3 py-1.5 text-xs font-bold bg-slate-900 text-white border border-[#D4AF37]/50 rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-1.5"
-              >
-                <PartyPopper className="w-3.5 h-3.5 text-[#D4AF37]" /> Festa ↗
-              </Link>
-
-              {typeof onDelete === "function" && (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item.id)}
-                  className="px-3 py-1.5 text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-100 transition-colors flex items-center gap-1.5 cursor-pointer"
-                  title="Elimina Invito dall'Archivio"
+              <div className="flex gap-1">
+                <Link
+                  href={`/${item.slug}`}
+                  target="_blank"
+                  className="px-2.5 py-1.5 text-[11px] font-bold bg-[#FAF7F2] text-[#8B6508] border border-[#D4AF37]/40 rounded-xl hover:bg-amber-100 transition-colors flex items-center gap-1"
                 >
-                  <Trash2 className="w-3.5 h-3.5" /> Elimina
-                </button>
-              )}
+                  <ExternalLink className="w-3 h-3" /> Invito ↗
+                </Link>
+
+                <Link
+                  href={`/${item.slug}/festa`}
+                  target="_blank"
+                  className="px-2.5 py-1.5 text-[11px] font-bold bg-slate-900 text-white border border-[#D4AF37]/50 rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-1"
+                >
+                  <PartyPopper className="w-3 h-3 text-[#D4AF37]" /> Festa ↗
+                </Link>
+
+                {typeof onDelete === "function" && (
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                    className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
+                    title="Elimina Invito"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}
 
         {invitations.length === 0 && (
-          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-serif text-sm">
+          <div className="col-span-2 p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-serif text-sm">
             Nessun invito salvato nell&apos;archivio agenzia.
           </div>
         )}
