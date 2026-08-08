@@ -1,10 +1,9 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Heart, Sparkles, Gift, ChevronDown, ChevronUp, PartyPopper } from "lucide-react";
+import { Heart, PartyPopper, ChevronDown, ChevronUp } from "lucide-react";
 import ScratchDate from "@/components/ScratchDate";
 import RsvpForm from "@/components/RsvpForm";
 import AudioPlayer from "@/components/AudioPlayer";
@@ -42,10 +41,10 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const locationName = searchParams?.get("location") || "Villa Rosa";
   const locationAddress = searchParams?.get("address") || "Via Roma 1, Roma";
   const welcomePhrase = searchParams?.get("phrase") || "Due anime, un solo destino. Una storia scritta nel cuore.";
-  const heroBgParam = searchParams?.get("heroBg") || "palette";
+  const heroBgParam = searchParams?.get("heroBg") || "/sfondi/fiori.jpg";
   const waterImageUrl = searchParams?.get("water") || "";
   const heroMediaImage = searchParams?.get("heroMedia") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80";
-  const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80";
+  const puzzleImage = searchParams?.get("puzzle") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80";
   const scratchPhotoUrl = searchParams?.get("scratch") || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80";
   const galleryStyle = searchParams?.get("gallery") || "polaroid";
 
@@ -58,14 +57,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
       optionC: "Al mare in vacanza",
       optionD: "Tramite amici comuni",
       correctOptionIdx: 0,
-    },
-    {
-      question: "Chi ha fatto la proposta di nozze?",
-      optionA: "Elena",
-      optionB: "Davide",
-      optionC: "Insieme a Parigi",
-      optionD: "I genitori",
-      correctOptionIdx: 1,
     },
   ];
 
@@ -93,7 +84,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
   const [apertoAcqua, setApertoAcqua] = useState(false);
   const [apertoCosmos, setApertoCosmos] = useState(false);
 
-  // LINK DINAMICO ALLA FESTA CON TUTTE LE IMPOSTAZIONI DEL CONFIGURATORE
   const quizEncoded = rawQuiz ? rawQuiz : encodeURIComponent(JSON.stringify(quizQuestions));
   const festaDynamicUrl = `/${cleanSlug}/festa?gallery=${encodeURIComponent(
     galleryStyle
@@ -103,7 +93,6 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
     audioUrl
   )}&quiz=${quizEncoded}`;
 
-  // RILEVAMENTO GIORNO MATRIMONIO
   const isWeddingDayOverride = searchParams?.get("isWeddingDay") === "true";
   const today = new Date();
   const currentDay = today.getDate().toString();
@@ -269,6 +258,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               outfitPhotos={outfitPhotos}
               colors={colorsList}
               rsvpStyle={rsvpStyle}
+              introStart={start}
               heroBgImage={heroBgParam}
               waterImageUrl={waterImageUrl}
               dateMode={dateMode}
@@ -422,7 +412,7 @@ function InvitationContent({ params }: { params?: { slug?: string } }) {
               {showHubGiochi && (
                 <div className="p-6 bg-gradient-to-br from-[#1E293B] to-slate-800 text-white rounded-3xl shadow-xl text-center space-y-3">
                   <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest block flex items-center justify-center gap-1.5">
-                    <Sparkles className="w-4 h-4" /> Hub della Festa &amp; Maxischermo
+                    <Heart className="w-4 h-4 text-[#D4AF37]" /> Hub della Festa &amp; Maxischermo
                   </span>
                   <p className="text-xs text-slate-300">
                     Partecipa al Quiz degli sposi, gioca al Puzzle e carica le tue foto sul Photo Wall!
