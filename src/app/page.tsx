@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ScratchCard from '@/components/ScratchCard';
 import OrbitWidget from '@/components/OrbitWidget';
 import KineticGrid from '@/components/ui/kinetic-grid';
+import Marquee from '@/components/ui/Marquee';
 import {
   Sparkles,
   Heart,
@@ -26,9 +27,6 @@ import {
   MapPin,
   Star,
   Quote,
-  ShieldCheck,
-  Clock,
-  Check,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -39,8 +37,8 @@ export default function LandingPage() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  // RECENSIONI RICCHE, INFORMATIVE E COMPLETE DI DETTAGLI
-  const detailedTestimonials = [
+  // 8 TESTIMONIANZE RICCHE, DETTAGLIATE ED INFORMATIVE
+  const richTestimonials = [
     {
       names: 'Sofia & Lorenzo',
       location: 'Sposi a Villa Borromeo (Milano)',
@@ -48,25 +46,70 @@ export default function LandingPage() {
       stars: 5,
       highlight: '🎯 130 Conferme Ricevute in 24 Ore',
       comment:
-        'I nostri invitati sono rimasti a bocca aperta quando hanno toccato la ceralacca sullo schermo ed è partita la nostra canzone con i nostri nomi! La cosa più comoda in assoluto è stata raccogliere le conferme delle intolleranze alimentari: lo chef del catering ha ringraziato calorosamente per la tabella Excel precisa.',
+        'I nostri invitati sono rimasti a bocca aperta quando hanno toccato la ceralacca 3D sullo schermo ed è partita la nostra canzone! La cosa più comoda in assoluto è stata raccogliere le conferme delle intolleranze alimentari: lo chef del catering ci ha ringraziato per la tabella Excel perfetta.',
     },
     {
       names: 'Elena Valenti',
-      role: 'Wedding Planner d\'Élite (Milano & Lago di Como)',
+      location: 'Wedding Planner d\'Élite (Milano & Lago di Como)',
       date: 'Gestione 12 Matrimoni / Anno',
       stars: 5,
       highlight: '💼 Servizio Impeccabile per le Agenzie',
       comment:
-        'Agency Hub ha rivoluzionato il mio lavoro. Creare partecipazioni con il logo della mia agenzia nel footer mi dà un posizionamento di altissimo livello. L\'export automatico delle liste invitati ed il modulo WhatsApp a tocco singolo azzerano giorni di stress per le conferme.',
+        'Agency Hub ha rivoluzionato il mio lavoro. Creare partecipazioni con il logo della mia agenzia nel footer mi dà un posizionamento di altissimo livello. L\'export automatico delle liste invitati ed il modulo WhatsApp ad un tocco azzerano giorni di stress.',
     },
     {
       names: 'Marco & Giulia',
-      role: 'Sposi a Villa Rosa (Roma)',
+      location: 'Sposi a Villa Rosa (Roma)',
       date: 'Matrimonio Giugno 2026',
       stars: 5,
-      highlight: '🎵 Canzone Inedita commovente',
+      highlight: '🎵 Canzone Inedita Commovente',
       comment:
         'Abbiamo scelto il servizio "Chiavi in Mano" e la Canzone Personalizzata del Maestro Fausto Fusetti. Ricevere 2 arrangiamenti diversi tra cui scegliere è stato emozionante. Quando parenti ed amici hanno aperto l\'invito hanno vissuto un momento di commozione pura.',
+    },
+    {
+      names: 'Davide & Francesca',
+      location: 'Sposi a Tenuta Castel Venezze (Rovigo)',
+      date: 'Matrimonio Maggio 2025',
+      stars: 5,
+      highlight: '🎰 Gioco Scratch della Data Virale',
+      comment:
+        'Tutti i nostri amici ci hanno fatto i complimenti per il gioco "Gratta la Data" col dito sullo schermo! La mappa navigatore GPS integrata ha guidato tutti direttamente al parcheggio della villa senza una sola telefonata di indicazioni.',
+    },
+    {
+      names: 'Chiara & Alessandro',
+      location: 'Sposi a Villa Miani (Roma)',
+      date: 'Matrimonio Ottobre 2025',
+      stars: 5,
+      highlight: '🎉 Maxischermo Festa Spettacolare',
+      comment:
+        'Durante il ricevimento gli invitati scattavano foto dal loro telefono e le vedevamo proiettate in diretta sul maxischermo della sala insieme alla classifica del Quiz degli Sposi. Una festa davvero indimenticabile per tutti!',
+    },
+    {
+      names: 'Roberto & Valentina',
+      location: 'Sposi a Castello di Guarene (Cuneo)',
+      date: 'Matrimonio Luglio 2025',
+      stars: 5,
+      highlight: '🥩 Gestione Intolleranze per lo Chef',
+      comment:
+        'Avendo molti invitati celiaci e vegetariani, temevamo ritardi con la cucina. Grazie alla tabella Excel scaricata dalla dashboard, il catering aveva già tutti i piatti speciali pronti. Servizio impeccabile.',
+    },
+    {
+      names: 'Silvia Moretti',
+      location: 'Wedding Planner & Event Designer (Firenze)',
+      date: 'Gestione Eventi Luxury',
+      stars: 5,
+      highlight: '✨ Impatto Emozionale Unico',
+      comment:
+        'I miei clienti cercano l\'eccellenza. LOVE offre quell\'effetto WOW che la carta non potrà mai dare, mantenendo al tempo stesso la classe e la raffinatezza della busta d\'epoca. Indispensabile per ogni agenzia.',
+    },
+    {
+      names: 'Gianluca & Beatrice',
+      location: 'Sposi a Villa Cordevigo (Verona)',
+      date: 'Matrimonio Aprile 2026',
+      stars: 5,
+      highlight: '💬 Spedizione WhatsApp Istantanea',
+      comment:
+        'Inviare 150 partecipazioni personalizzate con il nome dell\'invitato direttamente su WhatsApp dal pannello ha richiesto meno di 10 minuti. Risposte arrivate tutte entro 48 ore!',
     },
   ];
 
@@ -230,26 +273,27 @@ export default function LandingPage() {
           </p>
         </section>
 
-        {/* 🌟 SEZIONE RECENSIONI DEDICATA, RICCA E DETTAGLIATA */}
-        <section className="py-20 px-6 bg-slate-900 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
-          <div className="max-w-6xl mx-auto space-y-12 relative z-10">
-            <div className="text-center space-y-2 max-w-3xl mx-auto">
+        {/* 🌟 SEZIONE RECENSIONI SCORREVOLI IN LOOP CONTINUO (21ST.DEV MARQUEE) */}
+        <section className="py-20 bg-slate-900 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
+          <div className="max-w-6xl mx-auto space-y-8 relative z-10">
+            <div className="text-center space-y-2 max-w-3xl mx-auto px-6">
               <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block flex items-center justify-center gap-2">
                 <Star className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" /> Storie d'Amore &amp; Testimonianze Reali
               </span>
               <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white">Cosa dicono le Coppie ed i Wedding Planner</h2>
               <p className="text-base text-slate-300 font-serif">
-                Scopri l&apos;impatto delle nostre partecipazioni digitali d&apos;autore raccontato da chi le ha vissute in prima persona.
+                Passa il mouse sopra per mettere in pausa lo scorrimento e leggere i racconti completi.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 text-left">
-              {detailedTestimonials.map((item, idx) => (
+            {/* SCORRIMENTO INFINITO IN LOOP DA DESTRA A SINISTRA */}
+            <Marquee pauseOnHover repeat={4} className="[--duration:50s]">
+              {richTestimonials.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-8 bg-slate-950/90 rounded-3xl border-2 border-[#D4AF37]/60 shadow-[0_0_25px_rgba(212,175,55,0.2)] flex flex-col justify-between space-y-6 hover:border-[#D4AF37] transition-all relative group"
+                  className="w-[360px] sm:w-[420px] shrink-0 p-8 bg-slate-950/90 rounded-3xl border-2 border-[#D4AF37]/60 shadow-[0_0_25px_rgba(212,175,55,0.2)] flex flex-col justify-between space-y-5 hover:border-[#D4AF37] transition-all relative group text-left my-2"
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-1 text-amber-400">
                         {[...Array(item.stars)].map((_, i) => (
@@ -270,12 +314,12 @@ export default function LandingPage() {
 
                   <div className="pt-4 border-t border-slate-800 space-y-1">
                     <h4 className="font-serif font-bold text-lg text-white">{item.names}</h4>
-                    <p className="text-xs text-[#D4AF37] font-bold">{item.role || item.location}</p>
+                    <p className="text-xs text-[#D4AF37] font-bold">{item.location}</p>
                     <p className="text-[11px] text-slate-400">{item.date}</p>
                   </div>
                 </div>
               ))}
-            </div>
+            </Marquee>
           </div>
         </section>
 
@@ -642,7 +686,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* FORM DI CONTATTO WEB3FORMS (CAMPUS 16PX) */}
+        {/* FORM DI CONTATTO WEB3FORMS */}
         <section id="contatti" className="py-20 px-6 max-w-3xl mx-auto text-center space-y-6">
           <div className="space-y-2">
             <span className="text-xs text-[#D4AF37] uppercase font-bold tracking-widest block">Parla con il Team</span>
