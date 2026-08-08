@@ -270,7 +270,7 @@ export default function LandingPage() {
           </p>
         </section>
 
-        {/* 🌟 SEZIONE RECENSIONI USANDO IL TUO COMPONENTE MARQUEE DA 21ST.DEV */}
+        {/* 🌟 SEZIONE RECENSIONI USANDO IL TUO COMPONENTE ESATTO DA 21ST.DEV */}
         <section className="py-20 bg-slate-900 text-white border-y-2 border-[#D4AF37] relative shadow-2xl overflow-hidden">
           <div className="max-w-6xl mx-auto space-y-8 relative z-10">
             <div className="text-center space-y-2 max-w-3xl mx-auto px-6">
@@ -283,7 +283,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* MARQUEE ESATTO 21ST.DEV */}
+            {/* UTILIZZO COMPONENTE MARQUEE 21ST.DEV ESATTO */}
             <Marquee pauseOnHover repeat={4} className="[--duration:50s]">
               {richTestimonials.map((item, idx) => (
                 <div
