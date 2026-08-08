@@ -33,7 +33,6 @@ export default function AgencySidebar({
   const [richiestaAperta, setRichiestaAperta] = useState(false);
   const [inviatoWeb3, setInviatoWeb3] = useState(false);
 
-  // FORMATTAZIONE PULITA DEL NOME AGENZIA
   let formattedAgencyName = (agencyId || "sposi-in-love")
     .replace(/-/g, " ")
     .replace(/@/g, " ")
@@ -47,15 +46,10 @@ export default function AgencySidebar({
     formattedAgencyName = "SPOSI IN LOVE MASTER DEMO";
   }
 
-  const handleWeb3Submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInviatoWeb3(true);
-  };
-
   return (
     <aside
       style={style}
-      className="bg-[#1E293B] text-[#FAF7F2] border-r border-[#D4AF37]/30 p-5 flex flex-col justify-between h-full select-none overflow-y-auto"
+      className="bg-[#1E293B] text-[#FAF7F2] border-r border-[#D4AF37]/30 p-4 flex flex-col justify-between h-full select-none overflow-y-auto w-full"
     >
       <div className="space-y-5">
         {/* LOGO AGENZIA WHITE-LABEL */}
@@ -64,21 +58,21 @@ export default function AgencySidebar({
             <Image src="/logo.png" alt="Logo Agenzia" fill className="object-contain" priority unoptimized />
           </div>
           <div className="overflow-hidden">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1 whitespace-nowrap">
               <Sparkles className="w-3 h-3 text-[#D4AF37]" /> White-Label Hub
             </span>
-            <h1 className="font-serif font-bold text-sm text-white truncate">
+            <h1 className="font-serif font-bold text-xs text-white truncate">
               {formattedAgencyName}
             </h1>
           </div>
         </div>
 
-        {/* MENU NAVIGAZIONE COMPLETO IN ITALIANO */}
+        {/* MENU NAVIGAZIONE RIGOROSAMENTE SU 1 RIGA ED ALLINEATO A SINISTRA */}
         <nav className="space-y-1.5">
           <button
             type="button"
             onClick={() => setActiveTab("create")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "create"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -90,7 +84,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("list")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "list"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -102,7 +96,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("monogram")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "monogram"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -114,7 +108,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("tableau")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "tableau"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -126,7 +120,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("budget")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "budget"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -138,7 +132,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("whatsapp")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "whatsapp"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -150,7 +144,7 @@ export default function AgencySidebar({
           <button
             type="button"
             onClick={() => setActiveTab("brand")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap text-left ${
               activeTab === "brand"
                 ? "bg-[#D4AF37] text-[#1E293B] shadow-md"
                 : "text-slate-300 hover:bg-[#FAF7F2]/10 hover:text-white"
@@ -166,9 +160,9 @@ export default function AgencySidebar({
         <button
           type="button"
           onClick={() => setRichiestaAperta(true)}
-          className="w-full py-2.5 px-3 bg-gradient-to-r from-[#D4AF37] to-amber-500 text-slate-900 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:shadow-[0_0_20px_rgba(212,175,55,0.8)] transition-all cursor-pointer"
+          className="w-full py-2.5 px-3 bg-gradient-to-r from-[#D4AF37] to-amber-500 text-slate-900 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:shadow-[0_0_20px_rgba(212,175,55,0.8)] transition-all cursor-pointer whitespace-nowrap"
         >
-          <Send className="w-4 h-4 text-slate-900" /> Richiedi Brano / Assistenza
+          <Send className="w-4 h-4 text-slate-900 shrink-0" /> Richiedi Brano / Assistenza
         </button>
 
         <div className="text-slate-400">
@@ -177,9 +171,8 @@ export default function AgencySidebar({
         </div>
       </div>
 
-      {/* FINESTRA MODALE GRANDE E SPAZIOSA AL CENTRO DELLO SCHERMO */}
       {richiestaAperta && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in text-left">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 text-left">
           <div className="max-w-lg w-full bg-slate-900 text-white p-6 md:p-8 rounded-3xl border-2 border-[#D4AF37] shadow-2xl space-y-5 relative">
             <button
               type="button"
