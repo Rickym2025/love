@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronUp, Sparkles } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 
 export interface EnvelopeWaxProps {
   coupleNames?: string;
-  waxSealUrl?: string; // SIGILLO PERSONALIZZATO / DINO
+  waxSealUrl?: string;
   onOpen?: () => void;
   inline?: boolean;
 }
@@ -32,15 +32,14 @@ export default function EnvelopeWax({
     <AnimatePresence>
       {!isOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.08, y: -30 }}
-          transition={{ duration: 0.7, ease: "easeInOut" }}
+          initial={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.08, y: -40 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
           className={`${
             inline
-              ? "relative w-full max-w-[320px] h-[480px] mx-auto rounded-3xl overflow-hidden"
-              : "fixed inset-0 z-50 w-screen h-screen"
-          } bg-[#FAF7F2] flex flex-col items-center justify-center p-4 select-none overflow-hidden`}
+              ? "relative w-full max-w-[320px] h-[480px] mx-auto rounded-3xl overflow-hidden bg-[#FAF7F2]"
+              : "fixed inset-0 z-50 w-screen h-screen bg-[#FAF7F2]"
+          } flex flex-col items-center justify-center p-4 select-none overflow-hidden`}
         >
           {/* AURA GLOW DORATA IN BACKGROUND */}
           <div className="absolute w-80 h-80 bg-[#D4AF37]/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
