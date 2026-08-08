@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Heart, Sparkles, Music, Layers } from "lucide-react";
+import { Heart, Sparkles, Music, Layers, Send } from "lucide-react";
 import {
   WELCOME_PHRASE_PRESETS,
   AUDIO_DEMOS,
@@ -166,7 +166,7 @@ export function SectionColonnaSonora({ audioUrl, handleUpdate }: any) {
   return (
     <div className="p-5 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FDFBF7] rounded-2xl border border-[#D4AF37]/30 shadow-md space-y-4">
       <h3 className="text-xs font-bold uppercase tracking-wider text-[#8B6508] flex items-center gap-1.5">
-        <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore &amp; Upload MP3
+        <Music className="w-4 h-4 text-[#D4AF37]" /> Colonna Sonora d&apos;Autore FF Edizioni
       </h3>
 
       <div>
@@ -195,6 +195,27 @@ export function SectionColonnaSonora({ audioUrl, handleUpdate }: any) {
             />
           </div>
         )}
+      </div>
+
+      {/* HIGHLIGHT NEUROMARKETING CANZONE INEDITA CON DOPPIO ARRANGIAMENTO */}
+      <div className="p-3.5 bg-slate-900 text-white rounded-xl border border-[#D4AF37] space-y-2 text-left">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider flex items-center gap-1">
+            <Sparkles className="w-3.5 h-3.5" /> Canzone Inedita Unica al Mondo (+€300)
+          </span>
+          <span className="text-[9px] bg-[#D4AF37] text-slate-950 font-bold px-2 py-0.5 rounded-full">2 Varianti Incluse</span>
+        </div>
+        <p className="text-[11px] text-slate-300 font-serif leading-relaxed">
+          Vuoi regalare agli sposi un brano irripetibile con i loro nomi, aneddoti e ricordi reali? Il Maestro <strong>Fausto Fusetti</strong> inciderà <strong>2 versioni d&apos;arrangiamento</strong> tra cui scegliere la loro melodia perfetta.
+        </p>
+        <a
+          href="https://wa.me/3904251675950?text=Ciao%20Riccardo,%20vorrei%20richiedere%20una%20Canzone%20Inedita%20Su%20Misura%20per%20gli%20sposi!"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#D4AF37] hover:text-amber-300 pt-1"
+        >
+          <Send className="w-3.5 h-3.5" /> Richiedi Canzone Su Misura per gli Sposi (+€300) ↗
+        </a>
       </div>
     </div>
   );
