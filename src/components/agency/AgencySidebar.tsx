@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { LayoutGrid, FolderHeart, Palette, Sparkles, Send, MessageSquare } from "lucide-react";
+import { LayoutGrid, FolderHeart, Palette, Sparkles, Send, MessageSquare, Music } from "lucide-react";
 
 export interface AgencySidebarProps {
   agencyId?: string;
@@ -78,7 +78,6 @@ export default function AgencySidebar({
             <FolderHeart className="w-4 h-4 text-[#D4AF37]" /> Inviti Già Creati ({createdCount})
           </button>
 
-          {/* NUOVO TAB: SPEDIZIONE WHATSAPP INVITATI */}
           <button
             type="button"
             onClick={() => setActiveTab("whatsapp")}
@@ -105,7 +104,7 @@ export default function AgencySidebar({
         </nav>
       </div>
 
-      {/* MODULO RICHIESTA WEB3FORMS / ASSISTENZA B2B */}
+      {/* MODULO RICHIESTA WEB3FORMS / CANZONE SU MISURA D'AUTORE */}
       <div className="pt-6 border-t border-slate-700/60 text-[10px] space-y-3">
         {!richiestaAperta ? (
           <button
@@ -113,27 +112,29 @@ export default function AgencySidebar({
             onClick={() => setRichiestaAperta(true)}
             className="w-full py-3 px-3 bg-gradient-to-r from-[#D4AF37] to-amber-500 text-slate-900 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:shadow-[0_0_20px_rgba(212,175,55,0.8)] transition-all cursor-pointer"
           >
-            <Send className="w-4 h-4 text-slate-900" /> Richiedi Brano / Assistenza
+            <Music className="w-4 h-4 text-slate-900" /> Richiedi Canzone Unica (+€300)
           </button>
         ) : (
           <form
             onSubmit={handleWeb3Submit}
             className="p-3 bg-slate-900 rounded-2xl border-2 border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.6)] space-y-2 text-left"
           >
-            <span className="font-bold text-[#D4AF37] block text-xs">Richiesta Assistenza B2B</span>
+            <span className="font-bold text-[#D4AF37] block text-xs flex items-center gap-1">
+              <Music className="w-3.5 h-3.5" /> Canzone Su Misura (2 Varianti)
+            </span>
             {inviatoWeb3 ? (
-              <p className="text-emerald-400 font-bold">Richiesta inviata con successo!</p>
+              <p className="text-emerald-400 font-bold">Richiesta inviata al Maestro Fusetti!</p>
             ) : (
               <>
                 <input
                   type="text"
-                  placeholder="Oggetto (es. Brano SIAE)"
+                  placeholder="Nomi Sposi (es. Marco & Sara)"
                   required
                   className="w-full p-2 rounded-lg bg-slate-800 border border-slate-700 text-white text-[10px] font-bold"
                 />
                 <textarea
                   rows={2}
-                  placeholder="Messaggio per il team..."
+                  placeholder="Aneddoti, luogo primo incontro e ricordi speciali..."
                   required
                   className="w-full p-2 rounded-lg bg-slate-800 border border-slate-700 text-white text-[10px] resize-none"
                 />
