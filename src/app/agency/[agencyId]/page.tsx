@@ -43,9 +43,9 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
     }
   }, [agencyId, isMasterDemo]);
 
-  // LARGHEZZA SIDEBAR IMPOSTATA A 330PX PER TESTO SU 1 SOLA RIGA
-  const [sidebarWidth, setSidebarWidth] = useState(330);
-  const [previewWidth, setPreviewWidth] = useState(400);
+  // LARGHEZZA SIDEBAR IMPOSTATA A 350PX DI DEFAULT PER TESTO SU 1 SOLA RIGA
+  const [sidebarWidth, setSidebarWidth] = useState(350);
+  const [previewWidth, setPreviewWidth] = useState(390);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
 
@@ -201,7 +201,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar) {
-        const newWidth = Math.max(260, Math.min(400, e.clientX));
+        const newWidth = Math.max(280, Math.min(450, e.clientX));
         setSidebarWidth(newWidth);
       } else if (isResizingPreview) {
         const newWidth = Math.max(320, Math.min(550, window.innerWidth - e.clientX));
@@ -241,7 +241,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
             </span>
             <h2 className="text-2xl font-serif font-bold text-white">Accesso Riservato</h2>
             <p className="text-xs text-slate-300 font-serif leading-relaxed">
-              Lo Studio Demo <strong className="text-amber-300">"Sposi in Love"</strong> è la matrice riservata esclusivamente a <strong>Riccardo Modena (RM Studio)</strong>.
+              Lo Studio Demo <strong className="text-amber-300">&quot;Sposi in Love&quot;</strong> è la matrice riservata esclusivamente a <strong>Riccardo Modena (RM Studio)</strong>.
             </p>
           </div>
 
@@ -267,7 +267,7 @@ export default function AgencyStudioPage({ params }: { params?: { agencyId?: str
 
   return (
     <div className="flex h-screen w-screen bg-[#FAF7F2] overflow-hidden font-sans select-none">
-      {/* 1. SIDEBAR AGENZIA (LARGHEZZA 290PX PER TESTO SU 1 RIGA) */}
+      {/* 1. SIDEBAR AGENZIA */}
       <div style={{ width: `${sidebarWidth}px` }} className="flex-shrink-0 h-full overflow-hidden">
         <AgencySidebar
           agencyId={agencyId}
